@@ -1193,6 +1193,14 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     flex: 1 1 200px;
   }
 
+  /* Selects ignore the inherited line-height that text inputs pick up, so pin a shared height. */
+  .controls input,
+  .controls select {
+    box-sizing: border-box;
+    height: 2.5rem;
+    line-height: 1.25;
+  }
+
   .layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

@@ -4,8 +4,8 @@ nav:
   processes: Processos
   workProducts: Productes de treball
   lifecycles: Models de cicle de vida
-  tailor: Crear un cicle de vida
-  compare: Comparar versions
+  tailor: Crea un cicle de vida
+  compare: Compara versions
   references: Referències
   admin: Administració
   language: Idioma
@@ -97,7 +97,7 @@ wp:
   filter: Filtra els productes de treball
   all: Tots
 compare:
-  title: Comparar versions
+  title: Compara versions
   intro: Canvis en el text de cada procés entre dues versions del PRM.
   from: De
   to: A
