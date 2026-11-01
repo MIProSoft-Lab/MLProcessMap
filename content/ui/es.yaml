@@ -29,7 +29,7 @@ home:
   card-references: Consulta los estudios primarios de la revisión sistemática de la literatura y la literatura especializada que citan los procesos.
   overview: Qué encontrarás aquí
   thesisHeading: Parte de una tesis doctoral
-  thesisText: "Este sitio publica el Modelo de Referencia de Procesos desarrollado en la tesis doctoral *{title}*. La tesis estudia cómo se describe el desarrollo de ML en el ámbito académico y en la industria, lo compara con las normas internacionales de ciclo de vida y propone un modelo de referencia de procesos evaluado con profesionales."
+  thesisText: "Este sitio publica el Modelo de Referencia de Procesos desarrollado en la tesis doctoral *{title}*. La tesis estudia cómo se describe el desarrollo de ML en el ámbito académico y en la industria, lo compara con las normas internacionales de procesos de ciclo de vida y propone un modelo de referencia evaluado con profesionales."
   author: Autor
   supervisor: Director
   supervisors: Directores
