@@ -17,6 +17,7 @@
     "new-version": "node scripts/new-version.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/ibm-plex-sans": "5.3.0",
     "astro": "6.4.8",
@@ -26,7 +27,9 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@astrojs/check": "0.9.12",
     "tsx": "4.23.15",
+    "typescript": "6.0.3",
     "vitest": "4.1.12"
   }
 }

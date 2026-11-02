@@ -28,12 +28,15 @@ function render<T>(p: Pair<T>, text: (x: T) => string) {
 
 const ioText = (io: { name: string; description: string; serves: string[] }) =>
   `${io.name}: ${io.description}${io.serves.length ? ` (${io.serves.join(', ')})` : ''}`;
-const sections = [
+// Each section lists pairs of a different item type; the label and text
+// functions are written for that section's items.
+type Section = { key: string; pairs: Pair<any>[]; label: (x: any) => string; text: (x: any) => string };
+const sections: Section[] = [
   { key: 'outcomes', pairs: d.outcomes, label: (x: any) => `(${x.id})`, text: (x: any) => x.text },
   { key: 'inputs', pairs: d.inputs, label: () => '', text: ioText },
   { key: 'outputs', pairs: d.outputs, label: () => '', text: ioText },
   { key: 'activities', pairs: d.activities, label: (x: any) => x.id, text: (x: any) => `${x.title}. ${x.description}` },
-] as const;
+];
 const changelog = (b?.data.changes ?? []).flatMap((c) => c.changes);
 
 // Version pickers: any older version against any newer one. The pages exist
@@ -101,15 +104,14 @@ const home = b ? to : from;
           <h2>{t(`process.${s.key}`)}</h2>
           <ul class="pairs">
             {s.pairs.map((p) => {
-              const item = (p.to ?? p.from) as any;
-              const fromLabel = p.from ? s.label(p.from as any) : '';
-              const toLabel = p.to ? s.label(p.to as any) : '';
+              const fromLabel = p.from ? s.label(p.from) : '';
+              const toLabel = p.to ? s.label(p.to) : '';
               return (
                 <li class:list={[`status-${p.status}`, { same: p.status === 'same' }]}>
                   {(fromLabel || toLabel) && (
                     <span class="label">{fromLabel && toLabel && fromLabel !== toLabel ? `${fromLabel} → ${toLabel}` : toLabel || fromLabel}</span>
                   )}
-                  <span class="text" set:html={render(p, s.text as any)} />
+                  <span class="text" set:html={render(p, s.text)} />
                 </li>
               );
             })}

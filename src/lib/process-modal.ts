@@ -1,6 +1,7 @@
 // Client side of the process modal (src/components/ProcessModal.astro).
 // Pages create one with createProcessModal() and call open() with a process.
 // The tailoring page passes hooks to show the include and activity checkboxes.
+import { escapeHtml as esc } from './text';
 
 export interface Details {
   id: string;
@@ -26,7 +27,6 @@ export interface ModalOptions {
   findOpener?(id: string): HTMLElement | null;
 }
 
-const esc = (x: string) => x.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
 // One request per version and page load, shared by every modal on the page.
 const cache = new Map<string, Promise<Details[]>>();

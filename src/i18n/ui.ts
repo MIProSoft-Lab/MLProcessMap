@@ -2,6 +2,7 @@
 // translated from the admin panel. English is the reference: a string missing
 // in another language is shown in English. The PRM content is in content/ too.
 import { content } from '../lib/content';
+import { format } from '../lib/text';
 import { defaultLocale, locales, type Locale } from './locales';
 
 export { defaultLocale, isLocale, locales, type Locale } from './locales';
@@ -29,10 +30,9 @@ export function languageIn(locale: Locale, of: Locale) {
 
 export function useTranslations(locale: Locale) {
   return (key: UiKey, vars: Record<string, string | number> = {}) => {
-    let s = ui[locale][key] ?? en[key];
+    const s = ui[locale][key] ?? en[key];
     if (s === undefined) throw new Error(`Unknown interface string "${key}": add it to content/ui/${defaultLocale}.yaml`);
-    for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, String(v));
-    return s;
+    return format(s, vars);
   };
 }
 

@@ -1,0 +1,510 @@
+/* The process page, src/pages/[lang]/[version]/processes/[id].astro. Every
+   rule starts with the class the page gives <main>, so none reaches the rest
+   of the site. */
+
+.process-page h1 {
+  margin-bottom: 16px;
+}
+
+.process-page .sheet {
+  margin: 0 0 8px;
+}
+
+@media (max-width: 560px) {
+  .process-page .sheet {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .process-page .sheet > div:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+.process-page .sheet dd {
+  margin: 0;
+}
+
+.process-page .sheet dd a + a {
+  margin-left: 10px;
+}
+
+.process-page .sec {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--surface);
+  background: var(--ink-fill);
+  padding: 1px 6px;
+  letter-spacing: 0.04em;
+  align-self: center;
+}
+
+.process-page .layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+
+@media (min-width: 1000px) {
+  .process-page .layout {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+
+  .process-page .toc {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 999px) {
+  .process-page .toc {
+    display: none;
+  }
+}
+
+.process-page .toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid var(--ink);
+  font-size: 0.88rem;
+}
+
+.process-page .toc a {
+  display: flex;
+  gap: 8px;
+  padding: 4px 12px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.process-page .toc a .mono {
+  font-size: 0.75rem;
+  padding-top: 2px;
+}
+
+.process-page .toc a:hover {
+  color: var(--text);
+}
+
+.process-page section {
+  scroll-margin-top: 16px;
+}
+
+.process-page .purpose {
+  font-size: 1.08rem;
+}
+
+/* Outcomes */
+.process-page .outcomes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.process-page .outcomes li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  scroll-margin-top: 16px;
+}
+
+.process-page .outcomes li:target {
+  background: var(--surface-2);
+  outline: 1px dashed var(--ink);
+  outline-offset: 4px;
+}
+
+.process-page .letter {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin-top: 1px;
+}
+
+.process-page .served {
+  margin-top: 6px;
+}
+
+.process-page .served .chip {
+  font-size: 0.78rem;
+  padding: 0 6px;
+}
+
+/* Inputs, process and outputs as a diagram */
+.process-page .flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+  grid-template-areas: 'in core out';
+  gap: 0 32px;
+  padding: 20px;
+  border: 1px solid var(--ink);
+}
+
+.process-page .flow-col.inputs {
+  grid-area: in;
+}
+
+.process-page .flow-col.outputs {
+  grid-area: out;
+}
+
+.process-page .flow-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-margin-top: 16px;
+}
+
+.process-page .col-label {
+  margin-bottom: -6px;
+}
+
+.process-page .flow-core {
+  grid-area: core;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.process-page .core-box {
+  border: 2px solid var(--ink);
+  background: var(--surface);
+  padding: 14px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.process-page .core-id {
+  font-size: 0.8rem;
+  background: var(--ink-fill);
+  color: var(--surface);
+  align-self: center;
+  padding: 0 6px;
+}
+
+.process-page .core-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.process-page .core-outcomes {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+}
+
+.process-page .wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.process-page .io-node {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  padding: 10px 12px;
+  scroll-margin-top: 16px;
+}
+
+.process-page .io-node:target {
+  box-shadow: var(--lift);
+}
+
+.process-page .io-head {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.process-page .io-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.process-page .serves {
+  display: inline-flex;
+  gap: 3px;
+  flex: none;
+}
+
+.process-page .serves a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.process-page .serves a:hover {
+  border-color: var(--ink);
+  color: var(--text);
+}
+
+.process-page .io-tags {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.process-page .io-desc {
+  margin: 6px 0 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.process-page .io-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+.process-page .io-links .chip {
+  font-size: 0.8rem;
+}
+
+/* On narrow screens the diagram becomes a vertical flow. */
+@media (max-width: 860px) {
+  .process-page .flow {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'in' 'core' 'out';
+    padding: 12px;
+  }
+
+  .process-page .wires {
+    display: none;
+  }
+
+  .process-page .flow-core {
+    padding: 0;
+  }
+
+  .process-page .flow-core::before,
+  .process-page .flow-core::after {
+    content: '↓';
+    display: block;
+    text-align: center;
+    font-family: var(--mono);
+    color: var(--ink);
+    line-height: 2;
+  }
+
+  .process-page .link-name {
+    display: none;
+  }
+}
+
+/* Activities */
+.process-page .section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.process-page .section-head h2 {
+  flex: 1;
+}
+
+.process-page .toggle-all {
+  font-size: 0.8rem;
+  padding: 2px 10px;
+}
+
+.process-page .activities {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.process-page .activities li {
+  scroll-margin-top: 16px;
+}
+
+.process-page .activities li + li {
+  border-top: 1px solid var(--border);
+}
+
+.process-page .activities li:target {
+  background: var(--surface-2);
+}
+
+.process-page .activities summary {
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  gap: 12px;
+  padding: 10px 14px;
+  list-style: none;
+}
+
+.process-page .activities summary::-webkit-details-marker {
+  display: none;
+}
+
+.process-page .activities summary:hover .atitle {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.process-page .aid {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid var(--ink);
+  padding: 0 5px;
+  height: fit-content;
+  margin-top: 2px;
+  min-width: 2.6em;
+  text-align: center;
+}
+
+.process-page details[open] .aid {
+  background: var(--ink-fill);
+  color: var(--surface);
+}
+
+.process-page .abody {
+  padding: 0 14px 14px calc(14px + 2.6em + 12px);
+}
+
+.process-page .abody > p {
+  margin-top: 0;
+}
+
+@media (max-width: 560px) {
+  .process-page .abody {
+    padding-left: 14px;
+  }
+}
+
+.process-page .sources {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  margin: 10px 0 0;
+  align-items: center;
+}
+
+.process-page .sources dd {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .process-page .sources {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Changelog */
+.process-page .changes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.process-page .changes > li {
+  padding: 10px 14px;
+}
+
+.process-page .changes > li + li {
+  border-top: 1px solid var(--border);
+}
+
+.process-page .kind {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 6px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+}
+
+.process-page .kind-added {
+  background: var(--ins-bg);
+  color: var(--ins-text);
+}
+
+.process-page .kind-removed {
+  background: var(--del-bg);
+  color: var(--del-text);
+}
+
+/* Pager */
+.process-page .pager {
+  margin-top: 48px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.process-page .pager a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.process-page .pager a:hover {
+  background: var(--surface-2);
+}
+
+.process-page .pager .next {
+  text-align: right;
+  border-left: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+  .process-page .pager {
+    grid-template-columns: 1fr;
+  }
+
+  .process-page .pager .next {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.process-page .title-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.process-page .title-row .button {
+  flex: none;
+}

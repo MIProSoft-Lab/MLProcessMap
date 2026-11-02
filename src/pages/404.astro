@@ -5,7 +5,7 @@ import { defaultLocale, href, useTranslations } from '../i18n/ui';
 const t = useTranslations(defaultLocale);
 ---
 
-<Layout locale={defaultLocale} title={t('notFound.title')}>
+<Layout locale={defaultLocale} title={t('notFound.title')} indexable={false}>
   <h1>{t('notFound.title')}</h1>
   <p><a href={href(defaultLocale)}>{t('notFound.back')}</a></p>
 </Layout>

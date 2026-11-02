@@ -19,6 +19,12 @@ export function blocks(s: string) {
     .join('');
 }
 
+/** An interface string with its {name} placeholders filled in. */
+export function format(s: string, vars: Record<string, string | number> = {}) {
+  for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, String(v));
+  return s;
+}
+
 export function plain(s: string) {
   return s.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1').replace(/`(.+?)`/g, '$1');
 }
