@@ -4,7 +4,7 @@ import { site, pick, versions, defaultVersion, contentFiles } from '../lib/conte
 import { validate, formatIssues, errors } from '../lib/validation';
 import { edition, otherEditionUrl } from '../lib/edition';
 import ProcessHover from '../components/ProcessHover.astro';
-import { useTranslations, languageNames, languageIn, locales, href, type Locale } from '../i18n/ui';
+import { useTranslations, languageNames, languageIn, locales, defaultLocale, href, type Locale } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
@@ -16,9 +16,11 @@ interface Props {
   versionLinks?: Record<string, string>;
   /** False when the page shows English text in place of a missing translation. */
   translated?: boolean;
+  /** False on pages without a fixed address, such as the error page, to leave out the canonical and language links. */
+  indexable?: boolean;
 }
 
-const { locale, title, description, section, version, versionLinks, translated = true } = Astro.props;
+const { locale, title, description, section, version, versionLinks, translated = true, indexable = true } = Astro.props;
 const t = useTranslations(locale);
 const siteTitle = pick(site.title, locale);
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
@@ -32,6 +34,10 @@ if (issues.length) throw new Error(`Content errors (run npm run check:content to
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const rest = Astro.url.pathname.slice(base.length).split('/').slice(2).join('/');
 const languageLinks = locales.map((l) => ({ locale: l, href: `${base}/${l}/${rest}` }));
+
+const absolute = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
+const canonical = absolute(`${base}/${locale}/${rest}`);
+const defaultLanguageLink = languageLinks.find((l) => l.locale === defaultLocale)!.href;
 
 const navVersion = version ?? defaultVersion;
 // The same page under /latest/, which always forwards to the default version.
@@ -58,7 +64,15 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     {/* Searches lead to the live edition; the thesis edition is reached from the thesis. */}
     {edition === 'thesis' && <meta name="robots" content="noindex" />}
-    {languageLinks.map((l) => <link rel="alternate" hreflang={l.locale} href={l.href} />)}
+    {
+      indexable && (
+        <>
+          <link rel="canonical" href={canonical} />
+          {languageLinks.map((l) => <link rel="alternate" hreflang={l.locale} href={absolute(l.href)} />)}
+          <link rel="alternate" hreflang="x-default" href={absolute(defaultLanguageLink)} />
+        </>
+      )
+    }
     <script is:inline>
       // Apply the saved theme before the first paint. Without a saved choice
       // the page follows the system setting through prefers-color-scheme.
@@ -190,7 +204,7 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
             <span class="label">{t('footer.links')}</span>
             {repo && <a href={repo}>{t('footer.source')}</a>}
             {repo && ' · '}
-            <a href={`${base}/admin/`}>{t('nav.admin')}</a>
+            <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
             {edition === 'live' && otherEdition && (
               <>
                 {' · '}
