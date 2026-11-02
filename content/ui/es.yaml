@@ -94,6 +94,8 @@ process:
   outcomeServedBy: Productos de trabajo que contribuyen a este resultado
   expandAll: Desplegar todo
   collapseAll: Plegar todo
+  collapseSection: "Plegar {section}"
+  expandSection: "Desplegar {section}"
 decision:
   adopted: Adoptada
   rejected: Rechazada

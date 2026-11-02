@@ -1,0 +1,36 @@
+---
+// Button that opens and closes a collapse-body (see src/lib/collapse.ts).
+// With text, the button shows it as its label; without, only a chevron.
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /** ID of the collapse-body it controls. */
+  controls: string;
+  /** Name of the part, for the accessible label. */
+  name: string;
+  text?: string;
+  class?: string;
+}
+
+const { locale, controls, name, text, class: className } = Astro.props;
+const t = useTranslations(locale);
+const collapse = t('process.collapseSection', { section: name });
+const expand = t('process.expandSection', { section: name });
+---
+
+<button
+  type="button"
+  class:list={['collapse-toggle', text ? 'with-text' : 'icon-only', className]}
+  aria-expanded="true"
+  aria-controls={controls}
+  aria-label={text ? undefined : collapse}
+  title={collapse}
+  data-collapse={collapse}
+  data-expand={expand}
+>
+  {text && <span class="label">{text}</span>}
+  <svg class="chevron" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+    <path d="M2.5 4.5 L6 8 L9.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+  </svg>
+</button>

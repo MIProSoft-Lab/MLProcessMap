@@ -94,6 +94,8 @@ process:
   outcomeServedBy: Productes de treball que contribueixen a aquest resultat
   expandAll: Desplega-ho tot
   collapseAll: Plega-ho tot
+  collapseSection: "Plega {section}"
+  expandSection: "Desplega {section}"
 decision:
   adopted: Adoptada
   rejected: Rebutjada
