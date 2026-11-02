@@ -47,9 +47,9 @@ const latestLink = versionLinks?.[defaultVersion]?.replace(`/${locale}/${default
 const nav = [
   ['processes', href(locale, navVersion)],
   ['workProducts', href(locale, navVersion, 'work-products')],
-  ['compare', href(locale, 'compare')],
   ['lifecycles', href(locale, 'lifecycles')],
   ['tailor', href(locale, 'tailor')],
+  ['compare', href(locale, 'compare')],
   ['references', href(locale, 'references')],
 ] as const;
 const repo = import.meta.env.PUBLIC_REPO ? `https://github.com/${import.meta.env.PUBLIC_REPO}` : undefined;
