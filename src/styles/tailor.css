@@ -1,0 +1,464 @@
+/* The tailoring page, src/pages/[lang]/tailor.astro. Every rule starts with
+   the class the page gives <main>, so none reaches the rest of the site. */
+
+.tailor-page .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 16px 0;
+}
+
+.tailor-page .controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  flex: 1 1 200px;
+}
+
+/* Selects ignore the inherited line-height that text inputs pick up, so pin a shared height. */
+.tailor-page .controls input,
+.tailor-page .controls select {
+  box-sizing: border-box;
+  height: 2.5rem;
+  line-height: 1.25;
+}
+
+.tailor-page .layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 960px) {
+  .tailor-page .layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+
+  .tailor-page .sticky {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+  }
+}
+
+.tailor-page .bulk {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.tailor-page .summary {
+  font-weight: 600;
+  margin-top: 0;
+}
+
+.tailor-page .side h2 {
+  font-size: 1rem;
+  margin: 16px 0 6px;
+}
+
+.tailor-page .exports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tailor-page .exports button {
+  font-size: 0.85rem;
+  padding: 4px 10px;
+}
+
+.tailor-page .print-only {
+  display: none;
+}
+
+@media print {
+  .tailor-page .print-only {
+    display: block;
+  }
+
+  /* The page title and intro; the print view has its own. */
+  .tailor-page > .container > h1,
+  .tailor-page > .container > p {
+    display: none;
+  }
+}
+
+/* Rendered by the script */
+.tailor-page .processes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.tailor-page .processes .proc {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 8px 12px;
+}
+
+.tailor-page .processes .proc.off {
+  background: transparent;
+  border-style: dashed;
+}
+
+.tailor-page .processes .proc.off .proc-label strong {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.tailor-page .processes .proc-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tailor-page .processes .proc-label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  cursor: pointer;
+}
+
+.tailor-page .processes .dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink);
+  flex: none;
+}
+
+.tailor-page .processes .num,
+.tailor-page .processes .aid {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.tailor-page .processes details {
+  margin-left: 26px;
+}
+
+.tailor-page .processes summary {
+  cursor: pointer;
+}
+
+.tailor-page .processes .acts {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+  display: grid;
+  gap: 2px;
+  font-size: 0.9rem;
+}
+
+.tailor-page .processes .acts label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.tailor-page .processes .rationale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  margin: 4px 0 2px 26px;
+  color: var(--muted);
+}
+
+.tailor-page .processes .rationale input {
+  flex: 1 1 200px;
+  padding: 3px 8px;
+  font-size: 0.85rem;
+}
+
+.tailor-page .processes .rationale[hidden] {
+  display: none;
+}
+
+.tailor-page .missing {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.tailor-page .missing .link {
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: var(--link);
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+.tailor-page .processes .info {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  flex: none;
+}
+.tailor-page .tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.tailor-page .tabs [role='tab'] {
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 14px;
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+
+.tailor-page .tabs [role='tab'][aria-selected='true'] {
+  border-color: var(--ink);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.tailor-page .tabs .count {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.tailor-page [role='tabpanel'][hidden] {
+  display: none;
+}
+
+.tailor-page .processes .proc-tools {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex: none;
+}
+
+.tailor-page .processes .phase-select {
+  max-width: 180px;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+}
+
+.tailor-page .lc-description {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.tailor-page .phase-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.tailor-page .phase-list .phase-card {
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.tailor-page .phase-list .pc-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.tailor-page .phase-list .pc-step {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0 6px;
+  background: var(--ink-fill);
+  color: var(--surface);
+}
+
+.tailor-page .phase-list .pc-name {
+  font-weight: 600;
+  padding: 4px 8px;
+}
+
+.tailor-page .phase-list .pc-tools {
+  display: flex;
+  gap: 4px;
+}
+
+.tailor-page .phase-list .pc-tools button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  justify-content: center;
+}
+
+.tailor-page .phase-list .pc-add {
+  justify-self: start;
+  padding: 3px 8px;
+  font-size: 0.85rem;
+}
+
+.tailor-page .phase-list .pc-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+}
+
+.tailor-page .phase-list .pc-options label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.tailor-page .phase-list .pc-options select,
+.tailor-page .phase-list .pc-options input[type='text'] {
+  padding: 2px 6px;
+  font-size: 0.85rem;
+}
+
+.tailor-page .phase-list .pc-note {
+  flex: 1 1 260px;
+}
+
+.tailor-page .phase-list .pc-note input {
+  flex: 1;
+}
+
+.tailor-page .phase-list .pc-note[hidden] {
+  display: none;
+}
+
+.tailor-page .phase-list textarea,
+.tailor-page .lc-description textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  resize: vertical;
+}
+
+.tailor-page .phase-list details summary {
+  cursor: pointer;
+}
+
+/* Process chips that can be dragged between phases */
+.tailor-page .pc-procs,
+.tailor-page .phase-list .pc-procs {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  min-height: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-content: flex-start;
+  border: 1px dashed var(--border);
+}
+
+.tailor-page #panel-phases .dropzone.drop-target {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.tailor-page #panel-phases .pchip {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 3px 4px 3px 8px;
+  border: 1px solid var(--ink);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: grab;
+  max-width: 100%;
+}
+
+.tailor-page #panel-phases .pchip .num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.tailor-page #panel-phases .pchip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 22ch;
+}
+
+.tailor-page #panel-phases .pchip-x {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0 4px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.tailor-page #panel-phases .pchip.dragging {
+  opacity: 0.35;
+}
+
+.tailor-page #panel-phases .pchip.drop-before {
+  box-shadow: -4px 0 0 var(--accent);
+}
+
+.tailor-page #panel-phases .dropzone.drop-end::after {
+  content: '';
+  width: 3px;
+  align-self: stretch;
+  background: var(--accent);
+}
+
+.tailor-page #panel-phases .pc-empty {
+  align-self: center;
+  padding: 0 4px;
+}
+
+.tailor-page #panel-phases .pc-empty:not(:only-child) {
+  display: none;
+}
+
+.tailor-page .unassigned {
+  margin: 20px 0;
+}
+
+.tailor-page .unassigned h2 {
+  margin: 0 0 6px;
+}
+
+.tailor-page .preview-title {
+  font-size: 1rem;
+  margin: 20px 0 0;
+}
+
+.tailor-page #preview-section[hidden],
+.tailor-page #preview[hidden] {
+  display: none;
+}
+
+.tailor-page #preview .lc-diagram {
+  margin-top: 8px;
+}

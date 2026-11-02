@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ProcessModal from '../../components/ProcessModal.astro';
 import LifecycleDiagram from '../../components/LifecycleDiagram.astro';
+import '../../styles/tailor.css';
 import { versions, defaultVersion, getProcesses, getWorkProducts, lifecycleIds, getLifecycle, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { plain } from '../../lib/text';
@@ -96,7 +97,7 @@ const keys: UiKey[] = [
 const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 ---
 
-<Layout locale={locale} title={t('tailor.title')} section="tailor">
+<Layout locale={locale} title={t('tailor.title')} section="tailor" pageClass="tailor-page">
   <h1>{t('tailor.title')}</h1>
   <p class="muted prose">{t('tailor.intro')}</p>
   <noscript><p class="notice">{t('tailor.noscript')}</p></noscript>
@@ -199,43 +200,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   import { createProcessModal, openLinksInModal } from '../../lib/process-modal';
   import { diagramSvgs } from '../../lib/lifecycle-diagram';
   import { escapeHtml as esc, format } from '../../lib/text';
-
-  type Proc = {
-    id: string;
-    name: string;
-    origin: string;
-    purpose: string;
-    activities: { id: string; title: string }[];
-    inputs: string[];
-  };
-  type Version = {
-    id: string;
-    title: string;
-    processes: Proc[];
-    workProducts: Record<string, { name: string; external: boolean; producers: string[] }>;
-  };
-  type Phase = {
-    id: string;
-    name: string;
-    description: string;
-    processes: string[];
-    iterative: boolean;
-    returnsTo: string;
-    returnNote: string;
-  };
-  type Data = {
-    defaultVersion: string;
-    base: string;
-    versions: Version[];
-    lifecycles: {
-      id: string;
-      name: string;
-      version: string;
-      description: string;
-      processes: string[];
-      phases: (Partial<Phase> & { id: string; name: string; processes: string[] })[];
-    }[];
-  };
+  import * as model from '../../lib/tailor/model';
+  import type { Data, Phase, Proc, State } from '../../lib/tailor/model';
+  import * as exporter from '../../lib/tailor/export';
+  import { ImportError, readModel } from '../../lib/tailor/import';
 
   const { data, strings } = JSON.parse(document.getElementById('tailor-data')!.textContent!) as {
     data: Data;
@@ -243,127 +211,18 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   };
   const s = (k: string, vars: Record<string, string | number> = {}) => format(strings[k] ?? k, vars);
   const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
-  const slug = (x: string) =>
-    x
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
+  const { phase, phasesOf, slug } = model;
 
   // --- State, kept in the URL hash so a selection can be shared ---------
 
-  interface State {
-    version: string;
-    project: string;
-    selected: Set<string>;
-    /** Excluded activities of selected processes, as "P01.A3". */
-    excluded: Set<string>;
-    rationale: Record<string, string>;
-    /** Lifecycle phases with the selected processes in order. */
-    phases: Phase[];
-    description: string;
-    tab: 'processes' | 'phases';
-  }
+  const version = (id: string) => model.versionOf(data, id);
 
-  const version = (id: string) => data.versions.find((v) => v.id === id) ?? data.versions.find((v) => v.id === data.defaultVersion)!;
+  let state = model.fromHash(data, location.hash.slice(1));
 
-  const phase = (p: Partial<Phase> & { id: string }): Phase => ({
-    name: '',
-    description: '',
-    processes: [],
-    iterative: false,
-    returnsTo: '',
-    returnNote: '',
-    ...p,
-  });
-
-  function phasesOf(lc: Data['lifecycles'][number]) {
-    return lc.phases.map((ph) => phase({ ...ph, processes: [...ph.processes] }));
-  }
-
-  /** Phases in the link, in a compact form. */
-  function readPhases(text: string | null): Phase[] {
-    if (!text) return [];
-    try {
-      return (JSON.parse(text) as Record<string, any>[]).map((x) =>
-        phase({
-          id: String(x.i),
-          name: String(x.n ?? ''),
-          description: String(x.d ?? ''),
-          processes: Array.isArray(x.p) ? x.p.map(String) : [],
-          iterative: !!x.r,
-          returnsTo: String(x.t ?? ''),
-          returnNote: String(x.w ?? ''),
-        }),
-      );
-    } catch {
-      return [];
-    }
-  }
-
-  function writePhases(phases: Phase[]) {
-    return JSON.stringify(
-      phases.map((p) => ({
-        i: p.id,
-        n: p.name,
-        ...(p.description && { d: p.description }),
-        p: p.processes,
-        ...(p.iterative && { r: 1 }),
-        ...(p.returnsTo && { t: p.returnsTo }),
-        ...(p.returnsTo && p.returnNote && { w: p.returnNote }),
-      })),
-    );
-  }
-
-  function fromHash(): State {
-    const h = new URLSearchParams(location.hash.slice(1));
-    const v = version(h.get('v') ?? data.defaultVersion);
-    const lc = data.lifecycles.find((l) => l.id === h.get('lc'));
-    const all = v.processes.map((p) => p.id);
-    const selected = h.has('p') ? h.get('p')!.split(',').filter(Boolean) : lc ? lc.processes : all;
-    let rationale: Record<string, string> = {};
-    try {
-      rationale = JSON.parse(h.get('r') ?? '{}');
-    } catch {}
-    return {
-      version: v.id,
-      project: h.get('n') ?? (lc && !h.has('p') ? lc.name : ''),
-      selected: new Set(selected.filter((id) => all.includes(id))),
-      excluded: new Set((h.get('x') ?? '').split(',').filter(Boolean)),
-      rationale,
-      phases: h.has('ph') ? readPhases(h.get('ph')) : lc ? phasesOf(lc) : [],
-      description: h.get('ld') ?? (lc && !h.has('p') ? lc.description : ''),
-      tab: h.get('t') === 'phases' || (lc && !h.has('p')) ? 'phases' : 'processes',
-    };
-  }
-
-  let state = fromHash();
-
-  /** Keep the phases in step with the selection: only selected processes of the version, each loop to an existing phase. */
-  function syncPhases() {
-    const ids = new Set(version(state.version).processes.map((p) => p.id));
-    const phaseIds = new Set(state.phases.map((p) => p.id));
-    for (const p of state.phases) {
-      p.processes = p.processes.filter((id) => ids.has(id) && state.selected.has(id));
-      if (p.returnsTo && !phaseIds.has(p.returnsTo)) p.returnsTo = '';
-    }
-  }
+  const syncPhases = () => model.syncPhases(state, version(state.version));
   syncPhases();
 
-  function toHash() {
-    const h = new URLSearchParams();
-    h.set('v', state.version);
-    if (state.project) h.set('n', state.project);
-    h.set('p', [...state.selected].join(','));
-    if (state.excluded.size) h.set('x', [...state.excluded].join(','));
-    const r = Object.fromEntries(Object.entries(state.rationale).filter(([id, text]) => text && !state.selected.has(id)));
-    if (Object.keys(r).length) h.set('r', JSON.stringify(r));
-    if (state.phases.length) h.set('ph', writePhases(state.phases));
-    if (state.description) h.set('ld', state.description);
-    if (state.tab === 'phases') h.set('t', 'phases');
-    history.replaceState(null, '', `#${h}`);
-  }
+  const toHash = () => history.replaceState(null, '', `#${model.toHash(state)}`);
 
   // --- Rendering ---------------------------------------------------------
 
@@ -374,8 +233,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   const viewport = figure.querySelector<HTMLElement>('.viewport')!;
 
   const procOf = (id: string) => version(state.version).processes.find((p) => p.id === id);
-  const phaseOf = (id: string) => state.phases.find((p) => p.processes.includes(id));
-  const unassigned = () => version(state.version).processes.filter((p) => state.selected.has(p.id) && !phaseOf(p.id));
+  const phaseOf = (id: string) => model.phaseOf(state, id);
+  const unassigned = () => model.unassigned(state, version(state.version));
   const phaseLabel = (p: Phase, i: number) => `${String(i + 1).padStart(2, '0')} ${p.name || s('tailor.phase-new', { n: i + 1 })}`;
 
   function phaseSelect(id: string) {
@@ -487,25 +346,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     figure.dispatchEvent(new Event('lc-diagram:update'));
   }
 
-  function activeActivities(p: Proc) {
-    return state.selected.has(p.id) ? p.activities.filter((a) => !state.excluded.has(`${p.id}.${a.id}`)) : [];
-  }
-
-  function missingInputs() {
-    const v = version(state.version);
-    const missing = new Map<string, Set<string>>();
-    for (const p of v.processes) {
-      if (!state.selected.has(p.id)) continue;
-      for (const wid of p.inputs) {
-        const wp = v.workProducts[wid];
-        if (!wp || wp.external || wp.producers.length === 0) continue;
-        if (wp.producers.some((pid) => state.selected.has(pid))) continue;
-        if (!missing.has(wid)) missing.set(wid, new Set());
-        missing.get(wid)!.add(p.id);
-      }
-    }
-    return missing;
-  }
+  const activeActivities = (p: Proc) => model.activeActivities(state, p);
+  const missingInputs = () => model.missingInputs(state, version(state.version));
 
   function renderSummary() {
     const v = version(state.version);
@@ -649,19 +491,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   // --- Events: phases -----------------------------------------------------
 
-  /** Add a process to a phase in the order of the PRM, unless it is already there. */
-  function insertInOrder(p: Phase, id: string) {
-    if (p.processes.includes(id)) return;
-    const order = version(state.version).processes.map((x) => x.id);
-    const at = p.processes.findIndex((x) => order.indexOf(x) > order.indexOf(id));
-    p.processes.splice(at < 0 ? p.processes.length : at, 0, id);
-  }
-
-  function newPhaseId() {
-    let n = state.phases.length + 1;
-    while (state.phases.some((p) => p.id === `phase-${n}`)) n++;
-    return `phase-${n}`;
-  }
+  const insertInOrder = (p: Phase, id: string) => model.insertInOrder(p, id, version(state.version));
+  const newPhaseId = () => model.newPhaseId(state);
 
   $('#add-phase').addEventListener('click', () => {
     state.phases.push(phase({ id: newPhaseId() }));
@@ -792,129 +623,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   // --- Export -----------------------------------------------------------
 
-  function rows() {
-    const v = version(state.version);
-    return v.processes.map((p) => ({
-      p,
-      included: state.selected.has(p.id),
-      activities: p.activities.map((a) => ({ ...a, included: state.selected.has(p.id) && !state.excluded.has(`${p.id}.${a.id}`) })),
-      rationale: state.rationale[p.id] ?? '',
-    }));
-  }
-
-  const phaseName = (p: Phase) => p.name || s('tailor.phase-new', { n: state.phases.indexOf(p) + 1 });
-
-  /** The included processes grouped by phase, in lifecycle order; those without a phase come last. */
-  function groups() {
-    const r = rows().filter((x) => x.included);
-    const byId = new Map(r.map((x) => [x.p.id, x]));
-    const out = state.phases.map((ph) => ({ phase: ph as Phase | null, rows: ph.processes.map((id) => byId.get(id)!).filter(Boolean) }));
-    const rest = r.filter((x) => !phaseOf(x.p.id));
-    if (rest.length || !out.length) out.push({ phase: null, rows: rest });
-    return out;
-  }
-
-  function markdown() {
-    const r = rows();
-    const title = state.project || s('tailor.untitled');
-    let out = `# ${title}\n\nPRM ${state.version} · ${location.href}\n\n`;
-    if (state.description) out += `${state.description}\n\n`;
-    const phased = state.phases.length > 0;
-    for (const g of groups()) {
-      if (phased) {
-        const ph = g.phase;
-        out += ph ? `## ${String(state.phases.indexOf(ph) + 1).padStart(2, '0')} ${phaseName(ph)}${ph.iterative ? ` (↻ ${s('lc.iterative')})` : ''}\n\n` : `## ${s('tailor.unassigned')}\n\n`;
-        if (ph?.description) out += `${ph.description}\n\n`;
-        const back = ph?.returnsTo && state.phases.find((x) => x.id === ph.returnsTo);
-        if (back) out += `↩ ${s('tailor.phase-returnsTo')} ${phaseName(back)}${ph!.returnNote ? `: ${ph!.returnNote}` : ''}\n\n`;
-      }
-      for (const x of g.rows) {
-        out += `${phased ? '###' : '##'} ${x.p.id} ${x.p.name}\n\n${x.p.purpose}\n\n`;
-        for (const a of x.activities) if (a.included) out += `- [ ] ${a.id}. ${a.title}\n`;
-        const skipped = x.activities.filter((a) => !a.included);
-        if (skipped.length) out += `\n${s('tailor.excluded')}: ${skipped.map((a) => a.id).join(', ')}\n`;
-        out += '\n';
-      }
-    }
-    const excluded = r.filter((x) => !x.included);
-    if (excluded.length) {
-      out += `## ${s('tailor.excluded')}\n\n`;
-      for (const x of excluded) out += `- ${x.p.id} ${x.p.name}${x.rationale ? `: ${x.rationale}` : ''}\n`;
-    }
-    return out;
-  }
-
-  function csv() {
-    const q = (x: string) => `"${x.replace(/"/g, '""')}"`;
-    const lines = [['process_id', 'process', 'phase', 'activity_id', 'activity', 'included', 'rationale'].join(',')];
-    for (const x of rows()) {
-      const ph = phaseOf(x.p.id);
-      for (const a of x.activities) {
-        lines.push([x.p.id, q(x.p.name), q(ph ? phaseName(ph) : ''), a.id, q(a.title), a.included ? 'yes' : 'no', q(x.included ? '' : x.rationale)].join(','));
-      }
-    }
-    return lines.join('\n');
-  }
-
-  function json() {
-    return JSON.stringify(
-      {
-        name: state.project || undefined,
-        prmVersion: state.version,
-        link: location.href,
-        description: state.description || undefined,
-        phases: state.phases.length ? lifecyclePhases() : undefined,
-        processes: rows().map((x) => ({
-          id: x.p.id,
-          name: x.p.name,
-          included: x.included,
-          rationale: x.included ? undefined : x.rationale || undefined,
-          activities: x.activities.map((a) => ({ id: a.id, title: a.title, included: a.included })),
-        })),
-      },
-      null,
-      2,
-    );
-  }
-
-  /** Phases with readable, unique IDs made from their names, as in content/lifecycles. */
-  function lifecyclePhases() {
-    const ids = new Map<string, string>();
-    for (const p of state.phases) {
-      const base = slug(phaseName(p)) || 'phase';
-      let id = base;
-      for (let n = 2; [...ids.values()].includes(id); n++) id = `${base}-${n}`;
-      ids.set(p.id, id);
-    }
-    return state.phases.map((p) => ({
-      id: ids.get(p.id)!,
-      name: phaseName(p),
-      ...(p.description && { description: p.description }),
-      processes: p.processes,
-      ...(p.iterative && { iterative: true }),
-      ...(p.returnsTo && { returnsTo: ids.get(p.returnsTo) }),
-      ...(p.returnsTo && p.returnNote && { returnNote: p.returnNote }),
-    }));
-  }
-
-  /** A lifecycle file in the format of content/lifecycles/<lang>/<id>.yaml. */
-  function yaml() {
-    // Plain scalars when they are unambiguous, double-quoted (JSON) strings otherwise.
-    const q = (x: string) => (/^[\p{L}\p{N}][\p{L}\p{N} ,.()'’/&–—-]*$/u.test(x) && !/^(true|false|yes|no|on|off|null|~)$/i.test(x) ? x : JSON.stringify(x));
-    const name = state.project || s('tailor.untitled');
-    let out = `id: ${slug(state.project) || 'lifecycle-model'}\nname: ${q(name)}\nstatus: draft\nprmVersion: ${state.version}\n`;
-    if (state.description) out += `description: ${q(state.description)}\n`;
-    out += 'phases:\n';
-    for (const p of lifecyclePhases()) {
-      out += `  - id: ${p.id}\n    name: ${q(p.name)}\n`;
-      if (p.description) out += `    description: ${q(p.description)}\n`;
-      out += `    processes: [${p.processes.join(', ')}]\n`;
-      if (p.iterative) out += '    iterative: true\n';
-      if (p.returnsTo) out += `    returnsTo: ${p.returnsTo}\n`;
-      if (p.returnNote) out += `    returnNote: ${q(p.returnNote)}\n`;
-    }
-    return out;
-  }
+  const context = () => ({ state, version: version(state.version), s, link: location.href });
+  const phaseName = (p: Phase) => exporter.phaseName(state, p, s);
 
   function download(name: string, type: string, text: string) {
     const url = URL.createObjectURL(new Blob([text], { type }));
@@ -927,10 +637,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   document.querySelectorAll<HTMLButtonElement>('[data-export]').forEach((b) =>
     b.addEventListener('click', () => {
       const kind = b.dataset.export!;
-      if (kind === 'md') download(`${fileBase()}.md`, 'text/markdown', markdown());
-      if (kind === 'csv') download(`${fileBase()}.csv`, 'text/csv', csv());
-      if (kind === 'json') download(`${fileBase()}.json`, 'application/json', json());
-      if (kind === 'yaml') download(`${slug(state.project) || 'lifecycle-model'}.yaml`, 'application/yaml', yaml());
+      if (kind === 'md') download(`${fileBase()}.md`, 'text/markdown', exporter.markdown(context()));
+      if (kind === 'csv') download(`${fileBase()}.csv`, 'text/csv', exporter.csv(context()));
+      if (kind === 'json') download(`${fileBase()}.json`, 'application/json', exporter.json(context()));
+      if (kind === 'yaml') download(`${slug(state.project) || 'lifecycle-model'}.yaml`, 'application/yaml', exporter.yaml(state, s));
     }),
   );
 
@@ -938,7 +648,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     const phased = state.phases.length > 0;
     $('#print-view').innerHTML =
       `<h1>${esc(state.project || s('tailor.untitled'))}</h1><p>PRM ${esc(state.version)}</p>` +
-      groups()
+      exporter
+        .groups(context())
         .map(
           (g) =>
             (phased ? `<h2>${esc(g.phase ? `${String(state.phases.indexOf(g.phase) + 1).padStart(2, '0')} ${phaseName(g.phase)}` : s('tailor.unassigned'))}</h2>` : '') +
@@ -969,132 +680,6 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   // --- Import -----------------------------------------------------------
 
-  /** A model read from a file, before it is checked against the PRM version. */
-  type Imported = {
-    version: string;
-    project: string;
-    description: string;
-    selected: string[];
-    excluded: string[];
-    rationale: Record<string, string>;
-    phases: Phase[];
-    /** Read from a CSV file, which leaves out part of the model. */
-    csv?: boolean;
-  };
-
-  /** An error whose message can be shown as it is. */
-  class ImportError extends Error {}
-
-  const str = (x: unknown) => (x == null ? '' : String(x));
-
-  /** The JSON export, or a lifecycle file (YAML) in the format of content/lifecycles. */
-  function fromObject(x: any): Imported {
-    if (!x || typeof x !== 'object' || !(Array.isArray(x.phases) || Array.isArray(x.processes))) throw new Error('Not a lifecycle model');
-    const phases: Phase[] = (Array.isArray(x.phases) ? x.phases : []).map((p: any, i: number) =>
-      phase({
-        id: str(p?.id) || `phase-${i + 1}`,
-        name: str(p?.name),
-        description: str(p?.description),
-        processes: Array.isArray(p?.processes) ? p.processes.map(String) : [],
-        iterative: !!p?.iterative,
-        returnsTo: str(p?.returnsTo),
-        returnNote: str(p?.returnNote),
-      }),
-    );
-    // A lifecycle file only lists the processes of its phases; the JSON export lists every process.
-    const procs: any[] | null = Array.isArray(x.processes) ? x.processes.filter((p: any) => p && typeof p === 'object') : null;
-    const kept = procs?.filter((p) => p.included !== false);
-    const name = str(x.name);
-    return {
-      version: str(x.prmVersion),
-      project: name === s('tailor.untitled') ? '' : name,
-      description: str(x.description),
-      selected: kept ? kept.map((p) => str(p.id)) : phases.flatMap((p) => p.processes),
-      excluded: (kept ?? []).flatMap((p) =>
-        Array.isArray(p.activities) ? p.activities.filter((a: any) => a?.included === false).map((a: any) => `${p.id}.${a.id}`) : [],
-      ),
-      rationale: Object.fromEntries((procs ?? []).filter((p) => p.included === false && p.rationale).map((p) => [str(p.id), str(p.rationale)])),
-      phases,
-    };
-  }
-
-  /** Rows of fields; reads the CSV export and spreadsheets that save it with semicolons. */
-  function parseCsv(text: string) {
-    const sep = /^[^\n]*;/.test(text) && !/^[^\n]*,/.test(text) ? ';' : ',';
-    const rows: string[][] = [];
-    let row: string[] = [];
-    let field = '';
-    let quoted = false;
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (quoted) {
-        if (c === '"' && text[i + 1] === '"') field += text[i++];
-        else if (c === '"') quoted = false;
-        else field += c;
-      } else if (c === '"') quoted = true;
-      else if (c === sep) {
-        row.push(field);
-        field = '';
-      } else if (c === '\n' || c === '\r') {
-        if (c === '\r' && text[i + 1] === '\n') i++;
-        row.push(field);
-        rows.push(row);
-        row = [];
-        field = '';
-      } else field += c;
-    }
-    if (field || row.length) rows.push([...row, field]);
-    return rows.filter((r) => r.some(Boolean));
-  }
-
-  /**
-   * The CSV export. It has no PRM version, so it is taken from the file name the export
-   * gives it (…-v2.csv) or else the version being edited, and no phase order or loops.
-   */
-  function fromCsv(text: string, file: string): Imported {
-    const [head, ...lines] = parseCsv(text);
-    const col = Object.fromEntries(['process_id', 'phase', 'activity_id', 'included', 'rationale'].map((k) => [k, head?.indexOf(k) ?? -1]));
-    if (Object.values(col).some((i) => i < 0)) throw new Error('Not a lifecycle model');
-    const named = file.match(/-([^-]+)\.csv$/i)?.[1];
-    const v = data.versions.find((x) => x.id === named) ?? version(state.version);
-    const yes = (x: string) => /^(yes|true|1)$/i.test(x.trim());
-    const selected = new Set<string>();
-    const excluded: string[] = [];
-    const rationale: Record<string, string> = {};
-    const phases: Phase[] = [];
-    for (const r of lines) {
-      const id = r[col.process_id]?.trim();
-      if (!id) continue;
-      const name = r[col.phase]?.trim() ?? '';
-      // A process is in the model when it is in a phase or keeps an activity.
-      if (name || yes(r[col.included] ?? '')) selected.add(id);
-      if (!yes(r[col.included] ?? '')) excluded.push(`${id}.${r[col.activity_id]?.trim()}`);
-      if (r[col.rationale]) rationale[id] = r[col.rationale];
-      if (!name) continue;
-      let ph = phases.find((p) => p.name === name);
-      if (!ph) phases.push((ph = phase({ id: `phase-${phases.length + 1}`, name })));
-      if (!ph.processes.includes(id)) ph.processes.push(id);
-    }
-    return {
-      version: v.id,
-      project: '',
-      description: '',
-      selected: [...selected],
-      excluded: excluded.filter((key) => selected.has(key.split('.')[0])),
-      rationale: Object.fromEntries(Object.entries(rationale).filter(([id]) => !selected.has(id))),
-      phases,
-      csv: true,
-    };
-  }
-
-  async function readModel(text: string, file: string): Promise<Imported> {
-    text = text.replace(/^﻿/, '');
-    if (/^\s*"?process_id"?[,;]/.test(text)) return fromCsv(text, file);
-    if (/^\s*\{/.test(text)) return fromObject(JSON.parse(text));
-    const { parse } = await import('yaml');
-    return fromObject(parse(text));
-  }
-
   /** Replace the model being edited and show it. */
   function load(next: State) {
     state = next;
@@ -1117,7 +702,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!file) return;
     const messages: string[] = [];
     try {
-      const m = await readModel(await file.text(), file.name);
+      const m = await readModel(await file.text(), file.name, { versions: data.versions, fallback: version(state.version), untitled: s('tailor.untitled') });
       const v = data.versions.find((x) => x.id === m.version);
       if (!v) throw new ImportError(s('tailor.import-version', { v: m.version || '?' }));
       const ids = new Set(v.processes.map((p) => p.id));
@@ -1175,465 +760,3 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   load(state);
 </script>
 
-<style>
-  .controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 20px;
-    margin: 16px 0;
-  }
-
-  .controls label {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 0.85rem;
-    color: var(--muted);
-    flex: 1 1 200px;
-  }
-
-  /* Selects ignore the inherited line-height that text inputs pick up, so pin a shared height. */
-  .controls input,
-  .controls select {
-    box-sizing: border-box;
-    height: 2.5rem;
-    line-height: 1.25;
-  }
-
-  .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-  }
-
-  @media (min-width: 960px) {
-    .layout {
-      grid-template-columns: minmax(0, 1fr) 340px;
-    }
-
-    .sticky {
-      position: sticky;
-      top: 16px;
-      max-height: calc(100vh - 32px);
-      overflow: auto;
-    }
-  }
-
-  .bulk {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-
-  .summary {
-    font-weight: 600;
-    margin-top: 0;
-  }
-
-  .side h2 {
-    font-size: 1rem;
-    margin: 16px 0 6px;
-  }
-
-  .exports {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .exports button {
-    font-size: 0.85rem;
-    padding: 4px 10px;
-  }
-
-  .print-only {
-    display: none;
-  }
-
-  @media print {
-    .print-only {
-      display: block;
-    }
-
-    main h1:first-of-type,
-    main > .container > p {
-      display: none;
-    }
-  }
-
-  /* Rendered by the script, so these need :global */
-  .processes {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 6px;
-  }
-
-  .processes :global(.proc) {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    padding: 8px 12px;
-  }
-
-  .processes :global(.proc.off) {
-    background: transparent;
-    border-style: dashed;
-  }
-
-  .processes :global(.proc.off .proc-label strong) {
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  .processes :global(.proc-head) {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .processes :global(.proc-label) {
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-    cursor: pointer;
-  }
-
-  .processes :global(.dot) {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border: 1px solid var(--ink);
-    flex: none;
-  }
-
-  .processes :global(.num),
-  .processes :global(.aid) {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-
-  .processes :global(details) {
-    margin-left: 26px;
-  }
-
-  .processes :global(summary) {
-    cursor: pointer;
-  }
-
-  .processes :global(.acts) {
-    list-style: none;
-    padding: 0;
-    margin: 4px 0;
-    display: grid;
-    gap: 2px;
-    font-size: 0.9rem;
-  }
-
-  .processes :global(.acts label) {
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-  }
-
-  .processes :global(.rationale) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px 8px;
-    margin: 4px 0 2px 26px;
-    color: var(--muted);
-  }
-
-  .processes :global(.rationale input) {
-    flex: 1 1 200px;
-    padding: 3px 8px;
-    font-size: 0.85rem;
-  }
-
-  .processes :global(.rationale[hidden]) {
-    display: none;
-  }
-
-  .missing {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 8px;
-  }
-
-  .missing :global(.link) {
-    border: 0;
-    padding: 0 4px;
-    background: none;
-    color: var(--link);
-    font-size: 0.85rem;
-    text-decoration: underline;
-  }
-
-  .processes :global(.info) {
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    justify-content: center;
-    font-family: var(--mono);
-    font-size: 0.8rem;
-    font-weight: 500;
-    flex: none;
-  }
-  .tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--ink);
-  }
-
-  .tabs [role='tab'] {
-    border: 1px solid transparent;
-    border-bottom: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--muted);
-    padding: 6px 14px;
-    margin-bottom: -1px;
-    font-weight: 600;
-  }
-
-  .tabs [role='tab'][aria-selected='true'] {
-    border-color: var(--ink);
-    background: var(--surface);
-    color: var(--text);
-  }
-
-  .tabs .count {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    font-weight: 500;
-  }
-
-  [role='tabpanel'][hidden] {
-    display: none;
-  }
-
-  .processes :global(.proc-tools) {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    flex: none;
-  }
-
-  .processes :global(.phase-select) {
-    max-width: 180px;
-    padding: 2px 6px;
-    font-size: 0.8rem;
-  }
-
-  .lc-description {
-    display: grid;
-    gap: 4px;
-    margin-bottom: 14px;
-  }
-
-  .phase-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 12px;
-  }
-
-  .phase-list :global(.phase-card) {
-    border: 1px solid var(--ink);
-    background: var(--surface);
-    padding: 10px 12px;
-    display: grid;
-    gap: 8px;
-  }
-
-  .phase-list :global(.pc-head) {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .phase-list :global(.pc-step) {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0 6px;
-    background: var(--ink-fill);
-    color: var(--surface);
-  }
-
-  .phase-list :global(.pc-name) {
-    font-weight: 600;
-    padding: 4px 8px;
-  }
-
-  .phase-list :global(.pc-tools) {
-    display: flex;
-    gap: 4px;
-  }
-
-  .phase-list :global(.pc-tools button) {
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  .phase-list :global(.pc-add) {
-    justify-self: start;
-    padding: 3px 8px;
-    font-size: 0.85rem;
-  }
-
-  .phase-list :global(.pc-options) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 16px;
-    align-items: center;
-  }
-
-  .phase-list :global(.pc-options label) {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-
-  .phase-list :global(.pc-options select),
-  .phase-list :global(.pc-options input[type='text']) {
-    padding: 2px 6px;
-    font-size: 0.85rem;
-  }
-
-  .phase-list :global(.pc-note) {
-    flex: 1 1 260px;
-  }
-
-  .phase-list :global(.pc-note input) {
-    flex: 1;
-  }
-
-  .phase-list :global(.pc-note[hidden]) {
-    display: none;
-  }
-
-  .phase-list :global(textarea),
-  .lc-description textarea {
-    width: 100%;
-    font: inherit;
-    font-size: 0.9rem;
-    padding: 4px 8px;
-    resize: vertical;
-  }
-
-  .phase-list :global(details summary) {
-    cursor: pointer;
-  }
-
-  /* Process chips that can be dragged between phases */
-  .pc-procs,
-  .phase-list :global(.pc-procs) {
-    list-style: none;
-    margin: 0;
-    padding: 6px;
-    min-height: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-content: flex-start;
-    border: 1px dashed var(--border);
-  }
-
-  #panel-phases :global(.dropzone.drop-target) {
-    border-color: var(--accent);
-    background: var(--surface-2);
-  }
-
-  #panel-phases :global(.pchip) {
-    display: inline-flex;
-    gap: 6px;
-    align-items: center;
-    padding: 3px 4px 3px 8px;
-    border: 1px solid var(--ink);
-    font-size: 0.84rem;
-    font-weight: 600;
-    line-height: 1.25;
-    cursor: grab;
-    max-width: 100%;
-  }
-
-  #panel-phases :global(.pchip .num) {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    font-weight: 500;
-    opacity: 0.8;
-  }
-
-  #panel-phases :global(.pchip-name) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 22ch;
-  }
-
-  #panel-phases :global(.pchip-x) {
-    border: 0;
-    background: transparent;
-    color: inherit;
-    padding: 0 4px;
-    font-size: 1rem;
-    line-height: 1;
-  }
-
-  #panel-phases :global(.pchip.dragging) {
-    opacity: 0.35;
-  }
-
-  #panel-phases :global(.pchip.drop-before) {
-    box-shadow: -4px 0 0 var(--accent);
-  }
-
-  #panel-phases :global(.dropzone.drop-end)::after {
-    content: '';
-    width: 3px;
-    align-self: stretch;
-    background: var(--accent);
-  }
-
-  #panel-phases :global(.pc-empty) {
-    align-self: center;
-    padding: 0 4px;
-  }
-
-  #panel-phases :global(.pc-empty:not(:only-child)) {
-    display: none;
-  }
-
-  .unassigned {
-    margin: 20px 0;
-  }
-
-  .unassigned h2 {
-    margin: 0 0 6px;
-  }
-
-  .preview-title {
-    font-size: 1rem;
-    margin: 20px 0 0;
-  }
-
-  #preview-section[hidden],
-  #preview[hidden] {
-    display: none;
-  }
-
-  #preview :global(.lc-diagram) {
-    margin-top: 8px;
-  }
-</style>

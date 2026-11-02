@@ -18,9 +18,11 @@ interface Props {
   translated?: boolean;
   /** False on pages without a fixed address, such as the error page, to leave out the canonical and language links. */
   indexable?: boolean;
+  /** Class for <main>, which the page's own stylesheet starts its rules with. */
+  pageClass?: string;
 }
 
-const { locale, title, description, section, version, versionLinks, translated = true, indexable = true } = Astro.props;
+const { locale, title, description, section, version, versionLinks, translated = true, indexable = true, pageClass } = Astro.props;
 const t = useTranslations(locale);
 const siteTitle = pick(site.title, locale);
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
@@ -169,7 +171,7 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
         </div>
       </nav>
     </header>
-    <main id="main">
+    <main id="main" class={pageClass}>
       <div class="container">
         {!translated && <p class="notice">{t('i18n.untranslated', { language: languageIn(locale, locale) })}</p>}
         <slot />
