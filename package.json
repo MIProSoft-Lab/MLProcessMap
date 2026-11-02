@@ -27,7 +27,9 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@astrojs/check": "0.9.12",
     "tsx": "4.23.15",
+    "typescript": "6.0.3",
     "vitest": "4.1.12"
   }
 }

@@ -198,6 +198,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 <script>
   import { createProcessModal, openLinksInModal } from '../../lib/process-modal';
   import { diagramSvgs } from '../../lib/lifecycle-diagram';
+  import { escapeHtml as esc, format } from '../../lib/text';
 
   type Proc = {
     id: string;
@@ -240,10 +241,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     data: Data;
     strings: Record<string, string>;
   };
-  const s = (k: string, vars: Record<string, string | number> = {}) =>
-    Object.entries(vars).reduce((acc, [key, v]) => acc.replace(`{${key}}`, String(v)), strings[k] ?? k);
+  const s = (k: string, vars: Record<string, string | number> = {}) => format(strings[k] ?? k, vars);
   const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
-  const esc = (x: string) => x.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
   const slug = (x: string) =>
     x
       .normalize('NFD')

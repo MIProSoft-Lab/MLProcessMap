@@ -6,7 +6,7 @@
 //
 // The new version is added to content/versions.yaml as a draft, so it is
 // published but not the default until its status and the default change.
-import { cpSync, existsSync, readFileSync, writeFileSync, readdirSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseDocument } from 'yaml';
 

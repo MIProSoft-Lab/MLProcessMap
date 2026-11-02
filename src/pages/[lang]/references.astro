@@ -5,7 +5,7 @@ import { studies, references, getProcesses, defaultVersion, versions } from '../
 import { localePaths } from '../../lib/paths';
 import { fullCite, referenceByKey, referenceUrl } from '../../lib/refs';
 import { inline } from '../../lib/text';
-import { useTranslations, href, type Locale } from '../../i18n/ui';
+import { useTranslations, type Locale } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
 const locale = Astro.props.locale as Locale;
@@ -72,7 +72,7 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
 </Layout>
 
 <script>
-  const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
   target?.classList.add('highlight');
 </script>
 

@@ -35,6 +35,8 @@ jobs:
       - run: npm ci
       # --if-present: a branch from before these scripts existed still builds.
       - run: npm run check:content --if-present
+      # Type check, on branches that have the checker installed.
+      - run: if [ -d node_modules/@astrojs/check ]; then npm run check; fi
       - run: npm test --if-present
       - run: npm run build
 
