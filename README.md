@@ -48,6 +48,7 @@ content/
   versions.yaml                     PRM versions, the default one, and the process map layout
   studies.yaml                      primary studies of the SLR (P1–P18)
   references.yaml                   bibliography used by the activities
+  acronyms.yaml                     acronyms and their expansion, per language
   prm/<version>/
     processes/<lang>/P01.yaml …     one file per process and language
     work-products.yaml              type of each work product (information item, artifact, record)
@@ -56,6 +57,8 @@ content/
 ```
 
 Text fields accept `*emphasis*` and `**bold**`.
+
+Acronyms listed in `acronyms.yaml` are marked wherever the text of the PRM uses them (process pages, lifecycle descriptions and the introduction): the site shows the acronym with its expansion on hover or tap, and shortens a written-out "Key Performance Indicators (KPIs)" to "KPIs", so the YAML can keep the wording of the thesis. The list is shown at the end of the References page. Bibliographic data is never changed.
 
 ### Content checks
 

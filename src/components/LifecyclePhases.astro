@@ -1,6 +1,6 @@
 ---
 import { getProcess, type Lifecycle } from '../lib/content';
-import { inline } from '../lib/text';
+import { prose } from '../lib/acronyms';
 import { useTranslations, href, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -27,7 +27,7 @@ const phaseName = (id: string) => l.phases.find((p) => p.id === id)?.name ?? id;
             </span>
           )}
         </div>
-        {!compact && ph.description && <p class="small muted" set:html={inline(ph.description)} />}
+        {!compact && ph.description && <p class="small muted" set:html={prose(ph.description, locale)} />}
         <ul class="procs">
           {ph.processes.map((pid) => {
             const p = getProcess(l.prmVersion, pid, locale).data;

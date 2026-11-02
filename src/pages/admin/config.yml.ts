@@ -388,6 +388,21 @@ export const GET: APIRoute = () => {
               },
             ],
           },
+          {
+            name: 'acronyms',
+            label: 'Acronyms',
+            file: 'content/acronyms.yaml',
+            fields: [
+              {
+                name: 'acronyms',
+                label: 'Acronyms',
+                widget: 'list',
+                summary: '{{fields.id}}: {{fields.expansion.en}}',
+                hint: 'Text that uses an acronym shows its expansion on hover, and "Expansion (ACR)" is shortened to the acronym.',
+                fields: [{ name: 'id', label: 'Acronym', widget: 'string' }, localizedText('expansion', 'Expansion')],
+              },
+            ],
+          },
           ...versions.map((v) => ({
             name: `work-products-${v.id}`,
             label: `Work product types ${v.id}`,

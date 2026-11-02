@@ -1,0 +1,97 @@
+---
+// Expansion of an acronym (an <abbr class="acronym"> from src/lib/acronyms.ts),
+// shown when the pointer rests on it or it is tapped. The expansion is the
+// title of the <abbr>, so it is also there for screen readers and without
+// JavaScript; while the card shows, the title is set aside so the browser
+// does not show its own tooltip too. Included once, by the layout.
+---
+
+<div id="acronym-hover" class="acronym-hover" role="tooltip" hidden></div>
+
+<script>
+  const card = document.getElementById('acronym-hover')!;
+  let current: HTMLElement | null = null;
+  let timer = 0;
+
+  const acronymAt = (el: EventTarget | null) => (el instanceof Element ? el.closest<HTMLElement>('abbr.acronym') : null);
+
+  function show(abbr: HTMLElement) {
+    if (current === abbr) return;
+    hide();
+    current = abbr;
+    abbr.dataset.title = abbr.title;
+    abbr.removeAttribute('title');
+    card.textContent = abbr.dataset.title;
+    card.hidden = false;
+    // Below the acronym, or above it when there is no room.
+    const a = abbr.getBoundingClientRect();
+    const r = card.getBoundingClientRect();
+    const below = a.bottom + 6 + r.height <= innerHeight - 8;
+    card.style.top = `${below ? a.bottom + 6 : Math.max(8, a.top - 6 - r.height)}px`;
+    card.style.left = `${Math.min(Math.max(8, a.left + a.width / 2 - r.width / 2), innerWidth - r.width - 8)}px`;
+  }
+
+  function hide() {
+    clearTimeout(timer);
+    if (current) {
+      current.title = current.dataset.title ?? '';
+      delete current.dataset.title;
+    }
+    current = null;
+    card.hidden = true;
+  }
+
+  document.addEventListener('pointerover', (e) => {
+    if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+    const abbr = acronymAt(e.target);
+    if (!abbr || abbr === current) return;
+    clearTimeout(timer);
+    timer = window.setTimeout(() => show(abbr), current ? 0 : 120);
+  });
+  document.addEventListener('pointerout', (e) => {
+    // A finger leaves as soon as it lifts: a tapped card stays until the next tap.
+    if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+    if (acronymAt(e.target) && acronymAt(e.relatedTarget) !== acronymAt(e.target)) hide();
+  });
+  // A tap shows the expansion, and a tap anywhere else hides it.
+  document.addEventListener('pointerdown', (e) => {
+    const abbr = acronymAt(e.target);
+    if (e.pointerType !== 'mouse' && abbr) show(abbr);
+    else hide();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hide();
+  });
+  addEventListener('scroll', hide, { passive: true, capture: true });
+</script>
+
+<style>
+  .acronym-hover {
+    position: fixed;
+    z-index: 31;
+    max-width: min(320px, calc(100vw - 16px));
+    padding: 4px 8px;
+    background: var(--ink-fill);
+    color: var(--surface);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    pointer-events: none;
+  }
+
+  .acronym-hover[hidden] {
+    display: none;
+  }
+
+  :global(abbr.acronym) {
+    text-decoration: underline dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    cursor: help;
+  }
+
+  @media print {
+    .acronym-hover {
+      display: none;
+    }
+  }
+</style>

@@ -229,6 +229,7 @@ refs:
   studies: Estudis primaris de la revisió sistemàtica de la literatura
   literature: Literatura especialitzada
   citedBy: Citat per
+  acronyms: Acrònims
 i18n:
   untranslated: Aquest contingut encara no està traduït al {language}. Es mostra en anglès.
 footer:

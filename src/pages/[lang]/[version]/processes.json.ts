@@ -3,7 +3,7 @@
 import type { APIRoute } from 'astro';
 import { getProcesses, getWorkProducts } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
-import { inline } from '../../../lib/text';
+import { prose } from '../../../lib/acronyms';
 import type { Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
@@ -16,8 +16,8 @@ export const GET: APIRoute = ({ params, props }) => {
     id: p.id,
     name: p.name,
     origin: p.origin,
-    purpose: inline(p.purpose),
-    outcomes: p.outcomes.map((o) => ({ id: o.id, text: inline(o.text) })),
+    purpose: prose(p.purpose, locale),
+    outcomes: p.outcomes.map((o) => ({ id: o.id, text: prose(o.text, locale) })),
     inputs: p.inputs.map((io) => ({
       id: io.workProduct,
       name: io.name,
@@ -30,7 +30,7 @@ export const GET: APIRoute = ({ params, props }) => {
       serves: io.serves,
       consumers: wps.get(io.workProduct)?.consumers.map((l) => l.process).filter((c) => c !== p.id) ?? [],
     })),
-    activities: p.activities.map((a) => ({ id: a.id, title: inline(a.title), description: inline(a.description) })),
+    activities: p.activities.map((a) => ({ id: a.id, title: prose(a.title, locale), description: prose(a.description, locale) })),
   }));
   return new Response(JSON.stringify(processes), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
 };

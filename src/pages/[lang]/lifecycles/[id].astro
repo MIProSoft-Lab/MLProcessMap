@@ -5,7 +5,7 @@ import LifecycleDiagram from '../../../components/LifecycleDiagram.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import { getLifecycle, getProcess, processIds } from '../../../lib/content';
 import { lifecyclePaths } from '../../../lib/paths';
-import { inline } from '../../../lib/text';
+import { prose } from '../../../lib/acronyms';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = lifecyclePaths;
@@ -27,7 +27,7 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
     <a class="badge" href={href(locale, l.prmVersion)}>{t('lc.basedOn', { version: l.prmVersion })}</a>
     {l.source && <span class="small muted">{t('lc.source')}: {l.source}</span>}
   </div>
-  {l.description && <p class="prose" set:html={inline(l.description)} />}
+  {l.description && <p class="prose" set:html={prose(l.description, locale)} />}
 
   <LifecycleDiagram locale={locale} lifecycle={l} />
 
