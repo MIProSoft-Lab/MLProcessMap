@@ -8,16 +8,17 @@ purpose: >-
   expected outputs.
 outcomes:
 - id: a
-  text: A labeled dataset where samples are assigned target values.
+  text: A labeled dataset in which samples are assigned target values is produced.
 - id: b
-  text: A Labeling Guideline Document describing objectives and instructions.
+  text: >-
+    A Labeling Guideline Document describing objectives and instructions is produced.
 - id: c
-  text: Labeling metadata, including annotators, tools, and timestamps.
+  text: Labeling metadata, including annotators, tools, and timestamps, is recorded.
 - id: d
-  text: Quality control results for the assigned labels.
+  text: Quality control results for the assigned labels are documented.
 - id: e
   text: >-
-    A Data Labeling Record documenting the complete labeling process and configuration.
+    A Data Labeling Record documenting the complete labeling process and configuration is produced.
 inputs:
 - workProduct: enriched-dataset
   name: Enriched Dataset
@@ -109,6 +110,8 @@ activities:
   - snowCheapFastbutIt2008
   - haliburtonUncoveringLabelerBias2025
   - fredrikssonDataLabelingEmpirical2020
+  - frenayClassificationPresenceLabel2014
+  - northcuttConfidentLearningEstimating2021
 - id: A5
   title: Document labeling process
   description: >-

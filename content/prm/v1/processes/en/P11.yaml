@@ -3,17 +3,21 @@ number: 11
 origin: decomposed
 name: Data Cleaning Process
 purpose: >-
-  To find and fix problems in the data, such as missing values, errors, duplicates, and inconsistencies.
-  Its main goal is to improve the quality of the data so it can be used reliably for training and evaluation.
+  The purpose of the *Data Cleaning Process* is to find and fix problems in the data, such as missing
+  values, errors, duplicates, and inconsistencies. Its main goal is to improve the quality of the data
+  so it can be used reliably for training and evaluation.
 outcomes:
 - id: a
-  text: A cleaned and verified dataset with actions taken according to the plan.
+  text: >-
+    A cleaned and verified dataset is produced, with actions taken according to the plan.
 - id: b
-  text: A Data Cleaning Record describing transformations, tools, and reasoning.
+  text: >-
+    A Data Cleaning Record describing transformations, tools, and reasoning is produced.
 - id: c
-  text: Records linking original and cleaned data to maintain traceability.
+  text: >-
+    Records linking original and cleaned data are established to maintain traceability.
 - id: d
-  text: Reported data quality issues that could not be resolved during cleaning.
+  text: Data quality issues that could not be resolved during cleaning are reported.
 inputs:
 - workProduct: raw-dataset
   name: Raw Dataset
@@ -103,7 +107,6 @@ activities:
   - P7
   - P11
   literature:
-  - coteDataCleaningMachine2024
   - recupitoUnmaskingDataSecrets2024
   - wongsuphasawatGoalsProcessChallenges2019
 - id: A4
@@ -120,7 +123,6 @@ activities:
   - P7
   - P11
   - P14
-  - P16
   - P17
   literature:
   - nazabalDataEngineeringData2020
@@ -156,8 +158,7 @@ activities:
     shared tokens, latent representations, or a learned model, and merge or link the matches according
     to the plan.
   primaryStudies:
-  - P7
-  - P11
+  - P16
   literature:
   - coteDataCleaningMachine2024
   - wongsuphasawatGoalsProcessChallenges2019

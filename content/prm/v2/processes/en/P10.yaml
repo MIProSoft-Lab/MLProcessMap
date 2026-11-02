@@ -11,17 +11,18 @@ purpose: >-
   re-scoped.
 outcomes:
 - id: a
-  text: Identified statistical and structural characteristics of the dataset.
+  text: Statistical and structural characteristics of the dataset are identified.
 - id: b
-  text: Detected issues such as missing values, outliers, or inconsistencies.
+  text: Issues such as missing values, outliers, or inconsistencies are detected.
 - id: c
-  text: Identified quality risks and data smells.
+  text: Quality risks and data smells are identified.
 - id: d
-  text: Documented findings on patterns and relationships.
+  text: Findings on patterns and relationships are documented.
 - id: e
-  text: Produced an Exploratory Data Analysis Report and a Data Quality Report.
+  text: An Exploratory Data Analysis Report and a Data Quality Report are produced.
 - id: f
-  text: Established traceability between profiling results and future cleaning actions.
+  text: >-
+    Traceability between profiling results and future cleaning actions is established.
 inputs:
 - workProduct: raw-dataset
   name: Raw Dataset
@@ -182,7 +183,6 @@ activities:
   - P11
   - P13
   - P14
-  - P15
   literature:
   - sneedProcessAssessingData2011
   - krossOrientingFramingBridging2021

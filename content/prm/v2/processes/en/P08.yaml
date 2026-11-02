@@ -10,17 +10,17 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    Relevant data sources identified, assessed, mapped to the data requirements, and documented.
+    Relevant data sources are identified, assessed, mapped to the data requirements, and documented.
 - id: b
   text: >-
-    Clear understanding of internal and external dataset availability, quality, and metadata, including
-    for undocumented sources.
+    The availability, quality, and metadata of internal and external datasets, including undocumented
+    sources, are characterized.
 - id: c
-  text: Known legal, ethical, and privacy conditions.
+  text: Legal, ethical, and privacy conditions are identified.
 - id: d
-  text: Identified data gaps and complementary sources.
+  text: Data gaps and complementary sources are identified.
 - id: e
-  text: Established relationships between data requirements and sources.
+  text: Relationships between data requirements and sources are established.
 inputs:
 - workProduct: data-requirements-specification
   name: Data Requirements Specification
@@ -61,7 +61,6 @@ activities:
   primaryStudies:
   - P10
   - P13
-  - P16
 - id: A2
   title: Survey and map internal data sources
   description: >-
@@ -101,6 +100,7 @@ activities:
     in transit, and where data is synthesized, establish that it represents the intended operational domain
     rather than the behavior of the generator.
   primaryStudies:
+  - P3
   - P4
   - P8
   - P9
@@ -114,7 +114,6 @@ activities:
     contractual boundaries and intellectual property rights are included, and check the terms attaching
     to the data underlying a candidate artifact as well as those of the artifact itself.
   primaryStudies:
-  - P3
   - P10
   - P16
 - id: A7
@@ -126,6 +125,7 @@ activities:
     the access rights, ownership, and retention terms attaching to each source.
   primaryStudies:
   - P3
+  - P16
 - id: A8
   title: Conduct ethical review
   description: >-
@@ -147,6 +147,7 @@ activities:
   - P3
   - P9
   - P10
+  - P17
 changes:
 - annotation: A-25
   text: No activity establishes relationships between A1 and A2

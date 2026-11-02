@@ -8,13 +8,13 @@ purpose: >-
   for exploration and cleaning.
 outcomes:
 - id: a
-  text: Data extracted from sources and stored in a staging area.
+  text: Data are extracted from sources and stored in a staging area.
 - id: b
-  text: Raw data accompanied by metadata and documentation.
+  text: Raw data are accompanied by metadata and documentation.
 - id: c
-  text: Extraction logs and monitoring information available.
+  text: Extraction logs and monitoring information are available.
 - id: d
-  text: A Data Collection Record documenting decisions and parameters.
+  text: A Data Collection Record documenting decisions and parameters is produced.
 inputs:
 - workProduct: data-catalog
   name: Data Catalog
@@ -73,9 +73,6 @@ activities:
     source its update strategy, load frequency, and expected volume, and for each column its target column,
     type, constraints, and any transformation applied. Record alongside them the access rights, ownership,
     controllers, third parties, usage purpose, and retention attaching to each source.
-  primaryStudies:
-  - P3
-  - P14
   literature:
   - khanOverviewETLTechniques2024
   - yuliantoExtractTransformLoad2019
@@ -90,8 +87,6 @@ activities:
     extraction for video, and reach web sources either through a programmatic interface or by scraping
     where none exists. Account for the effect on the destination, since this material raises storage cost,
     threatens integrity, and can leave an indexed structure that later queries do not fit.
-  primaryStudies:
-  - P14
   literature:
   - seenivasanETLWorldUnstructured2021
 - id: A5

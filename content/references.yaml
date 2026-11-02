@@ -162,6 +162,13 @@ references:
   venue: Product-Focused Software Process Improvement
   publisher: Springer International Publishing
   doi: 10.1007/978-3-030-64148-1_13
+- key: frenayClassificationPresenceLabel2014
+  authors: Frenay, Benoit and Verleysen, Michel
+  title: 'Classification in the Presence of Label Noise: A Survey'
+  year: '2014'
+  venue: IEEE Transactions on Neural Networks and Learning Systems
+  doi: 10.1109/TNNLS.2013.2292894
+  url: https://ieeexplore.ieee.org/document/6685834
 - key: gamaSurveyConceptDrift2014
   authors: >-
     Gama, Joao and Zliobaite, Indre and Bifet, Albert and Pechenizkiy, Mykola and Bouchachia, Abdelhamid
@@ -302,6 +309,13 @@ references:
   publisher: arXiv
   doi: 10.48550/arXiv.2004.12929
   url: http://arxiv.org/abs/2004.12929
+- key: northcuttConfidentLearningEstimating2021
+  authors: Northcutt, Curtis and Jiang, Lu and Chuang, Isaac
+  title: 'Confident Learning: Estimating Uncertainty in Dataset Labels'
+  year: '2021'
+  venue: J. Artif. Int. Res.
+  doi: 10.1613/jair.1.12125
+  url: https://dl.acm.org/doi/10.1613/jair.1.12125
 - key: polletiHierarchicalFallbackArchitecture2025
   authors: >-
     Polleti, Gustavo and Santana, Marlesson and Sant, Felipe Sassi Del and Fontes, Eduardo

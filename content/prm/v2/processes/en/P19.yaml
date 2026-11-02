@@ -10,26 +10,28 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    A verification strategy defined, with its scope, methods, success criteria, and environment.
+    A verification strategy is defined, with its scope, methods, success criteria, and environment.
 - id: b
-  text: Correct operation of functional workflows and interfaces verified.
+  text: Correct operation of functional workflows and interfaces is verified.
 - id: c
-  text: Runtime performance verified against the Service Level Objectives.
+  text: Runtime performance is verified against the Service Level Objectives.
 - id: d
-  text: Fault tolerance, fallback, rollback, and recovery mechanisms verified.
+  text: Fault tolerance, fallback, rollback, and recovery mechanisms are verified.
 - id: e
   text: >-
-    Security of the system verified against its security requirements, including the vulnerabilities specific
-    to Machine Learning.
+    The security of the system is verified against its security requirements, including the vulnerabilities
+    specific to Machine Learning.
 - id: f
   text: >-
-    Environment and dependencies verified as identified, controlled, and reproducible.
+    The environment and dependencies are verified as identified, controlled, and reproducible.
 - id: g
-  text: Operational readiness of monitoring and versioning established.
+  text: Operational readiness of monitoring and versioning is established.
 - id: h
-  text: A System Verification Report documenting verification activities and results.
+  text: >-
+    Verification activities and results are documented in the System Verification Report.
 - id: i
-  text: Non-conformances recorded for corrective action and traced to the requirements.
+  text: >-
+    Non-conformances are recorded for corrective action and traced to the requirements.
 inputs:
 - workProduct: integrated-system
   name: Integrated System

@@ -8,20 +8,20 @@ purpose: >-
   between the ML component and the wider software system.
 outcomes:
 - id: a
-  text: Verified correct operation under functional workflows.
+  text: Correct operation under functional workflows is verified.
 - id: b
-  text: Tested interfaces between the ML component and system modules.
+  text: Interfaces between the ML component and system modules are tested.
 - id: c
-  text: Evaluated runtime performance against operational thresholds.
+  text: Runtime performance is evaluated against operational thresholds.
 - id: d
-  text: Verified fault tolerance and fallback mechanisms.
+  text: Fault tolerance and fallback mechanisms are verified.
 - id: e
-  text: Established operational readiness of monitoring and versioning.
+  text: Operational readiness of monitoring and versioning is established.
 - id: f
   text: >-
-    Documented verification activities and results in the System Verification Report.
+    Verification activities and results are documented in the System Verification Report.
 - id: g
-  text: Recorded non-conformances for corrective action.
+  text: Non-conformances are recorded for corrective action.
 inputs:
 - workProduct: integrated-system
   name: Integrated System

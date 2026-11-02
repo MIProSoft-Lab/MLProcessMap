@@ -8,13 +8,14 @@ purpose: >-
   and model structures to guide implementation and integration.
 outcomes:
 - id: a
-  text: Agreed-upon data flows, interfaces, and design constraints.
+  text: Data flows, interfaces, and design constraints are agreed upon.
 - id: b
-  text: Specified design choices for model training, deployment, and monitoring.
+  text: Design choices for model training, deployment, and monitoring are specified.
 - id: c
-  text: Design features addressing quality and interpretability.
+  text: Design features that address quality and interpretability are defined.
 - id: d
-  text: Traceability links between design elements, requirements, and verification.
+  text: >-
+    Traceability between design elements, requirements, and verification is established.
 inputs:
 - workProduct: system-analysis-report
   name: System Analysis Report
@@ -64,10 +65,8 @@ activities:
     against systems deployable under the organization's own control where regulation or data protection
     requires it.
   primaryStudies:
-  - P4
   - P8
   - P9
-  - P11
   - P16
   - P17
   - P18
@@ -90,7 +89,6 @@ activities:
   primaryStudies:
   - P2
   - P4
-  - P5
   - P9
   - P12
   literature:

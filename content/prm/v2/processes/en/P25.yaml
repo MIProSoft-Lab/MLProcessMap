@@ -8,17 +8,17 @@ purpose: >-
   components from production while ensuring traceability, compliance, and the preservation of knowledge.
 outcomes:
 - id: a
-  text: Identified and documented decommissioning triggers and scope.
+  text: Decommissioning triggers and scope are identified and documented.
 - id: b
-  text: Securely deactivated components, prediction services, and infrastructure.
+  text: Components, prediction services, and infrastructure are securely deactivated.
 - id: c
-  text: Archived or securely deleted components and artifacts according to policy.
+  text: Components and artifacts are archived or securely deleted according to policy.
 - id: d
-  text: Preserved provenance metadata and logs for auditability.
+  text: Provenance metadata and logs are preserved for auditability.
 - id: e
-  text: Retained documentation and artifacts for future reproducibility.
+  text: Documentation and artifacts are retained for future reproducibility.
 - id: f
-  text: Released resources and concluded technical ownership.
+  text: Resources are released and technical ownership is concluded.
 inputs:
 - workProduct: integrated-system
   name: Integrated System

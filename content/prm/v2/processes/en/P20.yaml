@@ -9,18 +9,18 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    A trained model transitioned into a prepared and configured production environment.
+    A trained model is transitioned into a prepared and configured production environment.
 - id: b
-  text: The model packaged into a standardized, portable deployment artifact.
+  text: The model is packaged into a standardized, portable deployment artifact.
 - id: c
-  text: A versioned model registered in a registry with metadata.
+  text: A versioned model is registered in a registry with metadata.
 - id: d
-  text: The deployed model correctly loaded and exposed via defined interfaces.
+  text: The deployed model is correctly loaded and exposed via defined interfaces.
 - id: e
-  text: Deployment executed using procedures that support monitoring and rollback.
+  text: Deployment is executed using procedures that support monitoring and rollback.
 - id: f
   text: >-
-    A Deployment Record documenting deployment decisions, configurations, and actions.
+    A Deployment Record documenting deployment decisions, configurations, and actions is produced.
 inputs:
 - workProduct: model-artifact
   name: Model Artifact

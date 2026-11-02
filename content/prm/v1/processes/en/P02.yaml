@@ -9,21 +9,22 @@ purpose: >-
   are validated.
 outcomes:
 - id: a
-  text: Identified stakeholders and their roles.
+  text: Stakeholders and their roles are identified.
 - id: b
-  text: Defined stakeholder needs, goals, and constraints.
+  text: Stakeholder needs, goals, and constraints are defined.
 - id: c
-  text: Description of the operational context and intended use.
+  text: The operational context and intended use are described.
 - id: d
-  text: Requirements analyzed and prioritized.
+  text: Requirements are analyzed and prioritized.
 - id: e
-  text: Defined quality characteristics.
+  text: Quality characteristics are defined.
 - id: f
-  text: Resolved conflicts and ambiguities.
+  text: Conflicts and ambiguities are resolved.
 - id: g
-  text: Formally agreed-upon stakeholder requirements.
+  text: Stakeholder requirements are formally agreed upon.
 - id: h
-  text: Traceability links between stakeholder needs and future system requirements.
+  text: >-
+    Traceability between stakeholder needs and future system requirements is established.
 inputs:
 - workProduct: technical-problem-statement
   name: Technical Problem Statement
@@ -113,8 +114,6 @@ activities:
     and governance expectations, and on feasibility.
   primaryStudies:
   - P2
-  - P4
-  - P9
   - P10
   - P11
   - P12
@@ -133,14 +132,12 @@ activities:
     terminology, and confirm understanding through demonstrations in which stakeholders exercise the intended
     capability against their own cases rather than reviewing reported results alone.
   primaryStudies:
-  - P2
   - P3
   - P6
   - P10
   - P11
   - P14
   - P16
-  - P18
 standards:
 - standard: ISO/IEC/IEEE 12207
   activity: a) Prepare for stakeholder needs and requirements definition

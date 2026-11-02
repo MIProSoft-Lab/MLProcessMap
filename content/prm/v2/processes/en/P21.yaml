@@ -10,25 +10,26 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    A validation strategy defined, with its scope, acceptance criteria, environment, and participating
+    A validation strategy is defined, with its scope, acceptance criteria, environment, and participating
     stakeholders.
 - id: b
   text: >-
-    The deployed system validated under operating conditions, with the validity of its predictions on
-    live data assessed.
+    The deployed system is validated under operating conditions, and the validity of its predictions on
+    live data is assessed.
 - id: c
-  text: The availability of the services required by stakeholders confirmed.
+  text: The availability of the services required by stakeholders is confirmed.
 - id: d
-  text: The achievement of the business objectives and success criteria assessed.
+  text: The achievement of the business objectives and success criteria is assessed.
 - id: e
-  text: Fitness for the intended use confirmed with users and other stakeholders.
+  text: Fitness for the intended use is confirmed with users and other stakeholders.
 - id: f
-  text: A System Validation Report documenting validation results and anomalies.
+  text: >-
+    A System Validation Report documenting validation results and anomalies is produced.
 - id: g
-  text: Stakeholder agreement that the system meets their needs obtained.
+  text: Stakeholder agreement that the system meets their needs is obtained.
 - id: h
   text: >-
-    Traceability between the validation results and the stakeholder requirements established.
+    Traceability between the validation results and the stakeholder requirements is established.
 inputs:
 - workProduct: deployment-artifacts
   name: Deployment Artifacts

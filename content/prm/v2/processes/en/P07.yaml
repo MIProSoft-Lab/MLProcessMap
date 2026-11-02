@@ -9,13 +9,13 @@ purpose: >-
   and non-functional system attributes based on project requirements.
 outcomes:
 - id: a
-  text: Testing and verification activities guided by a consistent evaluation framework.
+  text: >-
+    Testing and verification activities are guided by a consistent evaluation framework.
 - id: b
   text: >-
-    Performance, reliability, training efficiency, and cost assessed using relevant metrics.
+    Performance, reliability, training efficiency, and cost are assessed using relevant metrics.
 - id: c
-  text: >-
-    Metrics and benchmarks that remain traceable and comparable across the lifecycle.
+  text: Metrics and benchmarks are traceable and comparable across the lifecycle.
 inputs:
 - workProduct: system-requirements-specification
   name: System Requirements Specification
@@ -116,7 +116,6 @@ activities:
     generalizes. Incorporate reference points (such as human-level performance, competitor benchmarks,
     or published state-of-the-art results) to evaluate model competence.
   primaryStudies:
-  - P4
   - P10
   - P11
   - P13
@@ -151,6 +150,7 @@ activities:
     after an incident. Retain the business measures alongside the technical ones, since a system can satisfy
     its technical criteria while ceasing to deliver the outcome it was built for.
   primaryStudies:
+  - P10
   - P12
   - P13
   - P15

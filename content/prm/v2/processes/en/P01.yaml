@@ -10,14 +10,15 @@ purpose: >-
   is justified.
 outcomes:
 - id: a
-  text: A defined technical problem statement with success constraints and risks.
+  text: A technical problem statement with success constraints and risks is defined.
 - id: b
-  text: A comparison of technical solution classes with a selected preference.
+  text: Technical solution classes are compared and a preferred class is selected.
 - id: c
   text: >-
-    Established computational and operational cost constraints for the selected solution class.
+    Computational and operational cost constraints for the selected solution class are established.
 - id: d
-  text: Documented traceability linking the problem, KPIs, and solution rationale.
+  text: >-
+    Traceability between the problem, KPIs, and the solution rationale is established.
 inputs:
 - workProduct: business-goals-and-constraints
   name: Business Goals and Constraints
@@ -89,9 +90,7 @@ activities:
     discovery, cataloging, and screening of specific candidate datasets belongs to the *Data Source Identification
     Process*.
   primaryStudies:
-  - P10
   - P11
-  - P12
   - P13
   - P14
   - P16

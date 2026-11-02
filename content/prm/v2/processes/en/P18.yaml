@@ -8,16 +8,17 @@ purpose: >-
   adapting interfaces and implementing necessary safeguards.
 outcomes:
 - id: a
-  text: Trained model integrated with compatible interfaces for input and output data.
+  text: >-
+    The trained model is integrated through compatible interfaces for input and output data.
 - id: b
-  text: Codebase updated to incorporate the model into system workflows.
+  text: The codebase is updated to incorporate the model into system workflows.
 - id: c
-  text: Safeguards and fallback mechanisms implemented to handle failures.
+  text: Safeguards and fallback mechanisms to handle failures are implemented.
 - id: d
   text: >-
-    An Integration Record documenting integration steps, code changes, and interfaces.
+    An Integration Record documenting integration steps, code changes, and interfaces is produced.
 - id: e
-  text: Traceability links established between the model and system components.
+  text: Traceability between the model and system components is established.
 inputs:
 - workProduct: model-artifact
   name: Model Artifact
@@ -74,11 +75,9 @@ activities:
     protected from incompatible model updates.
   primaryStudies:
   - P4
-  - P8
   - P10
   literature:
   - sculleyHiddenTechnicalDebt2015
-  - sensLargeScaleStudyModel2025
 - id: A2
   title: Implement safeguards
   description: >-
@@ -89,9 +88,6 @@ activities:
   primaryStudies:
   - P8
   - P13
-  literature:
-  - sensLargeScaleStudyModel2025
-  - polletiHierarchicalFallbackArchitecture2025
 - id: A3
   title: Document integration
   description: >-

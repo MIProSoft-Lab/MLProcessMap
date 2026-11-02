@@ -9,15 +9,16 @@ purpose: >-
   any licensing, legal, or ethical implications before any data collection or ingestion takes place.
 outcomes:
 - id: a
-  text: Relevant data sources identified, assessed, and documented.
+  text: Relevant data sources are identified, assessed, and documented.
 - id: b
-  text: Clear understanding of internal and external dataset availability and quality.
+  text: >-
+    The availability and quality of internal and external datasets are characterized.
 - id: c
-  text: Known legal, ethical, and privacy conditions.
+  text: Legal, ethical, and privacy conditions are identified.
 - id: d
-  text: Identified data gaps and complementary sources.
+  text: Data gaps and complementary sources are identified.
 - id: e
-  text: Established relationships between data requirements and sources.
+  text: Relationships between data requirements and sources are established.
 inputs:
 - workProduct: data-requirements-specification
   name: Data Requirements Specification
@@ -57,7 +58,6 @@ activities:
   primaryStudies:
   - P10
   - P13
-  - P16
 - id: A2
   title: Survey internal data sources
   description: >-
@@ -68,9 +68,10 @@ activities:
     granted, since privileges can differ within a project, and identify where sources recording the same
     events in incompatible formats will have to be reconciled.
   primaryStudies:
+  - P3
   - P4
-  - P10
   - P11
+  - P16
   - P17
 - id: A3
   title: Identify external data sources
@@ -84,6 +85,7 @@ activities:
     in transit, and where data is synthesized, establish that it represents the intended operational domain
     rather than the behavior of the generator.
   primaryStudies:
+  - P3
   - P4
   - P8
   - P9
@@ -97,7 +99,6 @@ activities:
     contractual boundaries and intellectual property rights are included, and check the terms attaching
     to the data underlying a candidate artifact as well as those of the artifact itself.
   primaryStudies:
-  - P3
   - P10
   - P16
 - id: A5
@@ -109,6 +110,7 @@ activities:
     the access rights, ownership, and retention terms attaching to each source.
   primaryStudies:
   - P3
+  - P16
 - id: A6
   title: Conduct ethical review
   description: >-
@@ -130,6 +132,7 @@ activities:
   - P3
   - P9
   - P10
+  - P17
 standards:
 - standard: ISO/IEC 5338
   activity: a) Define scope and criteria for knowledge acquisition

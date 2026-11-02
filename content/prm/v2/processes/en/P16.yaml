@@ -9,15 +9,16 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    Model configuration parameters explored and adjusted for better validation performance.
+    Model configuration parameters are explored and adjusted to improve validation performance.
 - id: b
-  text: Optimal hyperparameter values identified and recorded.
+  text: Optimal hyperparameter values are identified and recorded.
 - id: c
-  text: Pre-trained models selected and fine-tuned (if applicable).
+  text: Pre-trained models are selected and fine-tuned, where applicable.
 - id: d
-  text: Regularization and ensemble strategies applied.
+  text: Regularization and ensemble strategies are applied.
 - id: e
-  text: A Model Optimization Record documenting search strategies and decisions.
+  text: >-
+    A Model Optimization Record documenting search strategies and decisions is produced.
 inputs:
 - workProduct: model-artifact
   name: Model Artifact
@@ -130,7 +131,6 @@ activities:
     access to the record where the hyperparameters are confidential.
   primaryStudies:
   - P8
-  - P13
   - P14
 changes:
 - annotation: A-41
