@@ -55,6 +55,7 @@ outputs:
   - e
   - f
   - g
+  - h
 activities:
 - id: A1
   title: Plan testing

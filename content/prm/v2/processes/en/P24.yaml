@@ -76,8 +76,12 @@ outputs:
   name: Maintenance Records
   description: Actions, outcomes, trends, and model lineage.
   serves:
+  - a
   - b
   - c
+  - d
+  - e
+  - f
   - g
   - h
 activities:
