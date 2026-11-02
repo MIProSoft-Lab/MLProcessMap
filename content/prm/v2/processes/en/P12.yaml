@@ -9,14 +9,15 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    An enriched dataset combining original data with additional or transformed attributes.
+    An enriched dataset combining original data with additional or transformed attributes is produced.
 - id: b
   text: >-
-    A Data Enrichment Record documenting all enrichment operations, methods, and tools.
+    A Data Enrichment Record documenting all enrichment operations, methods, and tools is produced.
 - id: c
-  text: Records of resolved conflicts, redundancies, and inconsistencies.
+  text: Resolved conflicts, redundancies, and inconsistencies are recorded.
 - id: d
-  text: A summary report describing the strategy and resulting dataset characteristics.
+  text: >-
+    A summary report describing the strategy and the resulting dataset characteristics is produced.
 inputs:
 - workProduct: cleaned-dataset
   name: Cleaned Dataset
@@ -86,6 +87,8 @@ activities:
   literature:
   - stonebrakerMachineLearningBig2019
   - liDataAugmentationMLdriven2021
+  - dongBigDataIntegration2015
+  - roh2021
 - id: A4
   title: Resolve entities
   description: >-
@@ -94,7 +97,6 @@ activities:
     at scale, generate examples for matching through rules or modeling, and have the generated matches
     validated by personnel with knowledge of the domain.
   literature:
-  - dongBigDataIntegration2015
   - stonebrakerMachineLearningBig2019
   - liDataAugmentationMLdriven2021
 - id: A5

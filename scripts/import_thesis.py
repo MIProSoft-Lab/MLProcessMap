@@ -18,7 +18,9 @@ import yaml
 ORIGINS = {
     "Standards and literature": "standards-and-literature",
     "Standards only": "standards-only",
+    "Standards": "standards-only",
     "Decomposed": "decomposed",
+    "Decomposed from standards": "decomposed",
 }
 
 WP_TYPES = {"I": "information-item", "A": "artifact", "R": "record"}
@@ -276,7 +278,16 @@ def parse_trace(path, names_to_ids):
     only the rows of that process are kept.
     """
     tex = strip_comments(path.read_text(encoding="utf-8"))
-    caption, _ = read_group(tex, tex.index("{", tex.index("\\caption")))
+    i = tex.index("\\caption") + len("\\caption")
+    # Skip the optional short caption, which may not name the process.
+    if tex[i] == "[":
+        depth = 0
+        for k in range(i, len(tex)):
+            depth += {"[": 1, "]": -1}.get(tex[k], 0)
+            if depth == 0:
+                i = k + 1
+                break
+    caption, _ = read_group(tex, tex.index("{", i))
     focal = next(i for n, i in names_to_ids.items() if f"*{n}*" in to_text(caption))
     header = re.search(r"\\textbf\{(.*?)Activity\}\s*&", tex)
     standard = to_text(header.group(1)).strip() if header else ""

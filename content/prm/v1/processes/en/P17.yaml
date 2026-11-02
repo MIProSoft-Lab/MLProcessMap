@@ -8,17 +8,17 @@ purpose: >-
   whether the model satisfies technical requirements and is suitable for integration.
 outcomes:
 - id: a
-  text: Confirmed evaluation metrics and success criteria.
+  text: Evaluation metrics and success criteria are confirmed.
 - id: b
-  text: Performance results produced by evaluating the model on a held-out test set.
+  text: Performance results are produced by evaluating the model on a held-out test set.
 - id: c
-  text: Detailed error analyses identifying strengths and weaknesses.
+  text: Detailed error analyses identifying strengths and weaknesses are performed.
 - id: d
-  text: Robustness information obtained from testing input perturbations.
+  text: Robustness information is obtained by testing input perturbations.
 - id: e
-  text: Documented results compared against predefined success thresholds.
+  text: Results are documented and compared against predefined success thresholds.
 - id: f
-  text: A decision on whether the model is ready for integration.
+  text: A decision on whether the model is ready for integration is made.
 inputs:
 - workProduct: model-artifact
   name: Model Artifact

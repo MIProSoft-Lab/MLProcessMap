@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
+import CollapseToggle from '../../../../components/CollapseToggle.astro';
 import '../../../../styles/process.css';
 import { getProcess, getVersion, getWorkProducts, processIds, versions, pick } from '../../../../lib/content';
 import { processPaths } from '../../../../lib/paths';
@@ -104,8 +105,12 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
         <p class="prose purpose" set:html={inline(p.purpose)} />
       </section>
 
-      <section id="outcomes">
-        <h2><span class="sec">{num('outcomes')}</span>{t('process.outcomes')}</h2>
+      <section id="outcomes" class="collapsible">
+        <div class="section-head">
+          <h2><span class="sec">{num('outcomes')}</span>{t('process.outcomes')}</h2>
+          <CollapseToggle locale={locale} controls="outcomes-body" name={t('process.outcomes')} class="no-print" />
+        </div>
+        <div class="collapse-body" id="outcomes-body">
         <ol class="outcomes">
           {
             p.outcomes.map((o) => (
@@ -128,15 +133,23 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
             ))
           }
         </ol>
+        </div>
       </section>
 
-      <section id="interface">
-        <h2><span class="sec">{num('interface')}</span>{t('process.inputs')} · {t('process.outputs')}</h2>
+      <section id="interface" class="collapsible">
+        <div class="section-head">
+          <h2><span class="sec">{num('interface')}</span>{t('process.inputs')} · {t('process.outputs')}</h2>
+          <CollapseToggle locale={locale} controls="interface-body" name={`${t('process.inputs')} · ${t('process.outputs')}`} class="no-print" />
+        </div>
+        <div class="collapse-body" id="interface-body">
         <div class="flow grid-paper">
           {
             (['inputs', 'outputs'] as const).map((kind) => (
-              <div class:list={['flow-col', kind]} id={kind}>
-                <span class="label col-label">{t(`process.${kind}`)}</span>
+              <div class:list={['flow-col', 'collapsible', kind]} id={kind}>
+                <span class="label col-label print-only">{t(`process.${kind}`)}</span>
+                <CollapseToggle locale={locale} controls={`${kind}-body`} name={t(`process.${kind}`)} text={t(`process.${kind}`)} class="col-toggle no-print" />
+                <div class="collapse-body" id={`${kind}-body`}>
+                <div class="io-list">
                 {p[kind].length === 0 && <p class="muted small">—</p>}
                 {p[kind].map((io) => {
                   const wp = wps.get(io.workProduct);
@@ -178,6 +191,8 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                     </div>
                   );
                 })}
+                </div>
+                </div>
               </div>
             ))
           }
@@ -196,15 +211,18 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
             </div>
           </div>
         </div>
+        </div>
       </section>
 
-      <section id="activities">
+      <section id="activities" class="collapsible">
         <div class="section-head">
           <h2><span class="sec">{num('activities')}</span>{t('process.activities')}</h2>
           <button type="button" class="toggle-all no-print" data-expand={t('process.expandAll')} data-collapse={t('process.collapseAll')}>
             {t('process.collapseAll')}
           </button>
+          <CollapseToggle locale={locale} controls="activities-body" name={t('process.activities')} class="no-print" />
         </div>
+        <div class="collapse-body" id="activities-body">
         <ol class="activities">
           {
             p.activities.map((a) => (
@@ -214,6 +232,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                     <span class="aid">{a.id}</span>
                     <span class="atitle" set:html={inline(a.title)} />
                   </summary>
+                  <div class="collapse-body">
                   <div class="abody">
                     <p class="prose" set:html={inline(a.description)} />
                     {(a.primaryStudies?.length || a.literature?.length) && (
@@ -245,20 +264,26 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                       </dl>
                     )}
                   </div>
+                  </div>
                 </details>
               </li>
             ))
           }
         </ol>
+        </div>
       </section>
 
       {
         changelog.length > 0 && (
-          <section id="changes">
-            <h2>
-              <span class="sec">{num('changes')}</span>
-              {t('process.changes')}
-            </h2>
+          <section id="changes" class="collapsible">
+            <div class="section-head">
+              <h2>
+                <span class="sec">{num('changes')}</span>
+                {t('process.changes')}
+              </h2>
+              <CollapseToggle locale={locale} controls="changes-body" name={t('process.changes')} class="no-print" />
+            </div>
+            <div class="collapse-body" id="changes-body">
             {previousVersion && <p class="muted small">{t('process.changesFrom', { version: previousVersion })}</p>}
             <ul class="changes">
               {changelog.map((ch) => (
@@ -269,6 +294,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                 </li>
               ))}
             </ul>
+            </div>
           </section>
         )
       }
@@ -304,6 +330,8 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
 </Layout>
 
 <script>
+  import { animateDetails, setBodyOpen, setDetailsOpen, willBeOpen } from '../../../../lib/collapse';
+
   // Route a right-angle wire from every input to the process and from the
   // process to every output. The wires share a vertical bus in each gap.
   const flow = document.querySelector<HTMLElement>('.flow');
@@ -315,6 +343,8 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
     if (!flow || !svg || !core) return;
     svg.querySelectorAll('path.wire').forEach((p) => p.remove());
     if (getComputedStyle(svg).display === 'none') return;
+    // Nothing to route while the whole section is closed or moving.
+    if (flow.closest("[data-state='closed'], [data-state='moving']")) return;
     const box = flow.getBoundingClientRect();
     const c = core.getBoundingClientRect();
     const coreY = c.top + c.height / 2 - box.top;
@@ -328,7 +358,9 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
       path.setAttribute('marker-end', 'url(#arrow)');
       svg.appendChild(path);
     };
-    flow.querySelectorAll<HTMLElement>('.inputs .io-node').forEach((n) => {
+    // Only the columns that are open and still.
+    const nodes = (kind: string) => flow.querySelectorAll<HTMLElement>(`.${kind}:not([data-state='closed'], [data-state='moving']) .io-node`);
+    nodes('inputs').forEach((n) => {
       const r = n.getBoundingClientRect();
       const x1 = r.right - box.left;
       const y1 = r.top - box.top + 20;
@@ -336,7 +368,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
       const mid = (x1 + x2) / 2;
       wire(`M${x1} ${y1} H${mid} V${coreY} H${x2 - 1}`);
     });
-    flow.querySelectorAll<HTMLElement>('.outputs .io-node').forEach((n) => {
+    nodes('outputs').forEach((n) => {
       const r = n.getBoundingClientRect();
       const x1 = c.right - box.left;
       const x2 = r.left - box.left;
@@ -349,27 +381,56 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
   if (flow) new ResizeObserver(drawWires).observe(flow);
   document.fonts?.ready.then(drawWires);
 
+  // Outcomes, inputs, outputs and activities each open and close on their own.
+  // A column of the diagram has no wires while it is closed or moving.
+  const toggles = [...document.querySelectorAll<HTMLButtonElement>('.collapse-toggle')];
+  const bodyOf = (t: HTMLButtonElement) => document.getElementById(t.getAttribute('aria-controls')!)!;
+  const setSection = (toggle: HTMLButtonElement, open: boolean, animate = true) => {
+    const body = bodyOf(toggle);
+    const part = toggle.closest<HTMLElement>('.collapsible')!;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.title = open ? toggle.dataset.collapse! : toggle.dataset.expand!;
+    if (toggle.hasAttribute('aria-label')) toggle.setAttribute('aria-label', toggle.title);
+    part.dataset.state = 'moving';
+    drawWires();
+    setBodyOpen(body, open, {
+      animate,
+      done: () => {
+        part.dataset.state = open ? 'open' : 'closed';
+        drawWires();
+      },
+    });
+  };
+  toggles.forEach((t) => t.addEventListener('click', () => setSection(t, t.getAttribute('aria-expanded') !== 'true')));
+
+  // Every activity, and the button that opens or closes them all.
+  animateDetails(document.querySelector('.activities')!);
   const button = document.querySelector<HTMLButtonElement>('.toggle-all');
   const all = [...document.querySelectorAll<HTMLDetailsElement>('.activities details')];
   const sync = () => {
-    const anyOpen = all.some((d) => d.open);
+    const anyOpen = all.some(willBeOpen);
     button!.textContent = anyOpen ? button!.dataset.collapse! : button!.dataset.expand!;
   };
   button?.addEventListener('click', () => {
-    const open = !all.some((d) => d.open);
-    all.forEach((d) => (d.open = open));
+    const open = !all.some(willBeOpen);
+    all.forEach((d) => setDetailsOpen(d, open));
     sync();
   });
   all.forEach((d) => d.addEventListener('toggle', sync));
-  // Open the activity a link points to, on load and on in-page links.
+
+  // Open what a link points to, and the parts that contain it, on load and on in-page links.
   const openTarget = () => {
     if (!location.hash) return;
     const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    const details = target?.querySelector('details');
-    if (details && !details.open) {
-      details.open = true;
-      sync();
+    if (!target) return;
+    for (const t of toggles) {
+      const part = t.closest('.collapsible')!;
+      const inside = part.contains(target) && part !== target && !t.contains(target);
+      if ((inside || part === target) && t.getAttribute('aria-expanded') !== 'true') setSection(t, true, false);
     }
+    const details = target.querySelector('details') ?? target.closest('details');
+    if (details) setDetailsOpen(details, true, { animate: false });
+    sync();
   };
   openTarget();
   window.addEventListener('hashchange', openTarget);

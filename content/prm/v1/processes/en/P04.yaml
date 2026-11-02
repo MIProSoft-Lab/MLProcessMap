@@ -8,15 +8,15 @@ purpose: >-
   move through the lifecycle to support integration, verification, and operation.
 outcomes:
 - id: a
-  text: Defined architectural structure with components and interactions.
+  text: An architectural structure with components and interactions is defined.
 - id: b
-  text: Data and model flow diagrams connecting all stages.
+  text: Data and model flow diagrams connecting all stages are produced.
 - id: c
-  text: Documented technical constraints and quality attributes.
+  text: Technical constraints and quality attributes are documented.
 - id: d
-  text: Traceable documentation of design decisions.
+  text: Design decisions are documented and traceable.
 - id: e
-  text: Defined retraining and monitoring mechanisms.
+  text: Retraining and monitoring mechanisms are defined.
 inputs:
 - workProduct: system-requirements-specification
   name: System Requirements Specification

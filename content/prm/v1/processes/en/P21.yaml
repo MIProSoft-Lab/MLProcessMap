@@ -8,19 +8,20 @@ purpose: >-
   compatibility, and robustness rather than only on predictive accuracy.
 outcomes:
 - id: a
-  text: Testing scope and plan defined.
+  text: The testing scope and plan are defined.
 - id: b
-  text: Functional and API-level tests executed, confirming correct interfaces.
+  text: Functional and API-level tests are executed, confirming correct interfaces.
 - id: c
-  text: Metamorphic and oracle-approximation tests executed.
+  text: Metamorphic and oracle-approximation tests are executed.
 - id: d
-  text: Runtime behavior assessed regarding latency and resources.
+  text: Runtime behavior regarding latency and resources is assessed.
 - id: e
-  text: Dependency and environment tests completed.
+  text: Dependency and environment tests are completed.
 - id: f
-  text: Stress tests and failure-scenario evaluations carried out.
+  text: Stress tests and failure-scenario evaluations are carried out.
 - id: g
-  text: A System Validation Report documenting tests, results, and identified issues.
+  text: >-
+    A System Validation Report documenting tests, results, and identified issues is produced.
 inputs:
 - workProduct: integrated-system
   name: Integrated System
@@ -48,6 +49,11 @@ outputs:
   description: Tests performed, results, and identified issues.
   serves:
   - a
+  - b
+  - c
+  - d
+  - e
+  - f
   - g
 activities:
 - id: A1
@@ -63,7 +69,6 @@ activities:
   primaryStudies:
   - P8
   - P10
-  - P15
 - id: A2
   title: Perform functional testing
   description: >-
@@ -140,7 +145,6 @@ activities:
   - P13
   literature:
   - sculleyHiddenTechnicalDebt2015
-  - breckMLTestScore2017
 - id: A7
   title: Document results
   description: >-

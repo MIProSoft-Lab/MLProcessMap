@@ -8,14 +8,14 @@ purpose: >-
   data needs, interfaces, and quality targets to create a baseline for design and testing.
 outcomes:
 - id: a
-  text: Defined, consistent, and feasible system requirements.
+  text: Consistent and feasible system requirements are defined.
 - id: b
-  text: Documented functions, data, performance, and interface requirements.
+  text: Functions, data, performance, and interface requirements are documented.
 - id: c
-  text: Resolved conflicts and established performance targets.
+  text: Conflicts are resolved and performance targets are established.
 - id: d
   text: >-
-    Traceability links connecting stakeholder needs to system requirements and future steps.
+    Traceability from stakeholder needs to system requirements and later steps is established.
 inputs:
 - workProduct: stakeholder-requirements-specification
   name: Stakeholder Requirements Specification
@@ -54,10 +54,9 @@ activities:
     the requirements, since artifact management platforms rarely cover this activity.
   primaryStudies:
   - P3
-  - P7
-  - P9
-  - P11
+  - P10
   - P12
+  - P13
   - P14
 - id: A2
   title: Define functional behavior
@@ -72,7 +71,6 @@ activities:
   - P4
   - P8
   - P9
-  - P11
   - P18
 - id: A3
   title: Identify data and information requirements
@@ -102,6 +100,7 @@ activities:
   primaryStudies:
   - P1
   - P3
+  - P4
   - P6
   - P8
   - P10
@@ -121,9 +120,7 @@ activities:
   - P1
   - P2
   - P4
-  - P9
   - P10
-  - P18
 - id: A6
   title: Analyze and refine requirements
   description: >-
@@ -134,12 +131,10 @@ activities:
     refinement of the requirement set as data and model requirements become clearer during development,
     so that changes discovered through data handling are recorded rather than absorbed informally.
   primaryStudies:
-  - P2
   - P7
   - P8
   - P11
   - P12
-  - P13
 - id: A7
   title: Establish traceability
   description: >-
@@ -153,7 +148,6 @@ activities:
   - P5
   - P8
   - P9
-  - P11
 standards:
 - standard: ISO/IEC/IEEE 12207
   activity: a) Prepare for verification

@@ -9,17 +9,18 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    A dataset partitioned into training, test, and validation sets to prevent data leakage.
+    The dataset is partitioned into training, test, and validation sets to prevent data leakage.
 - id: b
-  text: Instances of the selected modeling techniques trained on the prepared data.
+  text: Instances of the selected modeling techniques are trained on the prepared data.
 - id: c
-  text: A record of training configurations, including hyperparameters and random seeds.
+  text: >-
+    Training configurations, including hyperparameters and random seeds, are recorded.
 - id: d
-  text: Interpretability and transparency measures incorporated into the models.
+  text: Interpretability and transparency measures are incorporated into the models.
 - id: e
-  text: A Model Training Record summarizing procedures and results.
+  text: A Model Training Record summarizing procedures and results is produced.
 - id: f
-  text: Trained models and metadata stored for evaluation.
+  text: Trained models and metadata are stored for evaluation.
 inputs:
 - workProduct: model-selection-record
   name: Model Selection Record
@@ -72,8 +73,6 @@ activities:
   primaryStudies:
   - P3
   - P13
-  - P14
-  - P15
   - P16
 - id: A2
   title: Initialize and fit model

@@ -9,12 +9,12 @@ purpose: >-
   interactions, and specific ML data dependencies.
 outcomes:
 - id: a
-  text: Identified and documented system elements, interactions, and constraints.
+  text: System elements, interactions, and constraints are identified and documented.
 - id: b
-  text: Produced analytical models, data-flow diagrams, and risk assessments.
+  text: Analytical models, data-flow diagrams, and risk assessments are produced.
 - id: c
   text: >-
-    Established relationships between requirements, analytical findings, and architectural decisions.
+    Relationships between requirements, analytical findings, and architectural decisions are established.
 inputs:
 - workProduct: system-requirements-specification
   name: System Requirements Specification
@@ -86,9 +86,7 @@ activities:
   primaryStudies:
   - P3
   - P9
-  - P13
   - P16
-  - P17
   literature:
   - kazman1998
   - siebert2022

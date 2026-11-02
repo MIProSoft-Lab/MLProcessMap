@@ -9,23 +9,24 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    An operation strategy defined, with enabling systems and qualified operators available.
+    An operation strategy is defined, and enabling systems and qualified operators are available.
 - id: b
   text: >-
-    The system used in its operational environment, serving predictions in the established mode.
+    The system is used in its operational environment, serving predictions in the established mode.
 - id: c
-  text: Runtime resources managed against cost and performance objectives.
+  text: Runtime resources are managed against cost and performance objectives.
 - id: d
-  text: Production data and serving payloads captured and governed for downstream reuse.
+  text: >-
+    Production data and serving payloads are captured and governed for downstream reuse.
 - id: e
   text: >-
-    Operational procedures and contingency measures applied under degraded conditions.
+    Operational procedures and contingency measures are applied under degraded conditions.
 - id: f
   text: >-
-    Incidents and support requests recorded, tracked, and escalated when a change is needed.
+    Incidents and support requests are recorded, tracked, and escalated when a change is needed.
 - id: g
   text: >-
-    Operation records produced and traced to requirements and architectural decisions.
+    Operation records are produced and traced to requirements and architectural decisions.
 inputs:
 - workProduct: deployment-artifacts
   name: Deployment Artifacts
@@ -139,7 +140,6 @@ activities:
     learns from, and ensure that obligations such as data deletion requests are applied to everything
     derived from that data.
   primaryStudies:
-  - P3
   - P10
   literature:
   - breckMLTestScore2017

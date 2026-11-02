@@ -8,17 +8,19 @@ purpose: >-
   as data drift or performance degradation before they cause failures.
 outcomes:
 - id: a
-  text: Production data monitored for drift, schema changes, and anomalies.
+  text: Production data are monitored for drift, schema changes, and anomalies.
 - id: b
-  text: Model behavior assessed through performance tracking and statistical deviations.
+  text: >-
+    Model behavior is assessed through performance tracking and statistical deviations.
 - id: c
-  text: Model confidence and uncertainty analyzed to detect degradation.
+  text: Model confidence and uncertainty are analyzed to detect degradation.
 - id: d
-  text: Operational metrics, such as latency and resource usage, tracked.
+  text: Operational metrics, such as latency and resource usage, are tracked.
 - id: e
-  text: Alerting mechanisms configured to notify stakeholders of deviations.
+  text: Alerting mechanisms are configured to notify stakeholders of deviations.
 - id: f
-  text: A Monitoring Record documenting indicators, alerts, and response procedures.
+  text: >-
+    A Monitoring Record documenting indicators, alerts, and response procedures is produced.
 inputs:
 - workProduct: live-model-outputs
   name: Live Model Outputs
@@ -79,6 +81,7 @@ activities:
   - P8
   - P10
   - P13
+  - P17
   - P18
 - id: A2
   title: Monitor model behavior

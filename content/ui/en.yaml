@@ -84,6 +84,8 @@ process:
   outcomeServedBy: Work products that support this outcome
   expandAll: Expand all
   collapseAll: Collapse all
+  collapseSection: "Collapse {section}"
+  expandSection: "Expand {section}"
 change:
   added: Added
   updated: Updated

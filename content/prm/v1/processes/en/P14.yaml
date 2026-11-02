@@ -8,13 +8,15 @@ purpose: >-
   technique for the problem after data preparation is complete.
 outcomes:
 - id: a
-  text: A list of candidate modeling techniques suitable for the problem and goals.
+  text: >-
+    A list of candidate modeling techniques suitable for the problem and goals is established.
 - id: b
-  text: Analysis and comparison of candidate models against established criteria.
+  text: Candidate models are analyzed and compared against established criteria.
 - id: c
-  text: Selected modeling technique(s) to proceed to training and evaluation.
+  text: Modeling techniques to proceed to training and evaluation are selected.
 - id: d
-  text: A Model Selection Record describing the choice, justification, and constraints.
+  text: >-
+    A Model Selection Record describing the choice, justification, and constraints is produced.
 inputs:
 - workProduct: technical-problem-statement
   name: Technical Problem Statement
@@ -60,7 +62,6 @@ activities:
     the assumptions each candidate makes about the data, and consider existing models where their faults
     and limited reproducibility are acceptable.
   primaryStudies:
-  - P9
   - P13
   - P14
 - id: A3

@@ -9,24 +9,28 @@ purpose: >-
   and transition processes.
 outcomes:
 - id: a
-  text: A maintenance strategy defined as an annex to the architecture documentation.
+  text: A maintenance strategy is defined as an annex to the architecture documentation.
 - id: b
-  text: Maintenance needs classified and attributed to the data, the model, or the code.
+  text: >-
+    Maintenance needs are classified and attributed to the data, the model, or the code.
 - id: c
-  text: Impact of each change assessed before implementation.
+  text: The impact of each change is assessed before implementation.
 - id: d
   text: >-
-    Operational capability restored after failure through rollback, fallback, or degraded operation.
+    Operational capability is restored after failure through rollback, fallback, or degraded operation.
 - id: e
-  text: Changes implemented, including retraining or continuous learning of the model.
+  text: >-
+    Changes are implemented, including retraining or continuous learning of the model.
 - id: f
   text: >-
-    Changes regression tested and revised models assessed against the original evaluation framework.
+    Changes are regression tested and revised models are assessed against the original evaluation framework.
 - id: g
-  text: Restored capability confirmed against the indicators that triggered the change.
+  text: >-
+    Restored capability is confirmed against the indicators that triggered the change.
 - id: h
   text: >-
-    Maintenance records and trends linking each action to the affected elements and model lineage.
+    Maintenance records and trends linking each action to the affected elements and model lineage are
+    established.
 inputs:
 - workProduct: maintenance-requests
   name: Maintenance Requests

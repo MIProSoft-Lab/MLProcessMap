@@ -10,14 +10,14 @@ purpose: >-
 outcomes:
 - id: a
   text: >-
-    Identified and documented system elements, interactions, constraints, and the data dependencies between
-    them.
+    System elements, interactions, constraints, and the data dependencies between them are identified
+    and documented.
 - id: b
   text: >-
-    Produced analytical models, data-flow diagrams, trade-off studies, and risk assessments.
+    Analytical models, data-flow diagrams, trade-off studies, and risk assessments are produced.
 - id: c
   text: >-
-    Established relationships between requirements, analytical findings, and architectural decisions.
+    Relationships between requirements, analytical findings, and architectural decisions are established.
 inputs:
 - workProduct: system-requirements-specification
   name: System Requirements Specification
@@ -103,9 +103,7 @@ activities:
   primaryStudies:
   - P3
   - P9
-  - P13
   - P16
-  - P17
   literature:
   - kazman1998
   - siebert2022
