@@ -155,8 +155,12 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
         </div>
       </section>
 
-      <section id="interface">
-        <h2><span class="sec">{num('interface')}</span>{t('process.inputs')} · {t('process.outputs')}</h2>
+      <section id="interface" class="collapsible">
+        <div class="section-head">
+          <h2><span class="sec">{num('interface')}</span>{t('process.inputs')} · {t('process.outputs')}</h2>
+          <CollapseToggle locale={locale} controls="interface-body" name={`${t('process.inputs')} · ${t('process.outputs')}`} class="no-print" />
+        </div>
+        <div class="collapse-body" id="interface-body">
         <div class="flow grid-paper">
           {
             (['inputs', 'outputs'] as const).map((kind) => (
@@ -226,6 +230,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       <section id="activities" class="collapsible">
@@ -289,11 +294,15 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
 
       {
         traced && (
-          <section id="standards">
-            <h2>
-              <span class="sec">{num('standards')}</span>
-              {t('process.standards')}
-            </h2>
+          <section id="standards" class="collapsible">
+            <div class="section-head">
+              <h2>
+                <span class="sec">{num('standards')}</span>
+                {t('process.standards')}
+              </h2>
+              <CollapseToggle locale={locale} controls="standards-body" name={t('process.standards')} class="no-print" />
+            </div>
+            <div class="collapse-body" id="standards-body">
             <p class="muted small">
               {t('process.standardsNote')} {traced.version !== version && t('process.standardsV1', { version: traced.version })}
             </p>
@@ -334,17 +343,22 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                 </tbody>
               </table>
             </div>
+            </div>
           </section>
         )
       }
 
       {
         p.changes?.length ? (
-          <section id="changes">
-            <h2>
-              <span class="sec">{num('changes')}</span>
-              {t('process.changes')}
-            </h2>
+          <section id="changes" class="collapsible">
+            <div class="section-head">
+              <h2>
+                <span class="sec">{num('changes')}</span>
+                {t('process.changes')}
+              </h2>
+              <CollapseToggle locale={locale} controls="changes-body" name={t('process.changes')} class="no-print" />
+            </div>
+            <div class="collapse-body" id="changes-body">
             <p class="muted small">{t('process.changesNote')}</p>
             <ul class="changes">
               {p.changes.map((c) => (
@@ -375,6 +389,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                 </li>
               ))}
             </ul>
+            </div>
           </section>
         ) : null
       }
@@ -423,6 +438,8 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
     if (!flow || !svg || !core) return;
     svg.querySelectorAll('path.wire').forEach((p) => p.remove());
     if (getComputedStyle(svg).display === 'none') return;
+    // Nothing to route while the whole section is closed or moving.
+    if (flow.closest("[data-state='closed'], [data-state='moving']")) return;
     const box = flow.getBoundingClientRect();
     const c = core.getBoundingClientRect();
     const coreY = c.top + c.height / 2 - box.top;
