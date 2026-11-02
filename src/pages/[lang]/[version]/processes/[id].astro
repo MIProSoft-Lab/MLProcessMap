@@ -4,7 +4,8 @@ import CollapseToggle from '../../../../components/CollapseToggle.astro';
 import '../../../../styles/process.css';
 import { getProcess, getVersion, getWorkProducts, processIds, versions, pick } from '../../../../lib/content';
 import { processPaths } from '../../../../lib/paths';
-import { inline, plain } from '../../../../lib/text';
+import { plain } from '../../../../lib/text';
+import { prose } from '../../../../lib/acronyms';
 import { referenceByKey, shortCite, studyById } from '../../../../lib/refs';
 import { useTranslations, href, type Locale } from '../../../../i18n/ui';
 
@@ -102,7 +103,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
     <article class="content">
       <section id="purpose">
         <h2><span class="sec">{num('purpose')}</span>{t('process.purpose')}</h2>
-        <p class="prose purpose" set:html={inline(p.purpose)} />
+        <p class="prose purpose" set:html={prose(p.purpose, locale)} />
       </section>
 
       <section id="outcomes" class="collapsible">
@@ -117,7 +118,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
               <li id={`outcome-${o.id}`}>
                 <span class="letter">{o.id}</span>
                 <div>
-                  <span set:html={inline(o.text)} />
+                  <span set:html={prose(o.text, locale)} />
                   {servedBy(o.id).length > 0 && (
                     <div class="chips served" aria-label={t('process.outcomeServedBy')}>
                       {servedBy(o.id).map((io) => (
@@ -172,7 +173,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                         {wp && <span class="badge">{t(`wp.type-${wp.type}`)}</span>}
                         {io.optional && <span class="badge">{t('process.optional')}</span>}
                       </div>
-                      {io.description && <p class="io-desc" set:html={inline(io.description)} />}
+                      {io.description && <p class="io-desc" set:html={prose(io.description, locale)} />}
                       <div class="io-links">
                         <span class="label">{kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}</span>
                         {links && links.length > 0 ? (
@@ -230,11 +231,11 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                 <details open>
                   <summary>
                     <span class="aid">{a.id}</span>
-                    <span class="atitle" set:html={inline(a.title)} />
+                    <span class="atitle" set:html={prose(a.title, locale)} />
                   </summary>
                   <div class="collapse-body">
                   <div class="abody">
-                    <p class="prose" set:html={inline(a.description)} />
+                    <p class="prose" set:html={prose(a.description, locale)} />
                     {(a.primaryStudies?.length || a.literature?.length) && (
                       <dl class="sources small">
                         {a.primaryStudies?.length ? (
@@ -290,7 +291,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                 <li>
                   <span class={`kind kind-${ch.kind}`}>{t(`change.${ch.kind}`)}</span>
                   {ch.target && <strong>{ch.target}: </strong>}
-                  <span set:html={inline(ch.text)} />
+                  <span set:html={prose(ch.text, locale)} />
                 </li>
               ))}
             </ul>

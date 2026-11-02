@@ -15,8 +15,7 @@ outcomes:
   text: Technical solution classes are compared and a preferred class is selected.
 - id: c
   text: >-
-    Traceability between the problem, Key Performance Indicators (KPIs), and the solution rationale is
-    established.
+    Traceability between the problem, KPIs, and the solution rationale is established.
 inputs:
 - workProduct: business-goals-and-constraints
   name: Business Goals and Constraints

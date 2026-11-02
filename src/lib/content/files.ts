@@ -5,6 +5,7 @@
 import { parseDocument } from 'yaml';
 import type { z } from 'astro/zod';
 import {
+  acronymsSchema,
   lifecycleSchema,
   processSchema,
   referencesSchema,
@@ -23,6 +24,7 @@ export const paths = {
   versions: '/content/versions.yaml',
   studies: '/content/studies.yaml',
   references: '/content/references.yaml',
+  acronyms: '/content/acronyms.yaml',
   ui: (locale: string) => `/content/ui/${locale}.yaml`,
   workProducts: (version: string) => `/content/prm/${version}/work-products.yaml`,
   processDir: (version: string, locale: string) => `/content/prm/${version}/processes/${locale}/`,
@@ -44,6 +46,7 @@ export const contentKinds: ContentKind[] = [
   { name: 'versions', pattern: /^\/content\/versions\.yaml$/, schema: versionsSchema },
   { name: 'studies', pattern: /^\/content\/studies\.yaml$/, schema: studiesSchema },
   { name: 'references', pattern: /^\/content\/references\.yaml$/, schema: referencesSchema },
+  { name: 'acronyms', pattern: /^\/content\/acronyms\.yaml$/, schema: acronymsSchema },
   { name: 'interface strings', pattern: /^\/content\/ui\/(?<locale>[^/]+)\.yaml$/, schema: uiSchema },
   { name: 'work products', pattern: /^\/content\/prm\/(?<version>[^/]+)\/work-products\.yaml$/, schema: workProductsSchema },
   {

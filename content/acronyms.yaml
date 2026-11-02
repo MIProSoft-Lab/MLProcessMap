@@ -1,0 +1,49 @@
+# Acronyms used in the text of the PRM. Wherever the text uses one, the site
+# shows its expansion when the pointer rests on it, and shortens a written-out
+# "Expansion (ACR)" to the acronym. Keep the list in alphabetical order.
+acronyms:
+- id: AI
+  expansion:
+    en: Artificial Intelligence
+    es: Inteligencia Artificial
+    ca: Intel·ligència Artificial
+- id: API
+  expansion:
+    en: Application Programming Interface
+    es: Interfaz de Programación de Aplicaciones
+    ca: Interfície de Programació d'Aplicacions
+- id: CTO
+  expansion:
+    en: Chief Technology Officer
+    es: Director de Tecnología
+    ca: Director de Tecnologia
+- id: KPI
+  expansion:
+    en: Key Performance Indicator
+    es: Indicador Clave de Rendimiento
+    ca: Indicador Clau de Rendiment
+- id: ML
+  expansion:
+    en: Machine Learning
+    es: Aprendizaje Automático
+    ca: Aprenentatge Automàtic
+- id: OCR
+  expansion:
+    en: Optical Character Recognition
+    es: Reconocimiento Óptico de Caracteres
+    ca: Reconeixement Òptic de Caràcters
+- id: PRM
+  expansion:
+    en: Process Reference Model
+    es: Modelo de Referencia de Procesos
+    ca: Model de Referència de Processos
+- id: SLI
+  expansion:
+    en: Service Level Indicator
+    es: Indicador de Nivel de Servicio
+    ca: Indicador de Nivell de Servei
+- id: SLO
+  expansion:
+    en: Service Level Objective
+    es: Objetivo de Nivel de Servicio
+    ca: Objectiu de Nivell de Servei

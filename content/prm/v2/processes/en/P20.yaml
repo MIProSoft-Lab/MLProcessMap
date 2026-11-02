@@ -48,13 +48,16 @@ outputs:
   name: Deployment Artifacts
   description: Packaged model, registry entry, and live instance.
   serves:
+  - a
   - b
   - c
   - d
+  - e
 - workProduct: deployment-record
   name: Deployment Record
   description: Configurations, versions, and divergences from the plan.
   serves:
+  - e
   - f
 activities:
 - id: A1

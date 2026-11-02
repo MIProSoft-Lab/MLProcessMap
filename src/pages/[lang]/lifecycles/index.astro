@@ -4,7 +4,7 @@ import LifecyclePhases from '../../../components/LifecyclePhases.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import { getLifecycle, lifecycleIds } from '../../../lib/content';
 import { localePaths } from '../../../lib/paths';
-import { inline } from '../../../lib/text';
+import { prose } from '../../../lib/acronyms';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = localePaths;
@@ -29,7 +29,7 @@ const lifecycles = lifecycleIds().map((id) => getLifecycle(id, locale));
             {l.status === 'draft' && <span class="badge">{t('lc.draft')}</span>}
             <span class="badge">{t('lc.basedOn', { version: l.prmVersion })}</span>
           </div>
-          {l.description && <p class="prose muted" set:html={inline(l.description)} />}
+          {l.description && <p class="prose muted" set:html={prose(l.description, locale)} />}
           <LifecyclePhases locale={locale} lifecycle={l} compact />
         </li>
       ))

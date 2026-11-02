@@ -127,6 +127,15 @@ export const referencesSchema = z.object({
   ),
 });
 
+export const acronymsSchema = z.object({
+  acronyms: z.array(
+    z.object({
+      id: z.string(),
+      expansion: localized,
+    }),
+  ),
+});
+
 export const siteSchema = z.object({
   title: localized,
   author: z.string(),
@@ -185,5 +194,6 @@ export type Lifecycle = z.infer<typeof lifecycleSchema>;
 export type Version = z.infer<typeof versionsSchema>['versions'][number];
 export type Study = z.infer<typeof studiesSchema>['studies'][number];
 export type Reference = z.infer<typeof referencesSchema>['references'][number];
+export type Acronym = z.infer<typeof acronymsSchema>['acronyms'][number];
 export type WorkProductMeta = z.infer<typeof workProductsSchema>['workProducts'][number];
 export type WorkProductType = WorkProductMeta['type'];

@@ -4,6 +4,7 @@ import { site, pick, versions, defaultVersion, processIds } from '../../lib/cont
 import { localePaths } from '../../lib/paths';
 import { edition, otherEditionUrl } from '../../lib/edition';
 import { inline } from '../../lib/text';
+import { prose } from '../../lib/acronyms';
 import { useTranslations, href, type Locale } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
@@ -42,7 +43,7 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
   <section class="hero">
     <p class="breadcrumbs">ML-PRM · {t('footer.thesis')} · {site.institution}</p>
     <h1>{pick(site.title, locale)}</h1>
-    <p class="lead prose">{pick(site.intro, locale)}</p>
+    <p class="lead prose" set:html={prose(pick(site.intro, locale), locale)} />
     <p class="actions">
       <a class="button primary" href={href(locale, defaultVersion)}>{t('home.explore')} →</a>
       <a class="button" href={href(locale, 'tailor')}>{t('nav.tailor')}</a>

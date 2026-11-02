@@ -109,13 +109,13 @@ activities:
 - id: A5
   title: Define interface requirements
   description: >-
-    Identify how the system interacts with Application Programming Interfaces (APIs), users, and other
-    components, specifying the data flows that connect Machine Learning components to conventional software
-    modules and the format in which predictions are exposed. State the non-functional properties expected
-    of the serving interface, including availability, access control, logging, and auditability, so that
-    training and serving code are developed against a shared specification. Account for interactions between
-    Machine Learning components, whose entanglement can propagate errors across the system when they are
-    treated as independently replaceable parts.
+    Identify how the system interacts with APIs, users, and other components, specifying the data flows
+    that connect Machine Learning components to conventional software modules and the format in which
+    predictions are exposed. State the non-functional properties expected of the serving interface, including
+    availability, access control, logging, and auditability, so that training and serving code are developed
+    against a shared specification. Account for interactions between Machine Learning components, whose
+    entanglement can propagate errors across the system when they are treated as independently replaceable
+    parts.
   primaryStudies:
   - P1
   - P2

@@ -211,6 +211,7 @@ refs:
   studies: Estudios primarios de la revisión sistemática de la literatura
   literature: Literatura especializada
   citedBy: Citado por
+  acronyms: Acrónimos
 i18n:
   untranslated: Este contenido todavía no está traducido al {language}. Se muestra en inglés.
 footer:

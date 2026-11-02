@@ -80,15 +80,14 @@ activities:
 - id: A4
   title: Handle unstructured sources
   description: >-
-    Apply parsing, Optical Character Recognition (OCR), or scraping tools to capture text or images, deciding
-    how free-text entries are encoded or grouped and how multi-modal inputs are handled, and accounting
-    for information that exists only outside the systems the team can query. Match the technique to the
-    form of the source, using optical character recognition for scanned pages and images, document parsing
-    for portable and word-processor formats, language processing for text, speech-to-text and feature
-    extraction for audio, and frame extraction for video, and reach web sources either through a programmatic
-    interface or by scraping where none exists. Account for the effect on the destination, since this
-    material raises storage cost, threatens integrity, and can leave an indexed structure that later queries
-    do not fit.
+    Apply parsing, OCR, or scraping tools to capture text or images, deciding how free-text entries are
+    encoded or grouped and how multi-modal inputs are handled, and accounting for information that exists
+    only outside the systems the team can query. Match the technique to the form of the source, using
+    optical character recognition for scanned pages and images, document parsing for portable and word-processor
+    formats, language processing for text, speech-to-text and feature extraction for audio, and frame
+    extraction for video, and reach web sources either through a programmatic interface or by scraping
+    where none exists. Account for the effect on the destination, since this material raises storage cost,
+    threatens integrity, and can leave an indexed structure that later queries do not fit.
   literature:
   - seenivasanETLWorldUnstructured2021
 - id: A5

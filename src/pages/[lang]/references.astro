@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Cited from '../../components/Cited.astro';
-import { studies, references, getProcesses, defaultVersion, versions } from '../../lib/content';
+import { studies, references, acronyms, getProcesses, defaultVersion, versions, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { fullCite, referenceByKey, referenceUrl } from '../../lib/refs';
 import { inline } from '../../lib/text';
@@ -69,6 +69,24 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
       })
     }
   </ol>
+
+  {
+    acronyms.length > 0 && (
+      <>
+        <h2 id="acronyms">{t('refs.acronyms')}</h2>
+        <dl class="acronyms">
+          {[...acronyms]
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map((a) => (
+              <div id={`acronym-${a.id}`}>
+                <dt class="key">{a.id}</dt>
+                <dd>{pick(a.expansion, locale)}</dd>
+              </div>
+            ))}
+        </dl>
+      </>
+    )
+  }
 </Layout>
 
 <script>
@@ -101,6 +119,34 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
 
   .literature li {
     grid-template-columns: 1fr;
+  }
+
+  .acronyms {
+    display: grid;
+    gap: 4px;
+    max-width: 900px;
+    margin: 0;
+  }
+
+  .acronyms div {
+    display: grid;
+    grid-template-columns: 6em 1fr;
+    gap: 8px;
+    padding: 4px 10px;
+    scroll-margin-top: 16px;
+  }
+
+  .acronyms div:target {
+    background: var(--surface-2);
+    outline: 1px solid var(--accent);
+  }
+
+  .acronyms dt {
+    font-weight: 600;
+  }
+
+  .acronyms dd {
+    margin: 0;
   }
 
   .key {

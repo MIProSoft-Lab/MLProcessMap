@@ -13,6 +13,7 @@ export const {
   defaultVersion,
   studies,
   references,
+  acronyms,
   getVersion,
   processIds,
   getProcess,
@@ -25,7 +26,7 @@ export const {
 export { contentFiles };
 export type { Localized } from './model';
 export type { WorkProduct, WorkProductLink } from './work-products';
-export type { Activity, Lifecycle, Process, Reference, Study, Version, WorkProductType } from './schemas';
+export type { Acronym, Activity, Lifecycle, Process, Reference, Study, Version, WorkProductType } from './schemas';
 
 /** Pick the text for a locale from a localized map, falling back to English. */
 export function pick(map: Record<string, string>, locale: Locale): string {

@@ -7,6 +7,7 @@ import {
   lifecycleSchema,
   processSchema,
   referencesSchema,
+  acronymsSchema,
   siteSchema,
   studiesSchema,
   uiSchema,
@@ -47,6 +48,8 @@ export function createContent(files: ContentFiles) {
   const versions = versionsFile.versions;
   const studies = load(paths.studies, studiesSchema).studies;
   const references = load(paths.references, referencesSchema).references;
+  // Optional: without the file, no text is marked as an acronym.
+  const acronyms = files[paths.acronyms] !== undefined ? load(paths.acronyms, acronymsSchema).acronyms : [];
 
   function getVersion(id: string): Version {
     const v = versions.find((v) => v.id === id);
@@ -108,6 +111,7 @@ export function createContent(files: ContentFiles) {
     defaultVersion: versionsFile.default,
     studies,
     references,
+    acronyms,
     getVersion,
     processIds,
     getProcess,

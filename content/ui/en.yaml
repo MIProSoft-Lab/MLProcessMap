@@ -214,6 +214,7 @@ refs:
   studies: Primary studies of the systematic literature review
   literature: Specialized literature
   citedBy: Cited by
+  acronyms: Acronyms
 i18n:
   untranslated: This content has not been translated into {language} yet. It is shown in English.
 footer:
