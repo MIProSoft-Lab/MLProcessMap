@@ -1,0 +1,211 @@
+id: P01
+number: 1
+origin: standards-and-literature
+name: Procés d'anàlisi del negoci o de la missió
+purpose: >-
+  El propòsit del *Procés d'anàlisi del negoci o de la missió* és definir el problema o l'oportunitat de negoci
+  que motiva un projecte, caracteritzar l'espai de solucions disponible i determinar quines classes de solució
+  poden resoldre el problema. Aquest procés se centra a traduir les necessitats organitzatives d'alt nivell en
+  objectius tècnics quantificables i serveix com a primer punt de decisió per determinar si un enfocament
+  d'aprenentatge automàtic està justificat.
+outcomes:
+- id: a
+  text: Es defineix un enunciat tècnic del problema amb les restriccions d'èxit i els riscs.
+- id: b
+  text: Es comparen les classes de solució tècnica i se n'escull una de preferent.
+- id: c
+  text: >-
+    S'estableixen les restriccions de cost computacional i operacional de la classe de solució escollida.
+- id: d
+  text: >-
+    S'estableix la traçabilitat entre el problema, els KPI i la justificació de la solució.
+inputs:
+- workProduct: business-goals-and-constraints
+  name: Objectius i restriccions del negoci
+  description: Els objectius de l'organització i els límits dins els quals s'han d'assolir.
+  serves:
+  - a
+  - b
+  - c
+  - d
+outputs:
+- workProduct: technical-problem-statement
+  name: Enunciat tècnic del problema
+  description: >-
+    El problema expressat en termes de dades, amb els criteris d'èxit, els riscs inicials i el concepte
+    operacional.
+  serves:
+  - a
+  - d
+- workProduct: solution-class-selection-record
+  name: Registre de selecció de la classe de solució
+  description: Les classes de solució comparades, l'escollida i la justificació.
+  serves:
+  - b
+  - d
+- workProduct: data-landscape-assessment
+  name: Avaluació del panorama de dades
+  description: La viabilitat d'una solució basada en dades segons les dades i els recursos disponibles.
+  serves:
+  - a
+  - b
+- workProduct: cost-and-resource-constraint-record
+  name: Registre de restriccions de cost i recursos
+  description: >-
+    Els requisits computacionals estimats, els costs d'entrenament i els límits de recursos d'inferència de la
+    classe de solució escollida.
+  serves:
+  - c
+activities:
+- id: A1
+  title: Enunciar el problema i els criteris d'èxit
+  description: >-
+    Formular el problema concret de la missió o del negoci traduint les necessitats operacionals d'alt nivell
+    en objectius tècnics quantificables, per determinar si un enfocament basat en dades és adequat,
+    caracteritzant el problema sense pressuposar-ne la solució i reformulant-lo quan un altre plantejament el
+    faria més abordable. Definir criteris d'èxit mesurables que vagin més enllà de les mètriques de rendiment
+    tècnic per verificar que el model aporta un valor real al negoci, separant els criteris expressats en
+    termes de negoci dels expressats en termes tècnics, afegint un indicador econòmic que permeti justificar
+    més endavant la inversió i indicant qui valora cada criteri quan la valoració és subjectiva. Les mesures
+    d'efectivitat negociades amb les parts interessades i les mètriques que les fan operatives les estableixen,
+    respectivament, el *Procés de definició de necessitats i requisits de les parts interessades* i el *Procés
+    de definició de requisits del sistema*.
+  primaryStudies:
+  - P10
+  - P12
+  - P13
+  - P14
+  - P15
+  - P16
+- id: A2
+  title: Caracteritzar el panorama de dades
+  description: >-
+    Avaluar l'entorn de dades de l'organització per determinar si el problema definit es pot resoldre amb
+    aprenentatge automàtic, tenint en compte tant els actius actuals com les dades que es puguin recollir al
+    llarg del cicle de vida del projecte, i establint si l'organització pot accedir a les seves pròpies dades i
+    emprar-les legalment, no només si les té. Aquesta activitat incorpora l'estudi de viabilitat, ja que avalua
+    la viabilitat del projecte i els requisits de dades per establir llindars d'èxit inicials, fixa limitacions
+    que actuen com a senyal per aturar o redefinir l'abast si els recursos o les dades són insuficients i
+    considera una prova de concepte quan la tècnica no s'ha aplicat abans en el domini. Avaluar en el mateix
+    pas els recursos de personal, de càlcul i de programari dels quals dependria l'enfocament. Aquesta
+    activitat només estableix la viabilitat; la descoberta, la catalogació i el cribratge de conjunts de dades
+    candidats concrets corresponen al *Procés d'identificació de fonts de dades*.
+  primaryStudies:
+  - P11
+  - P13
+  - P14
+  - P16
+  - P18
+- id: A3
+  title: Identificar els riscs inicials
+  description: >-
+    Traduir els riscs d'alt nivell en consideracions tècniques pròpies de l'aprenentatge automàtic,
+    identificant els possibles modes de fallada d'enginyeria i les vulnerabilitats en les dades, els models,
+    les interfícies de programari i els límits normatius. Aquesta revisió estableix salvaguardes inicials
+    contra riscs tècnics com l'escassetat de dades, l'entrellaçament de components, les amenaces de seguretat
+    i l'exposició de la privadesa abans que comenci el desenvolupament, i opera al nivell del sistema i no del
+    model individual, de manera que la interpretabilitat s'avalua com la qüestió de si cal un enfocament
+    intrínsecament interpretable, i l'adopció, com una qüestió de preparació de l'organització. Incloure els
+    riscs normatius que poden prohibir directament un objectiu, com les restriccions a reutilitzar dades
+    personals per a una finalitat diferent d'aquella per a la qual es varen recollir, i l'obligació d'explicar
+    quines dades han fonamentat una decisió.
+  primaryStudies:
+  - P2
+  - P3
+  - P6
+  - P11
+  - P13
+  - P14
+  - P16
+  - P18
+- id: A4
+  title: Definir els conceptes operacionals
+  description: >-
+    Establir els paràmetres operacionals i arquitectònics d'alt nivell del sistema planificant la integració
+    dels components d'aprenentatge automàtic dins l'ecosistema de programari més ampli, i esbossar de manera
+    preliminar com el sistema resultant s'adquiriria, es desplegaria, es mantindria i, finalment, es retiraria.
+    Decidir si l'aplicació que l'envolta es dissenya juntament amb el component d'aprenentatge automàtic o
+    després, ja que ajornar-la ajorna l'esforç d'integració i d'enginyeria de dades, però no l'elimina.
+    Planificar l'estratègia de càlcul i d'infraestructura que requeriria l'enfocament tan aviat com
+    l'enfocament sembli prometedor. Aquests conceptes continuen essent preliminars i el *Procés de definició de
+    necessitats i requisits de les parts interessades* els concreta en un context d'ús, uns escenaris
+    operacionals i uns límits d'interfície.
+  primaryStudies:
+  - P2
+  - P7
+  - P10
+  - P18
+- id: A5
+  title: Comparar les alternatives de solució
+  description: >-
+    Explorar les possibles classes de solució tècnica per establir una línia de base preliminar de models
+    viables per a la missió definida. Aquesta anàlisi contrasta els enfocaments basats en dades amb les
+    solucions tradicionals per confirmar que una implementació d'aprenentatge automàtic està justificada,
+    incloses les alternatives computacionals no intel·ligents, i les avalua amb criteris i un vocabulari comú
+    acordats per endavant, perquè la novetat no substitueixi el valor. Preferir els enfocaments de menor
+    capacitat com a línia de base inicial i augmentar la capacitat només quan es demostri que la complexitat
+    afegida compensa, i fer aquí l'avaluació preliminar de les eines i les tècniques, ja que aquesta elecció
+    condiciona tot el projecte. Registrar sistemàticament les alternatives que no s'han escollit, tant per
+    deixar constància de la justificació com perquè una alternativa que no és d'aprenentatge automàtic és el
+    que permet disposar d'una solució determinista de reserva si en operació no es pot confiar en l'elecció
+    principal.
+  primaryStudies:
+  - P10
+  - P11
+  - P13
+  - P14
+  - P16
+- id: A6
+  title: Analitzar la viabilitat computacional i operacional
+  description: >-
+    Estimar les demandes de processament de les classes de solució candidates tant per a l'entrenament com per
+    a la inferència, inclosos els costs d'entrenament previstos, la latència i el rendiment requerits en
+    operació i la infraestructura necessària per sostenir-los. Establir els límits de recursos que ha de
+    respectar la classe de solució escollida, de manera que el cost computacional i operacional es tracti com
+    una restricció tècnica des del principi.
+- id: A7
+  title: Definir les necessitats de documentació i d'evidències
+  description: >-
+    Especificar els requisits de registre i d'informe de tots els artefactes del sistema per garantir-ne
+    l'auditabilitat i la mantenibilitat, determinant a partir del context normatiu i de governança què haurà
+    de demostrar més endavant l'organització sobre el sistema i a qui. Establir que el llinatge de les dades,
+    les llicències dels conjunts de dades i l'associació entre un model i les dades a partir de les quals es
+    va construir es registren des del principi i no es reconstrueixen després. Registrar les decisions preses
+    durant aquesta anàlisi juntament amb la seva justificació, incloses les classes de solució considerades i
+    descartades, i mantenir la traçabilitat entre el problema o l'oportunitat identificats aquí i la classe de
+    solució escollida.
+  primaryStudies:
+  - P10
+  - P11
+  - P13
+  - P16
+changes:
+- annotation: A-01
+  text: Les pràctiques base requereixen nivells de traçabilitat
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes:
+  - kind: updated
+    text: – (ja coberta pel resultat (c) i l'A6, ara (d) i A7)
+- annotation: A-02
+  text: Rellevància dels costs d'entrenament i d'operació
+  redVotes: 0
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A6
+    text: Analitzar la viabilitat computacional i operacional
+  - kind: added
+    target: Sortida
+    text: Registre de restriccions de cost i recursos
+  - kind: added
+    target: Resultat (c)
+    text: restriccions de cost computacional i operacional de la classe de solució escollida
+- annotation: A-03
+  text: La definició del procés és genèrica
+  redVotes: 0
+  yellowVotes: 1
+  decision: rejected
+  changes: []

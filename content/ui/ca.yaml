@@ -22,7 +22,7 @@ home:
   draft: esborrany
   processes: processos
   card-map: "Recorre el mapa de processos i consulta cada procés: propòsit, resultats, activitats, entrades i sortides."
-  card-flow: Segueix els productes de treball per veure quin procés produeix cada entrada i quins processos fan servir cada sortida.
+  card-flow: Segueix els productes de treball per veure quin procés produeix cada entrada i quins processos empren cada sortida.
   card-lifecycles: Mira com els models de cicle de vida organitzen els processos del PRM en fases i iteracions.
   card-tailor: "Crea un model de cicle de vida a mida per al teu projecte: tria els processos, organitza'ls en fases i bucles, i exporta'l."
   card-compare: Consulta què ha canviat entre versions del PRM i per què.
@@ -36,7 +36,7 @@ home:
   year: Any
   originHeading: Com es va construir el PRM
   cite: Com citar
-  citeText: "Si utilitzes el PRM a la teva feina, cita la tesi:"
+  citeText: "Si empres el PRM a la teva feina, cita la tesi:"
   copy: Copia
   copied: Copiat
   groupHeading: Grup de recerca
@@ -66,9 +66,9 @@ process:
   activities: Activitats
   serves: Contribueix als resultats
   producedBy: Produït per
-  usedBy: Usat per
+  usedBy: Emprat per
   external: Extern al PRM
-  notUsed: No el fa servir cap altre procés
+  notUsed: No l'empra cap altre procés
   optional: opcional
   primaryStudies: Estudis primaris
   literature: Literatura especialitzada
@@ -107,13 +107,13 @@ change:
   removed: Eliminat
 wp:
   title: Productes de treball
-  intro: Totes les entrades i sortides dels processos, amb els processos que les produeixen i les fan servir.
+  intro: Totes les entrades i sortides dels processos, amb els processos que les produeixen i les empren.
   type: Tipus
   type-information-item: Element d'informació
   type-artifact: Artefacte
   type-record: Registre
   producers: Produït per
-  consumers: Usat per
+  consumers: Emprat per
   filter: Filtra els productes de treball
   all: Tots
 compare:
@@ -136,7 +136,7 @@ lc:
   iterative: Es repeteix
   returnsTo: Torna a {phase}
   draft: Esborrany
-  useInTailor: Fes-lo servir com a punt de partida per al teu propi model de cicle de vida
+  useInTailor: Empra'l com a punt de partida per al teu propi model de cicle de vida
   notCovered: Processos no inclosos en aquest cicle de vida
   empty: Encara no hi ha plantilles de cicle de vida.
   source: Font
@@ -156,7 +156,7 @@ lc:
   zoomHint: Ctrl + roda o pessiga per fer zoom, arrossega per moure't
 tailor:
   title: Crea un model de cicle de vida per al teu projecte
-  intro: "Crea un model de cicle de vida a mida a partir dels processos del PRM: tria els processos i les activitats que necessita el teu projecte, organitza'ls en fases i marca les fases que es repeteixen i els bucles que tornen a fases anteriors. El model es desa a l'enllaç, així que el pots compartir."
+  intro: "Crea un model de cicle de vida a mida a partir dels processos del PRM: tria els processos i les activitats que necessita el teu projecte, organitza'ls en fases i marca les fases que es repeteixen i els bucles que tornen a fases anteriors. El model es guarda a l'enllaç, així que el pots compartir."
   project: Nom del model de cicle de vida
   version: Versió del PRM
   start: Comença des de
@@ -165,7 +165,7 @@ tailor:
   selected: "{n} de {total} processos, {a} activitats al model"
   missingInputs: Entrades sense productor al model
   missingInputsNote: Aquestes entrades dels processos del model les produeixen processos que has deixat fora. Assegura't que el teu projecte les obté d'un altre lloc.
-  allCovered: Totes les entrades dels processos del model les produeix un altre procés del model o vénen de fora del PRM.
+  allCovered: Totes les entrades dels processos del model les produeix un altre procés del model o venen de fora del PRM.
   export: Exporta
   markdown: Llista en Markdown
   csv: CSV
@@ -203,7 +203,7 @@ tailor:
   preview-empty: Afegeix una fase per veure el diagrama del cicle de vida.
   phases-summary: "{n} fases, {u} processos sense fase"
   yaml: Model de cicle de vida (YAML)
-  yamlNote: El fitxer YAML fa servir el format de les plantilles de cicle de vida, perquè un administrador pugui publicar el teu model en aquest lloc.
+  yamlNote: El fitxer YAML empra el format de les plantilles de cicle de vida, perquè un administrador pugui publicar el teu model en aquest lloc.
   untitled: Model de cicle de vida sense títol
   import: Importa
   import-note: Obre un model de cicle de vida exportat des d'aquesta pàgina com a JSON, YAML o CSV. Substitueix el model que estàs editant, així que copia'n abans l'enllaç si el vols conservar.
@@ -245,7 +245,7 @@ notFound:
 edition:
   thesis: Edició de la tesi
   banner: "La versió d'aquest lloc descrita a la tesi doctoral. Rep correccions i traduccions, però no funcions noves."
-  goLive: Ves a la versió actual
+  goLive: Vés a la versió actual
   thesisLink: Versió descrita a la tesi
 language:
   name: Català

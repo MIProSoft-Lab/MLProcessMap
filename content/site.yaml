@@ -18,10 +18,11 @@ intro:
     estructura de ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 e ISO/IEC 5338, de modo que puede utilizarse
     de forma conjunta.
   ca: >-
-    Un Model de Referència de Processos (PRM) per al cicle de vida de Machine Learning. Seguint
-    les directrius de ISO/IEC 33004 i ISO/IEC/IEEE 24774, se centra en el grup de processos tècnics i especifica cada
-    procés amb el seu propòsit, resultats, activitats, entrades i sortides. Manté els noms i l'estructura
-    d'ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, de manera que es pot utilitzar de forma conjunta.
+    Un Model de Referència de Processos (PRM) per al cicle de vida de Machine Learning. Segueix les
+    directrius de les normes ISO/IEC 33004 i ISO/IEC/IEEE 24774, se centra en el grup de processos tècnics i
+    especifica cada procés amb el seu propòsit, resultats, activitats, entrades i sortides. Manté els noms i
+    l'estructura de les normes ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, de manera que es pot
+    emprar juntament amb aquestes.
 # The doctoral thesis this site is part of.
 thesis:
   title: A Process Reference Model for Machine Learning Applications
@@ -76,17 +77,17 @@ people:
     role:
       en: Thesis supervisor, senior lecturer, and principal investigator of MIProSoft
       es: Director de la tesis, profesor tituar de universidad e investigador principal de MIProSoft
-      ca: Director de la tesi, professor titular d'Universitat i investigador principal de MIProSoft
+      ca: Director de la tesi, professor titular d'universitat i investigador principal de MIProSoft
   - name: Antonia Mas Pichaco
     role:
       en: Full Professor
       es: Catedrática de Universidad
-      ca: Catedràtica d'Universitat
+      ca: Catedràtica d'universitat
   - name: Maria Monserrat Barceló
     role:
       en: Assistant Professor
       es: Profesora Ayudante Doctora
-      ca: Professora Ajudant Doctora
+      ca: Professora ajudant doctora
   - name: Antoni Bennasar Garau
     role:
       en: PhD researcher
@@ -114,7 +115,7 @@ timeline:
     text:
       en: Mapped those processes against ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 and ISO/IEC 5338, to see where both sources agree and where they differ.
       es: Contraste de esos procesos con ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 e ISO/IEC 5338, para ver dónde coinciden ambas fuentes y dónde difieren.
-      ca: Contrast d'aquests processos amb ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, per veure on coincideixen les dues fonts i on difereixen.
+      ca: Contrast d'aquests processos amb les normes ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, per veure on coincideixen les dues fonts i on difereixen.
   - title:
       en: PRM v1
       es: PRM v1
@@ -122,7 +123,7 @@ timeline:
     text:
       en: Specified each process with its purpose, outcomes, activities, inputs and outputs, following the guidelines of ISO/IEC 33004 and ISO/IEC/IEEE 24774.
       es: Especificación de cada proceso con su propósito, resultados, actividades, entradas y salidas, siguiendo las directrices de ISO/IEC 33004 e ISO/IEC/IEEE 24774.
-      ca: Especificació de cada procés amb el seu propòsit, resultats, activitats, entrades i sortides, seguint les directrius de ISO/IEC 33004 i ISO/IEC/IEEE 24774.
+      ca: Especificació de cada procés amb el seu propòsit, resultats, activitats, entrades i sortides, seguint les directrius de les normes ISO/IEC 33004 i ISO/IEC/IEEE 24774.
   - title:
       en: Expert workshop
       es: Evaluación con expertos
