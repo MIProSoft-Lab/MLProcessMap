@@ -1,0 +1,141 @@
+id: P06
+number: 6
+origin: standards-only
+name: Proceso de análisis del sistema
+purpose: >-
+  El propósito del *Proceso de análisis del sistema* es transformar los requisitos del sistema en una
+  comprensión analítica del sistema que dé soporte a las decisiones de arquitectura y diseño. Identifica cómo
+  cumplirá el sistema sus funciones y características de calidad analizando el contexto operativo, las
+  restricciones, las interacciones, las dependencias de datos propias del ML y los compromisos entre enfoques
+  técnicos alternativos.
+outcomes:
+- id: a
+  text: >-
+    Se identifican y documentan los elementos del sistema, sus interacciones, sus restricciones y las
+    dependencias de datos entre ellos.
+- id: b
+  text: >-
+    Se elaboran modelos analíticos, diagramas de flujo de datos, estudios de compromisos y evaluaciones de
+    riesgos.
+- id: c
+  text: >-
+    Se establecen las relaciones entre los requisitos, los resultados analíticos y las decisiones
+    arquitectónicas.
+inputs:
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: >-
+    Los requisitos funcionales, de rendimiento y de calidad del sistema y su línea base de coste técnico.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los valores, formatos, calidad y metadatos esperados de los datos que necesita el sistema.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: system-analysis-report
+  name: Informe de análisis del sistema
+  description: >-
+    Los modelos analíticos, los diagramas de flujo de datos, las cadenas de dependencias de datos, los
+    estudios de compromisos y las evaluaciones de riesgos que dan soporte a las decisiones de diseño.
+  serves:
+  - a
+  - b
+  - c
+activities:
+- id: A1
+  title: Revisar los requisitos y el entorno operativo
+  description: >-
+    Identificar los aspectos funcionales y no funcionales que determinan las decisiones arquitectónicas y
+    formular como una pregunta explícita el problema que debe resolver cada análisis, de modo que sus
+    objetivos y la utilidad esperada de su resultado queden fijados antes de aplicar cualquier método. Esta
+    evaluación comprueba si se han identificado y resuelto pronto en el ciclo de vida las expectativas
+    contrapuestas de las partes interesadas, los límites de disponibilidad de los datos y los límites del
+    despliegue. Seleccionar qué características merecen un análisis sopesando la gravedad del riesgo asociado
+    frente a su probabilidad, en lugar de analizar todas las características de manera uniforme.
+  primaryStudies:
+  - P8
+  - P10
+  - P13
+  literature:
+  - siebert2022
+  - nahar2022
+- id: A2
+  title: Descomponer el sistema en elementos lógicos
+  description: >-
+    Dividir el sistema en elementos lógicos, distinguiendo entre los componentes de software tradicionales y
+    los elementos de ML, como la ingesta de datos, los pipelines de entrenamiento y los servicios de
+    inferencia. Al aislar los módulos de ML de la lógica determinista de la aplicación, los equipos de
+    ingeniería pueden analizar los límites y las dependencias de cada subsistema, teniendo en cuenta el
+    entrelazamiento y la erosión de los límites que impiden analizar los componentes de aprendizaje automático
+    de forma totalmente aislada. Dirigir el esfuerzo hacia los puntos de sensibilidad y ajustar la profundidad
+    de cada análisis a la criticidad de la decisión que respalda y a la complejidad del elemento en cuestión.
+  primaryStudies:
+  - P4
+  - P8
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+  - kazman1998
+- id: A3
+  title: Modelar la dinámica y las interacciones del sistema
+  description: >-
+    Representar cómo interactúan los mecanismos de datos, de control y de retroalimentación a través del
+    sistema, incluidas las interacciones entre modelos y los desencadenantes de reentrenamiento. Identificar
+    las cadenas de dependencias de datos por las que un cambio en un elemento se propaga a otros y los puntos
+    en los que las dependencias de datos o las salidas estocásticas pueden afectar a la estabilidad del
+    sistema. El modelado del comportamiento examina cómo fluyen las predicciones hacia los flujos de trabajo
+    de la aplicación y cómo operan con el tiempo los bucles de retroalimentación continua, incluidos aquellos
+    por los que un sistema desplegado condiciona los datos con los que se entrenará más adelante.
+  primaryStudies:
+  - P13
+- id: A4
+  title: Realizar el análisis de compromisos y de impacto
+  description: >-
+    Evaluar enfoques alternativos en cuanto a complejidad del modelo, rendimiento predictivo, explicabilidad,
+    consumo de recursos y coste operativo, usando la línea base de coste técnico definida en los requisitos
+    del sistema. Este análisis sopesa cualidades contrapuestas del sistema, como el equilibrio entre la
+    exactitud del modelo y los requisitos de eficiencia computacional, latencia e interpretabilidad,
+    identificando los elementos que afectan a varias cualidades a la vez para que se haga evidente el coste de
+    favorecer una de ellas. Fijar y justificar el criterio con el que se mide cada cualidad antes de hacer la
+    comparación, ya que en propiedades discutidas como la equidad la elección de la definición determina el
+    resultado. Revisar la validez de los resultados con los expertos pertinentes, registrar las conclusiones y
+    recomendaciones y mantener la trazabilidad entre cada resultado y el requisito del que procede.
+  primaryStudies:
+  - P3
+  - P9
+  - P16
+  literature:
+  - kazman1998
+  - siebert2022
+changes:
+- annotation: A-22
+  text: La definición de los resultados, las actividades y las entradas es demasiado abstracta
+  redVotes: 1
+  yellowVotes: 0
+  decision: partial
+  changes:
+  - kind: added
+    target: Entrada
+    text: Especificación de requisitos de datos
+  - kind: updated
+    target: Propósito
+    text: incluye los compromisos entre enfoques técnicos
+  - kind: updated
+    target: Resultados (a) y (b)
+    text: dependencias de datos y estudios de compromisos
+  - kind: updated
+    target: A2
+    text: nombra los elementos de aprendizaje automático
+  - kind: updated
+    target: A3
+    text: cadenas de dependencias de datos y estabilidad
+  - kind: updated
+    target: A4
+    text: complejidad del modelo y coste operativo
+  - kind: updated
+    target: Salida
+    text: contenido del Informe de análisis del sistema

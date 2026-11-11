@@ -1,0 +1,215 @@
+id: P10
+number: 10
+origin: decomposed
+name: Proceso de análisis exploratorio de datos
+purpose: >-
+  El propósito del *Proceso de análisis exploratorio de datos* es caracterizar los datos recopilados y
+  determinar si son adecuados para los objetivos del proyecto antes de aplicarles ninguna transformación. Este
+  proceso establece qué contienen los datos, cómo están estructurados y distribuidos y qué defectos, riesgos
+  latentes y relaciones son relevantes para los procesos siguientes, y sirve como punto de decisión en el que
+  el proyecto continúa con los datos disponibles, vuelve a la recopilación de datos o se redefine su alcance.
+outcomes:
+- id: a
+  text: Se identifican las características estadísticas y estructurales del conjunto de datos.
+- id: b
+  text: Se detectan problemas como valores ausentes, valores atípicos o incoherencias.
+- id: c
+  text: Se identifican los riesgos de calidad y los *data smells*.
+- id: d
+  text: Se documentan los hallazgos sobre patrones y relaciones.
+- id: e
+  text: Se elaboran un Informe de análisis exploratorio de datos y un Informe de calidad de los datos.
+- id: f
+  text: Se establece la trazabilidad entre los resultados del perfilado y las futuras acciones de limpieza.
+inputs:
+- workProduct: raw-dataset
+  name: Conjunto de datos en bruto
+  description: Los datos recopilados en el área de preparación.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los valores, formatos, calidad y metadatos esperados de los datos que necesita el sistema.
+  serves:
+  - b
+  - c
+- workProduct: data-collection-record
+  name: Registro de recopilación de datos
+  description: >-
+    La correspondencia de datos, los identificadores únicos, los metadatos, los registros de extracción y la
+    información de monitorización, con las decisiones y los parámetros de la recopilación.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: exploratory-data-analysis-report
+  name: Informe de análisis exploratorio de datos
+  description: Las características estadísticas, visualizaciones, patrones y relaciones encontrados en los datos.
+  serves:
+  - a
+  - d
+  - e
+- workProduct: data-quality-report
+  name: Informe de calidad de los datos
+  description: >-
+    Los defectos, valores ausentes, valores atípicos y *data smells* encontrados, cada uno vinculado a la
+    comprobación que lo detectó.
+  serves:
+  - b
+  - c
+  - e
+  - f
+activities:
+- id: A1
+  title: Realizar el perfilado de los datos
+  description: >-
+    Calcular estadísticos como recuentos, medias y tipos de datos. Realizar un análisis volumétrico de las
+    tablas y sus relaciones y calcular para cada atributo su tipo, su rango de valores y sus estadísticos de
+    distribución, incluidos la media, el mínimo, el máximo, la desviación típica, la varianza, la moda y la
+    asimetría, relacionando cada resultado con el significado del atributo en términos del dominio y con su
+    relevancia para los objetivos del proyecto. Confirmar que los datos tienen la forma esperada antes de
+    entrenar ningún modelo, comprobando que las características continuas tienen rangos y valores más
+    frecuentes plausibles, que las características categóricas toman valores de su dominio esperado, que cada
+    característica está presente en suficientes ejemplos y que cada entidad tiene el número de valores
+    esperado. Describir también los datos a nivel meta, ampliando su formato, sus unidades y su significado
+    con el conocimiento del dominio.
+  primaryStudies:
+  - P13
+  - P14
+  - P17
+  literature:
+  - foidlDataSmellsCategories2022
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A2
+  title: Visualizar los datos
+  description: >-
+    Usar gráficos para inspeccionar distribuciones, tendencias y patrones, y para comprobar si las
+    características se midieron de forma coherente, si los datos se recopilaron de forma coherente durante el
+    periodo de interés o contienen bloques de observaciones ausentes, y si un atributo presenta incoherencias
+    que sus estadísticos descriptivos ocultan. Elaborar una vista resumen estándar de cada variable antes de
+    escribir exploraciones a medida, indicar los valores ausentes junto a cada gráfico, ya que las
+    herramientas de visualización pueden descartarlos sin avisar, y tener en cuenta el riesgo de falsos
+    descubrimientos cuando se inspeccionan muchas vistas.
+  primaryStudies:
+  - P14
+  - P15
+  - P16
+  - P17
+  literature:
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A3
+  title: Analizar las relaciones entre características
+  description: >-
+    Examinar las correlaciones e interacciones entre las variables, y entre cada variable y el objetivo,
+    ordenando las variables según la fuerza de esa relación. Comprobar si los atributos presentan relaciones
+    lineales, cíclicas, probabilísticas y diferenciales, identificar los atributos multicolineales y
+    redundantes y caracterizar las subpoblaciones relevantes para el objetivo. Tratar una relación
+    inesperadamente fuerte entre una característica y el objetivo como posible señal de fuga de datos y hacer
+    que un experto del dominio revise las relaciones que puedan ser espurias. Registrar los hallazgos como
+    hipótesis para procesos posteriores en lugar de eliminar variables en esta etapa.
+  primaryStudies:
+  - P8
+  - P13
+  - P14
+  - P15
+  - P16
+  literature:
+  - wongsuphasawatGoalsProcessChallenges2019
+  - recupitoUnmaskingDataSecrets2024
+- id: A4
+  title: Detectar valores atípicos y anomalías
+  description: >-
+    Señalar los valores que se desvían significativamente de las normas esperadas, seleccionando el método de
+    detección según el tipo de relación presente en los datos. Para cada valor señalado, registrar si es más
+    probable que refleje ruido, un error de introducción o de medición o un fenómeno real pero poco frecuente,
+    y revisar los valores que contradicen el sentido común del dominio. Extender la búsqueda a regiones del
+    espacio de entrada, como regiones aisladas que contienen una sola clase o características concentradas en
+    un rango estrecho.
+  primaryStudies:
+  - P8
+  - P14
+  - P16
+  literature:
+  - murainaNecessityExploratoryData2023
+  - wongsuphasawatGoalsProcessChallenges2019
+  - recupitoUnmaskingDataSecrets2024
+- id: A5
+  title: Verificar el tipo y la estructura de los datos
+  description: >-
+    Comprobar si las características se ajustan a los formatos esperados y validar los supuestos frente a la
+    Especificación de requisitos de datos y el diccionario de datos, cubriendo los rangos o listas de valores
+    esperados, los formatos aceptados y la proporción máxima de valores ausentes, y tratar los registros no
+    conformes como anomalías. Comprobar las claves y su solapamiento entre tablas, la cobertura de los valores
+    esperados, los campos en blanco y el significado dado a los valores ausentes, los valores especiales
+    usados como códigos y, en los ficheros planos, el delimitador y el número de campos por registro.
+    Verificar los tipos de forma explícita y comprobar en la estructura los identificadores ausentes respecto
+    a los anotados en el Registro de recopilación de datos, los atributos repetidos y los tipos incompatibles.
+  primaryStudies:
+  - P14
+  - P15
+  literature:
+  - foidlDataSmellsCategories2022
+- id: A6
+  title: Identificar los *data smells*
+  description: >-
+    Buscar patrones heurísticos, como clases desequilibradas, que indiquen riesgos, cubriendo los *smells* de
+    credibilidad, comprensibilidad, coherencia, redundancia y distribución, como valores ficticios, números
+    codificados como cadenas, formatos de fecha ambiguos, uso incoherente de mayúsculas o abreviaturas,
+    características correlacionadas, identificadores únicos, valores extremos, dominios circulares
+    representados como lineales y características sensibles. Calcular la densidad de *smells* de cada atributo
+    para priorizar la atención y realizar la detección fuera de línea y no dentro de la validación de datos en
+    producción. Comparar el equilibrio de clases y características con el esperado en producción conservando
+    los casos límite, y comprobar si hay sesgo respecto a los atributos protegidos y sus variables sustitutas
+    y si hay indicios de datos envenenados.
+  primaryStudies:
+  - P3
+  - P8
+  literature:
+  - foidlDataSmellsCategories2022
+  - recupitoUnmaskingDataSecrets2024
+- id: A7
+  title: Documentar los hallazgos
+  description: >-
+    Recoger las conclusiones en un Informe de análisis exploratorio de datos y los problemas de calidad en un
+    Informe de calidad de los datos. Para cada área explorada, registrar las regularidades esperadas, el
+    método usado, las regularidades encontradas, las sorpresas y las conclusiones para la limpieza, la
+    transformación y los objetivos del proyecto. Para cada conjunto de datos, registrar el enfoque adoptado,
+    los resultados, los umbrales aplicados y las posibles soluciones a cada problema. Vincular cada problema
+    de calidad a la comprobación que lo detectó para que el *Proceso de limpieza de datos* pueda informar de
+    cómo se abordó, y documentar los problemas que se dejan sin tratar deliberadamente. Revisar los informes
+    con las partes interesadas para ordenar los riesgos y decidir si el proyecto continúa, vuelve a la
+    recopilación de datos o se redefine su alcance.
+  primaryStudies:
+  - P11
+  - P13
+  - P14
+  literature:
+  - sneedProcessAssessingData2011
+  - krossOrientingFramingBridging2021
+  - wongsuphasawatGoalsProcessChallenges2019
+changes:
+- annotation: A-30
+  text: "Falta contexto: ¿cómo debería analizarse una tabla con 300 columnas?"
+  redVotes: 0
+  yellowVotes: 3
+  decision: rejected
+  changes: []
+- annotation: A-31
+  text: La A2, la A3 y la A4 deben hacerse de forma iterativa tras limpiar los valores atípicos
+  redVotes: 0
+  yellowVotes: 2
+  decision: rejected
+  changes: []
+- annotation: A-27
+  raisedElsewhere: true
+  text: Identificar la clave primaria desde el principio
+  redVotes: 4
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Registro de recopilación de datos

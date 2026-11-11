@@ -1,0 +1,202 @@
+id: P07
+number: 7
+origin: decomposed
+name: Proceso de definición de métricas de verificación y benchmarks
+purpose: >-
+  El propósito del *Proceso de definición de métricas de verificación y benchmarks* es establecer un marco
+  para definir objetivos de evaluación, métricas cuantitativas, líneas base y plantillas de informe a lo largo
+  del ciclo de vida. Este proceso crea indicadores medibles de la calidad de los datos, el comportamiento del
+  modelo, la eficiencia del entrenamiento, el coste y los atributos no funcionales del sistema a partir de los
+  requisitos del proyecto.
+outcomes:
+- id: a
+  text: Las actividades de prueba y verificación se guían por un marco de evaluación coherente.
+- id: b
+  text: >-
+    Se evalúan el rendimiento, la fiabilidad, la eficiencia del entrenamiento y el coste mediante métricas
+    pertinentes.
+- id: c
+  text: Las métricas y los benchmarks son trazables y comparables a lo largo del ciclo de vida.
+inputs:
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: >-
+    Los requisitos funcionales, de rendimiento y de calidad del sistema y su línea base de coste técnico.
+  serves:
+  - a
+  - b
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los valores, formatos, calidad y metadatos esperados de los datos que necesita el sistema.
+  serves:
+  - a
+  - b
+- workProduct: architecture-requirements-specification
+  name: Especificación de requisitos de arquitectura
+  description: >-
+    Los requisitos de interfaz y los indicadores y objetivos de nivel de servicio que la arquitectura debe
+    soportar.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: cost-and-resource-constraint-record
+  name: Registro de restricciones de coste y recursos
+  description: >-
+    Los requisitos computacionales estimados, los costes de entrenamiento y los límites de recursos de
+    inferencia de la clase de solución seleccionada.
+  serves:
+  - b
+outputs:
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: >-
+    Las métricas de datos, de modelo, de entrenamiento y de coste, las líneas base y los benchmarks que se
+    usan en la evaluación.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: reporting-templates
+  name: Plantillas de informe
+  description: Formatos normalizados para informar de las métricas y hacer su seguimiento.
+  serves:
+  - c
+activities:
+- id: A1
+  title: Definir los objetivos de evaluación
+  description: >-
+    Derivar los objetivos de evaluación de los requisitos técnicos, los objetivos de nivel de servicio y el
+    contexto para establecer metas medibles. Formular objetivos de evaluación de alto nivel y límites de
+    rendimiento aceptables en las distintas dimensiones de calidad para orientar la estrategia de
+    verificación, indicando el alcance de lo que se va a verificar, los resultados esperados y la prioridad de
+    cada uno, ya que la verificación exhaustiva no es alcanzable y la estrategia equilibra la cobertura con
+    las restricciones. Formular cada objetivo de modo que sea específico, medible, alcanzable, pertinente y
+    acotado en el tiempo. Registrar el razonamiento de cada métrica elegida e indicar quién emite el juicio
+    cuando un criterio es subjetivo. Alinear los objetivos de evaluación con las expectativas de la
+    organización y de las partes interesadas.
+  primaryStudies:
+  - P3
+  - P10
+  - P11
+  - P13
+  - P15
+- id: A2
+  title: Definir las métricas de datos
+  description: >-
+    Definir indicadores y expectativas para validar la calidad, la cobertura y la integridad del conjunto de
+    datos, partiendo de las condiciones esperadas de los datos indicadas en los requisitos de datos.
+    Formalizar invariantes de tipo, rangos de valores de las características y umbrales aceptables para
+    permitir la validación automática de los datos, extendiéndolos al dominio esperado de las características
+    categóricas, la proporción de ejemplos en los que debe estar presente una característica, el número de
+    valores que puede tomar y la verificación de las etiquetas proporcionadas externamente. Establecer
+    indicadores de calidad de los datos que midan la completitud, el desequilibrio de clases y la cobertura de
+    las características en el conjunto de datos para evitar el sesgo de representación.
+  primaryStudies:
+  - P3
+  - P10
+  - P13
+  - P15
+  - P17
+- id: A3
+  title: Definir las métricas del modelo y del entrenamiento
+  description: >-
+    Seleccionar métricas que recojan el rendimiento predictivo, la calibración y el comportamiento no
+    funcional del modelo, e indicar qué significa cada medida en el dominio del modelo. Desglosar las
+    evaluaciones de rendimiento por segmentos demográficos y definidos por características para evitar sesgos,
+    y determinar qué segmentos merecen esa atención. Formular criterios de verificación que recojan la
+    calibración de las predicciones y las distribuciones de probabilidad durante la inferencia. Incluir
+    métricas del propio proceso de entrenamiento, como el tiempo de entrenamiento, el uso de recursos y la
+    convergencia, para poder comparar la eficiencia del entrenamiento entre experimentos. Detallar el conjunto
+    de métricas notificado para destinatarios sin formación en aprendizaje automático y fijar la definición de
+    cualquier propiedad discutida, como la equidad, antes de medirla.
+- id: A4
+  title: Definir los benchmarks y las líneas base
+  description: >-
+    Definir puntos de referencia para contextualizar el rendimiento del modelo. Definir líneas base (como
+    modelos más sencillos, heurísticas o implementaciones basadas en reglas) para confirmar el funcionamiento
+    del modelo y su valor, incluida cualquier solución que no sea de aprendizaje automático y que ya esté en
+    servicio. Establecer cómo se separarán los datos destinados a seleccionar entre los modelos candidatos de
+    los datos reservados para juzgar si el modelo seleccionado generaliza. Incorporar puntos de referencia
+    (como el rendimiento a nivel humano, los benchmarks de la competencia o los resultados publicados del
+    estado del arte) para evaluar la competencia del modelo.
+  primaryStudies:
+  - P10
+  - P11
+  - P13
+  - P15
+- id: A5
+  title: Definir la verificación de costes y recursos
+  description: >-
+    Establecer las métricas con las que se verifica el sistema frente a sus restricciones de coste y recursos,
+    cubriendo el coste del entrenamiento, el coste de inferencia por petición y el consumo de recursos del
+    sistema en operación. Derivar los umbrales de estas métricas de las restricciones de coste y recursos y de
+    los objetivos de nivel de servicio, y definir a partir de qué desviación debe notificarse un resultado.
+- id: A6
+  title: Definir las normas de presentación de informes
+  description: >-
+    Definir las plantillas de informe para recoger las métricas a lo largo del ciclo de vida. Normalizar las
+    pautas para registrar los resultados de evaluación, las decisiones y los parámetros del modelo. Definir
+    flujos de documentación para los supuestos, los compromisos, las limitaciones y las consideraciones entre
+    equipos y partes interesadas, y fijar el contenido mínimo que debe alcanzar cada registro.
+  primaryStudies:
+  - P3
+  - P10
+  - P11
+  - P12
+  - P15
+- id: A7
+  title: Conectar con la verificación continua
+  description: >-
+    Planificar cómo extender las métricas de desarrollo a la validación y la verificación. Planificar la
+    monitorización de los flujos de datos en producción para detectar cambios de distribución que indiquen una
+    degradación del modelo. Establecer umbrales de alerta para señalar regresiones de calidad, incumplimientos
+    del esquema o picos anómalos en las entradas, y determinar qué debe registrarse, durante cuánto tiempo y
+    con qué protección frente a alteraciones para poder reconstruir el comportamiento tras un incidente.
+    Conservar las medidas de negocio junto con las técnicas, ya que un sistema puede cumplir sus criterios
+    técnicos y dejar de ofrecer el resultado para el que se construyó.
+  primaryStudies:
+  - P10
+  - P12
+  - P13
+  - P15
+changes:
+- annotation: A-23
+  text: Faltan como entradas del proceso las salidas del *Proceso de definición de requisitos del sistema*
+  redVotes: 0
+  yellowVotes: 4
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Especificación de requisitos de datos
+  - kind: added
+    target: Entrada
+    text: Especificación de requisitos de arquitectura
+  - kind: updated
+    target: A1
+    text: objetivos derivados de los objetivos de nivel de servicio
+  - kind: updated
+    target: A2
+    text: métricas basadas en los requisitos de datos
+- annotation: A-24
+  text: Faltan métricas de entrenamiento, de costes y benchmarks de la competencia
+  redVotes: 2
+  yellowVotes: 3
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Registro de restricciones de coste y recursos
+  - kind: updated
+    target: A3
+    text: Definir las métricas del modelo y del entrenamiento
+  - kind: updated
+    target: A4
+    text: benchmarks del estado del arte
+  - kind: added
+    target: A5
+    text: Definir la verificación de costes y recursos
+  - kind: updated
+    target: Propósito, resultado (b) y salida
+    text: El Marco de evaluación incluye las métricas de entrenamiento y de coste

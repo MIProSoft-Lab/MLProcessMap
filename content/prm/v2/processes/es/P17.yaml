@@ -1,0 +1,147 @@
+id: P17
+number: 17
+origin: standards-and-literature
+name: Proceso de validación del modelo
+purpose: >-
+  El propósito del *Proceso de validación del modelo* es evaluar el modelo entrenado frente a los objetivos de
+  rendimiento definidos para determinar si alcanza la exactitud, la robustez y la fiabilidad requeridas.
+  Confirma si el modelo satisface los requisitos técnicos y es adecuado para su integración.
+outcomes:
+- id: a
+  text: Se confirman las métricas de evaluación y los criterios de éxito.
+- id: b
+  text: Se obtienen resultados de rendimiento evaluando el modelo sobre un conjunto de prueba reservado.
+- id: c
+  text: Se realizan análisis de errores detallados que identifican fortalezas y debilidades.
+- id: d
+  text: >-
+    Se obtiene información sobre la robustez probando perturbaciones de las entradas y condiciones extremas.
+- id: e
+  text: Se documentan los resultados y se comparan con umbrales de éxito predefinidos.
+- id: f
+  text: Se toma una decisión sobre si el modelo está listo para su integración.
+inputs:
+- workProduct: model-artifact
+  name: Artefacto del modelo
+  description: El modelo entrenado que se va a evaluar.
+  serves:
+  - b
+  - c
+  - d
+- workProduct: dataset-partitions
+  name: Particiones del conjunto de datos
+  description: El conjunto de prueba reservado.
+  serves:
+  - b
+  - c
+  - d
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: Las métricas de modelo, las líneas base y los benchmarks para la evaluación.
+  serves:
+  - a
+  - e
+- workProduct: reporting-templates
+  name: Plantillas de informe
+  description: Los formatos normalizados para informar de las métricas.
+  serves:
+  - e
+outputs:
+- workProduct: validation-report
+  name: Informe de validación
+  description: >-
+    Los resultados de rendimiento, el análisis de errores, las comprobaciones de robustez y las pruebas de
+    estrés, la comparación con los criterios de éxito y la decisión.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+activities:
+- id: A1
+  title: Confirmar las métricas y los criterios
+  description: >-
+    Confirmar las medidas y los umbrales concretos del Marco de evaluación con los que se juzga el modelo,
+    codificando los requisitos como pruebas y propiedades verificables con conocimiento tanto del dominio como
+    de la tecnología, y fijando la estrategia de pruebas.
+  primaryStudies:
+  - P16
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A2
+  title: Evaluar sobre el conjunto de prueba
+  description: >-
+    Ejecutar el modelo sobre un conjunto de datos reservado para estimar lo bien que generaliza a casos
+    nuevos, usando un conjunto de prueba disjunto de los conjuntos de entrenamiento y validación, preparado
+    por expertos para cubrir la distribución de entrada, usado solo para la evaluación final y no reutilizado
+    repetidamente. Comparar y ordenar los resultados frente a los criterios y comprobar la plausibilidad y la
+    fiabilidad del modelo con expertos del dominio.
+  primaryStudies:
+  - P6
+  - P13
+  - P14
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A3
+  title: Realizar el análisis de errores
+  description: >-
+    Examinar el rendimiento en clases o subgrupos concretos para encontrar debilidades que no muestran las
+    puntuaciones globales, desglosando los resultados por clase o por periodo, analizando los casos de prueba
+    fallidos y reincorporando los hallazgos al entrenamiento. Comprobar que las características que determinan
+    las predicciones resultan plausibles para los expertos del dominio y evaluar los sesgos no deseados cuando
+    intervienen características protegidas.
+  primaryStudies:
+  - P8
+  - P10
+  - P13
+  - P14
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A4
+  title: Evaluar la robustez
+  description: >-
+    Probar el modelo con pequeños cambios o ruido en las entradas para comprobar su estabilidad, midiendo la
+    pérdida de corrección ante perturbaciones y usando como pseudooráculos las transformaciones que no
+    deberían cambiar la salida. Elegir perturbaciones que tengan sentido en el contexto de uso y considerar la
+    validación o la validación cruzada repetida cuando proceda.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+  - P16
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A5
+  title: Realizar pruebas de estrés
+  description: >-
+    Evaluar el comportamiento del modelo en condiciones extremas, casos límite y entradas fuera de
+    distribución, identificando las condiciones en las que falla y si falla de una forma detectable.
+    Seleccionar las condiciones a partir del contexto de uso y de las debilidades encontradas en el análisis
+    de errores.
+- id: A6
+  title: Documentar y comparar los resultados
+  description: >-
+    Registrar los hallazgos en el Informe de validación usando las Plantillas de informe y determinar si el
+    modelo satisface los criterios de éxito de negocio y de aprendizaje automático del proyecto, con una
+    decisión tomada por expertos del dominio y de aprendizaje automático. Registrar cualquier anomalía,
+    obtener el acuerdo de las partes interesadas sobre los resultados, mantener la trazabilidad y dar
+    suficiente información para que los usuarios puedan juzgar si el modelo se ajusta a la aplicación
+    prevista.
+  primaryStudies:
+  - P8
+  - P13
+  - P14
+changes:
+- annotation: A-43
+  text: Realizar también pruebas de estrés
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Realizar pruebas de estrés.
+  - kind: updated
+    text: El resultado (d) y el Informe de validación incluyen las pruebas de estrés

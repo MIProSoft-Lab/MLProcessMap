@@ -1,0 +1,277 @@
+id: P03
+number: 3
+origin: standards-and-literature
+name: Proceso de definición de requisitos del sistema
+purpose: >-
+  El propósito del *Proceso de definición de requisitos del sistema* es convertir las necesidades de las
+  partes interesadas en un conjunto de requisitos del sistema verificables que describen lo que debe hacer el
+  sistema de ML. Define el comportamiento funcional, las necesidades de datos, las interfaces y los objetivos
+  de calidad para crear una línea base para el diseño y las pruebas.
+outcomes:
+- id: a
+  text: Se definen requisitos del sistema coherentes y viables.
+- id: b
+  text: Se documentan los requisitos de funciones, datos, rendimiento e interfaces.
+- id: c
+  text: Se establecen los objetivos técnicos de coste y rendimiento.
+- id: d
+  text: >-
+    Se establece la trazabilidad desde las necesidades de las partes interesadas hasta los requisitos y el
+    diseño del sistema.
+inputs:
+- workProduct: stakeholder-requirements-specification
+  name: Especificación de requisitos de las partes interesadas
+  description: Los requisitos de las partes interesadas acordados y su contexto de uso.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: technical-problem-statement
+  name: Enunciado técnico del problema
+  description: El problema, los criterios de éxito y el concepto operativo.
+  serves:
+  - a
+  - c
+- workProduct: cost-and-resource-constraint-record
+  name: Registro de restricciones de coste y recursos
+  description: >-
+    Los requisitos computacionales estimados, los costes de entrenamiento y los límites de recursos de
+    inferencia de la clase de solución seleccionada.
+  serves:
+  - c
+outputs:
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: >-
+    Los requisitos funcionales, de rendimiento y de calidad del sistema y su línea base de coste técnico, con
+    su trazabilidad.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los valores, formatos, calidad y metadatos esperados de los datos que necesita el sistema.
+  serves:
+  - a
+  - b
+- workProduct: architecture-requirements-specification
+  name: Especificación de requisitos de arquitectura
+  description: >-
+    Los requisitos de interfaz y los indicadores y objetivos de nivel de servicio que la arquitectura debe
+    soportar.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Revisar las necesidades técnicas y los requisitos de las partes interesadas
+  description: >-
+    Analizar los requisitos de las partes interesadas junto con el enunciado técnico del problema para
+    encontrar sus implicaciones en los datos, los recursos y el entorno operativo, e identificar qué
+    expectativas no pueden satisfacerse solo con una especificación determinista. Usar las restricciones de
+    coste y recursos establecidas para la clase de solución seleccionada como límites de los requisitos
+    posteriores. Definir la estrategia con la que se identificarán, expresarán y gestionarán los requisitos
+    del sistema según el modelo de ciclo de vida seleccionado, aceptando que parte del conjunto de requisitos
+    solo se hará visible cuando exista un modelo inicial. Identificar los sistemas habilitadores y las
+    herramientas necesarias para registrar y mantener los requisitos, ya que las plataformas de gestión de
+    artefactos rara vez cubren esta actividad.
+- id: A2
+  title: Definir el comportamiento funcional
+  description: >-
+    Describir cómo el sistema recopila y procesa los datos, entrena los modelos y entrega las salidas,
+    expresando el límite funcional en términos de las entradas que acepta y las respuestas que produce. Fijar
+    pronto la especificación de salida de cada componente de aprendizaje automático para que el pipeline que
+    lo rodea pueda diseñarse con independencia del desarrollo del modelo. Especificar el nivel de autonomía
+    del sistema, indicando qué decisiones siguen en manos de un operador humano y qué umbrales puede ajustar
+    ese operador, y definir las reglas deterministas de respaldo que se aplican cuando el modelo produce
+    resultados inesperados o fuera de rango.
+  primaryStudies:
+  - P4
+  - P8
+  - P9
+  - P18
+- id: A3
+  title: Identificar los requisitos de datos e información
+  description: >-
+    Especificar las fuentes de datos, el almacenamiento, el etiquetado y los criterios de calidad de los que
+    depende el sistema, indicando el estado esperado de los datos mediante los valores admisibles de las
+    características, los formatos aceptados y las proporciones toleradas de valores ausentes, con límites
+    fijados para admitir observaciones reales plausibles y rechazar el resto. Expresar estas condiciones como
+    un esquema para que los procesos posteriores puedan verificar con él los datos entrantes. Extender la
+    especificación a los metadatos, cubriendo la propiedad, los derechos de acceso, la finalidad de uso y la
+    conservación, y definir las estructuras de datos y los requisitos de integración necesarios para combinar
+    las fuentes de forma coherente.
+  primaryStudies:
+  - P3
+  - P8
+  - P10
+  - P12
+  - P13
+- id: A4
+  title: Definir los requisitos de rendimiento y calidad
+  description: >-
+    Fijar objetivos medibles de exactitud, latencia, robustez y equidad, junto con las condiciones de entrada
+    en las que se espera que se cumplan, e indicar las métricas con las que se evalúa cada uno en lugar de
+    dejar su elección a procesos posteriores. Definir el margen de error aceptable y las clases de error con
+    mayor impacto operativo. Complementar los objetivos predictivos con atributos de calidad como la
+    explicabilidad, la escalabilidad y la complejidad del modelo, y con restricciones de recursos que cubran
+    el hardware de inferencia, el presupuesto computacional y la infraestructura que requiere el sistema
+    desplegado. Derivar de las restricciones de coste y recursos una línea base de coste técnico para el
+    entrenamiento y la operación, con la que puedan contrastarse las decisiones posteriores de diseño y
+    verificación.
+  primaryStudies:
+  - P1
+  - P3
+  - P4
+  - P6
+  - P8
+  - P10
+  - P11
+  - P13
+- id: A5
+  title: Definir los requisitos de arquitectura
+  description: >-
+    Integrar el comportamiento funcional, los requisitos de datos y las especificaciones de interfaz en una
+    descripción coherente de lo que debe soportar la arquitectura. Identificar cómo interactúa el sistema con
+    las API, los usuarios y otros componentes, especificando los flujos de datos que conectan los componentes
+    de aprendizaje automático con los módulos de software convencionales y el formato en que se exponen las
+    predicciones. Definir los indicadores de nivel de servicio (SLI) que miden los aspectos técnicos del
+    servicio, como la latencia de inferencia o el rendimiento de peticiones, y los objetivos de nivel de
+    servicio (SLO) que fijan sus valores aceptables, junto con la disponibilidad, el control de acceso, el
+    registro y la auditabilidad que se esperan de la interfaz de servicio, de modo que el código de
+    entrenamiento y el de servicio se desarrollen con una especificación común y la operación reciba una línea
+    base verificable.
+- id: A6
+  title: Analizar y refinar los requisitos
+  description: >-
+    Comprobar la coherencia, la viabilidad y la verificabilidad de los requisitos del sistema, resolviendo los
+    conflictos y compromisos entre la calidad predictiva y los demás atributos de calidad antes de que avance
+    el desarrollo. Considerar riesgos como la deriva de los datos, el cambio de distribución y la divergencia
+    entre las condiciones de entrenamiento y de operación, y confirmar que la especificación sigue siendo
+    alcanzable en esas condiciones. Planificar un refinamiento controlado del conjunto de requisitos a medida
+    que los requisitos de datos y del modelo se aclaren durante el desarrollo, de modo que se registren los
+    cambios descubiertos al trabajar con los datos.
+  primaryStudies:
+  - P7
+  - P8
+  - P11
+  - P12
+- id: A7
+  title: Establecer la trazabilidad
+  description: >-
+    Crear vínculos bidireccionales entre las necesidades de las partes interesadas y los requisitos del
+    sistema, extendiéndolos a los conjuntos de datos, las versiones del modelo y los métodos de verificación
+    con los que se demostrará cada requisito. Registrar la justificación de las decisiones sobre los
+    requisitos y obtener un acuerdo explícito sobre la línea base resultante. Como el flujo de trabajo de
+    aprendizaje automático no ofrece una descomposición jerárquica formal de los requisitos y las herramientas
+    disponibles apenas dan soporte a esta actividad, establecer la trazabilidad como un acuerdo explícito del
+    proyecto respaldado por registros de procedencia, en lugar de suponer que la proporciona la
+    infraestructura de desarrollo.
+  primaryStudies:
+  - P5
+  - P8
+  - P9
+changes:
+- annotation: A-09
+  text: Entradas del proceso insuficientes (p. ej., contexto)
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Enunciado técnico del problema
+  - kind: added
+    target: Entrada
+    text: Registro de restricciones de coste y recursos
+- annotation: A-10
+  text: Los costes de entrenamiento y operación como salida del proceso
+  redVotes: 1
+  yellowVotes: 1
+  decision: partial
+  changes:
+  - kind: updated
+    target: A4
+    text: línea base de coste técnico
+  - kind: updated
+    target: Salida
+    text: La Especificación de requisitos del sistema incluye la línea base de coste
+- annotation: A-11
+  text: Al nombre del proceso le falta un verbo activo
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes:
+  - kind: updated
+    text: – (errata en los materiales del taller)
+- annotation: A-12
+  text: Al proceso le falta una perspectiva técnica
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A1
+    text: Revisar las necesidades técnicas y los requisitos de las partes interesadas
+- annotation: A-13
+  text: Falta una salida del proceso para la A2
+  redVotes: 0
+  yellowVotes: 1
+  decision: rejected
+  changes: []
+- annotation: A-14
+  text: Eliminar la A2
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: A-15
+  text: Consolidar la A2, la A3 y la A5 en una única actividad
+  redVotes: 0
+  yellowVotes: 2
+  decision: partial
+  changes:
+  - kind: updated
+    target: A5
+    text: Definir los requisitos de arquitectura
+  - kind: added
+    target: Salida
+    text: Especificación de requisitos de arquitectura
+- annotation: A-16
+  text: >-
+    Redundancia entre la A3 del *Proceso de definición de necesidades y requisitos de las partes interesadas*
+    y la A6 del *Proceso de definición de requisitos del sistema*
+  redVotes: 0
+  yellowVotes: 0
+  decision: partial
+  changes:
+  - kind: updated
+    target: A6
+    text: alcance limitado a los requisitos del sistema
+- annotation: A-17
+  text: >-
+    Comentarios sobre los requisitos del sistema (transición del director de tecnología, CTO, a operaciones)
+  redVotes: 2
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A5
+    text: >-
+      Indicadores de nivel de servicio (SLI) y objetivos de nivel de servicio (SLO) como línea base operativa
+- annotation: A-18
+  raisedElsewhere: true
+  text: Faltan los acuerdos de nivel de servicio
+  redVotes: 0
+  yellowVotes: 0
+  decision: partial
+  changes:
+  - kind: updated
+    text: La A5 define los SLI y SLO que debe soportar la arquitectura
+  - kind: added
+    target: Salida
+    text: Especificación de requisitos de arquitectura

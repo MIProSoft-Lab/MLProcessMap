@@ -1,0 +1,246 @@
+id: P19
+number: 19
+origin: standards-only
+name: Proceso de verificación del sistema
+purpose: >-
+  El propósito del *Proceso de verificación del sistema* es proporcionar evidencias objetivas de que el
+  sistema de aprendizaje automático integrado cumple sus requisitos y su diseño especificados antes de su
+  transición a operación. Comprueba la corrección de la implementación, las interacciones entre los
+  componentes de aprendizaje automático y el sistema software más amplio y el comportamiento del sistema bajo
+  carga y ante fallos.
+outcomes:
+- id: a
+  text: >-
+    Se define una estrategia de verificación, con su alcance, sus métodos, sus criterios de éxito y su entorno.
+- id: b
+  text: Se verifica el funcionamiento correcto de los flujos de trabajo funcionales y de las interfaces.
+- id: c
+  text: Se verifica el rendimiento en ejecución frente a los objetivos de nivel de servicio.
+- id: d
+  text: Se verifican los mecanismos de tolerancia a fallos, respaldo, reversión y recuperación.
+- id: e
+  text: >-
+    Se verifica la seguridad del sistema frente a sus requisitos de seguridad, incluidas las vulnerabilidades
+    propias del aprendizaje automático.
+- id: f
+  text: Se verifica que el entorno y las dependencias están identificados, controlados y son reproducibles.
+- id: g
+  text: Se establece la preparación operativa de la monitorización y del versionado.
+- id: h
+  text: >-
+    Se documentan las actividades y los resultados de la verificación en el Informe de verificación del
+    sistema.
+- id: i
+  text: Se registran las no conformidades para su corrección y se trazan hasta los requisitos.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: La aplicación completa con el modelo incorporado.
+  serves:
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: >-
+    Los requisitos funcionales, de rendimiento y de calidad del sistema y su línea base de coste técnico.
+  serves:
+  - a
+  - b
+  - c
+  - e
+  - i
+- workProduct: architecture-requirements-specification
+  name: Especificación de requisitos de arquitectura
+  description: >-
+    Los requisitos de interfaz y los indicadores y objetivos de nivel de servicio que la arquitectura debe
+    soportar.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: design-baseline
+  name: Línea base del diseño
+  description: >-
+    El diseño acordado de los componentes, las interfaces y las estructuras de gestión de datos y modelos.
+  serves:
+  - a
+  - b
+  - i
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: >-
+    La descripción de la arquitectura, con diagramas de flujo de datos y de modelos, registros de decisiones,
+    la gestión de dependencias y los costes de infraestructura previstos.
+  serves:
+  - d
+  - f
+  - g
+- workProduct: disaster-recovery-plan
+  name: Plan de recuperación ante desastres
+  description: >-
+    Las estrategias de copia de seguridad, los objetivos de recuperación y los procedimientos de recuperación
+    de los componentes críticos del sistema.
+  serves:
+  - d
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: >-
+    Las métricas de datos, de modelo, de entrenamiento y de coste, las líneas base y los benchmarks que se
+    usan en la evaluación.
+  serves:
+  - a
+  - c
+- workProduct: reporting-templates
+  name: Plantillas de informe
+  description: Los formatos normalizados para informar de las métricas.
+  serves:
+  - h
+outputs:
+- workProduct: system-verification-report
+  name: Informe de verificación del sistema
+  description: >-
+    La estrategia de verificación, los resultados de la verificación funcional, de rendimiento, de tolerancia
+    a fallos, del entorno y de la preparación operativa, y las no conformidades encontradas.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+  - i
+activities:
+- id: A1
+  title: Preparar la verificación
+  description: >-
+    Definir la estrategia y el alcance de la verificación a partir de la Especificación de requisitos del
+    sistema, la Especificación de requisitos de arquitectura y la Línea base del diseño, identificando para
+    cada requisito el método de verificación y el resultado esperado, así como las restricciones que limitan
+    lo que puede verificarse. Seleccionar un entorno controlado lo más parecido posible al operativo, sin
+    interferir con él, e identificar las entradas reales o sintéticas que se usarán, asegurando que las
+    entradas sintéticas que pretenden representar la operación normal son creíbles. Automatizar los
+    procedimientos de verificación siempre que sea posible, para que puedan repetirse cada vez que cambien el
+    modelo, los datos o el código, y prever la revisión de los datos de prueba a medida que evolucionen el
+    modelo y sus condiciones de operación.
+- id: A2
+  title: Verificar el comportamiento funcional y las interfaces
+  description: >-
+    Probar los flujos de trabajo de extremo a extremo para confirmar que las predicciones se procesan e
+    interpretan correctamente, comprobando el cumplimiento de cada requisito del sistema y probando las
+    interfaces entre el modelo y las API, las bases de datos y los módulos con los que intercambia datos
+    frente a la Línea base del diseño. Confirmar que el modelo acepta las entradas válidas, rechaza o trata
+    las no válidas sin fallar y devuelve las salidas en la forma esperada. Ejecutar una prueba automatizada
+    que recorra todo el pipeline, confirmar que el entrenamiento y el servicio calculan los mismos valores de
+    las características y que el preprocesamiento y el posprocesamiento entregan los datos en la forma
+    esperada, hacer pruebas unitarias del código de especificación del modelo y de preparación de datos, y
+    revisar el código escrito para el sistema de aprendizaje automático. Cuando la salida esperada para una
+    entrada dada no pueda determinarse de antemano, usar relaciones que deban cumplirse entre las salidas de
+    entradas relacionadas.
+- id: A3
+  title: Verificar el rendimiento
+  description: >-
+    Evaluar si el sistema cumple los objetivos de nivel de servicio definidos en la Especificación de
+    requisitos de arquitectura, como la latencia y el rendimiento, con la carga esperada y en condiciones de
+    estrés, en el hardware en el que se ejecutará. Medir el consumo de recursos y confirmar que se mantiene
+    dentro de la línea base de coste técnico, y comparar la latencia, el rendimiento y el uso de memoria entre
+    versiones del código, los datos y el modelo para detectar regresiones tanto repentinas como graduales.
+  primaryStudies:
+  - P8
+  - P13
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Verificar la tolerancia a fallos y la recuperación
+  description: >-
+    Simular los escenarios de fallo relevantes para el sistema, como fuentes de datos no disponibles o
+    corruptas, inferencia no disponible, picos de latencia y entradas no válidas o extremas resultantes de
+    fallos en otras partes del sistema, para confirmar que los procedimientos de respaldo se activan
+    correctamente, que el sistema se degrada de forma controlada y que cualquier mecanismo que limite las
+    salidas del modelo se mantiene cuando el modelo se comporta mal. Verificar que la reversión a una versión
+    anterior del modelo se activa en las condiciones definidas para ello y se completa en el tiempo previsto,
+    y que el modelo restaurado sigue siendo compatible con los datos, las características y los componentes de
+    los que depende. Confirmar que los procedimientos de recuperación del Plan de recuperación ante desastres
+    pueden llevarse a cabo y que están documentados de modo que no dependan del conocimiento de personas
+    concretas.
+- id: A5
+  title: Verificar la seguridad
+  description: >-
+    Analizar las vulnerabilidades del sistema integrado y realizar pruebas de penetración, y probarlo frente a
+    los ataques propios del aprendizaje automático identificados en los requisitos de seguridad, como las
+    entradas manipuladas para cambiar sus predicciones, los intentos de extraer el modelo o de reconstruir sus
+    datos de entrenamiento y el envenenamiento de los datos recopilados para el reentrenamiento. Confirmar que
+    el acceso al modelo, a sus predicciones y a sus datos de entrenamiento está restringido según lo
+    especificado.
+- id: A6
+  title: Verificar el entorno y las dependencias
+  description: >-
+    Verificar que el sistema se comporta de forma coherente cuando se despliega en entornos limpios y
+    reproducibles distintos de aquel en el que se desarrolló. Confirmar que sus bibliotecas, plataformas y
+    configuraciones están identificadas, controladas y aprobadas según la política de la organización, y que
+    sus cambios pueden distinguirse de los cambios en el propio modelo. Extender estas comprobaciones a las
+    dependencias de datos del sistema, identificando las señales externas de las que depende el modelo y
+    confirmando que sus versiones están controladas.
+- id: A7
+  title: Verificar la preparación operativa
+  description: >-
+    Comprobar que la monitorización, las alertas y el control de versiones están configurados correctamente.
+    Confirmar que la telemetría, los paneles de control, el control de acceso, el registro y la auditabilidad
+    están implantados, y que cada modelo desplegado puede identificarse junto con los datos usados para
+    construirlo y probarlo.
+  literature:
+  - ISO5338
+- id: A8
+  title: Documentar los resultados de la verificación
+  description: >-
+    Registrar en el Informe de verificación del sistema la estrategia de verificación, las pruebas realizadas,
+    sus resultados, las anomalías encontradas y las limitaciones y supuestos de la verificación, usando las
+    Plantillas de informe para que las verificaciones sucesivas sigan siendo comparables. Describir cada no
+    conformidad con información suficiente para que el proceso en el que se originó pueda abordarla, hacer el
+    seguimiento de su resolución, confirmar que se han cumplido los criterios de verificación y mantener la
+    trazabilidad entre los resultados de la verificación y los requisitos y elementos de diseño a los que se
+    refieren.
+  literature:
+  - ISO12207
+changes:
+- annotation: A-48
+  text: La A4 (preparación operativa) es un punto muy interesante
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    text: – (se mantiene como A7)
+- annotation: A-45
+  raisedElsewhere: true
+  text: Integrar la validación de vulnerabilidades en la validación del sistema
+  redVotes: 1
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Verificar la seguridad
+- annotation: –
+  text: Reenfoque de la verificación y la validación del sistema a partir de la discusión del taller
+  redVotes: null
+  yellowVotes: null
+  decision: –
+  changes:
+  - kind: updated
+    text: Propósito y resultados.
+  - kind: added
+    target: A1
+    text: Preparar la verificación.
+  - kind: updated
+    text: A2–A4 fusionadas con el *Proceso de validación del sistema*.
+  - kind: added
+    target: A6
+    text: Verificar el entorno y las dependencias.
+  - kind: added
+    text: Seis entradas

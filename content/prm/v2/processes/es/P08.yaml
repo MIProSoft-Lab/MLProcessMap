@@ -1,0 +1,189 @@
+id: P08
+number: 8
+origin: decomposed
+name: Proceso de identificación de fuentes de datos
+purpose: >-
+  El propósito del *Proceso de identificación de fuentes de datos* es descubrir y documentar conjuntos de
+  datos candidatos procedentes de repositorios internos y externos para establecer la base del modelo de
+  aprendizaje automático. Extrae las especificaciones de datos de los requisitos de datos y comprueba las
+  implicaciones de licencia, legales o éticas de las fuentes de datos descubiertas antes de que se produzca
+  cualquier recopilación o ingesta de datos.
+outcomes:
+- id: a
+  text: >-
+    Se identifican, evalúan, relacionan con los requisitos de datos y documentan las fuentes de datos
+    pertinentes.
+- id: b
+  text: >-
+    Se caracterizan la disponibilidad, la calidad y los metadatos de los conjuntos de datos internos y
+    externos, incluidas las fuentes no documentadas.
+- id: c
+  text: Se identifican las condiciones legales, éticas y de privacidad.
+- id: d
+  text: Se identifican las carencias de datos y las fuentes complementarias.
+- id: e
+  text: Se establecen las relaciones entre los requisitos de datos y las fuentes.
+inputs:
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los valores, formatos, calidad y metadatos esperados de los datos que necesita el sistema.
+  serves:
+  - a
+  - d
+  - e
+- workProduct: data-landscape-assessment
+  name: Evaluación del panorama de datos
+  description: La viabilidad de una solución basada en datos según los datos y los recursos disponibles.
+  serves:
+  - b
+  - d
+outputs:
+- workProduct: data-catalog
+  name: Catálogo de datos
+  description: >-
+    El inventario de fuentes internas y externas, con su correspondencia con los requisitos de datos, el
+    estado de su documentación, las evaluaciones de calidad y las revisiones legales y éticas.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Analizar los requisitos de datos
+  description: >-
+    Traducir los requisitos del sistema en especificaciones de datos que orienten la estrategia de búsqueda de
+    conjuntos de datos. Especificar las propiedades fundamentales de los datos, como las variables objetivo,
+    los dominios de las características, los esquemas esperados, los límites de volumen y los parámetros
+    temporales o geográficos, para centrar los esfuerzos de recopilación en los conjuntos de datos
+    pertinentes. Indicar la distribución que deben presentar los datos para que cada caso que el sistema debe
+    distinguir esté representado en cantidad suficiente, y acordar los rangos admisibles con un experto del
+    dominio en lugar de inferirlos de la muestra que esté disponible.
+  primaryStudies:
+  - P10
+  - P13
+- id: A2
+  title: Inventariar y relacionar las fuentes de datos internas
+  description: >-
+    Descubrir y evaluar los activos de datos existentes distribuidos en los sistemas internos de la
+    organización y relacionar cada candidato con las especificaciones de datos definidas en la A1 para
+    determinar su pertinencia, de modo que el descubrimiento interno se filtre por los requisitos en lugar de
+    producir un inventario general. Usar los catálogos de datos o repositorios de metadatos cuando existan
+    para evaluar las fuentes candidatas disponibles, fomentar la reutilización de activos e identificar
+    carencias de datos internas, registrando para cada candidato su propietario, las reglas que rigen su uso y
+    el nivel de control que exige su criticidad. Establecer qué acceso se concederá realmente al equipo, ya
+    que los privilegios pueden variar dentro de un proyecto, e identificar dónde habrá que conciliar fuentes
+    que registran los mismos hechos en formatos incompatibles.
+- id: A3
+  title: Recopilar y evaluar la documentación existente
+  description: >-
+    Para cada fuente interna candidata, reunir la documentación que ya existe, como diccionarios de datos,
+    definiciones de esquemas, entradas de catálogo y el conocimiento de los propietarios de la fuente, y
+    verificar que está disponible, actualizada y es coherente con la fuente que describe. Priorizar las
+    fuentes documentadas cuando existan alternativas y registrar qué fuentes carecen de documentación
+    suficiente para que puedan examinarse antes de recopilar ningún dato.
+- id: A4
+  title: Realizar el descubrimiento técnico de las fuentes
+  description: >-
+    Cuando la documentación falte o sea insuficiente, examinar directamente la fuente para recuperar su
+    estructura, incluidos su esquema, sus claves, los tipos de campo, los rangos de valores y la frecuencia de
+    actualización, y confirmar el significado de cada campo con los propietarios de la fuente o con expertos
+    del dominio. Este descubrimiento se limita a establecer qué contiene una fuente y si puede satisfacer los
+    requisitos de datos; el perfilado de los datos recopilados corresponde al *Proceso de análisis
+    exploratorio de datos*.
+- id: A5
+  title: Identificar las fuentes de datos externas
+  description: >-
+    Descubrir conjuntos de datos complementarios en entornos externos, como registros públicos, portales de
+    datos abiertos y proveedores comerciales. Buscar en repositorios públicos y portales de datos abiertos,
+    considerar proveedores comerciales y considerar la generación de los datos mediante ensayos controlados o
+    síntesis cuando no exista ninguna fuente adecuada. Realizar una evaluación formal de riesgos de cualquier
+    proveedor antes de la adquisición que cubra su cadena de suministro, el preprocesamiento ya aplicado a los
+    datos, sus prácticas de gobernanza y las políticas que lo vinculan. Obtener cualquier conjunto de datos
+    preexistente de una fuente fiable por medios que garanticen su integridad durante la transferencia y,
+    cuando los datos sean sintéticos, establecer que representan el dominio operativo previsto y no el
+    comportamiento del generador.
+  primaryStudies:
+  - P3
+  - P4
+  - P8
+  - P9
+  - P16
+  - P17
+- id: A6
+  title: Revisar las licencias de los datos
+  description: >-
+    Evaluar las condiciones de uso, las protecciones de derechos de autor y los acuerdos de distribución
+    asociados a los conjuntos de datos candidatos. Comprobar las condiciones de licencia antes de la
+    integración en el pipeline para que solo se incluyan conjuntos de datos que respeten los límites
+    contractuales y los derechos de propiedad intelectual, y comprobar las condiciones que afectan a los datos
+    en los que se basa un artefacto candidato además de las del propio artefacto.
+  primaryStudies:
+  - P10
+  - P16
+- id: A7
+  title: Revisar los aspectos legales
+  description: >-
+    Evaluar los conjuntos de datos candidatos frente a la normativa de protección de datos y las políticas de
+    privacidad aplicables. Verificar los mecanismos de consentimiento y la finalidad para la que se autorizó
+    la recogida, y evaluar los riesgos de reidentificación, prestando especial atención al cruce con
+    información auxiliar disponible en otros lugares. Registrar los derechos de acceso, la titularidad y las
+    condiciones de conservación asociados a cada fuente.
+  primaryStudies:
+  - P3
+  - P16
+- id: A8
+  title: Realizar una revisión ética
+  description: >-
+    Examinar los conjuntos de datos candidatos para detectar sesgos de representación, desequilibrios en las
+    muestras y posibles daños sociales. Evaluar la cobertura demográfica y la diversidad contextual antes del
+    entrenamiento y nombrar las categorías demográficas que deben cubrir los datos, para evitar que los
+    modelos posteriores produzcan resultados injustos o discriminatorios.
+  primaryStudies:
+  - P3
+  - P10
+- id: A9
+  title: Documentar las fuentes
+  description: >-
+    Registrar los metadatos sobre el origen del conjunto de datos, la estructura del esquema, los derechos de
+    acceso y las limitaciones conocidas. Registrar estos detalles para dar soporte a la reproducibilidad y a
+    la futura extracción y manipulación del conjunto de datos, incluida la licencia bajo la que se dispone de
+    cada activo y la asociación entre un conjunto de datos y los experimentos y pipelines que lo han
+    consumido.
+  primaryStudies:
+  - P3
+  - P9
+  - P10
+  - P17
+changes:
+- annotation: A-25
+  text: Ninguna actividad establece relaciones entre la A1 y la A2
+  redVotes: 0
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A2
+    text: Inventariar y relacionar las fuentes de datos internas
+  - kind: updated
+    target: Resultado (a)
+    text: fuentes relacionadas con los requisitos de datos
+- annotation: A-26
+  text: Muchas fuentes de datos no están documentadas; deberían solicitarse primero las fuentes documentadas
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: A3
+    text: Recopilar y evaluar la documentación existente
+  - kind: added
+    target: A4
+    text: Realizar el descubrimiento técnico de las fuentes
+  - kind: updated
+    target: Resultado (b)
+    text: incluye los metadatos y las fuentes no documentadas
+  - kind: updated
+    target: Salida
+    text: El Catálogo de datos incluye el estado de la documentación
