@@ -28,7 +28,7 @@ home:
   card-references: Consulta els estudis primaris de la revisió sistemàtica de la literatura i la literatura especialitzada que citen els processos.
   overview: Què hi trobaràs
   thesisHeading: Part d'una tesi doctoral
-  thesisText: "Aquesta plana web publica el Model de Referència de Processos desenvolupat a la tesi doctoral *{title}*. La tesi estudia com es descriu el desenvolupament de ML a l'àmbit acadèmic i a la indústria, el compara amb els estàndards internacionals de cicle de vida i proposa un model de referència de processos avaluat amb professionals."
+  thesisText: "Aquesta plana web publica el Model de Referència de Processos desenvolupat a la tesi doctoral *{title}*. La tesi estudia com es descriu el desenvolupament de ML a l'àmbit acadèmic i a la indústria, ho compara amb els estàndards internacionals de cicle de vida i proposa un model de referència de processos avaluat amb professionals."
   author: Autor
   supervisor: Director
   supervisors: Directors

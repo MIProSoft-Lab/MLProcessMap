@@ -38,7 +38,7 @@ inputs:
   - c
 - workProduct: monitoring-record
   name: Registre de monitoratge
-  description: Les evidències de deriva i de rendiment.
+  description: Les evidències de deriva de dades i de rendiment.
   serves:
   - b
   - g

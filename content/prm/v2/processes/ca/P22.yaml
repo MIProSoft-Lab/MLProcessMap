@@ -9,7 +9,7 @@ purpose: >-
   provoquin fallades.
 outcomes:
 - id: a
-  text: Es monitoren les dades de producció per detectar deriva, canvis d'esquema i anomalies.
+  text: Es monitoren les dades de producció per detectar deriva de dades, canvis d'esquema i anomalies.
 - id: b
   text: >-
     S'avalua el comportament del model mitjançant el seguiment del rendiment i les desviacions estadístiques.
@@ -74,8 +74,7 @@ activities:
   title: Monitorar les dades d'entrada
   description: >-
     Comparar les dades rebudes en producció amb les dades amb què es va entrenar el model i amb les dades de
-    producció anteriors, emprant les mètriques de dades definides al Marc d'avaluació, per detectar deriva en les
-    seves distribucions, deteriorament de la seva qualitat i canvis en la seva estructura o el seu significat.
+    producció anteriors, emprant les mètriques de dades definides al Marc d'avaluació, per detectar deriva en les seves distribucions, deteriorament de la seva qualitat i canvis en la seva estructura o el seu significat.
     Monitorar les fonts i els sistemes que subministren les dades, perquè se'n detectin els canvis, les fallades o
     l'envelliment fins i tot quan no produeixin cap anomalia evident en els valors. Seleccionar mètodes de
     comparació adequats al volum i a la dimensionalitat de les dades, i tenir en compte que els canvis també poden

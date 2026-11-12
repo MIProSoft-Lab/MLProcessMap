@@ -122,8 +122,7 @@ activities:
   description: >-
     Especificar què s'observa a les entrades del model, a l'entorn d'operació, dins el model i a les seves
     sortides, i tractar la detecció de canvis en la distribució com una qüestió arquitectònica. Comparar
-    les estadístiques de les dades de servei amb les de les dades d'entrenament perquè la desviació es
-    detecti abans que arribi al model. Registrar prou informació per reconstruir el comportament del model
+    les estadístiques de les dades de servei amb les de les dades d'entrenament perquè la desviació es detecti abans que arribi al model. Registrar prou informació per reconstruir el comportament del model
     després d'un incident, amb les entrades registrades de manera contínua, protegides contra alteracions
     i conservades durant un període definit. Dotar la capa d'una funció de decisió que compari el rendiment
     observat o previst amb els criteris d'èxit de l'Especificació de requisits de dades.

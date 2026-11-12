@@ -9,7 +9,7 @@ purpose: >-
   abans que provoquin fallades.
 outcomes:
 - id: a
-  text: Es monitoren les dades de producció per detectar deriva, canvis d'esquema i anomalies.
+  text: Es monitoren les dades de producció per detectar deriva de dades, canvis d'esquema i anomalies.
 - id: b
   text: >-
     S'avalua el comportament del model mitjançant el seguiment del rendiment i les desviacions estadístiques.
@@ -120,7 +120,7 @@ standards:
   activity: a) Monitorar la deriva de dades
   prmActivity: A1
 - standard: ''
-  activity: b) Monitorar la deriva de concepte
+  activity: b) Monitorar la deriva conceptual
   prmActivity: A2
 - standard: ''
   activity: c) Monitorar altres requisits que s'espera que canviïn amb el temps

@@ -68,7 +68,7 @@ inputs:
   - e
 - workProduct: monitoring-record
   name: Registre de monitoratge
-  description: La informació sobre deriva, rendiment i incidències.
+  description: La informació sobre deriva de dades, rendiment i incidències.
   serves:
   - c
   - f

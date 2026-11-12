@@ -1,0 +1,35 @@
+id: reference-sequence
+name: Seqüència de referència (exemple)
+status: draft
+prmVersion: v2
+description: >-
+  Una disposició d'exemple dels processos del PRM en l'ordre de la topologia, amb les fases de
+  preparació de les dades i de modelatge repetides fins que el model compleix els seus criteris d'èxit.
+  Mostra com es defineix una plantilla de cicle de vida; no és un dels models de cicle de vida de la
+  revisió de la literatura.
+phases:
+  - id: problem
+    name: Problema i requisits
+    processes: [P01, P02, P03, P07]
+  - id: architecture
+    name: Arquitectura i disseny
+    processes: [P04, P05, P06]
+  - id: data
+    name: Preparació de les dades
+    processes: [P08, P09, P10, P11, P12, P13]
+    iterative: true
+  - id: modeling
+    name: Modelatge
+    processes: [P14, P15, P16, P17]
+    iterative: true
+    returnsTo: data
+    returnNote: Quan el model no compleix els seus criteris d'èxit, tornar a la preparació de les dades.
+  - id: deployment
+    name: Integració i desplegament
+    processes: [P18, P19, P20, P21]
+  - id: operation
+    name: Operació
+    processes: [P22, P23, P24, P25]
+    iterative: true
+    returnsTo: data
+    returnNote: La validació contínua detecta la deriva de dades i desencadena el reentrenament amb dades noves.
