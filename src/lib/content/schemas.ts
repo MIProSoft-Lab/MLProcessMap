@@ -136,19 +136,27 @@ export const acronymsSchema = z.object({
   ),
 });
 
+// An ORCID iD, such as 0000-0002-1825-0097, linked as https://orcid.org/<id>.
+const orcid = z.string().regex(/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/, 'Write the ORCID iD as 0000-0000-0000-0000.');
+
 export const siteSchema = z.object({
   title: localized,
   author: z.string(),
+  orcid: orcid.optional(),
   // Contact address of the author, shown in the footer.
   email: z.string().optional(),
   institution: z.string().optional(),
+  institutionUrl: localized.optional(),
   intro: localized,
   // The doctoral thesis the site is part of, shown on the home page.
   thesis: z
     .object({
       title: z.string(),
       year: z.union([z.string(), z.number()]).transform(String),
-      supervisors: z.array(z.string()).default([]),
+      // A supervisor is a name, or a name with an ORCID iD.
+      supervisors: z
+        .array(z.union([z.string().transform((name) => ({ name, orcid: undefined })), z.object({ name: z.string(), orcid: orcid.optional() })]))
+        .default([]),
     })
     .optional(),
   // The research group behind the PRM.

@@ -36,6 +36,7 @@ home:
   author: Author
   supervisor: Supervisor
   supervisors: Supervisors
+  orcid: "ORCID iD of {name}"
   year: Year
   originHeading: How the PRM was built
   cite: How to cite

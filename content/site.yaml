@@ -3,8 +3,13 @@ title:
   es: MLProcessMap
   ca: MLProcessMap
 author: Antonio Crespí Tobeña
+orcid: 0009-0000-0046-8330
 email: antonio.crespi@uib.eu
 institution: Universitat de les Illes Balears
+institutionUrl:
+  en: https://www.uib.eu/
+  es: https://www.uib.es/
+  ca: https://www.uib.cat/
 intro:
   en: >-
     A Process Reference Model (PRM) for the Machine Learning lifecycle. Following ISO/IEC 33004 and
@@ -28,7 +33,8 @@ thesis:
   title: A Process Reference Model for Machine Learning Applications
   year: 2026
   supervisors:
-    - Antoni Lluís Mesquida Calafat
+    - name: Antoni Lluís Mesquida Calafat
+      orcid: 0000-0002-1191-6220
 # The research group behind the PRM.
 group:
   name: MIProSoft

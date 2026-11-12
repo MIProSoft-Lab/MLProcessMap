@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Orcid from '../../components/Orcid.astro';
 import { site, pick, versions, defaultVersion, processIds } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { edition, otherEditionUrl } from '../../lib/edition';
@@ -58,18 +59,29 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
         <dl class="titleblock">
           <div>
             <dt class="label">{t('home.author')}</dt>
-            <dd>{site.author}</dd>
+            <dd>
+              {site.author}
+              {site.orcid && <Orcid id={site.orcid} label={t('home.orcid', { name: site.author })} />}
+            </dd>
           </div>
           {thesis.supervisors.length > 0 && (
             <div>
               <dt class="label">{t(thesis.supervisors.length > 1 ? 'home.supervisors' : 'home.supervisor')}</dt>
-              <dd>{thesis.supervisors.join(', ')}</dd>
+              <dd>
+                {thesis.supervisors.map((supervisor, index) => (
+                  <>
+                    {index > 0 && ', '}
+                    {supervisor.name}
+                    {supervisor.orcid && <Orcid id={supervisor.orcid} label={t('home.orcid', { name: supervisor.name })} />}
+                  </>
+                ))}
+              </dd>
             </div>
           )}
           {site.institution && (
             <div>
               <dt class="label">{t('footer.institution')}</dt>
-              <dd>{site.institution}</dd>
+              <dd>{site.institutionUrl ? <a href={pick(site.institutionUrl, locale)}>{site.institution}</a> : site.institution}</dd>
             </div>
           )}
           <div>

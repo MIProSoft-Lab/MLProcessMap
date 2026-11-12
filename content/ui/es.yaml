@@ -33,6 +33,7 @@ home:
   author: Autor
   supervisor: Director
   supervisors: Directores
+  orcid: "ORCID iD de {name}"
   year: Año
   originHeading: Cómo se construyó el PRM
   cite: Cómo citar
