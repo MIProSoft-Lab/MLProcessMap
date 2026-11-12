@@ -15,7 +15,6 @@ nav:
   theme-dark: Canvia al tema fosc
   theme-light: Canvia al tema clar
 home:
-  explore: Explora els processos
   versions: Versions
   current: actual
   superseded: substituïda
@@ -29,7 +28,7 @@ home:
   card-references: Consulta els estudis primaris de la revisió sistemàtica de la literatura i la literatura especialitzada que citen els processos.
   overview: Què hi trobaràs
   thesisHeading: Part d'una tesi doctoral
-  thesisText: "Aquest lloc publica el Model de Referència de Processos desenvolupat a la tesi doctoral *{title}*. La tesi estudia com es descriu el desenvolupament de ML a l'àmbit acadèmic i a la indústria, el compara amb les normes internacionals de cicle de vida i proposa un model de referència de processos avaluat amb professionals."
+  thesisText: "Aquesta plana web publica el Model de Referència de Processos desenvolupat a la tesi doctoral *{title}*. La tesi estudia com es descriu el desenvolupament de ML a l'àmbit acadèmic i a la indústria, el compara amb els estàndards internacionals de cicle de vida i proposa un model de referència de processos avaluat amb professionals."
   author: Autor
   supervisor: Director
   supervisors: Directors
@@ -45,12 +44,12 @@ home:
   people: Persones
   groupLink: Pàgina del grup a la UIB
 origin:
-  standards-and-literature: Normes i literatura
-  standards-only: Només normes
+  standards-and-literature: Estàndards i literatura
+  standards-only: Només estàndards
   decomposed: Descompost
-  standards-and-literature-long: Present tant a les normes internacionals com a la literatura de ML.
-  standards-only-long: Conservat de les normes; no es tracta a la literatura revisada.
-  decomposed-long: Desglossat d'un procés més ampli de les normes per reflectir les activitats de la literatura.
+  standards-and-literature-long: Present tant als estàndards internacionals com a la literatura de ML.
+  standards-only-long: Conservat dels estàndards internacionals; no es tracta a la literatura revisada.
+  decomposed-long: Desglossat d'un procés més ampli dels estàndards internacionals per reflectir les activitats de la literatura.
 map:
   title: Mapa de processos
   search: Cerca processos, resultats i activitats
@@ -73,12 +72,12 @@ process:
   optional: opcional
   primaryStudies: Estudis primaris
   literature: Literatura especialitzada
-  standards: Traçabilitat amb les normes
-  standardsNote: Activitats de les normes que cobreix aquest procés.
+  standards: Traçabilitat amb els estàndards internacionals
+  standardsNote: Activitats dels estàndards internacionals que cobreix aquest procés.
   standardsV1: Traçat amb les activitats de la {version}.
-  noStandardActivity: Sense equivalent a la norma
-  standard: Norma
-  standardActivity: Activitat de la norma
+  noStandardActivity: Sense equivalent a l'estàndard
+  standard: Estàndard
+  standardActivity: Activitat de l'estàndard
   prmActivity: Activitat del PRM
   changes: Canvis en aquesta versió
   changesNote: Anotacions del taller d'experts i decisions preses.

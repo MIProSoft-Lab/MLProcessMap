@@ -105,7 +105,7 @@ activities:
 - id: A4
   title: Documentar el monitoratge
   description: >-
-    Registrar al Registre de monitoratge els indicadors que se segueixen, les regles d'alerta i la justificació
+    Registrar al Registre de monitoratge els indicadors que es segueixen, les regles d'alerta i la justificació
     de cada llindar, les observacions i els resultats de validació al llarg del temps, i les persones
     responsables de respondre a cada alerta. Vincular cada observació amb la versió del model que era
     en servei quan es va fer, perquè es pugui relacionar amb el llinatge del model que manté el procés

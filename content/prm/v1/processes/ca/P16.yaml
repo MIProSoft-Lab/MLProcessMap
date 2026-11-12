@@ -4,7 +4,7 @@ origin: decomposed
 name: Procés d'optimització del model
 purpose: >-
   El propòsit del *Procés d'optimització del model* és refinar els models entrenats per millorar-ne el
-  rendiment o la capacitat de generalització. Se centra a ajustar la configuració del model i a aplicar
+  rendiment o la capacitat de generalització. Es centra a ajustar la configuració del model i a aplicar
   tècniques per reduir el risc de sobreajust, i no només a ajustar els paràmetres a les dades.
 outcomes:
 - id: a
@@ -13,7 +13,7 @@ outcomes:
 - id: b
   text: S'identifiquen i es registren els valors òptims dels hiperparàmetres.
 - id: c
-  text: Se seleccionen i s'ajusten models preentrenats, quan escaigui.
+  text: Es seleccionen i s'ajusten models preentrenats, quan escaigui.
 - id: d
   text: S'apliquen estratègies de regularització i de conjunts de models.
 - id: e

@@ -18,7 +18,6 @@ nav:
   theme-dark: Switch to dark theme
   theme-light: Switch to light theme
 home:
-  explore: Explore the processes
   versions: Versions
   current: current
   superseded: superseded

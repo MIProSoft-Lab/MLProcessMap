@@ -5,7 +5,7 @@ name: Procés de validació del sistema
 purpose: >-
   El propòsit del *Procés de validació del sistema* és provar els models d'aprenentatge automàtic com
   a artefactes de programari, per confirmar que s'integren correctament i es comporten de manera fiable.
-  Se centra en el comportament funcional, la compatibilitat amb l'entorn i la robustesa, i no només en
+  Es centra en el comportament funcional, la compatibilitat amb l'entorn i la robustesa, i no només en
   la precisió predictiva.
 outcomes:
 - id: a

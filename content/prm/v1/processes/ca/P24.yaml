@@ -121,7 +121,7 @@ activities:
   title: Restablir la capacitat operacional
   description: >-
     Quan el model provoqui una fallada, tornar el sistema a un estat operacional acceptable, ja sigui
-    revertint a una versió anterior del model de la qual se sap que té un rendiment adequat o reparant
+    revertint a una versió anterior del model de la qual es sap que té un rendiment adequat o reparant
     el model en servei. Controlar el restabliment com un canvi d'emergència dins la gestió de llançaments.
     Mantenir el restabliment del servei separat de l'anàlisi de la causa, reproduint la fallada en un
     entorn separat perquè se'n pugui identificar la causa arrel i tractar-la mitjançant les activitats

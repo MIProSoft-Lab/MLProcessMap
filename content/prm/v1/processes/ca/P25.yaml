@@ -13,7 +13,7 @@ outcomes:
 - id: b
   text: Els serveis de predicció i la infraestructura es desactiven de manera segura.
 - id: c
-  text: Els artefactes del model s'arxiven o se suprimeixen de manera segura d'acord amb la política.
+  text: Els artefactes del model s'arxiven o es suprimeixen de manera segura d'acord amb la política.
 - id: d
   text: Es preserven les metadades de procedència i els registres per garantir l'auditabilitat.
 - id: e

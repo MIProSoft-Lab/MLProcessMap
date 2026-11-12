@@ -102,7 +102,7 @@ activities:
     vida i les metadades necessàries per traçar-lo fins al codi, les dades i la configuració que el varen produir.
     Controlar l'aprovació de cada llançament i registrar les transicions entre etapes, juntament amb la
     distribució de cada versió als entorns on s'instal·la. Mantenir registrades i disponibles les versions
-    anteriors, de manera que sempre se sàpiga quina versió és en servei i se'n pugui restaurar una d'anterior quan
+    anteriors, de manera que sempre es sàpiga quina versió és en servei i se'n pugui restaurar una d'anterior quan
     calgui.
   primaryStudies:
   - P1

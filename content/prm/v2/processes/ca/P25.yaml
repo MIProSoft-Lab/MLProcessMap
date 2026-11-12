@@ -13,7 +13,7 @@ outcomes:
 - id: b
   text: Els components, els serveis de predicció i la infraestructura es desactiven de manera segura.
 - id: c
-  text: Els components i els artefactes s'arxiven o se suprimeixen de manera segura d'acord amb la política.
+  text: Els components i els artefactes s'arxiven o es suprimeixen de manera segura d'acord amb la política.
 - id: d
   text: Es preserven les metadades de procedència i els registres per garantir l'auditabilitat.
 - id: e
@@ -85,7 +85,7 @@ activities:
     desplegar i amb les dependències registrades a la documentació de l'arquitectura i del desplegament.
     Identificar cada sistema i cada part interessada que depèn de les sortides del component, inclosos aquells la
     dependència dels quals no està declarada formalment, i notificar-los-ho amb prou temps perquè s'hi puguin
-    adaptar. Quan només es retiri o se substitueixi una part del sistema, avaluar-ne les implicacions per als
+    adaptar. Quan només es retiri o es substitueixi una part del sistema, avaluar-ne les implicacions per als
     components que continuen en operació, inclosos l'abast del canvi, el seu cost i els seus riscs, i gestionar el
     canvi mitjançant la gestió de la configuració.
   primaryStudies:

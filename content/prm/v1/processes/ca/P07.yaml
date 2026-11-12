@@ -91,7 +91,7 @@ activities:
     Definir punts de referència per contextualitzar el rendiment del model. Definir línies de base (com
     ara models més simples, heurístiques o implementacions basades en regles) per confirmar el funcionament
     del model i el seu valor, inclosa qualsevol solució que no sigui d'aprenentatge automàtic que ja estigui
-    en servei. Establir com se separaran les dades que serveixen per seleccionar entre models candidats
+    en servei. Establir com es separaran les dades que serveixen per seleccionar entre models candidats
     de les dades reservades per jutjar si el model seleccionat generalitza. Incorporar punts de referència
     (com ara el rendiment humà o els bancs de proves de la competència) per avaluar la competència del
     model.

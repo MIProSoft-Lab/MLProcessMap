@@ -13,7 +13,7 @@ outcomes:
 - id: b
   text: S'analitzen i es comparen els models candidats d'acord amb els criteris establerts.
 - id: c
-  text: Se seleccionen les tècniques de modelatge que passen a l'entrenament i l'avaluació.
+  text: Es seleccionen les tècniques de modelatge que passen a l'entrenament i l'avaluació.
 - id: d
   text: >-
     Es produeix un Registre de selecció del model que descriu l'elecció, la justificació i les restriccions.

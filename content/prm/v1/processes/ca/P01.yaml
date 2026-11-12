@@ -5,7 +5,7 @@ name: Procés d'anàlisi del negoci o de la missió
 purpose: >-
   El propòsit del *Procés d'anàlisi del negoci o de la missió* és definir el problema o l'oportunitat
   de negoci que motiva un projecte, caracteritzar l'espai de solucions disponible i determinar quines
-  classes de solució poden resoldre el problema. Aquest procés se centra a traduir les necessitats organitzatives
+  classes de solució poden resoldre el problema. Aquest procés es centra a traduir les necessitats organitzatives
   d'alt nivell en objectius tècnics quantificables i serveix com a primer punt de decisió per determinar
   si un enfocament d'aprenentatge automàtic està justificat.
 outcomes:

@@ -20,14 +20,12 @@ intro:
     Un Modelo de Referencia de Procesos (PRM) para el ciclo de vida de Machine Learning. Siguiendo
     las directrices de ISO/IEC 33004 e ISO/IEC/IEEE 24774, se centra en el grupo de procesos técnicos y especifica cada
     proceso con su propósito, resultados, actividades, entradas y salidas. Mantiene los nombres y la
-    estructura de ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 e ISO/IEC 5338, de modo que puede utilizarse
+    estructura de ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 e ISO/IEC 5338, de modo que pueden utilizarse
     de forma conjunta.
   ca: >-
-    Un Model de Referència de Processos (PRM) per al cicle de vida de Machine Learning. Segueix les
-    directrius de les normes ISO/IEC 33004 i ISO/IEC/IEEE 24774, se centra en el grup de processos tècnics i
+    Un Model de Referència de Processos (PRM) per al cicle de vida de Machine Learning. Segueix les directrius dels estàndards internacionals ISO/IEC 33004 i ISO/IEC/IEEE 24774, es centra en el grup de processos tècnics i
     especifica cada procés amb el seu propòsit, resultats, activitats, entrades i sortides. Manté els noms i
-    l'estructura de les normes ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, de manera que es pot
-    emprar juntament amb aquestes.
+    l'estructura dels estàndards ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, de manera que es pot emprar juntament amb aquests.
 # The doctoral thesis this site is part of.
 thesis:
   title: A Process Reference Model for Machine Learning Applications
@@ -116,12 +114,12 @@ timeline:
       ca: Recopilació dels models de cicle de vida de ML proposats en fonts acadèmiques i industrials i extracció dels processos que els componen.
   - title:
       en: Comparison with the standards
-      es: Comparación con las normas
-      ca: Comparació amb les normes
+      es: Comparación con normas internacionales
+      ca: Comparació amb estandards internacionals
     text:
       en: Mapped those processes against ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 and ISO/IEC 5338, to see where both sources agree and where they differ.
       es: Contraste de esos procesos con ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 e ISO/IEC 5338, para ver dónde coinciden ambas fuentes y dónde difieren.
-      ca: Contrast d'aquests processos amb les normes ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, per veure on coincideixen les dues fonts i on difereixen.
+      ca: Contrast d'aquests processos amb els estàndards internacionals ISO/IEC/IEEE 12207, ISO/IEC/IEEE 15288 i ISO/IEC 5338, per veure on coincideixen les dues fonts i on difereixen.
   - title:
       en: PRM v1
       es: PRM v1
@@ -129,7 +127,7 @@ timeline:
     text:
       en: Specified each process with its purpose, outcomes, activities, inputs and outputs, following the guidelines of ISO/IEC 33004 and ISO/IEC/IEEE 24774.
       es: Especificación de cada proceso con su propósito, resultados, actividades, entradas y salidas, siguiendo las directrices de ISO/IEC 33004 e ISO/IEC/IEEE 24774.
-      ca: Especificació de cada procés amb el seu propòsit, resultats, activitats, entrades i sortides, seguint les directrius de les normes ISO/IEC 33004 i ISO/IEC/IEEE 24774.
+      ca: Especificació de cada procés amb el seu propòsit, resultats, activitats, entrades i sortides, seguint les directrius dels estàndards internacionals ISO/IEC 33004 i ISO/IEC/IEEE 24774.
   - title:
       en: Expert workshop
       es: Evaluación con expertos

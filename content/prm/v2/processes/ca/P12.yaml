@@ -106,7 +106,7 @@ activities:
   title: Fusionar els valors de les dades
   description: >-
     Conciliar diversos valors en una única representació, definint per a cada atribut que proporciona més d'una
-    font com se seleccionen o s'agreguen els seus valors segons la seva fiabilitat, actualitat o confiança.
+    font com es seleccionen o s'agreguen els seus valors segons la seva fiabilitat, actualitat o confiança.
     Registrar cada conflicte trobat juntament amb la regla emprada per resoldre'l.
   primaryStudies:
   - P14

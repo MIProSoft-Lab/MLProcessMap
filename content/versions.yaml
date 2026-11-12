@@ -11,7 +11,7 @@ versions:
     description:
       en: Built from the systematic literature review and the international lifecycle standards.
       es: Construida a partir de la revisión sistemática de la literatura y de las normas internacionales de ciclo de vida.
-      ca: Construïda a partir de la revisió sistemàtica de la literatura i de les normes internacionals de cicle de vida.
+      ca: Construïda a partir de la revisió sistemàtica de la literatura i dels estàndards internacionals de cicle de vida.
     # Columns of the process map, as in the topology figure of the thesis.
     topology: &topology
       - group:
