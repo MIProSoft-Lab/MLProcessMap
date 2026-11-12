@@ -7,21 +7,45 @@ export const lifecycles: Rule = {
   description: 'A lifecycle uses a PRM version that exists, its phases list processes of that version, and phases return to phases that exist.',
   severity: 'error',
   check({ content, report }) {
+    const versionIds = content.versions.map((version) => version.id);
     for (const { file, lifecycle } of lifecycleFiles(content)) {
-      if (!content.versions.some((v) => v.id === lifecycle.prmVersion)) {
-        report(file, `unknown PRM version ${lifecycle.prmVersion}`);
+      const version = lifecycle.prmVersion;
+      if (!versionIds.includes(version)) {
+        report(file, `The lifecycle uses PRM version ${version}, which does not exist.`, `Set prmVersion to one of: ${versionIds.join(', ')}.`);
         continue;
       }
-      const ids = new Set(content.processIds(lifecycle.prmVersion));
-      const phases = new Set(lifecycle.phases.map((p) => p.id));
-      for (const ph of lifecycle.phases) {
-        for (const pid of ph.processes) if (!ids.has(pid)) report(file, `phase ${ph.id} lists unknown process ${pid}`);
-        if (ph.returnsTo && !phases.has(ph.returnsTo)) report(file, `phase ${ph.id} returns to unknown phase ${ph.returnsTo}`);
+
+      const processIdsOfVersion = new Set(content.processIds(version));
+      const phaseIds = lifecycle.phases.map((phase) => phase.id);
+
+      for (const phase of lifecycle.phases) {
+        for (const processId of phase.processes) {
+          if (!processIdsOfVersion.has(processId)) {
+            report(file, `Phase "${phase.id}" lists ${processId}, which is not a process of ${version}.`, `Remove it, or correct the process ID.`);
+          }
+        }
+
+        if (phase.returnsTo && !phaseIds.includes(phase.returnsTo)) {
+          report(
+            file,
+            `Phase "${phase.id}" returns to "${phase.returnsTo}", which is not a phase of this lifecycle.`,
+            `Use one of: ${phaseIds.join(', ')}.`,
+          );
+        }
       }
     }
   },
 };
 
+/** Phase indexes: from the phase returned to (start) to the one that returns (end). */
+interface Loop {
+  start: number;
+  end: number;
+}
+
+// An input produced in a later phase is fine when that phase loops back here:
+// it exists from the second pass on. Translations repeat the phases, so only
+// English is checked.
 export const lifecycleDataflow: Rule = {
   id: 'lifecycle-dataflow',
   description:
@@ -29,34 +53,53 @@ export const lifecycleDataflow: Rule = {
   severity: 'warning',
   check({ content, report }) {
     for (const { file, locale, lifecycle } of lifecycleFiles(content)) {
-      if (locale !== defaultLocale || !content.versions.some((v) => v.id === lifecycle.prmVersion)) continue;
       const version = lifecycle.prmVersion;
-      const known = new Set(content.processIds(version));
-      const phaseOf = new Map<string, number>();
-      lifecycle.phases.forEach((ph, i) => ph.processes.forEach((pid) => phaseOf.set(pid, i)));
-      const workProducts = new Map(content.getWorkProducts(version, defaultLocale).map((w) => [w.id, w]));
+      // An unknown version is reported by the lifecycles rule.
+      if (locale !== defaultLocale || !content.versions.some((v) => v.id === version)) continue;
+
+      const processIdsOfVersion = new Set(content.processIds(version));
+      const phaseIndexOfProcess = new Map<string, number>();
+      lifecycle.phases.forEach((phase, phaseIndex) => phase.processes.forEach((processId) => phaseIndexOfProcess.set(processId, phaseIndex)));
+      const workProductsById = new Map(content.getWorkProducts(version, defaultLocale).map((workProduct) => [workProduct.id, workProduct]));
+
       // A phase that returns to an earlier one repeats every phase in between.
-      const loops = lifecycle.phases.flatMap((ph, end) => {
-        const start = lifecycle.phases.findIndex((p) => p.id === ph.returnsTo);
+      const loops: Loop[] = lifecycle.phases.flatMap((phase, end) => {
+        const start = lifecycle.phases.findIndex((candidate) => candidate.id === phase.returnsTo);
         return start >= 0 && start <= end ? [{ start, end }] : [];
       });
+      const isInsideLoopReaching = (phaseIndex: number, producerPhaseIndex: number) =>
+        loops.some((loop) => loop.start <= phaseIndex && loop.end >= producerPhaseIndex);
 
-      lifecycle.phases.forEach((ph, i) => {
-        for (const pid of ph.processes) {
-          if (!known.has(pid)) continue;
-          for (const input of content.getProcess(version, pid, defaultLocale).data.inputs) {
-            const wp = workProducts.get(input.workProduct)!;
-            // An input no process produces is reported by work-product-flow.
-            if (input.optional || wp.external || wp.producers.length === 0) continue;
-            const producers = wp.producers.map((p) => p.process);
-            const phases = producers.flatMap((p) => (phaseOf.has(p) ? [phaseOf.get(p)!] : []));
-            if (phases.length === 0) {
-              report(file, `phase ${ph.id}: ${pid} needs ${wp.name}, which no process of the lifecycle produces (${producers.join(', ')} in ${version})`);
+      lifecycle.phases.forEach((phase, phaseIndex) => {
+        for (const processId of phase.processes) {
+          // An unknown process is reported by the lifecycles rule.
+          if (!processIdsOfVersion.has(processId)) continue;
+
+          for (const input of content.getProcess(version, processId, defaultLocale).data.inputs) {
+            const workProduct = workProductsById.get(input.workProduct)!;
+            // An input that no process produces is reported by work-product-flow.
+            if (input.optional || workProduct.external || workProduct.producers.length === 0) continue;
+
+            const producerIds = workProduct.producers.map((producer) => producer.process);
+            const producerPhaseIndexes = producerIds.flatMap((producerId) =>
+              phaseIndexOfProcess.has(producerId) ? [phaseIndexOfProcess.get(producerId)!] : [],
+            );
+            if (producerPhaseIndexes.length === 0) {
+              report(
+                file,
+                `In phase "${phase.id}", ${processId} needs "${workProduct.name}", but no process of the lifecycle produces it.`,
+                `Add one of its producers in ${version} (${producerIds.join(', ')}) to this or an earlier phase, or mark the input optional.`,
+              );
               continue;
             }
-            const first = Math.min(...phases);
-            if (first <= i || loops.some((l) => l.start <= i && l.end >= first)) continue;
-            report(file, `phase ${ph.id}: ${pid} needs ${wp.name}, which is first produced in the later phase ${lifecycle.phases[first].id}`);
+
+            const firstProducerPhaseIndex = Math.min(...producerPhaseIndexes);
+            if (firstProducerPhaseIndex <= phaseIndex || isInsideLoopReaching(phaseIndex, firstProducerPhaseIndex)) continue;
+            report(
+              file,
+              `In phase "${phase.id}", ${processId} needs "${workProduct.name}", which is first produced later, in phase "${lifecycle.phases[firstProducerPhaseIndex].id}".`,
+              'Move its producer to this or an earlier phase, or make the later phase return to this one.',
+            );
           }
         }
       });

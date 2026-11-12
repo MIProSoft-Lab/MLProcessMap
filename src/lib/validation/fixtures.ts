@@ -1,9 +1,6 @@
-// A small, valid content set for the tests. A test changes what it needs
-// and turns it into files with toFiles().
 import { stringify } from 'yaml';
 import type { ContentFiles } from '../content/files';
 
-// The tests reach into the fixture to break it, so it is loosely typed.
 export type Fixture = Record<string, any>;
 
 export function process(id = 'P01') {
@@ -60,7 +57,6 @@ export function fixture(): Fixture {
   };
 }
 
-/** The fixture as files. A string value is used as the file's text, as is. */
 export function toFiles(f: Fixture): ContentFiles {
   return Object.fromEntries(Object.entries(f).map(([path, data]) => [path, typeof data === 'string' ? data : stringify(data)]));
 }

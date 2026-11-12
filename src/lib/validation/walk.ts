@@ -15,12 +15,12 @@ export interface ProcessFile {
 }
 
 export function* processFiles(content: Content): Generator<ProcessFile> {
-  for (const v of content.versions) {
-    for (const id of content.processIds(v.id)) {
+  for (const version of content.versions) {
+    for (const processId of content.processIds(version.id)) {
       for (const locale of locales) {
-        const { data, translated } = content.getProcess(v.id, id, locale);
+        const { data, translated } = content.getProcess(version.id, processId, locale);
         if (!translated && locale !== defaultLocale) continue;
-        yield { file: paths.process(v.id, locale, id), version: v.id, locale, id, process: data };
+        yield { file: paths.process(version.id, locale, processId), version: version.id, locale, id: processId, process: data };
       }
     }
   }
@@ -34,11 +34,11 @@ export interface LifecycleFile {
 }
 
 export function* lifecycleFiles(content: Content): Generator<LifecycleFile> {
-  for (const id of content.lifecycleIds()) {
+  for (const lifecycleId of content.lifecycleIds()) {
     for (const locale of locales) {
-      const { data, translated } = content.getLifecycle(id, locale);
+      const { data, translated } = content.getLifecycle(lifecycleId, locale);
       if (!translated && locale !== defaultLocale) continue;
-      yield { file: paths.lifecycle(locale, id), locale, id, lifecycle: data };
+      yield { file: paths.lifecycle(locale, lifecycleId), locale, id: lifecycleId, lifecycle: data };
     }
   }
 }

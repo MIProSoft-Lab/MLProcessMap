@@ -4,14 +4,14 @@ import type { Process } from '../../content/schemas';
 import type { Rule } from '../rule';
 import { processFiles } from '../walk';
 
-/** The parts of a process a translation must not change: IDs, not text. */
-function structure(p: Process) {
-  return JSON.stringify([
-    p.outcomes.map((o) => o.id),
-    p.activities.map((a) => a.id),
-    p.inputs.map((i) => i.workProduct),
-    p.outputs.map((o) => o.workProduct),
-  ]);
+/** Only the text is translated, so these must match exactly and in order. */
+function idsOf(process: Process): Record<string, string[]> {
+  return {
+    outcomes: process.outcomes.map((outcome) => outcome.id),
+    activities: process.activities.map((activity) => activity.id),
+    inputs: process.inputs.map((input) => input.workProduct),
+    outputs: process.outputs.map((output) => output.workProduct),
+  };
 }
 
 export const processTranslations: Rule = {
@@ -19,36 +19,63 @@ export const processTranslations: Rule = {
   description: 'A translated process has the same outcomes, activities, inputs and outputs as the English one.',
   severity: 'error',
   check({ content, report }) {
-    for (const { file, version, locale, id, process } of processFiles(content)) {
+    for (const { file, version, locale, id: processId, process } of processFiles(content)) {
       if (locale === defaultLocale) continue;
-      const english = content.getProcess(version, id, defaultLocale).data;
-      if (structure(process) !== structure(english)) {
-        report(file, 'outcomes, activities, inputs or outputs differ from the English version');
+
+      const englishFile = display(paths.process(version, defaultLocale, processId));
+      const englishIds = idsOf(content.getProcess(version, processId, defaultLocale).data);
+      const translatedIds = idsOf(process);
+
+      for (const part of Object.keys(englishIds)) {
+        const here = translatedIds[part].join(', ') || 'none';
+        const inEnglish = englishIds[part].join(', ') || 'none';
+        if (here === inEnglish) continue;
+        report(
+          file,
+          `The ${part} differ from the English file (here: ${here}; in English: ${inEnglish}).`,
+          `A translation only changes the text: keep the IDs and order of ${englishFile}.`,
+        );
       }
     }
   },
 };
 
-const placeholders = (s: string) =>
-  [...s.matchAll(/\{(\w+)\}/g)]
-    .map((m) => m[1])
+/** `placeholdersOf('{n} of {total} processes')` is `"n, total"`. */
+const placeholdersOf = (text: string) =>
+  [...text.matchAll(/\{(\w+)\}/g)]
+    .map((match) => match[1])
     .sort()
     .join(', ');
 
+// The site fills in only the placeholders of the English text.
 export const uiTranslations: Rule = {
   id: 'ui-translations',
   description: 'Translated interface strings exist in English and use the same {placeholders}.',
   severity: 'error',
   check({ content, report }) {
-    const en = content.uiStrings(defaultLocale) ?? {};
-    const enFile = display(paths.ui(defaultLocale));
+    const englishStrings = content.uiStrings(defaultLocale) ?? {};
+    const englishFile = display(paths.ui(defaultLocale));
+
     for (const locale of locales) {
       if (locale === defaultLocale) continue;
+
       const file = paths.ui(locale);
-      for (const [key, text] of Object.entries(content.uiStrings(locale) ?? {})) {
-        if (en[key] === undefined) report(file, `${key} does not exist in ${enFile}`);
-        else if (placeholders(text) !== placeholders(en[key])) {
-          report(file, `${key} must use the placeholders {${placeholders(en[key]) || '…'}} of the English text`);
+
+      for (const [key, translatedText] of Object.entries(content.uiStrings(locale) ?? {})) {
+        const englishText = englishStrings[key];
+        if (englishText === undefined) {
+          report(file, `"${key}" does not exist in ${englishFile}.`, `Add it to ${englishFile} first, or remove it here.`);
+          continue;
+        }
+
+        const translatedPlaceholders = placeholdersOf(translatedText);
+        const englishPlaceholders = placeholdersOf(englishText);
+        if (translatedPlaceholders !== englishPlaceholders) {
+          report(
+            file,
+            `"${key}" uses the placeholders {${translatedPlaceholders || 'none'}}, but the English text uses {${englishPlaceholders || 'none'}}.`,
+            'Use the same placeholders as the English text, which the site fills in.',
+          );
         }
       }
     }

@@ -1,4 +1,4 @@
-import { paths } from '../../content/files';
+import { display, paths } from '../../content/files';
 import type { Rule } from '../rule';
 import { processFiles } from '../walk';
 
@@ -7,15 +7,38 @@ export const citations: Rule = {
   description: 'Activities cite studies in studies.yaml and references in references.yaml, and a study points to a reference that exists.',
   severity: 'error',
   check({ content, report }) {
-    const studyIds = new Set(content.studies.map((s) => s.id));
-    const refKeys = new Set(content.references.map((r) => r.key));
-    for (const s of content.studies) {
-      if (s.reference && !refKeys.has(s.reference)) report(paths.studies, `${s.id} points to unknown reference ${s.reference}`);
+    const knownStudyIds = new Set(content.studies.map((study) => study.id));
+    const knownReferenceKeys = new Set(content.references.map((reference) => reference.key));
+    const studiesFile = display(paths.studies);
+    const referencesFile = display(paths.references);
+
+    for (const study of content.studies) {
+      if (study.reference && !knownReferenceKeys.has(study.reference)) {
+        report(
+          paths.studies,
+          `Study ${study.id} points to reference "${study.reference}", which is not in ${referencesFile}.`,
+          `Add the reference to ${referencesFile}, or correct the key.`,
+        );
+      }
     }
+
     for (const { file, process } of processFiles(content)) {
-      for (const a of process.activities) {
-        for (const s of a.primaryStudies ?? []) if (!studyIds.has(s)) report(file, `${a.id} cites unknown study ${s}`);
-        for (const k of a.literature ?? []) if (!refKeys.has(k)) report(file, `${a.id} cites unknown reference ${k}`);
+      for (const activity of process.activities) {
+        for (const studyId of activity.primaryStudies ?? []) {
+          if (!knownStudyIds.has(studyId)) {
+            report(file, `Activity ${activity.id} cites study ${studyId}, which is not in ${studiesFile}.`, `Add the study to ${studiesFile}, or correct the ID.`);
+          }
+        }
+
+        for (const referenceKey of activity.literature ?? []) {
+          if (!knownReferenceKeys.has(referenceKey)) {
+            report(
+              file,
+              `Activity ${activity.id} cites reference "${referenceKey}", which is not in ${referencesFile}.`,
+              `Add the reference to ${referencesFile}, or correct the key.`,
+            );
+          }
+        }
       }
     }
   },

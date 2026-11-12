@@ -17,7 +17,7 @@ function check(change: (f: Fixture) => void = () => {}): Issue[] {
   return validate(toFiles(f));
 }
 
-/** The issues as "rule: file: message", easy to compare. */
+/** The issues as "rule: file: message". */
 const summary = (issues: Issue[]) => issues.map((i) => `${i.rule}: ${i.file}: ${i.message}`);
 
 describe('the content of the repository', () => {
@@ -68,13 +68,13 @@ describe('files', () => {
 
   it('reports a missing required file', () => {
     expect(summary(check((f) => delete f['/content/references.yaml']))).toEqual([
-      'files: /content/references.yaml: the file is missing',
+      'files: /content/references.yaml: The required file is missing.',
     ]);
   });
 
   it('reports files the site does not read', () => {
     expect(summary(check((f) => (f['/content/prm/v1/P03.yaml'] = 'id: P03')))).toEqual([
-      'files: /content/prm/v1/P03.yaml: the site does not read this file: move it to where its kind of content belongs, or delete it',
+      'files: /content/prm/v1/P03.yaml: The site does not read files in this place.',
     ]);
   });
 
@@ -86,7 +86,7 @@ describe('files', () => {
 
   it('reports a translation without an English file', () => {
     expect(summary(check((f) => (f['/content/prm/v1/processes/es/P03.yaml'] = { ...f[P01], id: 'P03' })))).toEqual([
-      'files: /content/prm/v1/processes/es/P03.yaml: translation of content/prm/v1/processes/en/P03.yaml, which does not exist',
+      'files: /content/prm/v1/processes/es/P03.yaml: This file translates content/prm/v1/processes/en/P03.yaml, which does not exist.',
     ]);
   });
 
@@ -102,7 +102,7 @@ describe('files', () => {
 describe('rules', () => {
   it('versions: the default version exists', () => {
     expect(summary(check((f) => (f['/content/versions.yaml'].default = 'v9')))).toEqual([
-      'versions: /content/versions.yaml: default version v9 does not exist',
+      'versions: /content/versions.yaml: The default version "v9" is not one of the versions.',
     ]);
   });
 
@@ -111,7 +111,7 @@ describe('rules', () => {
       f['/content/versions.yaml'].versions[0].id = 'latest';
       f['/content/versions.yaml'].default = 'latest';
     });
-    expect(summary(issues)).toContain('versions: /content/versions.yaml: the version ID "latest" is reserved for links to the default version');
+    expect(summary(issues)).toContain('versions: /content/versions.yaml: A version is called "latest", which is reserved for links to the default version.');
   });
 
   it('versions: the topology places every process once', () => {
@@ -119,26 +119,26 @@ describe('rules', () => {
       f['/content/versions.yaml'].versions[0].topology[0].columns = [['P01', 'P01']];
     });
     expect(summary(issues)).toEqual([
-      'versions: /content/versions.yaml: v1 topology lists P01 more than once',
-      'versions: /content/versions.yaml: v1 topology does not list P02',
+      'versions: /content/versions.yaml: The topology of v1 lists P01 2 times.',
+      'versions: /content/versions.yaml: The topology of v1 does not list P02, so the process map does not show it.',
     ]);
   });
 
   it('versions: the topology lists processes that have a file', () => {
     expect(summary(check((f) => f['/content/versions.yaml'].versions[0].topology[0].columns[0].push('P03')))).toEqual([
-      'versions: /content/versions.yaml: v1 topology lists P03, which has no file',
+      'versions: /content/versions.yaml: The topology of v1 lists P03, which has no process file.',
     ]);
   });
 
   it('process-id: the id matches the file name', () => {
     expect(summary(check((f) => (f['/content/prm/v1/processes/en/P02.yaml'].id = 'P07')))).toEqual([
-      'process-id: /content/prm/v1/processes/en/P02.yaml: id is P07, expected P02',
+      'process-id: /content/prm/v1/processes/en/P02.yaml: The id is P07, but the file is named P02.yaml.',
     ]);
   });
 
   it('process-outcomes: inputs and outputs serve existing outcomes', () => {
     expect(summary(check((f) => f['/content/prm/v1/processes/en/P02.yaml'].outputs[0].serves.push('z')))).toEqual([
-      'process-outcomes: /content/prm/v1/processes/en/P02.yaml: Plan serves outcome (z), which does not exist',
+      'process-outcomes: /content/prm/v1/processes/en/P02.yaml: The output "Plan" serves outcome (z), which this process does not have.',
     ]);
   });
 
@@ -148,8 +148,8 @@ describe('rules', () => {
       f[P02].inputs.push(f[P02].inputs[0]);
     });
     expect(summary(issues)).toEqual([
-      `process-unique-ids: ${P02}: outcome a appears more than once`,
-      `process-unique-ids: ${P02}: input goals appears more than once`,
+      `process-unique-ids: ${P02}: The outcome ID "a" is used more than once.`,
+      `process-unique-ids: ${P02}: The work product "goals" is listed more than once among the inputs.`,
     ]);
   });
 
@@ -160,8 +160,8 @@ describe('rules', () => {
     });
     expect(issues.every((i) => i.severity === 'warning')).toBe(true);
     expect(summary(issues)).toEqual([
-      `outcome-evidence: ${P02}: outcome (b) is served by no output, only by inputs`,
-      `outcome-evidence: ${P02}: outcome (c) is served by no output or input`,
+      `outcome-evidence: ${P02}: Outcome (b) is served by inputs, but by no output.`,
+      `outcome-evidence: ${P02}: Outcome (c) is served by no input or output.`,
     ]);
   });
 
@@ -173,24 +173,24 @@ describe('rules', () => {
       ];
     });
     expect(summary(issues)).toEqual([
-      `work-product-flow: ${P01}: input Goals is not an output of any process of v1; if it comes from outside the project, mark goals external in content/prm/v1/work-products.yaml`,
-      `work-product-flow: ${P02}: input Goals is not an output of any process of v1; if it comes from outside the project, mark goals external in content/prm/v1/work-products.yaml`,
-      `work-product-flow: ${workProducts}: plan is marked external, but P01, P02 produce it`,
-      `work-product-flow: ${workProducts}: unused is not an input or output of any process of v1`,
+      `work-product-flow: ${P01}: The input "Goals" is not an output of any process of v1.`,
+      `work-product-flow: ${P02}: The input "Goals" is not an output of any process of v1.`,
+      `work-product-flow: ${workProducts}: "plan" is marked external, but P01 and P02 produce it.`,
+      `work-product-flow: ${workProducts}: "unused" is not an input or output of any process of v1.`,
     ]);
   });
 
   it('work-product-flow: a work product has one name', () => {
     expect(summary(check((f) => (f[P02].outputs[0].name = 'Project plan')))).toEqual([
-      `work-product-flow: ${P02}: plan is called "Project plan" here and "Plan" in P01`,
+      `work-product-flow: ${P02}: The work product "plan" is called "Project plan" here, but "Plan" in P01.`,
     ]);
   });
 
   it('work-product-dead-ends: outputs other than records are used (warning)', () => {
     const issues = check((f) => (f[workProducts].workProducts[1].type = 'artifact'));
     expect(summary(issues)).toEqual([
-      `work-product-dead-ends: ${P01}: output Plan is not an input of any process`,
-      `work-product-dead-ends: ${P02}: output Plan is not an input of any process`,
+      `work-product-dead-ends: ${P01}: The output "Plan" is not an input of any process.`,
+      `work-product-dead-ends: ${P02}: The output "Plan" is not an input of any process.`,
     ]);
   });
 
@@ -210,7 +210,7 @@ describe('rules', () => {
           delete f[lifecycle].phases[1].returnsTo;
         }),
       ),
-    ).toEqual([`lifecycle-dataflow: ${lifecycle}: phase start: P01 needs Report, which is first produced in the later phase loop`]);
+    ).toEqual([`lifecycle-dataflow: ${lifecycle}: In phase "start", P01 needs "Report", which is first produced later, in phase "loop".`]);
     expect(
       summary(
         check((f) => {
@@ -218,7 +218,7 @@ describe('rules', () => {
           f[lifecycle].phases = [f[lifecycle].phases[0]];
         }),
       ),
-    ).toEqual([`lifecycle-dataflow: ${lifecycle}: phase start: P01 needs Report, which no process of the lifecycle produces (P02 in v1)`]);
+    ).toEqual([`lifecycle-dataflow: ${lifecycle}: In phase "start", P01 needs "Report", but no process of the lifecycle produces it.`]);
     expect(
       summary(
         check((f) => {
@@ -232,7 +232,7 @@ describe('rules', () => {
 
   it('citations: a study points to a known reference', () => {
     expect(summary(check((f) => (f['/content/studies.yaml'].studies[0].reference = 'nobody2020')))).toEqual([
-      'citations: /content/studies.yaml: S1 points to unknown reference nobody2020',
+      'citations: /content/studies.yaml: Study S1 points to reference "nobody2020", which is not in content/references.yaml.',
     ]);
   });
 
@@ -242,19 +242,19 @@ describe('rules', () => {
       f['/content/prm/v1/processes/en/P02.yaml'].activities[0].literature = ['nobody2020'];
     });
     expect(summary(issues)).toEqual([
-      'citations: /content/prm/v1/processes/en/P02.yaml: P02.1 cites unknown study S9',
-      'citations: /content/prm/v1/processes/en/P02.yaml: P02.1 cites unknown reference nobody2020',
+      'citations: /content/prm/v1/processes/en/P02.yaml: Activity P02.1 cites study S9, which is not in content/studies.yaml.',
+      'citations: /content/prm/v1/processes/en/P02.yaml: Activity P02.1 cites reference "nobody2020", which is not in content/references.yaml.',
     ]);
   });
 
   it('process-translations: a translation keeps the IDs of the English file', () => {
     expect(summary(check((f) => (f[P01es].outcomes[0].id = 'b')))).toContain(
-      `process-translations: ${P01es}: outcomes, activities, inputs or outputs differ from the English version`,
+      `process-translations: ${P01es}: The outcomes differ from the English file (here: b; in English: a).`,
     );
   });
 
   it('lifecycles: the PRM version exists', () => {
-    expect(summary(check((f) => (f[lifecycle].prmVersion = 'v9')))).toEqual([`lifecycles: ${lifecycle}: unknown PRM version v9`]);
+    expect(summary(check((f) => (f[lifecycle].prmVersion = 'v9')))).toEqual([`lifecycles: ${lifecycle}: The lifecycle uses PRM version v9, which does not exist.`]);
   });
 
   it('lifecycles: phases list processes of the version and return to existing phases', () => {
@@ -263,8 +263,8 @@ describe('rules', () => {
       f[lifecycle].phases[1].returnsTo = 'nowhere';
     });
     expect(summary(issues)).toEqual([
-      `lifecycles: ${lifecycle}: phase start lists unknown process P09`,
-      `lifecycles: ${lifecycle}: phase loop returns to unknown phase nowhere`,
+      `lifecycles: ${lifecycle}: Phase "start" lists P09, which is not a process of v1.`,
+      `lifecycles: ${lifecycle}: Phase "loop" returns to "nowhere", which is not a phase of this lifecycle.`,
     ]);
   });
 
@@ -274,19 +274,50 @@ describe('rules', () => {
       f['/content/ui/es.yaml'].nav.count = '{total} procesos';
     });
     expect(summary(issues)).toEqual([
-      'ui-translations: /content/ui/es.yaml: nav.count must use the placeholders {n} of the English text',
-      'ui-translations: /content/ui/es.yaml: nav.extra does not exist in content/ui/en.yaml',
+      'ui-translations: /content/ui/es.yaml: "nav.count" uses the placeholders {total}, but the English text uses {n}.',
+      'ui-translations: /content/ui/es.yaml: "nav.extra" does not exist in content/ui/en.yaml.',
     ]);
   });
 });
 
 describe('formatIssues', () => {
-  it('groups the issues by file', () => {
-    const text = formatIssues([
-      { file: '/content/b.yaml', message: 'two', rule: 'r', severity: 'error' },
-      { file: '/content/a.yaml', message: 'one', rule: 'r', severity: 'error' },
-      { file: '/content/b.yaml', message: 'three', rule: 's', severity: 'warning' },
-    ]);
-    expect(text).toBe('content/a.yaml\n  - one (r)\n\ncontent/b.yaml\n  - two (r)\n  - three (warning: s)');
+  const issues: Issue[] = [
+    { file: '/content/b.yaml', message: 'Two.', rule: 'r', severity: 'error', fix: 'Fix two.' },
+    { file: '/content/a.yaml', message: 'One.', rule: 'r', severity: 'error' },
+    { file: '/content/b.yaml', message: 'Three.', rule: 's', severity: 'warning' },
+  ];
+
+  it('lists errors before warnings, grouped by file, with the severity on every line', () => {
+    expect(formatIssues(issues)).toBe(
+      [
+        'Errors (2)',
+        '',
+        'content/a.yaml',
+        '  error   One.  [r]',
+        '',
+        'content/b.yaml',
+        '  error   Two.  [r]',
+        '          Fix: Fix two.',
+        '',
+        'Warnings (1)',
+        '',
+        'content/b.yaml',
+        '  warning Three.  [s]',
+      ].join('\n'),
+    );
+  });
+
+  it('explains the rules that reported, when given their descriptions', () => {
+    const text = formatIssues(issues, { ruleDescriptions: { s: 'What s checks.' } });
+    expect(text.endsWith('About these rules:\n  s: What s checks.')).toBe(true);
+  });
+
+  it('gives every reported issue a fix', () => {
+    const everything = check((f) => {
+      f[P02].id = 'P07';
+      f[P02].outputs[0].serves.push('z');
+      f['/content/versions.yaml'].default = 'v9';
+    });
+    expect(everything.filter((issue) => !issue.fix)).toEqual([]);
   });
 });
