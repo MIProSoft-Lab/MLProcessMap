@@ -1,0 +1,137 @@
+id: P25
+number: 25
+origin: standards-only
+name: Procés de retirada
+purpose: >-
+  El propòsit del *Procés de retirada* és definir les activitats per al moment en què un sistema o un
+  model d'aprenentatge automàtic arriba al final de la seva vida. Gestiona la retirada ordenada dels models
+  i els artefactes de producció alhora que garanteix la traçabilitat, el compliment normatiu i la preservació
+  del coneixement.
+outcomes:
+- id: a
+  text: S'identifiquen i es documenten els desencadenants i l'abast de la posada fora de servei.
+- id: b
+  text: Els serveis de predicció i la infraestructura es desactiven de manera segura.
+- id: c
+  text: Els artefactes del model s'arxiven o se suprimeixen de manera segura d'acord amb la política.
+- id: d
+  text: Es preserven les metadades de procedència i els registres per garantir l'auditabilitat.
+- id: e
+  text: Es conserven la documentació i els artefactes per a la reproductibilitat futura.
+- id: f
+  text: S'alliberen els recursos i es dona per conclosa la responsabilitat tècnica.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: Els components operacionals que s'han de posar fora de servei.
+  serves:
+  - a
+  - b
+  - f
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: L'estructura de desplegament i de dades per planificar la retirada.
+  serves:
+  - a
+  - b
+  - c
+outputs:
+- workProduct: decommissioning-record
+  name: Registre de posada fora de servei
+  description: Els desencadenants, l'abast, les disposicions i les accions dutes a terme.
+  serves:
+  - a
+  - b
+  - f
+- workProduct: archived-assets
+  name: Actius arxivats
+  description: >-
+    Les dades, els artefactes del model, el llinatge i els registres conservats per a consulta o auditoria.
+  serves:
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Identificar els desencadenants de la posada fora de servei
+  description: >-
+    Determinar els motius per retirar el model o el sistema, tant si sorgeixen d'una substitució, d'una
+    pèrdua d'adequació a la finalitat, d'un canvi en el problema o en l'entorn, com del final de la necessitat
+    a la qual responia. Establir l'abast de la retirada, inclòs cada element que només existeix per donar
+    suport al model retirat, i identificar si la retirada afecta una sola versió del model o el sistema
+    en conjunt. Assignar les responsabilitats de la posada fora de servei i de la conservació o la destrucció
+    de les dades i de la propietat intel·lectual, i identificar les parts interessades a les quals s'ha
+    d'informar.
+  primaryStudies:
+  - P1
+  - P14
+  - P16
+- id: A2
+  title: Planificar la posada fora de servei
+  description: >-
+    Definir la seqüència d'accions necessàries per retirar el model de l'ús, d'acord amb la manera com
+    es va desplegar i amb les dependències registrades a la documentació de l'arquitectura i del desplegament.
+    Identificar cada sistema i cada part interessada que depèn de les sortides del model, inclosos aquells
+    la dependència dels quals no està declarada formalment, i notificar-los-ho amb prou temps perquè s'hi
+    puguin adaptar.
+  primaryStudies:
+  - P8
+  - P9
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Gestionar les dades i els artefactes
+  description: >-
+    Decidir la disposició de cada conjunt de dades, model i artefacte associat, escollint entre la reutilització,
+    l'arxivament o la destrucció d'acord amb els requisits de conservació, les obligacions legals i les
+    polítiques organitzatives aplicables. Completar l'arxivament abans d'alliberar la infraestructura
+    que conté els actius, i preservar-ne la integritat i les metadades en l'emmagatzematge. Quan s'hagin
+    de destruir dades, estendre la destrucció a totes les còpies, incloses les còpies de seguretat i les
+    dades que tenguin tercers, i avaluar els models entrenats amb aquestes dades perquè el seu efecte
+    es tracti de manera coherent.
+  primaryStudies:
+  - P3
+  - P9
+  - P10
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Preservar el coneixement
+  description: >-
+    Conservar la informació necessària per entendre, reproduir o reutilitzar el model retirat, inclosos
+    la seva documentació, els resultats de l'avaluació i el llinatge de les dades i de la configuració,
+    fins i tot quan no es puguin conservar les dades subjacents. Registrar el coneixement operacional
+    i l'experiència en el projecte de les persones implicades, perquè pugui orientar sistemes similars
+    en el futur. Considerar si el model retirat o els seus components poden servir de base per a un successor,
+    i si la propietat intel·lectual que representa requereix protecció.
+  primaryStudies:
+  - P4
+  - P14
+  - P16
+- id: A5
+  title: Documentar la posada fora de servei
+  description: >-
+    Registrar al Registre de posada fora de servei els desencadenants, l'abast i les accions dutes a terme,
+    la disposició de cada actiu amb el requisit que la justifica, les parts interessades i els sistemes
+    dependents que han estat notificats, i l'alliberament dels recursos i de la responsabilitat. Confirmar
+    que s'han tractat les qüestions de seguretat física, de seguretat de la informació i de privadesa
+    associades a la retirada, i mantenir el registre disponible mentre el model retirat o les seves dades
+    puguin ser objecte d'auditoria o d'investigació.
+  primaryStudies:
+  - P3
+standards:
+- standard: ''
+  activity: a) Preparar la retirada
+  prmActivity: A1
+- standard: ''
+  activity: a) Preparar la retirada
+  prmActivity: A2
+- standard: ''
+  activity: b) Dur a terme la retirada
+  prmActivity: A3
+- standard: ''
+  activity: b) Dur a terme la retirada
+  prmActivity: A4
+- standard: ''
+  activity: c) Finalitzar la retirada
+  prmActivity: A5

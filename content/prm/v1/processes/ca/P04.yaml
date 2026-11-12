@@ -1,0 +1,195 @@
+id: P04
+number: 4
+origin: standards-only
+name: Procés de definició de l'arquitectura del sistema
+purpose: >-
+  El propòsit del *Procés de definició de l'arquitectura del sistema* és crear el marc estructural del
+  sistema definint-ne els components i la manera com interactuen. Especifica com es mouen les dades, els
+  models i el codi al llarg del cicle de vida per donar suport a la integració, la verificació i l'operació.
+outcomes:
+- id: a
+  text: Es defineix una estructura arquitectònica amb components i interaccions.
+- id: b
+  text: Es produeixen diagrames de flux de dades i de models que connecten totes les etapes.
+- id: c
+  text: Es documenten les restriccions tècniques i els atributs de qualitat.
+- id: d
+  text: Les decisions de disseny es documenten i són traçables.
+- id: e
+  text: Es defineixen els mecanismes de reentrenament i de monitoratge.
+inputs:
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: Els requisits funcionals, de rendiment, de qualitat i d'interfície del sistema.
+  serves:
+  - a
+  - c
+  - d
+  - e
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: Els requisits sobre les dades que necessita el sistema.
+  serves:
+  - b
+  - c
+outputs:
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: >-
+    La descripció de l'arquitectura, amb els diagrames de flux de dades i de models i els registres de
+    decisions.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Definir els objectius i les restriccions arquitectòniques
+  description: >-
+    Establir de què es compon el sistema, separant l'aplicació d'usuari, el sistema d'aprenentatge automàtic
+    i la infraestructura de suport, i distingint el pipeline de dades del pipeline del model. Tenir en
+    compte els límits d'aquesta descomposició, ja que els components d'aprenentatge automàtic interactuen
+    de maneres poc evidents i millorar-ne un pot degradar la qualitat global. Fixar les propietats que
+    l'estructura ha de garantir, vinculant les tàctiques arquitectòniques amb els requisits de qualitat
+    que satisfan i tractant l'estabilitat davant distribucions de dades canviants com un objectiu arquitectònic.
+    Considerar el monitoratge i el manteniment des del principi, escollir el maquinari d'inferència d'acord
+    amb els requisits ja definits i tractar les diferències entre els entorns d'entrenament i de desplegament
+    com una restricció, ja que poden canviar el comportament del model.
+  primaryStudies:
+  - P4
+  - P11
+  - P13
+  - P16
+  - P18
+  literature:
+  - serban2022
+  - gamaSurveyConceptDrift2014
+- id: A2
+  title: Dissenyar el pipeline de dades i de models
+  description: >-
+    Estructurar el pipeline com a mòduls connectats per preparar, entrenar, avaluar, validar i servir,
+    inclòs el camí de retorn pel qual les dades de servei es registren i es reintrodueixen com a dades
+    d'entrenament. Compartir la lògica de preparació entre l'entrenament i el servei en lloc de reimplementar-la
+    a cada banda, i fer de la validació de dades una part de l'estructura, ja que un defecte en la generació
+    de característiques pot alterar la producció sense que canviï cap codi ni cap dada. Integrar les etapes
+    de dades i de model per evitar la desviació entre entrenament i servei i l'acumulació de codi de cola
+    i de dependències no documentades. Construir el pipeline i la seva infraestructura a partir d'un conjunt
+    de dades inicial més petit, de manera que l'estructura que l'envolta existeixi abans que acabi la
+    recollida de dades.
+  primaryStudies:
+  - P1
+  - P17
+  - P18
+  literature:
+  - baylorTFXTensorFlowBasedProductionScale2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Definir l'arquitectura d'entrenament i d'experimentació
+  description: >-
+    Tractar la gestió d'experiments com un element de primer ordre del sistema, que conté dades, models,
+    metadades i programari, on les metadades inclouen paràmetres, mètriques de qualitat, experiments,
+    pipelines i registres d'execució, i el programari s'estén a configuracions, dependències d'entorn
+    i contenidors. Versionar conjuntament les dades d'entrenament, la configuració dels experiments i
+    el codi del model perquè els resultats siguin reproduïbles i cada model sigui traçable fins als registres
+    del conjunt de dades a partir dels quals es va construir. Decidir si l'arquitectura proporciona només
+    el llinatge o la procedència completa, ja que saber quines entrades han produït una sortida és menys
+    que saber quines transformacions ho han fet.
+  primaryStudies:
+  - P9
+  - P10
+  - P18
+- id: A4
+  title: Definir el marc de desplegament i d'operació
+  description: >-
+    Seleccionar la disposició amb què el sistema més ampli tolera una sortida incorrecta del model, ja
+    sigui un monitor que actua sobre aquesta sortida, un agregador que combina diversos models independents
+    o un commutador que transfereix el control a una alternativa, i definir el valor substitutiu, ja sigui
+    una sortida segura fixa o la darrera sortida correcta coneguda. Especificar com es reemplaça un model
+    en servei, ja sigui posant el sistema en un estat segur o executant canals actius i de reserva. Proporcionar
+    un mòdul que faci el seguiment de l'ús i del rendiment i que doni suport a estratègies com les proves
+    A/B, emprar contenidors i orquestració per mantenir la disposició portable entre entorns, i decidir
+    entre serveis gestionats i sistemes de codi obert sota el control de la mateixa organització.
+  primaryStudies:
+  - P1
+  - P8
+  - P9
+  - P13
+  - P16
+- id: A5
+  title: Definir la capa de monitoratge i d'observabilitat
+  description: >-
+    Especificar què s'observa a les entrades del model, a l'entorn d'operació, dins el model i a les seves
+    sortides, i tractar la detecció de canvis en la distribució com una qüestió arquitectònica. Comparar
+    les estadístiques de les dades de servei amb les de les dades d'entrenament perquè la desviació es
+    detecti abans que arribi al model. Registrar prou informació per reconstruir el comportament del model
+    després d'un incident, amb les entrades registrades de manera contínua, protegides contra alteracions
+    i conservades durant un període definit. Dotar la capa d'una funció de decisió que compari el rendiment
+    observat o previst amb els criteris d'èxit de l'Especificació de requisits de dades.
+  primaryStudies:
+  - P8
+  - P13
+  - P17
+  literature:
+  - gamaSurveyConceptDrift2014
+  - baylorTFXTensorFlowBasedProductionScale2017
+- id: A6
+  title: Definir els mecanismes de reentrenament
+  description: >-
+    Definir com s'actualitza el model en servei en resposta al que observa la capa de monitoratge, preferint
+    l'ajust fi a l'entrenament des de zero, exigint que cada actualització superi una nova avaluació abans
+    del desplegament i comparant cada model actualitzat amb els seus predecessors perquè se'n faci visible
+    l'evolució. Especificar com s'apliquen les actualitzacions de manera segura, supervisant la diversitat
+    de la flota quan es despleguen de manera incremental, i tractar el reentrenament com una responsabilitat
+    permanent del pipeline del model, juntament amb l'auditoria, el versionat i el monitoratge.
+  primaryStudies:
+  - P1
+  - P8
+  - P13
+  - P16
+  literature:
+  - serban2022
+- id: A7
+  title: Documentar l'arquitectura
+  description: >-
+    Assignar els requisits del sistema a les entitats arquitectòniques que els satisfan, i mantenir la
+    traçabilitat entre aquestes entitats, els requisits, les definicions d'interfície i els mètodes de
+    verificació. Tractar la configuració com a part del registre de l'arquitectura, ja que tendeix a créixer
+    molt i a estar poc documentada i pot superar el codi que entrena el model. Recollir les decisions
+    arquitectòniques en una forma que els avaluadors puguin inspeccionar i que es pugui traçar fins al
+    codi font, en lloc de fer-ho només en prosa.
+  primaryStudies:
+  - P9
+  - P11
+  - P18
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la definició de l'arquitectura del sistema
+  prmActivity: A1
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Conceptualitzar l'arquitectura del sistema
+  prmActivity: A1
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar l'arquitectura del sistema
+  prmActivity: A2
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar l'arquitectura del sistema
+  prmActivity: A3
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar l'arquitectura del sistema
+  prmActivity: A4
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar l'arquitectura del sistema
+  prmActivity: A5
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar l'arquitectura del sistema
+  prmActivity: A6
+- standard: ISO/IEC/IEEE 12207
+  activity: d) Avaluar l'arquitectura del sistema
+  prmActivity: A7
+- standard: ISO/IEC/IEEE 12207
+  activity: e) Gestionar els resultats de la definició de l'arquitectura del sistema
+  prmActivity: A7

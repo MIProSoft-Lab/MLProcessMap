@@ -1,0 +1,142 @@
+id: P09
+number: 9
+origin: decomposed
+name: Proceso de recopilación de datos
+purpose: >-
+  El propósito del *Proceso de recopilación de datos* es extraer los datos en bruto de las fuentes internas
+  y externas identificadas y reunirlos en un área de almacenamiento común. Crea uno o varios conjuntos
+  de datos en bruto listos para su exploración y limpieza.
+outcomes:
+- id: a
+  text: Los datos se extraen de las fuentes y se almacenan en un área de preparación.
+- id: b
+  text: Los datos en bruto van acompañados de metadatos y documentación.
+- id: c
+  text: Se dispone de los registros de extracción y de la información de monitorización.
+- id: d
+  text: Se elabora un Registro de recopilación de datos que documenta las decisiones y los parámetros.
+inputs:
+- workProduct: data-catalog
+  name: Catálogo de datos
+  description: Las fuentes identificadas a las que conectarse, con sus condiciones de acceso y sus metadatos.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: raw-dataset
+  name: Conjunto de datos en bruto
+  description: Los datos extraídos almacenados en un área de preparación.
+  serves:
+  - a
+- workProduct: data-collection-record
+  name: Registro de recopilación de datos
+  description: >-
+    La correspondencia de datos, los metadatos, los registros de extracción y la información de monitorización,
+    con las decisiones y los parámetros de la recopilación.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Establecer las conexiones y obtener los datos
+  description: >-
+    Conectarse a las fuentes para obtener los datos, teniendo en cuenta la distinta calidad y fiabilidad
+    de los sistemas implicados y las características de almacenamiento, procesamiento y exposición propias
+    de cada tipo de datos, y confirmar que la extracción no degrada el rendimiento ni el tiempo de respuesta
+    de los sistemas de origen que siguen atendiendo tráfico de producción.
+  primaryStudies:
+  - P14
+  - P17
+  literature:
+  - khanOverviewETLTechniques2024
+- id: A2
+  title: Seleccionar la estrategia de extracción
+  description: >-
+    Elegir entre extracción completa o incremental y entre modos por lotes o en tiempo real, dejando que
+    la actualidad definida para la adquisición determine cuánto histórico se obtiene y con qué frecuencia
+    se repite la extracción. Distinguir la extracción completa de la extracción parcial con y sin notificación
+    de actualización, y etiquetar el tipo de carga correspondiente como carga inicial, carga incremental
+    o actualización completa. Registrar la estrategia y la frecuencia por fuente y no por proyecto.
+  primaryStudies:
+  - P14
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+  - seenivasanETLWorldUnstructured2021
+- id: A3
+  title: Crear la correspondencia de datos y la documentación
+  description: >-
+    Especificar qué campos de datos se obtienen y registrar los metadatos de la fuente, indicando los
+    criterios de selección, qué atributos son necesarios para el objetivo indicado, cuáles se han marcado
+    como irrelevantes, cuántos puede manejar la técnica de extracción elegida y cuánto histórico se obtiene
+    aunque haya más disponible. Establecer un mapa de datos que exprese la relación entre origen y destino,
+    registrando para cada fuente su estrategia de actualización, su frecuencia de carga y su volumen esperado,
+    y para cada columna su columna de destino, su tipo, sus restricciones y cualquier transformación aplicada.
+    Registrar junto con ellos los derechos de acceso, la titularidad, los responsables del tratamiento,
+    los terceros, la finalidad de uso y la conservación asociados a cada fuente.
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+- id: A4
+  title: Tratar las fuentes no estructuradas
+  description: >-
+    Aplicar herramientas de análisis sintáctico, OCR o *scraping* para capturar texto o imágenes, decidiendo
+    cómo se codifican o agrupan las entradas de texto libre y cómo se tratan las entradas multimodales,
+    y teniendo en cuenta la información que solo existe fuera de los sistemas que el equipo puede consultar.
+    Adecuar la técnica a la forma de la fuente, usando el reconocimiento óptico de caracteres para páginas
+    e imágenes escaneadas, el análisis de documentos para formatos portables y de procesadores de texto,
+    el procesamiento del lenguaje para el texto, la conversión de voz a texto y la extracción de características
+    para el audio, y la extracción de fotogramas para el vídeo, y acceder a las fuentes web mediante una
+    interfaz programática o mediante *scraping* cuando no exista ninguna. Tener en cuenta el efecto en
+    el destino, ya que este material aumenta el coste de almacenamiento, pone en riesgo la integridad
+    y puede dejar una estructura indexada a la que no se ajusten las consultas posteriores.
+  literature:
+  - seenivasanETLWorldUnstructured2021
+- id: A5
+  title: Registrar y monitorizar la extracción
+  description: >-
+    Hacer el seguimiento de los registros extraídos y de los errores para detectar anomalías, validando
+    los datos que llegan frente al esquema acordado. Conciliar los registros obtenidos con la fuente,
+    verificar los tipos de datos y verificar la extracción comparando el número de registros entre origen
+    y destino, y consultar los registros que están presentes en uno y ausentes en el otro.
+  primaryStudies:
+  - P5
+  - P13
+  - P17
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+- id: A6
+  title: Mantener el registro de recopilación de datos
+  description: >-
+    Documentar todas las decisiones, estrategias y parámetros usados durante la extracción, registrando
+    dónde y mediante qué método se adquirió cada conjunto de datos, los problemas encontrados y las soluciones
+    adoptadas y la importancia relativa de los atributos seleccionados, de modo que pueda consultarse
+    después la cadena que va desde la entrada en bruto hasta el modelo construido sobre ella. Almacenar
+    el resultado de modo que quede establecida la trazabilidad de la adquisición, y poner los datos recopilados
+    a disposición de otros proyectos para su reutilización mediante repositorios que los almacenen y registros
+    que indiquen dónde se han usado.
+  primaryStudies:
+  - P3
+  - P14
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+standards:
+- standard: ISO/IEC 5338
+  activity: c) Llevar a cabo la adquisición de conocimiento para extraer conocimiento
+  standardProcess: Proceso de adquisición de conocimiento
+- standard: ISO/IEC 5338
+  activity: d) Reunir conocimiento sobre el dominio y el problema
+  standardProcess: Proceso de adquisición de conocimiento
+- standard: ISO/IEC 5338
+  activity: e) Gestionar el resultado de la adquisición de conocimiento
+  standardProcess: Proceso de adquisición de conocimiento
+- standard: ISO/IEC 5338
+  activity: a) Adquirir o seleccionar los datos
+  standardProcess: Proceso de ingeniería de datos de IA
+- standard: ISO/IEC 5338
+  activity: e) Documentar el linaje y la procedencia de los datos
+  standardProcess: Proceso de ingeniería de datos de IA
+  note: Repartido entre todos los procesos de datos

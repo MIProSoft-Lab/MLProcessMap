@@ -1,0 +1,160 @@
+id: P08
+number: 8
+origin: decomposed
+name: Procés d'identificació de fonts de dades
+purpose: >-
+  El propòsit del *Procés d'identificació de fonts de dades* és descobrir i documentar conjunts de dades
+  candidats de repositoris tant interns com externs per establir els fonaments del model d'aprenentatge
+  automàtic. Extreu les especificacions de dades dels requisits de dades i comprova si les fonts de dades
+  descobertes tenen implicacions de llicència, legals o ètiques abans que tengui lloc cap recollida o
+  ingesta de dades.
+outcomes:
+- id: a
+  text: S'identifiquen, s'avaluen i es documenten les fonts de dades pertinents.
+- id: b
+  text: Es caracteritzen la disponibilitat i la qualitat dels conjunts de dades interns i externs.
+- id: c
+  text: S'identifiquen les condicions legals, ètiques i de privadesa.
+- id: d
+  text: S'identifiquen les mancances de dades i les fonts complementàries.
+- id: e
+  text: S'estableixen les relacions entre els requisits de dades i les fonts.
+inputs:
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: Les necessitats de dades derivades dels requisits del sistema.
+  serves:
+  - a
+  - d
+  - e
+- workProduct: data-landscape-assessment
+  name: Avaluació del panorama de dades
+  description: L'avaluació preliminar de les dades disponibles per al projecte.
+  serves:
+  - b
+  - d
+outputs:
+- workProduct: data-catalog
+  name: Catàleg de dades
+  description: >-
+    L'inventari de fonts internes i externes, amb les seves avaluacions de qualitat i les revisions legals
+    i ètiques.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Analitzar els requisits de dades
+  description: >-
+    Traduir els requisits del sistema en especificacions de dades que guiïn l'estratègia de cerca de conjunts
+    de dades. Especificar les propietats fonamentals de les dades, com les variables objectiu, els dominis
+    de les característiques, els esquemes esperats, els límits de volum i els paràmetres temporals o geogràfics,
+    per centrar els esforços de recollida en els conjunts de dades pertinents. Indicar la distribució
+    que han de presentar les dades perquè cada cas que el sistema ha de distingir hi estigui representat
+    en quantitat suficient, i acordar els rangs admissibles amb un expert del domini en lloc d'inferir-los
+    de la mostra que hi hagi disponible.
+  primaryStudies:
+  - P10
+  - P13
+- id: A2
+  title: Inventariar les fonts de dades internes
+  description: >-
+    Descobrir i avaluar els actius de dades existents distribuïts pels sistemes interns de l'organització.
+    Emprar els catàlegs de dades o els repositoris de metadades per avaluar les fonts candidates disponibles,
+    afavorir la reutilització d'actius i identificar les mancances de dades internes, registrant per a
+    cada candidat el seu propietari, les normes que en regulen l'ús i el nivell de control que exigeix
+    la seva criticitat. Establir quin accés es concedirà realment a l'equip, ja que els privilegis poden
+    variar dins un mateix projecte, i identificar on caldrà conciliar fonts que registren els mateixos
+    esdeveniments en formats incompatibles.
+  primaryStudies:
+  - P3
+  - P4
+  - P11
+  - P16
+  - P17
+- id: A3
+  title: Identificar les fonts de dades externes
+  description: >-
+    Descobrir conjunts de dades complementaris d'entorns externs, com registres públics, portals de dades
+    obertes i proveïdors comercials. Cercar en repositoris públics i portals de dades obertes, considerar
+    els proveïdors comercials i considerar la generació de les dades mitjançant assajos controlats o síntesi
+    quan no existeixi cap font adequada. Fer una avaluació formal del risc de qualsevol proveïdor abans
+    de l'adquisició, que tengui en compte la seva cadena de subministrament, el preprocessament ja aplicat
+    a les dades, les seves pràctiques de governança i les polítiques que el vinculen. Obtenir qualsevol
+    conjunt de dades preexistent d'una font de confiança per mitjans que en garanteixin la integritat
+    durant la transmissió, i, quan les dades se sintetitzin, establir que representen el domini operacional
+    previst i no el comportament del generador.
+  primaryStudies:
+  - P3
+  - P4
+  - P8
+  - P9
+  - P16
+  - P17
+- id: A4
+  title: Revisar les llicències de les dades
+  description: >-
+    Avaluar les condicions d'ús, les proteccions de drets d'autor i els acords de distribució associats
+    als conjunts de dades candidats. Comprovar les condicions de llicència abans de la integració al pipeline
+    perquè només s'incloguin conjunts de dades que respectin els límits contractuals i els drets de propietat
+    intel·lectual, i comprovar tant les condicions que afecten les dades subjacents a un artefacte candidat
+    com les del mateix artefacte.
+  primaryStudies:
+  - P10
+  - P16
+- id: A5
+  title: Revisar els aspectes legals
+  description: >-
+    Avaluar els conjunts de dades candidats d'acord amb la normativa de protecció de dades i les polítiques
+    de privadesa aplicables. Verificar els mecanismes de consentiment i la finalitat per a la qual se'n
+    va autoritzar la recollida, i avaluar els riscs de reidentificació, amb una atenció especial a la
+    vinculació amb informació auxiliar disponible en altres llocs. Registrar els drets d'accés, la propietat
+    i les condicions de conservació associades a cada font.
+  primaryStudies:
+  - P3
+  - P16
+- id: A6
+  title: Fer la revisió ètica
+  description: >-
+    Examinar els conjunts de dades candidats per detectar biaixos de representació, desequilibris de mostra
+    i possibles danys socials. Avaluar la cobertura demogràfica i la diversitat contextual abans de l'entrenament,
+    i anomenar les categories demogràfiques que han de cobrir les dades, per evitar que els models posteriors
+    produeixin resultats injustos o discriminatoris.
+  primaryStudies:
+  - P3
+  - P10
+- id: A7
+  title: Documentar les fonts
+  description: >-
+    Registrar les metadades sobre l'origen del conjunt de dades, l'estructura de l'esquema, els drets
+    d'accés i les limitacions conegudes. Registrar aquests detalls per donar suport a la reproductibilitat
+    i a l'extracció i la manipulació futures del conjunt de dades, incloses la llicència amb què es disposa
+    de cada actiu i l'associació entre un conjunt de dades i els experiments i pipelines que l'han consumit.
+  primaryStudies:
+  - P3
+  - P9
+  - P10
+  - P17
+standards:
+- standard: ISO/IEC 5338
+  activity: a) Definir l'abast i els criteris de l'adquisició de coneixement
+  standardProcess: Procés d'adquisició de coneixement
+- standard: ISO/IEC 5338
+  activity: b) Cercar i reunir fonts de coneixement
+  standardProcess: Procés d'adquisició de coneixement
+- standard: ISO/IEC 5338
+  activity: e) Gestionar el resultat de l'adquisició de coneixement
+  standardProcess: Procés d'adquisició de coneixement
+- standard: ISO/IEC 5338
+  activity: a) Adquirir o seleccionar les dades
+  standardProcess: Procés d'enginyeria de dades d'IA
+- standard: ISO/IEC 5338
+  activity: e) Documentar el llinatge i la procedència de les dades
+  standardProcess: Procés d'enginyeria de dades d'IA
+  note: Repartit entre tots els processos de dades
+- standard: ISO/IEC 5338
+  activity: g) Protegir les dades sensibles
+  standardProcess: Procés d'enginyeria de dades d'IA

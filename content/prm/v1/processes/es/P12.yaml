@@ -1,0 +1,184 @@
+id: P12
+number: 12
+origin: decomposed
+name: Proceso de enriquecimiento de datos
+purpose: >-
+  El propósito del *Proceso de enriquecimiento de datos* es ampliar los conjuntos de datos existentes
+  con información adicional o mejorada para aumentar su valor y su utilidad. Implica integrar fuentes
+  externas o transformar atributos existentes para dar soporte a mejores representaciones de las características.
+outcomes:
+- id: a
+  text: >-
+    Se obtiene un conjunto de datos enriquecido que combina los datos originales con atributos adicionales
+    o transformados.
+- id: b
+  text: >-
+    Se elabora un Registro de enriquecimiento de datos que documenta todas las operaciones, métodos y
+    herramientas de enriquecimiento.
+- id: c
+  text: Se registran los conflictos, redundancias e incoherencias resueltos.
+- id: d
+  text: >-
+    Se elabora un informe resumen que describe la estrategia y las características del conjunto de datos
+    resultante.
+inputs:
+- workProduct: cleaned-dataset
+  name: Conjunto de datos limpio
+  description: Los datos verificados con sus problemas de calidad resueltos.
+  serves:
+  - a
+- workProduct: exploratory-data-analysis-report
+  name: Informe de análisis exploratorio de datos
+  description: Las características, patrones y señales débiles encontrados en los datos.
+  serves:
+  - a
+  - d
+outputs:
+- workProduct: enriched-dataset
+  name: Conjunto de datos enriquecido
+  description: El conjunto de datos con fuentes integradas, características derivadas y muestras aumentadas.
+  serves:
+  - a
+- workProduct: data-enrichment-record
+  name: Registro de enriquecimiento de datos
+  description: >-
+    La estrategia de enriquecimiento, las operaciones aplicadas, los conflictos resueltos y la procedencia
+    de cada característica.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Identificar las necesidades de enriquecimiento
+  description: >-
+    Analizar el conjunto de datos para detectar información o atributos ausentes que podrían aportar valor,
+    localizando hechos que ningún atributo representa y atributos con una señal débil. Justificar cada
+    atributo derivado por el conocimiento que representa, los requisitos del algoritmo o las carencias
+    que revela el modelado, y usar los resultados de un modelo inicial para identificar las limitaciones
+    del conjunto de datos. Valorar si es necesario añadir características, ya que puede aumentar el tiempo
+    de ejecución y la redundancia.
+  primaryStudies:
+  - P14
+  - P16
+  - P17
+  literature:
+  - kumar2016
+- id: A2
+  title: Integrar las fuentes de datos
+  description: >-
+    Combinar conjuntos de datos a partir de claves compartidas, aplicando las correspondencias de atributos,
+    las reglas de emparejamiento y las reglas de fusión definidas para la combinación. Unir las tablas
+    que contienen información distinta sobre los mismos objetos, agregar los registros cuando se necesite
+    otro nivel de detalle y llevar todos los registros a la misma granularidad antes de combinarlos, partiendo
+    de la correspondencia de datos elaborada durante la recopilación. Tratar las claves que no coinciden
+    perfectamente, considerar la búsqueda automática en un repositorio de datos de tablas que combinar
+    y reconsiderar los criterios de selección de datos a la luz de lo que revele la integración. Evaluar
+    el riesgo para la privacidad de combinar datos sobre personas, ya que cruzar fuentes puede identificarlas.
+  primaryStudies:
+  - P3
+  - P11
+  - P14
+  - P16
+  literature:
+  - chepurko2020
+- id: A3
+  title: Alinear los esquemas
+  description: >-
+    Establecer la correspondencia entre los atributos de distintos conjuntos de datos que se refieren
+    al mismo concepto, automatizando el emparejamiento cuando el número de atributos haga inviable la
+    correspondencia manual, reutilizando las correspondencias existentes como ejemplos de entrenamiento
+    para los modelos de emparejamiento e identificando los atributos sinónimos cuando el emparejamiento
+    se use para completar valores de atributos ausentes.
+  literature:
+  - stonebrakerMachineLearningBig2019
+  - liDataAugmentationMLdriven2021
+  - dongBigDataIntegration2015
+  - roh2021
+- id: A4
+  title: Resolver entidades
+  description: >-
+    Identificar los registros que corresponden a la misma entidad sin coincidencias exactas de clave,
+    definiendo las reglas que emparejan los registros entre las fuentes que se integran. Evitar comparar
+    cada registro con todos los demás a gran escala, generar ejemplos para el emparejamiento mediante
+    reglas o modelado y hacer que personal con conocimiento del dominio valide las coincidencias generadas.
+  literature:
+  - stonebrakerMachineLearningBig2019
+  - liDataAugmentationMLdriven2021
+- id: A5
+  title: Fusionar los valores de los datos
+  description: >-
+    Conciliar varios valores en una única representación, definiendo para cada atributo que proporciona
+    más de una fuente cómo se seleccionan o agregan sus valores según su fiabilidad, su actualidad o su
+    confianza. Registrar cada conflicto encontrado junto con la regla usada para resolverlo.
+  primaryStudies:
+  - P14
+  literature:
+  - dongBigDataIntegration2015
+  - stonebrakerMachineLearningBig2019
+- id: A6
+  title: Integrar los datos no estructurados
+  description: >-
+    Vincular entradas en bruto, como texto o imágenes, con bases de conocimiento estructuradas externas,
+    relacionando directamente cada mención de una entidad con su entrada en una base de conocimiento,
+    ya que las entradas no estructuradas no tienen atributos que alinear o emparejar. Generar entradas
+    candidatas para cada mención y ordenarlas, teniendo en cuenta las variaciones de nombre y la ambigüedad,
+    y etiquetar como no vinculables las menciones sin una entrada correspondiente en lugar de forzar una
+    coincidencia.
+  literature:
+  - shenEntityLinkingKnowledge2015
+- id: A7
+  title: Diseñar las características
+  description: >-
+    Derivar nuevos atributos o representaciones a partir de los datos en bruto mediante la inclusión,
+    la agregación y la transformación de las variables en bruto, como la normalización, la discretización,
+    la codificación de valores nominales y ordinales y los cruces de características, o mediante representaciones
+    aprendidas como los *embeddings* y los temas latentes, elegidas según los datos y el algoritmo de
+    entrenamiento. Seleccionar las características que usa el modelo, comparando cada una con una línea
+    base y eliminando las que aportan poco, incluidas las características irrelevantes introducidas por
+    las uniones. Confirmar que cada característica puede generarse en el momento del servicio, que su
+    uso está permitido, que su beneficio justifica su coste, sus dependencias y su efecto en la latencia,
+    y que no filtra el objetivo.
+  primaryStudies:
+  - P13
+  - P14
+  - P15
+  - P17
+  literature:
+  - roh2021
+  - chepurko2020
+- id: A8
+  title: Aumentar los datos
+  description: >-
+    Generar copias modificadas de los datos para diversificar el conjunto de datos, mediante transformaciones
+    que preservan la etiqueta en el espacio de entrada, en el espacio de características o a nivel meta,
+    mediante la interpolación o la generación de muestras sintéticas, o mediante sobremuestreo y submuestreo
+    para abordar el desequilibrio de clases. Usar el aumento para cubrir condiciones que no pueden recopilarse
+    de forma segura, como los errores y fallos de los sensores. Verificar que los datos sintéticos representan
+    el dominio operativo y no introducen artefactos, y evaluar el efecto de cada medida de aumento en
+    un modelo inicial.
+  primaryStudies:
+  - P8
+  - P13
+  - P16
+  literature:
+  - liDataAugmentationMLdriven2021
+- id: A9
+  title: Documentar las transformaciones
+  description: >-
+    Registrar el origen y los cambios aplicados a cada dato en el Registro de enriquecimiento de datos,
+    consolidando las fuentes integradas y las reglas aplicadas al combinarlas, las características desarrolladas
+    con referencias al código que las genera y el aumento aplicado. Hacer el seguimiento del estado de
+    cada iteración para que el enriquecimiento pueda explicarse y repetirse en producción, y recoger los
+    pasos de preprocesamiento y transformación como procedencia que vincula cada conjunto de datos con
+    las actividades que lo usaron y lo generaron.
+  primaryStudies:
+  - P15
+  literature:
+  - stonebrakerMachineLearningBig2019
+standards:
+- standard: ISO/IEC 5338
+  activity: e) Documentar el linaje y la procedencia de los datos
+  note: Repartido entre todos los procesos de datos
+- standard: ISO/IEC 5338
+  activity: f) Limpiar, combinar y preparar los datos

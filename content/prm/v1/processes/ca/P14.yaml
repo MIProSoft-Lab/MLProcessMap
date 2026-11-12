@@ -1,0 +1,94 @@
+id: P14
+number: 14
+origin: decomposed
+name: Procés de selecció del model
+purpose: >-
+  El propòsit del *Procés de selecció del model* és identificar la família de models o l'algorisme que
+  millor satisfarà els objectius i les restriccions del projecte. Implica escollir la tècnica de modelatge
+  més adequada per al problema un cop acabada la preparació de les dades.
+outcomes:
+- id: a
+  text: >-
+    S'estableix una llista de tècniques de modelatge candidates adequades per al problema i els objectius.
+- id: b
+  text: S'analitzen i es comparen els models candidats d'acord amb els criteris establerts.
+- id: c
+  text: Se seleccionen les tècniques de modelatge que passen a l'entrenament i l'avaluació.
+- id: d
+  text: >-
+    Es produeix un Registre de selecció del model que descriu l'elecció, la justificació i les restriccions.
+inputs:
+- workProduct: technical-problem-statement
+  name: Enunciat tècnic del problema
+  description: El problema i els seus criteris d'èxit mesurables.
+  serves:
+  - a
+  - b
+- workProduct: solution-class-selection-record
+  name: Registre de selecció de la classe de solució
+  description: La classe de solució escollida i la seva justificació.
+  serves:
+  - a
+outputs:
+- workProduct: model-selection-record
+  name: Registre de selecció del model
+  description: Les tècniques candidates, la seva comparació, la tècnica escollida i la justificació.
+  serves:
+  - a
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Establir els criteris i les restriccions
+  description: >-
+    Analitzar l'*Enunciat tècnic del problema* per definir els criteris de selecció i les restriccions
+    de rendiment del model, a partir del tipus de tasca del model. Complementar la mètrica de rendiment
+    amb la robustesa, l'explicabilitat, l'escalabilitat, la demanda de recursos i la complexitat del model,
+    ponderades segons l'aplicació. Identificar les restriccions que limiten l'elecció més enllà de les
+    dades, com els requisits organitzatius d'interpretabilitat, les eines i la tecnologia d'implementació
+    disponibles i el maquinari en què s'executarà el model.
+  primaryStudies:
+  - P3
+  - P11
+  - P13
+  - P14
+- id: A2
+  title: Identificar les tècniques candidates
+  description: >-
+    Preseleccionar models que vagin des de línies de base simples fins a enfocaments complexos, a partir
+    de treballs publicats i de resultats interns en problemes similars, i incloent-hi la línia de base
+    definida per a la verificació. Registrar els supòsits que fa cada candidat sobre les dades, i considerar
+    els models existents quan els seus defectes i la seva reproductibilitat limitada siguin acceptables.
+  primaryStudies:
+  - P13
+  - P14
+- id: A3
+  title: Comparar i seleccionar els models
+  description: >-
+    Avaluar els candidats d'acord amb els criteris i seleccionar-ne un o més per continuar, ordenant-los
+    segons els criteris ponderats o identificant-ne els òptims de Pareto. Experimentar quan no es pugui
+    determinar per endavant la millor tècnica, adoptar capacitat addicional només quan aporti un benefici
+    validat, i tenir en compte la interpretabilitat quan el domini exigeixi que es justifiquin els resultats.
+  primaryStudies:
+  - P8
+  - P13
+- id: A4
+  title: Documentar la decisió
+  description: >-
+    Registrar la tècnica de modelatge escollida i la justificació de l'elecció al Registre de selecció
+    del model, juntament amb els supòsits que fa la tècnica sobre les dades i els candidats descartats,
+    i mantenir la traçabilitat amb els criteris a partir dels quals es va prendre la decisió.
+  primaryStudies:
+  - P11
+  - P14
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la implementació
+  standardProcess: Procés d'implementació
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar els resultats de la implementació
+  standardProcess: Procés d'implementació
+- standard: ISO/IEC 5338
+  activity: a) Selecció de l'algorisme
+  standardProcess: Procés d'implementació

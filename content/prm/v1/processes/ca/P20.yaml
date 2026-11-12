@@ -1,0 +1,155 @@
+id: P20
+number: 20
+origin: standards-and-literature
+name: Procés de transició
+purpose: >-
+  El propòsit del *Procés de transició* és traslladar un model entrenat, validat i provat a un entorn
+  de producció on pugui fer prediccions. Fa de pont entre l'experimentació i l'operació, perquè els models
+  funcionin de manera fiable en condicions reals.
+outcomes:
+- id: a
+  text: Un model entrenat es trasllada a un entorn de producció preparat i configurat.
+- id: b
+  text: El model s'empaqueta en un artefacte de desplegament normalitzat i portable.
+- id: c
+  text: Un model versionat es registra en un registre de models amb metadades.
+- id: d
+  text: El model desplegat es carrega correctament i s'exposa mitjançant interfícies definides.
+- id: e
+  text: El desplegament s'executa amb procediments que permeten el monitoratge i la reversió.
+- id: f
+  text: >-
+    Es produeix un Registre de desplegament que documenta les decisions, les configuracions i les accions
+    del desplegament.
+inputs:
+- workProduct: model-artifact
+  name: Artefacte del model
+  description: El model validat i provat que s'ha de desplegar.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: L'estratègia de desplegament i l'entorn de destinació.
+  serves:
+  - a
+  - e
+outputs:
+- workProduct: deployment-artifacts
+  name: Artefactes de desplegament
+  description: El model empaquetat, l'entrada al registre i la instància en funcionament.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+- workProduct: deployment-record
+  name: Registre de desplegament
+  description: Les configuracions, les versions i les divergències respecte del pla.
+  serves:
+  - e
+  - f
+activities:
+- id: A1
+  title: Preparar l'entorn
+  description: >-
+    Proveir i configurar la infraestructura, el programari i els recursos de l'entorn operacional d'acord
+    amb els requisits d'instal·lació i les decisions de maquinari preses a l'arquitectura. Confirmar que
+    l'entorn proporciona la capacitat de càlcul i de memòria que necessita el model, i que els supòsits
+    fets durant el desenvolupament sobre el maquinari, la plataforma i la configuració encara s'hi mantenen,
+    ja que les diferències entre entorns poden canviar el comportament del model. Establir els controls
+    d'accés, el registre i els altres serveis facilitadors dels quals depèn el model desplegat, i demostrar
+    que estan a punt abans d'instal·lar el model.
+  primaryStudies:
+  - P1
+  - P3
+  - P8
+  - P10
+  - P11
+  - P13
+- id: A2
+  title: Empaquetar i contenidoritzar el model
+  description: >-
+    Combinar el model entrenat amb el codi necessari per servir-lo, inclosos el preprocessament i el postprocessament,
+    i amb les biblioteques, els entorns d'execució i la configuració dels quals depèn, en una unitat desplegable
+    que es pugui instal·lar de manera coherent a l'entorn operacional. Quan els requisits operacionals
+    ho exigeixin, convertir o reimplementar el model en un format diferent del que s'ha emprat en desenvolupament,
+    i confirmar que la conversió en preserva el comportament. Garantir que el processament aplicat a les
+    entrades i a les sortides és el mateix en desenvolupament i en producció, i que queda clar quines
+    parts del model estan contingudes a la unitat i quines s'obtenen en temps d'execució.
+  primaryStudies:
+  - P1
+  - P7
+  - P9
+  - P10
+  - P11
+- id: A3
+  title: Versionar i registrar el model
+  description: >-
+    Registrar cada model desplegable en un repositori central amb una versió única, la seva etapa del
+    cicle de vida i les metadades necessàries per traçar-lo fins al codi, les dades i la configuració
+    que el varen produir. Controlar l'aprovació de cada llançament i registrar les transicions entre etapes,
+    juntament amb la distribució de cada versió als entorns on s'instal·la. Mantenir registrades i disponibles
+    les versions anteriors, de manera que sempre se sàpiga quina versió és en servei i se'n pugui restaurar
+    una d'anterior quan calgui.
+  primaryStudies:
+  - P1
+  - P4
+  - P6
+  - P7
+  - P9
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Executar el desplegament
+  description: >-
+    Instal·lar el model empaquetat a l'entorn operacional d'acord amb l'estratègia de desplegament definida
+    a l'arquitectura, i connectar-lo amb els sistemes amb què interopera mitjançant les interfícies definides.
+    Confirmar que el model es carrega, s'inicialitza i serveix prediccions amb entrades de producció,
+    que les seves interfícies només exposen la informació prevista i que el seu rendiment en condicions
+    reals és coherent amb el que es va observar durant la validació. Revisar la preparació del sistema
+    per a l'operació, inclosa la seva seguretat, i confirmar que la versió anterior continua disponible
+    per restaurar-la abans de posar completament en servei la nova.
+  primaryStudies:
+  - P3
+  - P6
+  - P8
+  - P13
+  - P15
+  - P16
+  - P18
+  literature:
+  - breckMLTestScore2017
+- id: A5
+  title: Documentar el desplegament
+  description: >-
+    Registrar al Registre de desplegament les configuracions, les versions, els paràmetres i l'entorn
+    emprats, els resultats del desplegament i les anomalies o incidències trobades juntament amb les condicions
+    en què es varen produir. Anotar les diferències respecte de l'estratègia de desplegament definida
+    a l'arquitectura, perquè el registre pugui complementar aquesta documentació en lloc de repetir-la.
+    Mantenir la traçabilitat entre els elements desplegats i les seves versions aprovades, i posar la
+    informació necessària per operar el sistema a disposició dels responsables de la seva operació.
+  primaryStudies:
+  - P3
+  - P11
+  - P14
+  - P15
+  - P16
+standards:
+- standard: ''
+  activity: a) Preparar la transició
+  prmActivity: A1
+- standard: ''
+  activity: b) Dur a terme la transició
+  prmActivity: A2
+- standard: ''
+  activity: b) Dur a terme la transició
+  prmActivity: A3
+- standard: ''
+  activity: b) Dur a terme la transició
+  prmActivity: A4
+- standard: ''
+  activity: c) Gestionar els resultats de la transició
+  prmActivity: A5

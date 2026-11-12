@@ -1,0 +1,133 @@
+id: P15
+number: 15
+origin: decomposed
+name: Procés d'entrenament del model
+purpose: >-
+  El propòsit del *Procés d'entrenament del model* és instanciar les tècniques de modelatge seleccionades
+  i ajustar-les als conjunts de dades preparats. Aplica els models al conjunt d'entrenament de manera
+  controlada per crear un artefacte reproduïble, transparent i a punt per a l'avaluació.
+outcomes:
+- id: a
+  text: >-
+    El conjunt de dades es divideix en conjunts d'entrenament, de prova i de validació per evitar la filtració
+    de dades.
+- id: b
+  text: S'entrenen instàncies de les tècniques de modelatge seleccionades amb les dades preparades.
+- id: c
+  text: >-
+    Es registren les configuracions d'entrenament, inclosos els hiperparàmetres i les llavors aleatòries.
+- id: d
+  text: S'incorporen als models mesures d'interpretabilitat i de transparència.
+- id: e
+  text: Es produeix un Registre d'entrenament del model que resumeix els procediments i els resultats.
+- id: f
+  text: S'emmagatzemen els models entrenats i les metadades per a l'avaluació.
+inputs:
+- workProduct: model-selection-record
+  name: Registre de selecció del model
+  description: Les tècniques seleccionades per a l'entrenament.
+  serves:
+  - b
+- workProduct: labeled-dataset
+  name: Conjunt de dades etiquetat
+  description: El conjunt de dades etiquetat i processat.
+  serves:
+  - a
+  - b
+- workProduct: optimized-model-configuration
+  name: Configuració optimitzada del model
+  description: La configuració per a una nova versió del model.
+  serves:
+  - b
+  - c
+  optional: true
+outputs:
+- workProduct: model-artifact
+  name: Artefacte del model
+  description: El model ajustat, amb les seves mesures de transparència.
+  serves:
+  - b
+  - d
+  - f
+- workProduct: dataset-partitions
+  name: Particions del conjunt de dades
+  description: Els conjunts d'entrenament, de validació i de prova.
+  serves:
+  - a
+  - f
+- workProduct: model-training-record
+  name: Registre d'entrenament del model
+  description: Les configuracions, les llavors aleatòries, els procediments i els resultats de l'entrenament.
+  serves:
+  - c
+  - d
+  - e
+  - f
+activities:
+- id: A1
+  title: Crear les particions de dades
+  description: >-
+    Dividir les dades en conjunts d'entrenament i de prova (i, opcionalment, de validació), emprant una
+    partició de reserva o una partició d'entrenament, validació i prova, o la validació creuada per a
+    conjunts de dades més petits. Reservar per a l'avaluació final un conjunt de prova disjunt dels conjunts
+    d'entrenament i de validació, i considerar el mostreig estratificat quan les classes estiguin desequilibrades
+    o l'equilibri sigui important.
+  primaryStudies:
+  - P3
+  - P13
+  - P16
+- id: A2
+  title: Inicialitzar i ajustar el model
+  description: >-
+    Instanciar els algorismes i minimitzar les funcions de pèrdua amb el conjunt d'entrenament, alineant
+    l'objectiu amb els criteris d'èxit del negoci i aplicant regularització per evitar el sobreajust sense
+    caure en el subajust. Registrar els valors dels paràmetres amb la justificació de cada elecció, descriure
+    el model resultant i les dificultats per interpretar-lo, i tornar a ajustar el model amb la Configuració
+    optimitzada del model quan calgui una nova versió.
+  primaryStudies:
+  - P3
+  - P13
+  - P14
+- id: A3
+  title: Millorar la transparència
+  description: >-
+    Emprar models interpretables o tècniques d'explicabilitat, afegint mètodes d'explicació intrínsecs
+    o extrínsecs quan la tècnica seleccionada no sigui interpretable per si mateixa. Sospesar els mètodes
+    agnòstics respecte del model davant els específics del model, considerar l'ús de les explicacions
+    per refinar el model i seleccionar mètodes que no comprometin la privadesa.
+  primaryStudies:
+  - P3
+  - P6
+  - P8
+  - P16
+- id: A4
+  title: Documentar la configuració
+  description: >-
+    Registrar els valors dels hiperparàmetres, les llavors aleatòries, l'algorisme, el conjunt de dades
+    i l'entorn d'execució, incloses les versions del programari i el maquinari.
+  primaryStudies:
+  - P8
+  - P13
+- id: A5
+  title: Emmagatzemar el model i els registres
+  description: >-
+    Emmagatzemar l'Artefacte del model i les Particions del conjunt de dades juntament amb el Registre
+    d'entrenament del model en una ubicació controlada sota gestió de la configuració, versionant conjuntament
+    les dades d'entrenament, la configuració i el codi, registrant qualsevol anomalia i mantenint cada
+    model traçable fins als registres del conjunt de dades a partir dels quals es va construir.
+  primaryStudies:
+  - P9
+  - P10
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la implementació
+  standardProcess: Procés d'implementació
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Dur a terme la implementació
+  standardProcess: Procés d'implementació
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar els resultats de la implementació
+  standardProcess: Procés d'implementació
+- standard: ISO/IEC 5338
+  activity: b) Entrenament del model
+  standardProcess: Procés d'implementació

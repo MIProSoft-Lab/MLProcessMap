@@ -1,0 +1,218 @@
+id: P11
+number: 11
+origin: decomposed
+name: Procés de neteja de dades
+purpose: >-
+  El propòsit del *Procés de neteja de dades* és trobar i corregir problemes a les dades, com els valors
+  absents, els errors, els duplicats i les incoherències. El seu objectiu principal és millorar la qualitat
+  de les dades perquè es puguin emprar de manera fiable per a l'entrenament i l'avaluació.
+outcomes:
+- id: a
+  text: >-
+    Es produeix un conjunt de dades netejat i verificat, amb les accions dutes a terme d'acord amb el
+    pla.
+- id: b
+  text: >-
+    Es produeix un Registre de neteja de dades que descriu les transformacions, les eines i el raonament.
+- id: c
+  text: >-
+    S'estableixen registres que vinculen les dades originals i les netejades per mantenir la traçabilitat.
+- id: d
+  text: S'informa dels problemes de qualitat de les dades que no s'han pogut resoldre durant la neteja.
+inputs:
+- workProduct: raw-dataset
+  name: Conjunt de dades en brut
+  description: Les dades recollides a l'àrea de preparació.
+  serves:
+  - a
+  - c
+- workProduct: exploratory-data-analysis-report
+  name: Informe d'anàlisi exploratòria de dades
+  description: >-
+    Un resum de les característiques estadístiques, les visualitzacions, els patrons i les tendències
+    de les dades.
+  serves:
+  - a
+  - b
+- workProduct: data-quality-report
+  name: Informe de qualitat de les dades
+  description: >-
+    Documenta els defectes, els valors absents i els valors atípics que s'han de tenir en compte en planificar
+    les activitats de neteja.
+  serves:
+  - a
+  - b
+  - d
+outputs:
+- workProduct: cleaned-dataset
+  name: Conjunt de dades netejat
+  description: Les dades verificades amb els problemes resolts.
+  serves:
+  - a
+- workProduct: data-cleaning-record
+  name: Registre de neteja de dades
+  description: >-
+    Un registre de les transformacions aplicades, les eines emprades, els enllaços de traçabilitat entre
+    les dades en brut i les netejades, i els problemes de qualitat no resolts.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Planificar les activitats de neteja
+  description: >-
+    Definir un pla que identifiqui els problemes que s'han de tractar a partir de l'Informe d'anàlisi
+    exploratòria de dades i de l'Informe de qualitat de les dades. Per a cada problema, decidir si es
+    corregeix, s'elimina o s'ignora deliberadament, si s'espera que netejar-lo millori el model, quina
+    part de les dades queda afectada i com s'aplicarà la correcció a totes les dades rebudes fins al moment.
+    Escollir cada tècnica segons el tipus d'error, tenir en compte els llindars de què depèn i considerar
+    com la neteja d'un tipus d'error afecta els altres. Preferir resoldre la causa d'un defecte a l'origen
+    abans que afegir codi de neteja, i identificar les dades que s'han de filtrar per motius de biaix,
+    de privadesa o de sensibilitat. Seleccionar tècniques i eines que es puguin automatitzar i reutilitzar
+    en lloc d'aplicar-les mitjançant scripts *ad hoc*.
+  primaryStudies:
+  - P10
+  - P14
+  - P17
+  literature:
+  - whangDataCollectionQuality2023
+  - coteDataCleaningMachine2024
+  - foidlDataSmellsCategories2022
+  - wongsuphasawatGoalsProcessChallenges2019
+  - kandelWranglerInteractiveVisual2011
+- id: A2
+  title: Tractar els valors absents
+  description: >-
+    Eliminar o omplir les entrades buides mitjançant imputació o estimadors, com la imputació estadística
+    per la mitjana, la mediana o la moda, la interpolació, la imputació per regressió o *hot-deck*, els
+    veïns més propers, les prediccions d'un model o la imputació múltiple quan s'hagi de representar la
+    incertesa dels valors imputats. Identificar els valors absents disfressats que es codifiquen com a
+    valors vàlids de la característica, i substituir els valors absents per un símbol distintiu quan el
+    seu patró sigui informatiu. Comparar el rendiment del model amb diferents tècniques d'imputació abans
+    d'adoptar-ne una, i mantenir els valors originals recuperables perquè els valors imputats es puguin
+    distingir dels observats.
+  primaryStudies:
+  - P3
+  - P13
+  - P14
+  - P16
+  literature:
+  - nazabalDataEngineeringData2020
+  - coteDataCleaningMachine2024
+  - recupitoUnmaskingDataSecrets2024
+- id: A3
+  title: Eliminar els registres duplicats
+  description: >-
+    Eliminar les entrades repetides que podrien esbiaixar els models, amb una atenció especial a les dades
+    combinades de diverses fonts, i eliminar les observacions redundants o irrellevants. Excloure de les
+    característiques els identificadors que no aporten informació al model, però conservar-los per vincular
+    els registres netejats amb les seves fonts.
+  primaryStudies:
+  - P7
+  - P11
+  literature:
+  - recupitoUnmaskingDataSecrets2024
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A4
+  title: Normalitzar els formats
+  description: >-
+    Fer coherent el format en tot el conjunt de dades (com les dates i les unitats), convertint els valors
+    que tenen diverses representacions d'una mateixa entitat en una única forma canònica, conciliant l'ús
+    de majúscules, l'ortografia, les abreviatures i els valors de significat similar, i alineant tots
+    els registres al mateix nivell de granularitat. Automatitzar les correccions quan la regla sigui clara,
+    emprant tipus de dades semàntics per donar suport a la validació i la conversió, i proporcionar un
+    procediment documentat per als casos que requereixen una actuació humana. Verificar que les conversions
+    no introdueixen nous defectes, i garantir que cada regla de normalització es pugui aplicar de manera
+    idèntica en desenvolupament i en producció.
+  primaryStudies:
+  - P7
+  - P11
+  - P14
+  - P17
+  literature:
+  - nazabalDataEngineeringData2020
+  - kandelWranglerInteractiveVisual2011
+  - foidlDataSmellsCategories2022
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A5
+  title: Corregir els valors atípics
+  description: >-
+    Identificar i eliminar o corregir els valors que es desvien significativament dels rangs esperats,
+    actuant segons l'origen probable registrat per a cada anomalia a l'Informe d'anàlisi exploratòria
+    de dades. Corregir o eliminar els valors que es considerin errors, i etiquetar i conservar els casos
+    genuïns però poc freqüents quan el problema els requereixi per al desenvolupament o l'avaluació, o
+    quan detectar-los sigui l'objectiu del model. Avaluar qualsevol filtre de soroll abans d'aplicar-lo,
+    ja que un filtre erroni pot eliminar part del senyal, comprovar si hi ha registres que s'hagin pogut
+    injectar deliberadament, i documentar el soroll que s'ignora perquè es troba en camps irrellevants
+    per a l'objectiu.
+  primaryStudies:
+  - P3
+  - P13
+  - P14
+  - P16
+  literature:
+  - coteDataCleaningMachine2024
+  - nazabalDataEngineeringData2020
+  - whangDataCollectionQuality2023
+  - recupitoUnmaskingDataSecrets2024
+- id: A6
+  title: Fer la correspondència d'entitats
+  description: >-
+    Identificar els registres estructurats que fan referència al mateix objecte del món real encara que
+    els seus noms, identificadors o formats siguin diferents, inclosos els registres conciliats entre
+    fonts que empren sistemes temporals o nivells de granularitat diferents. Agrupar els registres en
+    blocs per limitar les comparacions necessàries, comparar-los mitjançant elements compartits, representacions
+    latents o un model après, i fusionar o vincular les coincidències d'acord amb el pla.
+  primaryStudies:
+  - P16
+  literature:
+  - coteDataCleaningMachine2024
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A7
+  title: Netejar les etiquetes
+  description: >-
+    Corregir les etiquetes de classe incorrectes o amb soroll mitjançant regles o revisió experta, tractant
+    les etiquetes que arriben amb les dades recollides, com els resultats històrics o les etiquetes de
+    serveis externs. Verificar les etiquetes externes amb etiquetes conegudes, i ajustar la profunditat
+    de la revisió al risc de l'aplicació, tenint en compte que les etiquetes incorrectes afecten tant
+    l'entrenament com l'avaluació que s'empra per seleccionar un model. Detectar les etiquetes probablement
+    errònies a partir de la confiança del model, la pèrdua, l'efecte d'eliminar o reetiquetar un registre
+    o la seva distància respecte de la resta de la seva classe, tenint en compte que el soroll sistemàtic
+    pot escapar a aquests mètodes. Reservar el reetiquetatge manual per part d'experts del domini als
+    casos que requereixen una confiança alta, prioritzant les mostres amb la correcció d'etiqueta estimada
+    més baixa quan els recursos siguin limitats.
+  primaryStudies:
+  - P8
+  - P17
+  literature:
+  - bernhardtActiveLabelCleaning2022
+  - coteDataCleaningMachine2024
+  - whangDataCollectionQuality2023
+- id: A8
+  title: Documentar les accions de neteja
+  description: >-
+    Registrar les operacions, les eines i les justificacions al Registre de neteja de dades per transparència,
+    indicant per a cada problema de l'Informe de qualitat de les dades la decisió presa, les mostres descartades
+    i els criteris emprats per descartar-les, i els problemes encara pendents juntament amb el seu possible
+    efecte sobre els resultats. Mantenir les transformacions com un script revisable i reutilitzable,
+    mantenir els vincles entre els registres en brut i els netejats, verificar el conjunt de dades netejat
+    amb el conjunt en brut i amb l'esquema de dades, i provar el mateix codi de neteja. Mantenir el registre
+    actualitzat durant tot el procés i traslladar els problemes no resolts als processos posteriors.
+  primaryStudies:
+  - P5
+  - P10
+  - P13
+  - P14
+  literature:
+  - kandelWranglerInteractiveVisual2011
+  - Schelter2017
+  - sneedProcessAssessingData2011
+  - breckMLTestScore2017
+  - nazabalDataEngineeringData2020
+standards:
+- standard: ISO/IEC 5338
+  activity: e) Documentar el llinatge i la procedència de les dades
+  note: Repartit entre tots els processos de dades
+- standard: ISO/IEC 5338
+  activity: f) Netejar, fusionar i preparar les dades

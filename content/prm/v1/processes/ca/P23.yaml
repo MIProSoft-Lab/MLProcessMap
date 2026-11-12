@@ -1,0 +1,194 @@
+id: P23
+number: 23
+origin: standards-only
+name: Procés d'operació
+purpose: >-
+  El propòsit del *Procés d'operació* és emprar el sistema d'aprenentatge automàtic en producció per prestar
+  els seus serveis. Manté el sistema disponible dins els nivells de servei acordats, gestiona les persones
+  i els recursos necessaris per fer-lo funcionar i atén les incidències i les sol·licituds de suport que
+  sorgeixen durant l'ús.
+outcomes:
+- id: a
+  text: >-
+    Es defineix una estratègia d'operació i hi ha disponibles els sistemes facilitadors i operadors qualificats.
+- id: b
+  text: El sistema s'empra en el seu entorn operacional i serveix prediccions en el mode establert.
+- id: c
+  text: Els recursos d'execució es gestionen d'acord amb els objectius de cost i de rendiment.
+- id: d
+  text: >-
+    Les dades de producció i les càrregues de servei es capturen i es governen per a la seva reutilització
+    posterior.
+- id: e
+  text: >-
+    S'apliquen els procediments operacionals i les mesures de contingència en condicions degradades.
+- id: f
+  text: >-
+    Les incidències i les sol·licituds de suport es registren, se'n fa el seguiment i s'escalen quan cal
+    un canvi.
+- id: g
+  text: >-
+    Es produeixen registres d'operació i es tracen fins als requisits i les decisions arquitectòniques.
+inputs:
+- workProduct: deployment-artifacts
+  name: Artefactes de desplegament
+  description: El model empaquetat i la instància en funcionament que s'han d'operar.
+  serves:
+  - a
+  - b
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: El sistema de programari en què està incorporat el model.
+  serves:
+  - b
+  - e
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: El mode de servei i l'estratègia de reserva.
+  serves:
+  - a
+  - b
+  - e
+- workProduct: monitoring-record
+  name: Registre de monitoratge
+  description: La informació sobre deriva, rendiment i incidències.
+  serves:
+  - c
+  - f
+- workProduct: alerting-configuration
+  name: Configuració d'alertes
+  description: Les regles i els llindars als quals responen els operadors.
+  serves:
+  - e
+  - f
+outputs:
+- workProduct: live-model-outputs
+  name: Sortides del model en producció
+  description: Les prediccions servides amb dades de producció.
+  serves:
+  - b
+  - d
+- workProduct: operational-procedures
+  name: Procediments operacionals
+  description: Els manuals d'operació, els procediments de contingència i la documentació d'usuari.
+  serves:
+  - a
+  - e
+- workProduct: operation-records
+  name: Registres d'operació
+  description: El rendiment del servei, l'ús de recursos, les incidències i les sol·licituds.
+  serves:
+  - c
+  - f
+  - g
+- workProduct: maintenance-requests
+  name: Sol·licituds de manteniment
+  description: Els problemes que els procediments d'operació no poden resoldre.
+  serves:
+  - f
+activities:
+- id: A1
+  title: Preparar l'operació
+  description: >-
+    Definir l'estratègia d'operació, inclosos la capacitat, la disponibilitat i el temps de resposta esperats
+    dels serveis, els modes d'operació i les operacions de contingència, i les mesures que permeten conèixer
+    el rendiment operacional, a partir de les disposicions de servei i de reserva definides a l'arquitectura.
+    Identificar i obtenir els sistemes facilitadors necessaris per operar el sistema. Definir els requisits
+    de qualificació dels operadors, formar-los i assignar-los, i establir com cooperen amb els equips
+    responsables de les dades i del model, tenint en compte que el model es pot executar en una forma
+    diferent de la que s'ha emprat en desenvolupament.
+  primaryStudies:
+  - P4
+  - P10
+  - P16
+- id: A2
+  title: Operar el sistema i gestionar els recursos d'execució
+  description: >-
+    Emprar el sistema en el seu entorn operacional d'acord amb el mode de servei establert, de manera
+    que els serveis es prestin dins els nivells de servei acordats. Assignar i ajustar els recursos de
+    càlcul, de memòria, d'emmagatzematge i d'energia necessaris per sostenir el servei, equilibrant la
+    capacitat i el rendiment amb el cost d'operació. Actuar a partir del consum de recursos i del rendiment
+    que mesura el procés de validació contínua, i identificar oportunitats per reduir el cost d'operació
+    sense degradar el servei.
+  primaryStudies:
+  - P1
+  - P9
+  - P18
+- id: A3
+  title: Governar les dades de producció i les càrregues de servei
+  description: >-
+    Determinar quines dades d'entrada i de sortida produïdes durant l'operació es capturen, en quina proporció
+    i amb quina finalitat, tenint en compte la seva possible reutilització per al monitoratge, l'anàlisi
+    i l'entrenament futur. Preservar la traçabilitat de les dades capturades fins a les peticions i les
+    versions del model que les han produïdes, i protegir-ne la integritat perquè no es puguin alterar
+    abans d'emprar-les. Controlar l'accés a les dades capturades amb el mateix nivell que les dades d'origen,
+    considerar com el model pot influir en les dades de les quals aprendrà més endavant, i garantir que
+    obligacions com les sol·licituds de supressió de dades s'apliquin a tot el que se'n derivi.
+  primaryStudies:
+  - P10
+  literature:
+  - breckMLTestScore2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A4
+  title: Aplicar els procediments operacionals i les mesures de contingència
+  description: >-
+    Desenvolupar, i automatitzar quan sigui factible, els procediments per a l'operació rutinària, incloses
+    les sol·licituds de servei i de canvi, la resolució de problemes i la notificació d'incidències, per
+    reduir el risc d'anomalies operacionals. Aplicar les mesures de contingència definides a l'arquitectura,
+    com els modes d'operació degradats o els models alternatius, quan les fallades en les fonts de dades,
+    la infraestructura o els sistemes de l'entorn impedeixin el servei normal mentre el mateix model continua
+    essent vàlid. Garantir que els operadors coneguin el rendiment esperat de cada mode de contingència
+    abans d'entrar-hi, i mantenir aquests procediments en un pla de continuïtat.
+  primaryStudies:
+  - P18
+  literature:
+  - polletiHierarchicalFallbackArchitecture2025
+- id: A5
+  title: Gestionar les incidències i donar suport als usuaris
+  description: >-
+    Registrar i classificar les incidències, les queixes i les sol·licituds de servei, distingint les
+    fallades del servei dels errors que són d'esperar en un model probabilístic, i examinant els casos
+    notificats amb la versió del model que els va produir. Restablir l'operació normal mitjançant procediments
+    d'operació validats o solucions temporals, i escalar les qüestions sobre el comportament del model
+    als equips responsables del model. Obrir una sol·licitud de manteniment sempre que un problema requereixi
+    un canvi en les dades, el model o el codi, i informar els usuaris de les limitacions i els riscs del
+    sistema per afavorir-ne l'ús correcte.
+  primaryStudies:
+  - P3
+  - P8
+  - P11
+  literature:
+  - breckMLTestScore2017
+- id: A6
+  title: Registrar i informar dels resultats de l'operació
+  description: >-
+    Documentar el rendiment del servei, la disponibilitat, el consum de recursos i el cost, juntament
+    amb les incidències, les sol·licituds de suport i les anomalies trobades, i informar-ne respecte dels
+    nivells de servei acordats. Vincular cada registre amb la versió del model que era en servei en aquell
+    moment, i mantenir la traçabilitat entre els serveis operacionals i els requisits, el concepte operacional
+    i les versions publicades. Posar els registres a disposició dels processos que en depenen, en particular
+    per orientar les accions de manteniment i les decisions sobre la freqüència de l'entrenament i l'elecció
+    de l'algorisme.
+  primaryStudies:
+  - P1
+  - P9
+  - P16
+standards:
+- standard: ''
+  activity: a) Preparar l'operació
+  prmActivity: A1
+- standard: ''
+  activity: b) Dur a terme l'operació
+  prmActivity: A2
+- standard: ''
+  activity: b) Dur a terme l'operació
+  prmActivity: A3
+- standard: ''
+  activity: b) Dur a terme l'operació
+  prmActivity: A4
+- standard: ''
+  activity: d) Donar suport al client
+  prmActivity: A5
+- standard: ''
+  activity: c) Gestionar els resultats de l'operació
+  prmActivity: A6

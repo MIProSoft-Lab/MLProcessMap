@@ -1,0 +1,95 @@
+id: P14
+number: 14
+origin: decomposed
+name: Proceso de selección del modelo
+purpose: >-
+  El propósito del *Proceso de selección del modelo* es identificar la familia de modelos o el algoritmo
+  que mejor satisfará los objetivos y las restricciones del proyecto. Implica elegir la técnica de modelado
+  más adecuada para el problema una vez completada la preparación de los datos.
+outcomes:
+- id: a
+  text: >-
+    Se establece una lista de técnicas de modelado candidatas adecuadas para el problema y los objetivos.
+- id: b
+  text: Se analizan y comparan los modelos candidatos con los criterios establecidos.
+- id: c
+  text: Se seleccionan las técnicas de modelado que pasan al entrenamiento y la evaluación.
+- id: d
+  text: >-
+    Se elabora un Registro de selección del modelo que describe la elección, su justificación y sus restricciones.
+inputs:
+- workProduct: technical-problem-statement
+  name: Enunciado técnico del problema
+  description: El problema y sus criterios de éxito medibles.
+  serves:
+  - a
+  - b
+- workProduct: solution-class-selection-record
+  name: Registro de selección de la clase de solución
+  description: La clase de solución seleccionada y su justificación.
+  serves:
+  - a
+outputs:
+- workProduct: model-selection-record
+  name: Registro de selección del modelo
+  description: Las técnicas candidatas, su comparación, la técnica seleccionada y su justificación.
+  serves:
+  - a
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Establecer los criterios y las restricciones
+  description: >-
+    Analizar el *Enunciado técnico del problema* para definir los criterios de selección y las restricciones
+    de rendimiento del modelo, partiendo del tipo de tarea del modelo. Complementar la métrica de rendimiento
+    con la robustez, la explicabilidad, la escalabilidad, la demanda de recursos y la complejidad del
+    modelo, ponderadas según la aplicación. Identificar las restricciones que limitan la elección más
+    allá de los datos, como los requisitos organizativos de interpretabilidad, las herramientas y la tecnología
+    de implementación disponibles y el hardware en el que se ejecutará el modelo.
+  primaryStudies:
+  - P3
+  - P11
+  - P13
+  - P14
+- id: A2
+  title: Identificar las técnicas candidatas
+  description: >-
+    Preseleccionar modelos que vayan desde líneas base sencillas hasta enfoques complejos, a partir de
+    trabajos publicados y de resultados internos en problemas similares, e incluir la línea base definida
+    para la verificación. Registrar los supuestos que cada candidato hace sobre los datos y considerar
+    modelos existentes cuando sus defectos y su reproducibilidad limitada sean aceptables.
+  primaryStudies:
+  - P13
+  - P14
+- id: A3
+  title: Comparar y seleccionar los modelos
+  description: >-
+    Evaluar los candidatos frente a los criterios y seleccionar uno o varios para continuar, ordenándolos
+    según los criterios ponderados o identificando los óptimos de Pareto. Recurrir a la experimentación
+    cuando la mejor técnica no pueda determinarse de antemano, adoptar una capacidad adicional solo cuando
+    aporte un beneficio validado y valorar la interpretabilidad cuando el dominio exija justificar los
+    resultados.
+  primaryStudies:
+  - P8
+  - P13
+- id: A4
+  title: Documentar la decisión
+  description: >-
+    Registrar la técnica de modelado seleccionada y la justificación de la elección en el Registro de
+    selección del modelo, junto con los supuestos que la técnica hace sobre los datos y los candidatos
+    descartados, y mantener la trazabilidad con los criterios a partir de los que se tomó la decisión.
+  primaryStudies:
+  - P11
+  - P14
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la implementación
+  standardProcess: Proceso de implementación
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar los resultados de la implementación
+  standardProcess: Proceso de implementación
+- standard: ISO/IEC 5338
+  activity: a) Selección del algoritmo
+  standardProcess: Proceso de implementación

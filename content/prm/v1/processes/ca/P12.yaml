@@ -1,0 +1,181 @@
+id: P12
+number: 12
+origin: decomposed
+name: Procés d'enriquiment de dades
+purpose: >-
+  El propòsit del *Procés d'enriquiment de dades* és ampliar els conjunts de dades existents amb informació
+  addicional o millorada per augmentar-ne el valor i la utilitat. Implica integrar fonts externes o transformar
+  els atributs existents per donar suport a millors representacions de les característiques.
+outcomes:
+- id: a
+  text: >-
+    Es produeix un conjunt de dades enriquit que combina les dades originals amb atributs addicionals
+    o transformats.
+- id: b
+  text: >-
+    Es produeix un Registre d'enriquiment de dades que documenta totes les operacions, els mètodes i les
+    eines d'enriquiment.
+- id: c
+  text: Es registren els conflictes, les redundàncies i les incoherències resolts.
+- id: d
+  text: >-
+    Es produeix un informe resum que descriu l'estratègia i les característiques del conjunt de dades
+    resultant.
+inputs:
+- workProduct: cleaned-dataset
+  name: Conjunt de dades netejat
+  description: Les dades verificades amb els problemes de qualitat resolts.
+  serves:
+  - a
+- workProduct: exploratory-data-analysis-report
+  name: Informe d'anàlisi exploratòria de dades
+  description: Les característiques, els patrons i els senyals febles trobats a les dades.
+  serves:
+  - a
+  - d
+outputs:
+- workProduct: enriched-dataset
+  name: Conjunt de dades enriquit
+  description: El conjunt de dades amb fonts integrades, característiques elaborades i mostres augmentades.
+  serves:
+  - a
+- workProduct: data-enrichment-record
+  name: Registre d'enriquiment de dades
+  description: >-
+    L'estratègia d'enriquiment, les operacions aplicades, els conflictes resolts i la procedència de cada
+    característica.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Identificar les necessitats d'enriquiment
+  description: >-
+    Analitzar el conjunt de dades per detectar informació o atributs absents que podrien aportar valor,
+    localitzant els fets que cap atribut no representa i els atributs amb un senyal feble. Justificar
+    cada atribut derivat pel coneixement que representa, pels requisits de l'algorisme o per les mancances
+    que revela el modelatge, i emprar els resultats d'un model inicial per identificar les limitacions
+    del conjunt de dades. Sospesar si realment cal afegir característiques, ja que pot augmentar el temps
+    d'execució i la redundància.
+  primaryStudies:
+  - P14
+  - P16
+  - P17
+  literature:
+  - kumar2016
+- id: A2
+  title: Integrar les fonts de dades
+  description: >-
+    Fusionar conjunts de dades a partir de claus compartides, aplicant els mapatges d'atributs, les regles
+    de correspondència i les regles de fusió definides per a la combinació. Unir les taules que contenen
+    informació diferent sobre els mateixos objectes, agregar registres quan calgui un nivell de detall
+    diferent i portar tots els registres a la mateixa granularitat abans de combinar-los, a partir del
+    mapatge de dades produït durant la recollida. Tractar les claus que no coincideixen perfectament,
+    considerar la cerca automàtica de taules per unir en un repositori de dades i reconsiderar els criteris
+    de selecció de dades a la llum del que reveli la integració. Avaluar el risc per a la privadesa de
+    combinar dades sobre persones, ja que creuar fonts pot permetre identificar-les.
+  primaryStudies:
+  - P3
+  - P11
+  - P14
+  - P16
+  literature:
+  - chepurko2020
+- id: A3
+  title: Alinear els esquemes
+  description: >-
+    Vincular els atributs de diferents conjunts de dades que fan referència al mateix concepte, automatitzant
+    la correspondència quan el nombre d'atributs faci inviable el mapatge manual, reutilitzant mapatges
+    existents per proporcionar exemples d'entrenament als models de correspondència, i identificant atributs
+    sinònims quan la correspondència s'empri per omplir valors d'atributs absents.
+  literature:
+  - stonebrakerMachineLearningBig2019
+  - liDataAugmentationMLdriven2021
+  - dongBigDataIntegration2015
+  - roh2021
+- id: A4
+  title: Resoldre les entitats
+  description: >-
+    Identificar els registres que corresponen a la mateixa entitat sense coincidències exactes de claus,
+    definint les regles que relacionen els registres entre les fonts que s'integren. Evitar comparar cada
+    registre amb tots els altres a gran escala, generar exemples de correspondència mitjançant regles
+    o modelatge, i fer que personal amb coneixement del domini validi les correspondències generades.
+  literature:
+  - stonebrakerMachineLearningBig2019
+  - liDataAugmentationMLdriven2021
+- id: A5
+  title: Fusionar els valors de les dades
+  description: >-
+    Conciliar diversos valors en una única representació, definint per a cada atribut que proporciona
+    més d'una font com se seleccionen o s'agreguen els seus valors segons la seva fiabilitat, actualitat
+    o confiança. Registrar cada conflicte trobat juntament amb la regla emprada per resoldre'l.
+  primaryStudies:
+  - P14
+  literature:
+  - dongBigDataIntegration2015
+  - stonebrakerMachineLearningBig2019
+- id: A6
+  title: Integrar les dades no estructurades
+  description: >-
+    Vincular entrades en brut com text o imatges amb bases de coneixement estructurades externes, associant
+    cada menció d'una entitat directament amb la seva entrada en una base de coneixement, ja que les entrades
+    no estructurades no tenen atributs per alinear o fer correspondre. Generar entrades candidates per
+    a cada menció i ordenar-les, tenint en compte les variacions de nom i l'ambigüitat, i etiquetar com
+    a no vinculables les mencions sense una entrada corresponent en lloc de forçar-ne una correspondència.
+  literature:
+  - shenEntityLinkingKnowledge2015
+- id: A7
+  title: Elaborar les característiques
+  description: >-
+    Derivar nous atributs o representacions de les dades en brut mitjançant la inclusió, l'agregació i
+    la transformació de variables en brut, com la normalització, la discretització, la codificació de
+    valors nominals i ordinals i el creuament de característiques, o mitjançant representacions apreses
+    com els embeddings i els temes latents, escollides segons les dades i l'algorisme d'entrenament. Seleccionar
+    les característiques que empra el model, comparant-ne cadascuna amb una línia de base i eliminant
+    les que hi contribueixen poc, incloses les característiques irrellevants que introdueixen les unions.
+    Confirmar que cada característica es pot generar en temps de servei, que se'n permet l'ús, que el
+    seu benefici en justifica el cost, les dependències i l'efecte sobre la latència, i que no filtra
+    l'objectiu.
+  primaryStudies:
+  - P13
+  - P14
+  - P15
+  - P17
+  literature:
+  - roh2021
+  - chepurko2020
+- id: A8
+  title: Augmentar les dades
+  description: >-
+    Generar còpies modificades de les dades per diversificar el conjunt de dades, mitjançant transformacions
+    que preserven l'etiqueta a l'espai d'entrada, a l'espai de característiques o a un nivell meta, mitjançant
+    la interpolació o la generació de mostres sintètiques, o mitjançant el sobremostreig i el submostreig
+    per tractar el desequilibri de classes. Emprar l'augment per cobrir condicions que no es poden recollir
+    de manera segura, com els errors i les fallades de sensors. Verificar que les dades sintètiques representen
+    el domini operacional i no introdueixen artefactes, i avaluar l'efecte de cada mesura d'augment en
+    un model inicial.
+  primaryStudies:
+  - P8
+  - P13
+  - P16
+  literature:
+  - liDataAugmentationMLdriven2021
+- id: A9
+  title: Documentar les transformacions
+  description: >-
+    Registrar l'origen i els canvis aplicats a cada dada al Registre d'enriquiment de dades, consolidant
+    les fonts integrades i les regles aplicades en fusionar-les, les característiques elaborades amb referències
+    al codi que les genera, i l'augment aplicat. Fer el seguiment de l'estat de cada iteració perquè l'enriquiment
+    es pugui explicar i repetir en producció, i recollir els passos de preprocessament i de transformació
+    com a procedència que vincula cada conjunt de dades amb les activitats que l'han emprat i generat.
+  primaryStudies:
+  - P15
+  literature:
+  - stonebrakerMachineLearningBig2019
+standards:
+- standard: ISO/IEC 5338
+  activity: e) Documentar el llinatge i la procedència de les dades
+  note: Repartit entre tots els processos de dades
+- standard: ISO/IEC 5338
+  activity: f) Netejar, fusionar i preparar les dades

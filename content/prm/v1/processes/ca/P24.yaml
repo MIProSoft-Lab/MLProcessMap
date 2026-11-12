@@ -1,0 +1,197 @@
+id: P24
+number: 24
+origin: standards-and-literature
+name: Procés de manteniment
+purpose: >-
+  El propòsit del *Procés de manteniment* és mantenir la capacitat del sistema d'aprenentatge automàtic
+  per prestar el seu servei. Analitza les desviacions notificades i duu a terme les accions correctives,
+  adaptatives, perfectives i preventives necessàries, inclòs el reentrenament, coordinant la feina amb
+  els processos de dades, de model i de transició.
+outcomes:
+- id: a
+  text: Es defineix una estratègia de manteniment com a annex de la documentació de l'arquitectura.
+- id: b
+  text: Les necessitats de manteniment es classifiquen i s'atribueixen a les dades, al model o al codi.
+- id: c
+  text: S'avalua l'impacte de cada canvi abans de la seva implementació.
+- id: d
+  text: >-
+    Es restableix la capacitat operacional després d'una fallada mitjançant la reversió, la reserva o
+    l'operació degradada.
+- id: e
+  text: S'implementen els canvis, inclòs el reentrenament o l'aprenentatge continu del model.
+- id: f
+  text: >-
+    Es fan proves de regressió dels canvis i els models revisats s'avaluen amb el marc d'avaluació original.
+- id: g
+  text: Es confirma la capacitat restablerta respecte dels indicadors que varen desencadenar el canvi.
+- id: h
+  text: >-
+    S'estableixen registres i tendències de manteniment que vinculen cada acció amb els elements afectats
+    i amb el llinatge del model.
+inputs:
+- workProduct: maintenance-requests
+  name: Sol·licituds de manteniment
+  description: Els problemes escalats des de l'operació que requereixen un canvi.
+  serves:
+  - b
+  - c
+- workProduct: monitoring-record
+  name: Registre de monitoratge
+  description: Les evidències de deriva i de rendiment.
+  serves:
+  - b
+  - g
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: El sistema la capacitat del qual es manté.
+  serves:
+  - c
+  - d
+  - e
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: >-
+    Els desencadenants de reentrenament, els punts de control de validació i els mecanismes de reversió.
+  serves:
+  - a
+  - d
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: Els criteris per tornar a avaluar un model revisat.
+  serves:
+  - f
+  - g
+outputs:
+- workProduct: maintenance-records
+  name: Registres de manteniment
+  description: Les accions, els resultats, les tendències i el llinatge del model.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+activities:
+- id: A1
+  title: Definir l'estratègia de manteniment
+  description: >-
+    Establir les prioritats, els calendaris i l'autoritat d'aprovació per a cada tipus d'acció de manteniment,
+    a partir dels mecanismes de reentrenament i de recuperació ja definits. Determinar amb quina freqüència
+    s'ha d'actualitzar el model, tenint en compte el ritme de canvi esperat de les dades i de l'entorn
+    i la pèrdua de qualitat tolerable al llarg del temps. Identificar les competències necessàries per
+    mantenir tant el model com la resta del sistema, i definir les mesures que s'empren per avaluar l'eficàcia
+    del manteniment. Sempre que sigui possible, preveure l'obsolescència dels elements i de les tecnologies.
+  primaryStudies:
+  - P4
+  - P11
+  literature:
+  - breckMLTestScore2017
+- id: A2
+  title: Analitzar les necessitats de manteniment
+  description: >-
+    Revisar les sol·licituds de manteniment, els registres de monitoratge i altres informes per identificar
+    les accions correctives, adaptatives, perfectives o preventives necessàries. Determinar si cada problema
+    s'origina en les dades, el model o el codi, i si es pot resoldre actualitzant el model o requereix
+    reconsiderar el mateix problema. Basar aquesta atribució en la procedència de les dades i del model
+    i no només en les versions de la configuració, i distingir les dades errònies de les expectatives
+    que ja no són vàlides.
+  primaryStudies:
+  - P5
+  - P16
+  - P17
+- id: A3
+  title: Avaluar l'impacte del canvi
+  description: >-
+    Avaluar l'efecte de cada canvi proposat sobre les estructures de dades, les interfícies, la documentació
+    i el rendiment, la seguretat física i la seguretat de la informació del sistema abans d'implementar-lo.
+    Tenir en compte que un canvi en qualsevol entrada, paràmetre o selecció de dades pot alterar el comportament
+    del model en conjunt, i identificar els models i els sistemes que depenen de les seves sortides, tant
+    si ho han declarat com si no. Avaluar si el canvi pot degradar un comportament que abans era acceptable,
+    i sospesar-ne el cost i el risc davant el risc de deixar el problema sense resoldre.
+  primaryStudies:
+  - P10
+  - P16
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A4
+  title: Restablir la capacitat operacional
+  description: >-
+    Quan el model provoqui una fallada, tornar el sistema a un estat operacional acceptable, ja sigui
+    revertint a una versió anterior del model de la qual se sap que té un rendiment adequat o reparant
+    el model en servei. Controlar el restabliment com un canvi d'emergència dins la gestió de llançaments.
+    Mantenir el restabliment del servei separat de l'anàlisi de la causa, reproduint la fallada en un
+    entorn separat perquè se'n pugui identificar la causa arrel i tractar-la mitjançant les activitats
+    de manteniment ordinàries.
+  primaryStudies:
+  - P13
+  literature:
+  - breckMLTestScore2017
+- id: A5
+  title: Implementar el canvi
+  description: >-
+    Dur a terme les accions de manteniment seleccionades, recorrent als processos de dades i de model
+    quan el canvi requereixi dades noves, una preparació de dades revisada o un reentrenament, i aplicant
+    l'aprenentatge continu només en les condicions definides a l'estratègia. Aplicar les correccions de
+    dades de manera coherent a totes les dades afectades, perquè el model no es reentreni amb una barreja
+    de dades corregides i no corregides. Garantir que hi hagi disponibles les dades, els recursos de càlcul,
+    la capacitat d'etiquetatge i el personal qualificat necessaris per produir un model revisat, i que
+    les dades i els artefactes arxivats es mantinguin íntegres i accessibles.
+  primaryStudies:
+  - P4
+  - P8
+  - P17
+- id: A6
+  title: Verificar i publicar el canvi
+  description: >-
+    Provar els canvis per confirmar que no han introduït nous problemes ni han degradat requisits que
+    abans es complien. Tornar a avaluar qualsevol model revisat amb els criteris amb què es va acceptar
+    el model original, emprant casos de prova tant anteriors com actualitzats perquè les versions successives
+    continuïn essent comparables, i amb una línia de base simple per confirmar que la seva complexitat
+    continua estant justificada. Publicar el canvi mitjançant el procés de transició, i confirmar la capacitat
+    restablerta un cop els indicadors que varen desencadenar el canvi hagin tornat dins els seus llindars.
+  primaryStudies:
+  - P10
+  literature:
+  - breckMLTestScore2017
+- id: A7
+  title: Registrar els resultats del manteniment
+  description: >-
+    Documentar les accions de manteniment dutes a terme, els seus resultats i les anomalies o incidències
+    trobades, i identificar les tendències entre incidències i accions que puguin orientar l'operació,
+    el manteniment i projectes similars. Vincular cada registre amb els elements del sistema afectats
+    i amb el llinatge del model, incloses les dades amb què es va entrenar, la configuració emprada i
+    l'avaluació que va superar. Mantenir la traçabilitat entre les accions de manteniment i els artefactes
+    del cicle de vida, i recollir la informació necessària per avaluar la satisfacció dels usuaris amb
+    el sistema i el seu manteniment.
+  primaryStudies:
+  - P5
+  - P10
+standards:
+- standard: ''
+  activity: a) Preparar el manteniment
+  prmActivity: A1
+- standard: ''
+  activity: b) Dur a terme el manteniment
+  prmActivity: A2
+- standard: ''
+  activity: b) Dur a terme el manteniment
+  prmActivity: A3
+- standard: ''
+  activity: b) Dur a terme el manteniment
+  prmActivity: A4
+- standard: ''
+  activity: b) Dur a terme el manteniment
+  prmActivity: A5
+- standard: ''
+  activity: b) Dur a terme el manteniment
+  prmActivity: A6
+- standard: ''
+  activity: c) Proporcionar el suport logístic
+  prmActivity: A5
+- standard: ''
+  activity: d) Gestionar els resultats del manteniment
+  prmActivity: A7

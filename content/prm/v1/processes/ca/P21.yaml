@@ -1,0 +1,188 @@
+id: P21
+number: 21
+origin: standards-and-literature
+name: Procés de validació del sistema
+purpose: >-
+  El propòsit del *Procés de validació del sistema* és provar els models d'aprenentatge automàtic com
+  a artefactes de programari, per confirmar que s'integren correctament i es comporten de manera fiable.
+  Se centra en el comportament funcional, la compatibilitat amb l'entorn i la robustesa, i no només en
+  la precisió predictiva.
+outcomes:
+- id: a
+  text: Es defineixen l'abast i el pla de proves.
+- id: b
+  text: S'executen proves funcionals i a nivell d'API que confirmen que les interfícies són correctes.
+- id: c
+  text: S'executen proves metamòrfiques i d'aproximació a l'oracle.
+- id: d
+  text: S'avalua el comportament en execució pel que fa a la latència i els recursos.
+- id: e
+  text: Es completen les proves de dependències i d'entorn.
+- id: f
+  text: Es duen a terme proves d'estrès i avaluacions d'escenaris de fallada.
+- id: g
+  text: >-
+    Es produeix un Informe de validació del sistema que documenta les proves, els resultats i els problemes
+    identificats.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: L'aplicació amb el model, que s'ha de provar.
+  serves:
+  - b
+  - d
+  - e
+  - f
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: Les mètriques, les línies de base i els llindars per jutjar els resultats.
+  serves:
+  - a
+  - c
+  - d
+- workProduct: reporting-templates
+  name: Plantilles d'informe
+  description: Els formats normalitzats per registrar els resultats.
+  serves:
+  - g
+outputs:
+- workProduct: system-validation-report
+  name: Informe de validació del sistema
+  description: Les proves fetes, els resultats i els problemes identificats.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+activities:
+- id: A1
+  title: Planificar les proves
+  description: >-
+    Definir l'estratègia i l'abast de la validació, incloses les característiques del sistema integrat
+    que s'han de validar, les tècniques que s'aplicaran i les restriccions que limiten el que es pot validar.
+    Seleccionar un entorn tan semblant com sigui possible a l'operacional, i derivar els escenaris de
+    prova de la manera com s'espera que s'empri el sistema, implicant-hi les parts interessades quan calgui
+    per fer-los representatius. Identificar les entrades reals o sintètiques que s'empraran, garantint
+    que les entrades sintètiques que han de representar l'operació normal siguin creïbles per si mateixes,
+    i planificar la revisió de les dades de prova a mesura que evolucionin el model i les seves condicions
+    d'operació.
+  primaryStudies:
+  - P8
+  - P10
+- id: A2
+  title: Fer les proves funcionals
+  description: >-
+    Provar les interfícies i les funcions a través de les quals s'empra el model, confirmant que accepta
+    les entrades vàlides, rebutja o gestiona les no vàlides sense fallar i retorna les sortides en la
+    forma esperada. Incloure a les proves el codi i la configuració que defineixen el model i el pipeline
+    que el produeix. Quan no es pugui determinar per endavant la sortida esperada per a una entrada donada,
+    emprar relacions que s'hagin de complir entre les sortides d'entrades relacionades, i repetir les
+    proves cada vegada que canviï el model per detectar incompatibilitats amb la resta del sistema.
+  primaryStudies:
+  - P4
+  - P6
+  - P8
+  - P11
+  literature:
+  - breckMLTestScore2017
+  - zhangMachineLearningTesting2022
+- id: A3
+  title: Monitorar l'entorn d'execució
+  description: >-
+    Observar el sistema integrat durant un període de validació definit mentre funciona en condicions
+    reals o representatives, abans de l'ús operacional complet. Avaluar la validesa de les prediccions
+    amb les entrades actuals, reconeixent que la qualitat mesurada amb dades anteriors només és una estimació
+    de la qualitat amb dades reals. Mesurar la latència, el rendiment i el consum de recursos, comparant-los
+    entre versions del codi, de les dades i del model per detectar regressions tant sobtades com graduals.
+  primaryStudies:
+  - P11
+  - P16
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Provar les dependències i l'entorn
+  description: >-
+    Verificar que el model es comporta de manera coherent quan es desplega en entorns nets i reproduïbles
+    diferents d'aquell en què es va desenvolupar. Confirmar que les seves biblioteques, plataformes i
+    configuracions estan identificades, controlades i aprovades d'acord amb la política de l'organització,
+    i que els canvis que hi hagi es poden distingir dels canvis en el mateix model. Estendre aquestes
+    comprovacions a les dependències de dades del sistema, identificant els senyals externs en què es
+    basa el model i confirmant que les seves versions estan controlades.
+  primaryStudies:
+  - P1
+  - P8
+  - P9
+  - P11
+  literature:
+  - breckMLTestScore2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A5
+  title: Provar les fallades i la robustesa
+  description: >-
+    Provar el sistema més enllà del seu comportament habitual, emprant condicions d'estrès i entrades
+    no vàlides, extremes o pertorbades en tot el domini d'entrada, incloses les entrades que puguin resultar
+    de fallades en altres parts del sistema. Simular els escenaris de fallada rellevants per al sistema,
+    com fonts de dades no disponibles o corrompudes, inferència no disponible o temps de resposta excessius,
+    per confirmar que es degrada de manera controlada i que les mesures de contingència definides a l'arquitectura
+    es comporten tal com es preveu. Confirmar que qualsevol mecanisme que limita les sortides del model
+    es manté quan el model es comporta malament.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+  - P18
+  literature:
+  - polletiHierarchicalFallbackArchitecture2025
+- id: A6
+  title: Provar els procediments de reversió
+  description: >-
+    Dissenyar i executar proves que confirmin que els procediments de reversió s'activen en les condicions
+    definides i es poden dur a terme dins el temps esperat. Verificar que el model restaurat funciona
+    amb les dades, les característiques i els altres elements del sistema dels quals depèn, i que continua
+    essent compatible amb els components que consumeixen les seves sortides. Garantir que els procediments
+    estan documentats i s'exerciten regularment, de manera que no depenguin del coneixement de persones
+    concretes.
+  primaryStudies:
+  - P4
+  - P13
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A7
+  title: Documentar els resultats
+  description: >-
+    Registrar a l'Informe de validació del sistema les proves fetes, els seus resultats, les anomalies
+    trobades i les limitacions i els supòsits de la validació, emprant les Plantilles d'informe perquè
+    les validacions successives continuïn essent comparables. Descriure cada problema identificat amb
+    prou informació perquè el procés en què es va originar el pugui tractar, i fer-ne el seguiment de
+    la resolució. Obtenir l'acord que s'han complert els criteris de validació, i mantenir la traçabilitat
+    entre els resultats de la validació i els requisits als quals fan referència.
+  primaryStudies:
+  - P8
+  - P15
+  literature:
+  - breckMLTestScore2017
+standards:
+- standard: ''
+  activity: a) Preparar la validació
+  prmActivity: A1
+- standard: ''
+  activity: b) Dur a terme la validació
+  prmActivity: A2
+- standard: ''
+  activity: b) Dur a terme la validació
+  prmActivity: A3
+- standard: ''
+  activity: b) Dur a terme la validació
+  prmActivity: A4
+- standard: ''
+  activity: b) Dur a terme la validació
+  prmActivity: A5
+- standard: ''
+  activity: b) Dur a terme la validació
+  prmActivity: A6
+- standard: ''
+  activity: c) Gestionar els resultats de la validació
+  prmActivity: A7
