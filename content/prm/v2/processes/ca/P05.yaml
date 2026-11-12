@@ -1,0 +1,133 @@
+id: P05
+number: 5
+origin: standards-only
+name: Procés de definició del disseny
+purpose: >-
+  El propòsit del *Procés de definició del disseny* és convertir els requisits i l'anàlisi del sistema en
+  descripcions detallades de l'arquitectura, els components i les interfícies del sistema. Especifica les
+  estructures de programari, de dades i de models que han de guiar la implementació i la integració.
+outcomes:
+- id: a
+  text: S'acorden els fluxos de dades, les interfícies i les restriccions de disseny.
+- id: b
+  text: S'especifiquen les decisions de disseny per a l'entrenament, el desplegament i el monitoratge del model.
+- id: c
+  text: Es defineixen les característiques de disseny que tracten la qualitat i la interpretabilitat.
+- id: d
+  text: >-
+    S'estableix la traçabilitat entre els elements de disseny, els requisits i la verificació.
+inputs:
+- workProduct: system-analysis-report
+  name: Informe d'anàlisi del sistema
+  description: Els resultats de les anàlisis i els compromisos que fonamenten les decisions de disseny.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: Els requisits funcionals, de rendiment, de qualitat i d'interfície del sistema.
+  serves:
+  - a
+  - c
+  - d
+outputs:
+- workProduct: design-baseline
+  name: Línia de base del disseny
+  description: >-
+    El disseny acordat dels components, les interfícies i les estructures de gestió de dades i de models, amb la
+    seva justificació i traçabilitat.
+  serves:
+  - a
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Desenvolupar els dissenys de components i d'interfícies
+  description: >-
+    Definir les responsabilitats operacionals, els esquemes de dades i els protocols de comunicació per establir
+    uns límits clars entre els components d'aprenentatge automàtic i els mòduls de programari tradicionals,
+    refinant les interfícies que l'arquitectura només va definir fins on ho requeria la seva intenció i afegint
+    les que no va tractar. Seleccionar i prioritzar els principis i les característiques de disseny d'acord amb
+    els quals es construeix cada element, com l'encapsulació, la separació entre interfície i implementació, el
+    mínim privilegi, la testabilitat i la portabilitat. Fixar explícitament les entrades i les sortides de cada
+    mòdul d'aprenentatge automàtic, reconeixent que l'especificació de sortida és la més estable de les dues i
+    que, per tant, és la que permet dissenyar els mòduls que l'envolten. Tractar cada valor que travessa un límit
+    com un compromís de disseny, confirmant que està disponible en temps de servei, que se'n permet l'ús i que el
+    seu efecte sobre la mida del model i la latència de predicció és acceptable. Determinar les tecnologies que
+    requereix cada element i com s'obtindran, ja sigui construint-les de nou, adaptant un component existent o
+    adquirint-les, cosa que per als elements d'aprenentatge automàtic és la decisió d'entrenar des de zero,
+    d'adaptar un model preentrenat mitjançant aprenentatge per transferència o de consumir una capacitat com a
+    servei, avaluada segons l'adequació a la finalitat prevista, la distància entre l'entorn per al qual es va
+    construir el candidat i aquell en què operarà, les llicències tant del model com de les dades que hi ha al
+    darrere, i la sostenibilitat al llarg de la vida del sistema. Tenir en compte que la reutilització transfereix
+    tant defectes com capacitats, i avaluar la plataforma de suport amb el mateix criteri, sospesant els serveis
+    gestionats davant els sistemes desplegables sota el control de la mateixa organització quan la normativa o la
+    protecció de dades ho exigeixin.
+  primaryStudies:
+  - P8
+  - P9
+  - P16
+  - P17
+  - P18
+  literature:
+  - washizaki2022
+  - serban2022
+- id: A2
+  title: Definir els dissenys de gestió de dades i de models
+  description: >-
+    Especificar les estructures d'emmagatzematge, els mecanismes de versionat i els esquemes de metadades per
+    gestionar els conjunts de dades, els models, el codi i els registres. Escollir el tipus d'emmagatzematge
+    adequat per a cada classe d'artefacte, decidir si el versionat es delega a un sistema de control de versions
+    que cobreix els artefactes d'un projecte o es fa amb instantànies independents per a cada artefacte, i decidir
+    si la captura és intrusiva, mitjançant instrumentació explícita, o automàtica, ja que aquesta elecció
+    determina si el registre sobreviu a la pressió dels lliuraments. Especificar les metadades que acompanyen cada
+    artefacte perquè un model remeti a la versió de les dades i del codi que el va produir i un conjunt de dades
+    remeti al seu origen i al codi d'extracció, i dissenyar el mecanisme de captura perquè la seva sobrecàrrega no
+    el converteixi en el primer que s'abandona. Dissenyar l'estructura de la base de dades de manera deliberada en
+    lloc de deixar que creixi al voltant de l'algorisme escollit, ja que un esquema modelat pel mètode i no per
+    l'aplicació esdevé un obstacle per als canvis posteriors.
+  primaryStudies:
+  - P2
+  - P4
+  - P9
+  - P12
+  literature:
+  - washizaki2022
+- id: A3
+  title: Tractar els atributs de qualitat
+  description: >-
+    Incorporar mecanismes arquitectònics directament a les especificacions del sistema per a la seguretat i
+    l'observabilitat. Exemples d'aquests mecanismes són les eines d'interpretabilitat, les rutines de detecció de
+    biaixos, les comprovacions de robustesa i els procediments de reserva. Preferir els mecanismes integrats en el
+    disseny als que s'apliquen a posteriori, ja sigui seleccionant un model intrínsecament interpretable perquè
+    satisfà restriccions del domini com la monotonia, l'additivitat o la causalitat, o incorporant mecanismes de
+    preservació de la privadesa a la tecnologia en lloc de confiar en polítiques i avisos. Determinar si calen
+    explicacions per al model en conjunt o per a decisions individuals, ja que cada cas requereix mètodes
+    diferents. Incloure les disposicions de seguretat pròpies del temps de disseny, com ara biblioteques aprovades,
+    interfícies protegides, anàlisi estàtica i un pla de resposta a incidents establert abans del llançament.
+    Assignar aquests atributs de manera deliberada, ja que s'ha observat que les qualitats que l'aprenentatge
+    automàtic fa més rellevants acaben cedint a la pràctica davant factors convencionals com l'escalabilitat i la
+    interoperabilitat.
+  primaryStudies:
+  - P3
+  - P6
+  - P8
+  literature:
+  - serban2022
+- id: A4
+  title: Revisar el disseny i establir-ne la línia de base
+  description: >-
+    Avaluar els dissenys amb els requisits del sistema i les restriccions de viabilitat abans de la
+    implementació, considerant més d'un enfocament de disseny i tornant a l'arquitectura o als requisits quan les
+    característiques de disseny resultin irrealitzables. Avaluar-ne l'adequació al llarg de tota la vida del
+    sistema, tenint en compte la facilitat d'implementació, d'integració, de verificació, de manteniment i de
+    retirada final, i tractar el deute tècnic acumulat com una evidència en contra, inclosa la configuració que ha
+    crescut més enllà del codi que governa. Registrar els artefactes de disseny juntament amb la justificació de
+    les alternatives escollides i descartades, mantenir la traçabilitat entre els elements de disseny, els
+    requisits del sistema, les entitats arquitectòniques i els mètodes de verificació que els demostraran, i
+    posar el conjunt acordat sota línia de base.
+  primaryStudies:
+  - P7
+  - P18

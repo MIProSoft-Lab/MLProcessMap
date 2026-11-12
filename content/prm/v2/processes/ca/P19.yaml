@@ -1,0 +1,242 @@
+id: P19
+number: 19
+origin: standards-only
+name: Procés de verificació del sistema
+purpose: >-
+  El propòsit del *Procés de verificació del sistema* és proporcionar evidències objectives que el sistema
+  d'aprenentatge automàtic integrat compleix els requisits i el disseny especificats abans de la seva transició a
+  l'operació. Comprova la correcció de la implementació, les interaccions entre els components d'aprenentatge
+  automàtic i el sistema de programari més ampli, i el comportament del sistema sota càrrega i davant fallades.
+outcomes:
+- id: a
+  text: >-
+    Es defineix una estratègia de verificació, amb el seu abast, els mètodes, els criteris d'èxit i l'entorn.
+- id: b
+  text: Es verifica el funcionament correcte dels fluxos de treball funcionals i de les interfícies.
+- id: c
+  text: Es verifica el rendiment en execució respecte dels objectius de nivell de servei.
+- id: d
+  text: Es verifiquen els mecanismes de tolerància a fallades, de reserva, de reversió i de recuperació.
+- id: e
+  text: >-
+    Es verifica la seguretat del sistema respecte dels seus requisits de seguretat, incloses les vulnerabilitats
+    pròpies de l'aprenentatge automàtic.
+- id: f
+  text: >-
+    Es verifica que l'entorn i les dependències estan identificats, controlats i són reproduïbles.
+- id: g
+  text: S'estableix la preparació operacional del monitoratge i del versionat.
+- id: h
+  text: >-
+    Les activitats i els resultats de la verificació es documenten a l'Informe de verificació del sistema.
+- id: i
+  text: >-
+    Les no conformitats es registren per a l'acció correctiva i es tracen fins als requisits.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: L'aplicació completa amb el model incorporat.
+  serves:
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: >-
+    Els requisits funcionals, de rendiment i de qualitat del sistema i la seva línia de base de cost tècnic.
+  serves:
+  - a
+  - b
+  - c
+  - e
+  - i
+- workProduct: architecture-requirements-specification
+  name: Especificació de requisits d'arquitectura
+  description: >-
+    Els requisits d'interfície i els indicadors i objectius de nivell de servei que l'arquitectura ha de
+    suportar.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: design-baseline
+  name: Línia de base del disseny
+  description: >-
+    El disseny acordat dels components, les interfícies i les estructures de gestió de dades i de models.
+  serves:
+  - a
+  - b
+  - i
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: >-
+    La descripció de l'arquitectura, amb els diagrames de flux de dades i de models, els registres de decisions,
+    la gestió de dependències i els costs d'infraestructura previstos.
+  serves:
+  - d
+  - f
+  - g
+- workProduct: disaster-recovery-plan
+  name: Pla de recuperació davant desastres
+  description: >-
+    Les estratègies de còpia de seguretat, els objectius de recuperació i els procediments de recuperació dels
+    components crítics del sistema.
+  serves:
+  - d
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: >-
+    Les mètriques de dades, de model, d'entrenament i de cost, les línies de base i els bancs de proves que
+    s'empren per a l'avaluació.
+  serves:
+  - a
+  - c
+- workProduct: reporting-templates
+  name: Plantilles d'informe
+  description: Els formats normalitzats per informar de les mètriques.
+  serves:
+  - h
+outputs:
+- workProduct: system-verification-report
+  name: Informe de verificació del sistema
+  description: >-
+    L'estratègia de verificació, els resultats de la verificació funcional, de rendiment, de tolerància a
+    fallades, de l'entorn i de la preparació operacional, i les no conformitats trobades.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+  - i
+activities:
+- id: A1
+  title: Preparar la verificació
+  description: >-
+    Definir l'estratègia i l'abast de la verificació a partir de l'Especificació de requisits del sistema,
+    l'Especificació de requisits d'arquitectura i la Línia de base del disseny, identificant per a cada requisit
+    el mètode de verificació i el resultat esperat, i les restriccions que limiten el que es pot verificar.
+    Seleccionar un entorn controlat tan semblant com sigui possible a l'operacional, sense interferir-hi, i
+    identificar les entrades reals o sintètiques que s'empraran, garantint que les entrades sintètiques que han
+    de representar l'operació normal siguin creïbles. Automatitzar els procediments de verificació quan sigui
+    possible, perquè es puguin repetir cada vegada que canviïn el model, les dades o el codi, i planificar la
+    revisió de les dades de prova a mesura que evolucionin el model i les seves condicions d'operació.
+- id: A2
+  title: Verificar el comportament funcional i les interfícies
+  description: >-
+    Provar els fluxos de treball d'extrem a extrem per confirmar que les prediccions es processen i s'interpreten
+    correctament, comprovant el compliment de cada requisit del sistema i provant, d'acord amb la Línia de base
+    del disseny, les interfícies entre el model i les API, les bases de dades i els mòduls amb què intercanvia
+    dades. Confirmar que el model accepta les entrades vàlides, rebutja o gestiona les no vàlides sense fallar i
+    retorna les sortides en la forma esperada. Executar una prova automatitzada que recorri tot el pipeline,
+    confirmar que l'entrenament i el servei calculen els mateixos valors de les característiques i que el
+    preprocessament i el postprocessament lliuren les dades en la forma esperada, fer proves unitàries del codi
+    d'especificació del model i de preparació de dades, i revisar el codi escrit per al sistema d'aprenentatge
+    automàtic. Quan no es pugui determinar per endavant la sortida esperada per a una entrada donada, emprar
+    relacions que s'hagin de complir entre les sortides d'entrades relacionades.
+- id: A3
+  title: Verificar el rendiment
+  description: >-
+    Avaluar si el sistema compleix els objectius de nivell de servei definits a l'Especificació de requisits
+    d'arquitectura, com la latència i el rendiment, sota la càrrega esperada i en condicions d'estrès, amb el
+    maquinari en què s'executarà. Mesurar el consum de recursos i confirmar que es manté dins la línia de base de
+    cost tècnic, i comparar la latència, el rendiment i l'ús de memòria entre versions del codi, de les dades i
+    del model per detectar regressions tant sobtades com graduals.
+  primaryStudies:
+  - P8
+  - P13
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Verificar la tolerància a fallades i la recuperació
+  description: >-
+    Simular els escenaris de fallada rellevants per al sistema, com fonts de dades no disponibles o corrompudes,
+    inferència no disponible, pics de latència i entrades no vàlides o extremes resultants de fallades en altres
+    parts del sistema, per confirmar que els procediments de reserva s'activen correctament, que el sistema es
+    degrada de manera controlada i que qualsevol mecanisme que limita les sortides del model es manté quan el
+    model es comporta malament. Verificar que la reversió a una versió anterior del model s'activa en les
+    condicions definides i es completa dins el temps esperat, i que el model restaurat continua essent compatible
+    amb les dades, les característiques i els components dels quals depèn. Confirmar que els procediments de
+    recuperació del Pla de recuperació davant desastres es poden dur a terme i que estan documentats de manera
+    que no depenguin del coneixement de persones concretes.
+- id: A5
+  title: Verificar la seguretat
+  description: >-
+    Analitzar les vulnerabilitats del sistema integrat i fer-hi proves de penetració, i provar-lo contra els atacs
+    propis de l'aprenentatge automàtic identificats als requisits de seguretat, com les entrades manipulades per
+    canviar-ne les prediccions, els intents d'extreure el model o de reconstruir-ne les dades d'entrenament, i
+    l'enverinament de les dades recollides per al reentrenament. Confirmar que l'accés al model, a les seves
+    prediccions i a les seves dades d'entrenament està restringit tal com s'ha especificat.
+- id: A6
+  title: Verificar l'entorn i les dependències
+  description: >-
+    Verificar que el sistema es comporta de manera coherent quan es desplega en entorns nets i reproduïbles
+    diferents d'aquell en què es va desenvolupar. Confirmar que les seves biblioteques, plataformes i
+    configuracions estan identificades, controlades i aprovades d'acord amb la política de l'organització, i que
+    els canvis que hi hagi es poden distingir dels canvis en el mateix model. Estendre aquestes comprovacions a
+    les dependències de dades del sistema, identificant els senyals externs en què es basa el model i confirmant
+    que les seves versions estan controlades.
+- id: A7
+  title: Verificar la preparació operacional
+  description: >-
+    Comprovar que el monitoratge, les alertes i el control de versions estan configurats correctament. Confirmar
+    que la telemetria, els taulers de control, el control d'accés, el registre i l'auditabilitat estan
+    implantats, i que cada model desplegat es pot identificar juntament amb les dades emprades per construir-lo i
+    provar-lo.
+  literature:
+  - ISO5338
+- id: A8
+  title: Documentar els resultats de la verificació
+  description: >-
+    Registrar a l'Informe de verificació del sistema l'estratègia de verificació, les proves fetes, els seus
+    resultats, les anomalies trobades i les limitacions i els supòsits de la verificació, emprant les Plantilles
+    d'informe perquè les verificacions successives continuïn essent comparables. Descriure cada no conformitat
+    amb prou informació perquè el procés en què es va originar la pugui tractar, fer-ne el seguiment de la
+    resolució, confirmar que s'han complert els criteris de verificació i mantenir la traçabilitat entre els
+    resultats de la verificació i els requisits i els elements de disseny als quals fan referència.
+  literature:
+  - ISO12207
+changes:
+- annotation: A-48
+  text: L'A4 (preparació operacional) és un punt molt interessant
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    text: – (es manté com a A7)
+- annotation: A-45
+  raisedElsewhere: true
+  text: Integrar la validació de vulnerabilitats a la validació del sistema
+  redVotes: 1
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Verificar la seguretat
+- annotation: –
+  text: >-
+    Reorientació de la Verificació del sistema i la Validació del sistema, arran de la discussió del taller
+  redVotes: null
+  yellowVotes: null
+  decision: –
+  changes:
+  - kind: updated
+    text: Propòsit i resultats.
+  - kind: added
+    target: A1
+    text: Preparar la verificació.
+  - kind: updated
+    text: A2–A4 fusionades amb el *Procés de validació del sistema*.
+  - kind: added
+    target: A6
+    text: Verificar l'entorn i les dependències.
+  - kind: added
+    text: Sis entrades

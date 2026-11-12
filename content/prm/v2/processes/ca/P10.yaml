@@ -1,0 +1,217 @@
+id: P10
+number: 10
+origin: decomposed
+name: Procés d'anàlisi exploratòria de dades
+purpose: >-
+  El propòsit del *Procés d'anàlisi exploratòria de dades* és caracteritzar les dades recollides i determinar si
+  són adequades per als objectius del projecte abans d'aplicar-los cap transformació. Aquest procés estableix què
+  contenen les dades, com estan estructurades i distribuïdes, i quins defectes, riscs latents i relacions són
+  rellevants per als processos posteriors, i serveix de punt de decisió en què el projecte continua amb les dades
+  disponibles, torna a la recollida de dades o en redefineix l'abast.
+outcomes:
+- id: a
+  text: S'identifiquen les característiques estadístiques i estructurals del conjunt de dades.
+- id: b
+  text: Es detecten problemes com els valors absents, els valors atípics o les incoherències.
+- id: c
+  text: S'identifiquen els riscs de qualitat i les males olors de les dades.
+- id: d
+  text: Es documenten les troballes sobre patrons i relacions.
+- id: e
+  text: Es produeixen un Informe d'anàlisi exploratòria de dades i un Informe de qualitat de les dades.
+- id: f
+  text: >-
+    S'estableix la traçabilitat entre els resultats de la caracterització i les futures accions de neteja.
+inputs:
+- workProduct: raw-dataset
+  name: Conjunt de dades en brut
+  description: Les dades recollides a l'àrea de preparació.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: >-
+    Els valors esperats, els formats, la qualitat i les metadades de les dades que necessita el sistema.
+  serves:
+  - b
+  - c
+- workProduct: data-collection-record
+  name: Registre de recollida de dades
+  description: >-
+    El mapatge de dades, els identificadors únics, les metadades, els registres d'extracció i la informació de
+    monitoratge, amb les decisions i els paràmetres de la recollida.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: exploratory-data-analysis-report
+  name: Informe d'anàlisi exploratòria de dades
+  description: >-
+    Les característiques estadístiques, les visualitzacions, els patrons i les relacions trobats a les dades.
+  serves:
+  - a
+  - d
+  - e
+- workProduct: data-quality-report
+  name: Informe de qualitat de les dades
+  description: >-
+    Els defectes, els valors absents, els valors atípics i les males olors de les dades trobats, cadascun vinculat
+    a la comprovació que l'ha detectat.
+  serves:
+  - b
+  - c
+  - e
+  - f
+activities:
+- id: A1
+  title: Caracteritzar les dades
+  description: >-
+    Calcular estadístiques com recomptes, mitjanes i tipus de dades. Fer una anàlisi volumètrica de les taules i
+    de les seves relacions, i calcular per a cada atribut el seu tipus, el rang de valors i les estadístiques de
+    distribució, incloses la mitjana, el mínim, el màxim, la desviació estàndard, la variància, la moda i el
+    biaix, relacionant cada resultat amb el significat de l'atribut en termes del domini i amb la seva rellevància
+    per als objectius del projecte. Confirmar que les dades tenen la forma esperada abans d'entrenar cap model,
+    comprovant que les característiques contínues tenen rangs i valors més freqüents plausibles, que les
+    característiques categòriques prenen valors del seu domini esperat, que cada característica és present en
+    prou exemples i que cada entitat té el nombre de valors esperat. Descriure també les dades a un nivell meta,
+    ampliant-ne el format, les unitats i el significat amb coneixement del domini.
+  primaryStudies:
+  - P13
+  - P14
+  - P17
+  literature:
+  - foidlDataSmellsCategories2022
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A2
+  title: Visualitzar les dades
+  description: >-
+    Emprar gràfics per inspeccionar distribucions, tendències i patrons, i per comprovar si les característiques
+    es varen mesurar de manera coherent, si les dades es varen recollir de manera coherent durant el període
+    d'interès o contenen blocs d'observacions absents, i si un atribut mostra incoherències que les seves
+    estadístiques resum amaguen. Produir una vista resum estàndard de cada variable abans d'escriure una
+    exploració a mida, informar dels valors absents al costat de cada gràfic, ja que les eines de representació
+    poden descartar-los sense avisar, i tenir en compte el risc de descobriments falsos quan s'inspeccionen moltes
+    vistes.
+  primaryStudies:
+  - P14
+  - P15
+  - P16
+  - P17
+  literature:
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A3
+  title: Analitzar les relacions entre característiques
+  description: >-
+    Examinar les correlacions i les interaccions entre variables, i entre cada variable i l'objectiu, ordenant les
+    variables segons la força d'aquesta relació. Comprovar si els atributs presenten relacions lineals, cícliques,
+    probabilístiques i diferencials, identificar els atributs multicol·lineals i redundants, i caracteritzar les
+    subpoblacions rellevants per a l'objectiu. Tractar una relació inesperadament forta entre una característica i
+    l'objectiu com un possible senyal de filtració, i fer que un expert del domini revisi les relacions que puguin
+    ser espúries. Registrar les troballes com a hipòtesis per als processos posteriors en lloc d'eliminar
+    variables en aquesta etapa.
+  primaryStudies:
+  - P8
+  - P13
+  - P14
+  - P15
+  - P16
+  literature:
+  - wongsuphasawatGoalsProcessChallenges2019
+  - recupitoUnmaskingDataSecrets2024
+- id: A4
+  title: Detectar valors atípics i anomalies
+  description: >-
+    Assenyalar els valors que es desvien significativament de les normes esperades, seleccionant el mètode de
+    detecció segons el tipus de relació present a les dades. Per a cada valor assenyalat, registrar si és més
+    probable que reflecteixi soroll, un error d'entrada o de mesura, o un fenomen genuí però poc freqüent, i
+    revisar els valors que contradiuen el sentit comú del domini. Estendre la cerca a regions de l'espai
+    d'entrada, com regions aïllades que contenen una sola classe o característiques concentrades en un rang
+    estret.
+  primaryStudies:
+  - P8
+  - P14
+  - P16
+  literature:
+  - murainaNecessityExploratoryData2023
+  - wongsuphasawatGoalsProcessChallenges2019
+  - recupitoUnmaskingDataSecrets2024
+- id: A5
+  title: Verificar el tipus i l'estructura de les dades
+  description: >-
+    Comprovar si les característiques s'ajusten als formats esperats i validar els supòsits amb l'Especificació
+    de requisits de dades i el diccionari de dades, tenint en compte els rangs o les llistes de valors esperats,
+    els formats acceptats i la proporció màxima de valors absents, i tractar els registres no conformes com a
+    anomalies. Comprovar les claus i la seva superposició entre taules, la cobertura dels valors esperats, els
+    camps en blanc i el significat que es dona als valors absents, els valors especials emprats com a codis i, per
+    als fitxers plans, el delimitador i el nombre de camps per registre. Verificar els tipus de manera explícita,
+    i comprovar si l'estructura presenta identificadors absents respecte dels que consten al Registre de recollida
+    de dades, atributs repetits i tipus incompatibles.
+  primaryStudies:
+  - P14
+  - P15
+  literature:
+  - foidlDataSmellsCategories2022
+- id: A6
+  title: Identificar les males olors de les dades
+  description: >-
+    Cercar patrons heurístics, com les classes desequilibrades, que assenyalen riscs, tenint en compte les males
+    olors de credibilitat, de comprensibilitat, de coherència, de redundància i de distribució, com els valors
+    ficticis, els nombres codificats com a cadenes, els formats de data ambigus, l'ús incoherent de majúscules o
+    d'abreviatures, les característiques correlacionades, els identificadors únics, els valors extrems, els
+    dominis circulars representats com a lineals i les característiques sensibles. Calcular la densitat de males
+    olors de cada atribut per prioritzar l'atenció, i executar la detecció fora de línia en lloc de dins la
+    validació de dades de producció. Comparar l'equilibri de classes i de característiques amb l'equilibri
+    esperat en producció sense eliminar els casos límit, i comprovar si hi ha biaix respecte dels atributs
+    protegits i dels seus substituts i si hi ha indicis de dades enverinades.
+  primaryStudies:
+  - P3
+  - P8
+  literature:
+  - foidlDataSmellsCategories2022
+  - recupitoUnmaskingDataSecrets2024
+- id: A7
+  title: Documentar les troballes
+  description: >-
+    Recollir les observacions en un Informe d'anàlisi exploratòria de dades i els problemes de qualitat en un
+    Informe de qualitat de les dades. Per a cada àrea explorada, registrar les regularitats esperades, el mètode
+    emprat, les regularitats trobades, les sorpreses i les conclusions per a la neteja, la transformació i els
+    objectius del projecte. Per a cada conjunt de dades, registrar l'enfocament adoptat, els resultats, els
+    llindars aplicats i les possibles solucions a cada problema. Vincular cada problema de qualitat a la
+    comprovació que l'ha detectat perquè el *Procés de neteja de dades* pugui informar de com s'ha tractat, i
+    documentar els problemes que es deixen sense tractar deliberadament. Revisar els informes amb les parts
+    interessades per ordenar els riscs i decidir si el projecte continua, torna a la recollida de dades o en
+    redefineix l'abast.
+  primaryStudies:
+  - P11
+  - P13
+  - P14
+  literature:
+  - sneedProcessAssessingData2011
+  - krossOrientingFramingBridging2021
+  - wongsuphasawatGoalsProcessChallenges2019
+changes:
+- annotation: A-30
+  text: 'Hi manca context: com s''hauria d''analitzar una taula de 300 columnes?'
+  redVotes: 0
+  yellowVotes: 3
+  decision: rejected
+  changes: []
+- annotation: A-31
+  text: L'A2, l'A3 i l'A4 s'han de fer de manera iterativa després de netejar els valors atípics
+  redVotes: 0
+  yellowVotes: 2
+  decision: rejected
+  changes: []
+- annotation: A-27
+  raisedElsewhere: true
+  text: Identificar la clau primària des del principi
+  redVotes: 4
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Registre de recollida de dades

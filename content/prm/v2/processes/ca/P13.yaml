@@ -1,0 +1,150 @@
+id: P13
+number: 13
+origin: decomposed
+name: Procés d'etiquetatge de dades
+purpose: >-
+  El propòsit del *Procés d'etiquetatge de dades* és assignar valors objectiu o categories correctes a les mostres
+  de dades individuals. Aquestes etiquetes permeten que els models supervisats aprenguin la relació entre les
+  dades d'entrada i les sortides esperades.
+outcomes:
+- id: a
+  text: Es produeix un conjunt de dades etiquetat en què s'assignen valors objectiu a les mostres.
+- id: b
+  text: >-
+    Es produeix un Document de pautes d'etiquetatge que descriu els objectius i les instruccions.
+- id: c
+  text: Es registren les metadades de l'etiquetatge, inclosos els anotadors, les eines i les marques de temps.
+- id: d
+  text: Es documenten els resultats del control de qualitat de les etiquetes assignades.
+- id: e
+  text: >-
+    Es produeix un Registre d'etiquetatge de dades que documenta el procés d'etiquetatge complet i la seva
+    configuració.
+inputs:
+- workProduct: enriched-dataset
+  name: Conjunt de dades enriquit
+  description: El conjunt de dades preparat per a l'anotació.
+  serves:
+  - a
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: Els requisits que defineixen els valors objectiu.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: labeled-dataset
+  name: Conjunt de dades etiquetat
+  description: El conjunt de dades amb valors objectiu o categories assignats a cada mostra.
+  serves:
+  - a
+- workProduct: data-labeling-record
+  name: Registre d'etiquetatge de dades
+  description: >-
+    Les pautes d'etiquetatge, les metadades dels anotadors, els resultats del control de qualitat i la
+    configuració del procés.
+  serves:
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Planificar les activitats d'etiquetatge
+  description: >-
+    Seleccionar els subconjunts de dades que val la pena etiquetar i dissenyar l'estratègia d'etiquetatge, prenent
+    els valors objectiu de l'Especificació de requisits de dades. Planificar si les etiquetes s'han de reutilitzar
+    en altres tasques. Decidir qui etiqueta les dades, sospesant els anotadors interns, els experts del domini i
+    els treballadors col·laboratius segons el cost, la qualitat, la comprensió del problema que es requereix, la
+    confidencialitat de les dades i la composició del grup d'etiquetatge. Escollir i avaluar el mètode i les eines
+    d'etiquetatge.
+  primaryStudies:
+  - P3
+  - P10
+  literature:
+  - fredrikssonDataLabelingEmpirical2020
+  - haliburtonUncoveringLabelerBias2025
+  - sabouCorpusAnnotationCrowdsourcing2014
+  - zhaDatacentricArtificialIntelligence2025
+  - hutchinsonAccountabilityMachineLearning2021
+- id: A2
+  title: Dissenyar les pautes d'etiquetatge
+  description: >-
+    Redactar les definicions i les instruccions que guien els anotadors, d'acord amb l'Especificació de requisits
+    de dades i l'estratègia d'etiquetatge, perquè donin suport a la formació dels anotadors i al mateix
+    etiquetatge. Refinar les pautes a partir de la retroalimentació dels anotadors.
+- id: A3
+  title: Formar els anotadors
+  description: >-
+    Informar els anotadors, proporcionar-los pràctica i fer exercicis de calibratge, avaluant que són competents
+    en el domini i que estan formats en l'ús de l'eina d'etiquetatge. Formar els anotadors perquè segueixin les
+    instruccions escrites en lloc de la seva pròpia interpretació de la finalitat, calibrar-los amb etiquetes de
+    referència per estimar i corregir el biaix de cada anotador, i seleccionar els col·laboradors mitjançant proves
+    de competència.
+  literature:
+  - artsteinIntercoderAgreementComputational2008
+  - snowCheapFastbutIt2008
+  - sabouCorpusAnnotationCrowdsourcing2014
+- id: A4
+  title: Assignar les etiquetes
+  description: >-
+    Executar l'etiquetatge amb mètodes com l'anotació manual, la col·laboració oberta, l'etiquetatge
+    semisupervisat, l'aprenentatge actiu o la preanotació per un model validada per persones. Quan les etiquetes
+    tenguin soroll, obtenir diverses etiquetes per als elements seleccionats i integrar-les, per exemple per
+    votació majoritària, i incloure preguntes amb respostes verificables per desincentivar les respostes poc
+    acurades. Quan les etiquetes es generin programàticament, tenir en compte que una automatització més gran pot
+    reduir la precisió de les etiquetes.
+  primaryStudies:
+  - P10
+  literature:
+  - roh2021
+  - zhaDatacentricArtificialIntelligence2025
+  - snowCheapFastbutIt2008
+  - shengGetAnotherLabel2008
+  - fredrikssonDataLabelingEmpirical2020
+- id: A5
+  title: Validar les etiquetes
+  description: >-
+    Avaluar l'acord, comparar amb referències i revisar les etiquetes de baixa qualitat, ajustant la profunditat
+    de la revisió i de la correcció al risc de l'aplicació. Mesurar l'acord amb coeficients corregits per l'atzar,
+    incorporar elements de referència per avaluar cada anotador i fer que experts del domini validin les
+    etiquetes. Identificar a partir de les dades les etiquetes probablement errònies, tenint en compte les fonts de
+    soroll de les etiquetes, i comprovar si l'acord dins el grup d'etiquetatge pot amagar un biaix compartit.
+  primaryStudies:
+  - P3
+  - P8
+  literature:
+  - artsteinIntercoderAgreementComputational2008
+  - sabouCorpusAnnotationCrowdsourcing2014
+  - snowCheapFastbutIt2008
+  - haliburtonUncoveringLabelerBias2025
+  - fredrikssonDataLabelingEmpirical2020
+  - frenayClassificationPresenceLabel2014
+  - northcuttConfidentLearningEstimating2021
+- id: A6
+  title: Documentar el procés d'etiquetatge
+  description: >-
+    Registrar les pautes, les configuracions de les eines i els mètodes d'assegurament de la qualitat al Registre
+    d'etiquetatge de dades, juntament amb les característiques demogràfiques dels anotadors i dels qui han
+    elaborat les pautes, com s'ha dut a terme l'etiquetatge planificat i quines circumstàncies imprevistes han
+    sorgit, i quan s'ha assignat cada etiqueta, ja que les etiquetes poden esdevenir incorrectes amb el temps.
+  primaryStudies:
+  - P9
+  literature:
+  - benderDataStatementsNatural2018
+  - hutchinsonAccountabilityMachineLearning2021
+  - haliburtonUncoveringLabelerBias2025
+changes:
+- annotation: A-35
+  text: El procés no és clar; l'objectiu es defineix al començament del projecte
+  redVotes: 2
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    text: >-
+      L'A1 es limita a l'estratègia d'etiquetatge, amb els valors objectiu presos de l'Especificació de
+      requisits de dades.
+  - kind: added
+    target: A2
+    text: Dissenyar les pautes d'etiquetatge

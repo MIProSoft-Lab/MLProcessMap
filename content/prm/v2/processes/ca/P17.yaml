@@ -1,0 +1,145 @@
+id: P17
+number: 17
+origin: standards-and-literature
+name: Procés de validació del model
+purpose: >-
+  El propòsit del *Procés de validació del model* és avaluar el model entrenat respecte dels objectius de
+  rendiment definits per determinar si assoleix la precisió, la robustesa i la fiabilitat requerides. Confirma si
+  el model satisfà els requisits tècnics i és adequat per a la integració.
+outcomes:
+- id: a
+  text: Es confirmen les mètriques d'avaluació i els criteris d'èxit.
+- id: b
+  text: S'obtenen resultats de rendiment avaluant el model amb un conjunt de prova reservat.
+- id: c
+  text: Es fan anàlisis d'errors detallades que identifiquen els punts forts i febles.
+- id: d
+  text: >-
+    S'obté informació sobre la robustesa provant pertorbacions de les entrades i condicions extremes.
+- id: e
+  text: Els resultats es documenten i es comparen amb els llindars d'èxit predefinits.
+- id: f
+  text: Es pren una decisió sobre si el model està a punt per a la integració.
+inputs:
+- workProduct: model-artifact
+  name: Artefacte del model
+  description: El model entrenat que s'ha d'avaluar.
+  serves:
+  - b
+  - c
+  - d
+- workProduct: dataset-partitions
+  name: Particions del conjunt de dades
+  description: El conjunt de prova reservat.
+  serves:
+  - b
+  - c
+  - d
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: Les mètriques de model, les línies de base i els bancs de proves per a l'avaluació.
+  serves:
+  - a
+  - e
+- workProduct: reporting-templates
+  name: Plantilles d'informe
+  description: Els formats normalitzats per informar de les mètriques.
+  serves:
+  - e
+outputs:
+- workProduct: validation-report
+  name: Informe de validació
+  description: >-
+    Els resultats de rendiment, l'anàlisi d'errors, les comprovacions de robustesa i les proves d'estrès, la
+    comparació amb els criteris d'èxit i la decisió.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+activities:
+- id: A1
+  title: Confirmar les mètriques i els criteris
+  description: >-
+    Confirmar les mesures i els llindars concrets del Marc d'avaluació que s'empren per jutjar el model,
+    codificant els requisits com a proves i propietats verificables amb coneixement tant del domini com de la
+    tecnologia, i fixant l'estratègia de proves.
+  primaryStudies:
+  - P16
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A2
+  title: Avaluar amb el conjunt de prova
+  description: >-
+    Executar el model amb un conjunt de dades reservat per estimar com generalitza a casos nous, emprant un
+    conjunt de prova disjunt dels conjunts d'entrenament i de validació, curat per experts perquè cobreixi la
+    distribució d'entrada, emprat només per a l'avaluació final i no reutilitzat repetidament. Comparar i ordenar
+    els resultats d'acord amb els criteris, i comprovar la plausibilitat i la fiabilitat del model amb experts del
+    domini.
+  primaryStudies:
+  - P6
+  - P13
+  - P14
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A3
+  title: Fer l'anàlisi d'errors
+  description: >-
+    Examinar el rendiment en classes o subgrups concrets per trobar punts febles que les puntuacions globals no
+    mostren, desglossant els resultats per classe o per període, analitzant els casos de prova fallits i
+    reintroduint les troballes a l'entrenament. Comprovar que les característiques que determinen les prediccions
+    són plausibles per als experts del domini, i avaluar els biaixos no desitjats quan hi intervenen
+    característiques protegides.
+  primaryStudies:
+  - P8
+  - P10
+  - P13
+  - P14
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A4
+  title: Avaluar la robustesa
+  description: >-
+    Provar el model amb petits canvis o soroll a les entrades per comprovar-ne l'estabilitat, mesurant la pèrdua
+    de correcció sota pertorbacions i emprant com a pseudooracles transformacions que no haurien de canviar la
+    sortida. Escollir pertorbacions que tenguin sentit en el context d'ús i considerar fer la validació o la
+    validació creuada repetida quan escaigui.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+  - P16
+  literature:
+  - zhangMachineLearningTesting2022
+- id: A5
+  title: Fer proves d'estrès
+  description: >-
+    Avaluar el comportament del model en condicions extremes, casos límit i entrades fora de distribució,
+    identificant les condicions en què falla i si falla d'una manera que es pugui detectar. Seleccionar les
+    condicions a partir del context d'ús i dels punts febles trobats a l'anàlisi d'errors.
+- id: A6
+  title: Documentar i comparar els resultats
+  description: >-
+    Registrar les troballes a l'Informe de validació emprant les Plantilles d'informe, i determinar si el model
+    satisfà els criteris d'èxit de negoci i d'aprenentatge automàtic del projecte, amb una decisió presa per
+    experts del domini i d'aprenentatge automàtic. Registrar qualsevol anomalia, obtenir l'acord de les parts
+    interessades sobre els resultats, mantenir la traçabilitat i proporcionar prou informació perquè els usuaris
+    puguin jutjar si el model és adequat per a l'aplicació prevista.
+  primaryStudies:
+  - P8
+  - P13
+  - P14
+changes:
+- annotation: A-43
+  text: Fer també proves d'estrès
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Fer proves d'estrès.
+  - kind: updated
+    text: el resultat (d) i l'Informe de validació inclouen les proves d'estrès

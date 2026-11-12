@@ -1,0 +1,182 @@
+id: P02
+number: 2
+origin: standards-and-literature
+name: Procés de definició de necessitats i requisits de les parts interessades
+purpose: >-
+  El propòsit del *Procés de definició de necessitats i requisits de les parts interessades* és recollir i
+  analitzar les necessitats de les parts interessades i transformar-les en un conjunt coherent de requisits que
+  defineixin les interaccions previstes dins l'entorn del sistema i la visió funcional de com s'espera que el
+  sistema es comporti dins el seu flux de treball operacional, i que serveixin de línia de base per validar les
+  capacitats del sistema.
+outcomes:
+- id: a
+  text: S'identifiquen les parts interessades i els seus rols.
+- id: b
+  text: Es defineixen les necessitats de les parts interessades, la visió funcional i el context d'ús.
+- id: c
+  text: >-
+    S'analitzen, es prioritzen i s'acorden els requisits de les parts interessades, incloses les seves
+    característiques de qualitat.
+- id: d
+  text: >-
+    S'estableix la traçabilitat entre les necessitats de les parts interessades, els requisits de les parts
+    interessades i els futurs requisits del sistema.
+inputs:
+- workProduct: technical-problem-statement
+  name: Enunciat tècnic del problema
+  description: El problema, els criteris d'èxit i el concepte operacional.
+  serves:
+  - b
+  - c
+- workProduct: stakeholder-list
+  name: Llista de parts interessades
+  description: Una llista inicial de les parts que tenen interès en el sistema.
+  serves:
+  - a
+  - d
+outputs:
+- workProduct: stakeholder-requirements-specification
+  name: Especificació de requisits de les parts interessades
+  description: >-
+    Les necessitats de les parts interessades i la visió funcional, i els requisits de les parts interessades
+    acordats i prioritzats que se'n deriven, amb el seu context d'ús i la seva traçabilitat.
+  serves:
+  - a
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Identificar les parts interessades
+  description: >-
+    Identificar les parts internes i externes al llarg del cicle de vida i definir-ne les responsabilitats i els
+    rols, tenint en compte els rols tècnics que construeixen i operen el sistema, els rols de negoci que el
+    patrocinen i el consumeixen, i les parts externes els interessos de les quals el condicionen, com ara les
+    persones titulars de les dades, els auditors i les autoritats reguladores. Incloure els rols facilitadors que
+    supervisen l'ètica, l'exposició legal i la validesa en el domini, i identificar les parts els interessos de
+    les quals s'oposen al sistema, les expectatives de les quals no se satisfan però el comportament de les quals
+    s'ha d'anticipar. Tenir en compte que els diferents rols intervenen en moments diferents del cicle de vida i
+    tenen prioritats diferents sobre un mateix sistema, i evitar delimitar el conjunt de parts interessades de
+    manera massa restrictiva, ja que un conjunt limitat de punts de vista és en si mateix una font de biaix.
+  primaryStudies:
+  - P3
+  - P5
+  - P6
+  - P10
+  - P11
+  - P14
+  - P16
+  - P17
+- id: A2
+  title: Definir les necessitats de les parts interessades i la visió funcional
+  description: >-
+    Recollir les expectatives de les parts interessades sobre les capacitats del sistema alhora que s'estableixen
+    les restriccions tècniques, operacionals i normatives. Descriure la visió funcional del sistema, és a dir, com
+    s'espera que el component d'aprenentatge automàtic es comporti dins el flux de treball operacional dels seus
+    usuaris, perquè se n'acordi el paper previst abans de derivar-ne els requisits tècnics del sistema. Descriure
+    el context d'ús i l'entorn operacional en què s'espera que aquestes capacitats es mantinguin, expressar les
+    capacitats requerides com a casos d'ús i escenaris, i complementar-los amb els escenaris d'abús i de fallada
+    que el sistema ha de poder suportar. Registrar la solució que s'empra actualment i fins a quin punt els
+    usuaris l'accepten, perquè existeixi una línia de base per a la validació posterior. Recollir les qualitats
+    no funcionals que importen a les parts interessades, com ara la robustesa, l'explicabilitat, els límits de
+    recursos, la comprensibilitat i la mantenibilitat, juntament amb les classes d'error que tenen més
+    conseqüències operacionals, i deixar les mètriques i els objectius numèrics que les expressen al *Procés de
+    definició de requisits del sistema*. Recollir també les expectatives de governança, inclosos els principis de
+    privadesa des del disseny, les restriccions de consentiment i de minimització de dades, el dret de les
+    persones afectades a impugnar una decisió automatitzada, les expectatives d'usabilitat i les polítiques
+    organitzatives que restringeixen l'ús de models no interpretables. Registrar els supòsits en què es basa el
+    projecte, inclosos els que no es poden verificar, sempre que la validesa del resultat en depengui.
+- id: A3
+  title: Analitzar i prioritzar els requisits
+  description: >-
+    Transformar les necessitats de les parts interessades en requisits de les parts interessades, expressant cada
+    necessitat com un enunciat que es pugui verificar més endavant, de manera que les expectatives inicials
+    recollides a l'A2 es continuïn distingint dels requisits formalitzats que resulten de la seva anàlisi.
+    Avaluar els requisits resultants pel que fa a la viabilitat tècnica, la coherència i l'alineació amb les
+    restriccions operacionals. Això implica analitzar els compromisos (com ara sospesar la precisió predictiva
+    davant la latència, l'explicabilitat o els costs de curació de dades) i resoldre les discrepàncies entre les
+    mètriques de negoci i els indicadors tècnics de ciència de dades. Acordar les mesures d'efectivitat amb què
+    les parts interessades jutjaran si la capacitat lliurada és adequada, i els objectius d'assoliment que
+    supervisaran les activitats posteriors d'assegurament de la qualitat. Els requisits es prioritzen per lliurar
+    un producte mínim viable funcional, de manera que el desenvolupament abordi primer els requisits més crítics,
+    i el conjunt resultant se sotmet a una decisió explícita de continuació que avalua el projecte pel que fa a
+    la viabilitat, al compliment de les expectatives ètiques i de governança i a la factibilitat.
+  primaryStudies:
+  - P2
+  - P10
+  - P11
+  - P12
+  - P13
+  - P14
+  - P18
+- id: A4
+  title: Establir l'acord i la traçabilitat
+  description: >-
+    Conciliar els diferents punts de vista de les parts interessades, assolir el consens sobre els requisits
+    especificats i establir la traçabilitat entre cada requisit i la part interessada i la necessitat que l'han
+    originat, conservant-ne la justificació i l'origen dels canvis posteriors. Comunicar obertament les capacitats
+    del sistema, declarar-ne les limitacions o els biaixos coneguts i documentar els acords en un llenguatge
+    planer perquè les parts interessades no tècniques puguin actuar a partir d'aquests, inclosa una descripció de
+    l'ús previst del sistema i de les decisions que prendrà. Establir un vocabulari comú amb els experts del
+    domini perquè una terminologia incoherent no comprometi l'acord, i confirmar-ne la comprensió mitjançant
+    demostracions en què les parts interessades posin a prova la capacitat prevista amb els seus propis casos, en
+    lloc de revisar només els resultats que se'ls presenten.
+  primaryStudies:
+  - P3
+  - P6
+  - P10
+  - P11
+  - P14
+  - P16
+changes:
+- annotation: A-04
+  text: Nombre excessiu de resultats del procés
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Resultats
+    text: consolidats de vuit a quatre
+- annotation: A-05
+  text: L'Enunciat tècnic del problema no hauria de ser una entrada
+  redVotes: 0
+  yellowVotes: 2
+  decision: rejected
+  changes: []
+- annotation: A-06
+  text: No s'hauria d'incloure la qualitat de la sortida
+  redVotes: 0
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Resultat (c)
+    text: característiques de qualitat integrades en els requisits acordats
+- annotation: A-07
+  text: Distinció entre necessitats i requisits de les parts interessades
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Resultats (b) i (c)
+    text: necessitats i requisits com a resultats separats
+  - kind: updated
+    target: A3
+    text: transformar les necessitats en requisits verificables
+- annotation: A-08
+  text: Hi manca la visió funcional
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Propòsit
+    text: inclou la visió funcional
+  - kind: updated
+    target: A2
+    text: Definir les necessitats de les parts interessades i la visió funcional
+  - kind: updated
+    target: Sortida
+    text: l'Especificació de requisits de les parts interessades inclou la visió funcional

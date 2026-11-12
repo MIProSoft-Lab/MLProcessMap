@@ -1,0 +1,162 @@
+id: P16
+number: 16
+origin: decomposed
+name: Procés d'optimització del model
+purpose: >-
+  El propòsit del *Procés d'optimització del model* és refinar els models entrenats per millorar-ne el rendiment o
+  la capacitat de generalització. Se centra a ajustar la configuració del model i a aplicar tècniques per reduir
+  el risc de sobreajust, i no només a ajustar els paràmetres a les dades.
+outcomes:
+- id: a
+  text: >-
+    S'exploren i s'ajusten els paràmetres de configuració del model per millorar-ne el rendiment de validació.
+- id: b
+  text: S'identifiquen i es registren els valors òptims dels hiperparàmetres.
+- id: c
+  text: Se seleccionen i s'ajusten models preentrenats, quan escaigui.
+- id: d
+  text: S'apliquen estratègies de regularització i de conjunts de models.
+- id: e
+  text: >-
+    Es produeix un Registre d'optimització del model que documenta les estratègies de cerca i les decisions.
+inputs:
+- workProduct: model-artifact
+  name: Artefacte del model
+  description: El model entrenat que s'ha de millorar.
+  serves:
+  - a
+  - c
+  - d
+- workProduct: dataset-partitions
+  name: Particions del conjunt de dades
+  description: Els conjunts d'entrenament, de validació i de prova.
+  serves:
+  - a
+  - b
+  - d
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: >-
+    Les mètriques de dades, de model, d'entrenament i de cost, les línies de base i els bancs de proves que
+    s'empren per a l'avaluació.
+  serves:
+  - a
+  - b
+- workProduct: model-optimization-record
+  name: Registre d'optimització del model
+  description: >-
+    L'estratègia de cerca, les configuracions provades, els resultats de validació i les decisions de les
+    iteracions anteriors.
+  serves:
+  - a
+  - b
+  optional: true
+- workProduct: architecture-requirements-specification
+  name: Especificació de requisits d'arquitectura
+  description: >-
+    Els requisits d'interfície i els indicadors i objectius de nivell de servei que l'arquitectura ha de
+    suportar.
+  serves:
+  - a
+outputs:
+- workProduct: optimized-model-configuration
+  name: Configuració optimitzada del model
+  description: Els hiperparàmetres i la configuració seleccionats per a la versió següent del model.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: model-optimization-record
+  name: Registre d'optimització del model
+  description: L'estratègia de cerca, les configuracions provades, els resultats de validació i les decisions.
+  serves:
+  - b
+  - e
+activities:
+- id: A1
+  title: Revisar els resultats d'optimització anteriors
+  description: >-
+    Abans de començar, analitzar els Registres d'optimització del model de les iteracions anteriors per evitar
+    repetir configuracions ja provades i definir uns límits de cerca eficients. Definir la millora que es pretén
+    en la iteració actual a partir de les mètriques del Marc d'avaluació i dels objectius de nivell de servei de
+    l'Especificació de requisits d'arquitectura, com el rendiment predictiu, la generalització entre conjunts de
+    dades, la latència o l'ús de recursos.
+- id: A2
+  title: Ajustar els hiperparàmetres
+  description: >-
+    Ajustar els paràmetres de configuració de l'entrenament per trobar els valors que donen els millors resultats
+    amb el conjunt de validació. Partir dels valors per defecte del framework, de les recomanacions de la
+    literatura o de l'experiència, i cercar manualment, per assaig i error o amb mètodes automatitzats. Optimitzar
+    els hiperparàmetres de cada versió del model perquè les versions es comparin en les seves millors condicions.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+- id: A3
+  title: Aplicar l'aprenentatge per transferència
+  description: >-
+    Reutilitzar el coneixement d'un model preentrenat en una tasca relacionada per accelerar l'aprenentatge,
+    emprant-lo com a punt de partida que redueix el temps d'entrenament fins i tot quan no es pot transferir
+    directament. Adaptar els models base d'ús general al sector, al cas d'ús i al client, reentrenant o
+    substituint el model quan el domini o el format d'entrada siguin diferents de l'original.
+  primaryStudies:
+  - P4
+  - P8
+  - P10
+  - P13
+- id: A4
+  title: Aplicar la regularització
+  description: >-
+    Aplicar penalitzacions o restriccions per evitar que el model s'ajusti al soroll de les dades, ajustant el
+    tipus i la intensitat de la regularització. Preferir models més simples quan sigui possible, i no confiar
+    només en la regularització quan es requereixin nivells més alts de robustesa.
+  primaryStudies:
+  - P6
+  - P8
+- id: A5
+  title: Combinar models en conjunts
+  description: >-
+    Combinar diversos models entrenats, agregant models de tipus diferents o diverses instàncies d'un mateix
+    tipus. Emprar els conjunts de models per fer el sistema més tolerant a fallades, estimar la incertesa i
+    destacar les zones de baixa confiança.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+- id: A6
+  title: Documentar l'optimització
+  description: >-
+    Registrar l'espai de cerca, els valors escollits i les estratègies emprades al Registre d'optimització del
+    model per mantenir-ne la transparència, juntament amb les configuracions provades, els seus resultats de
+    validació, els criteris emprats per comparar-les i la comprensió de per què determinades configuracions han
+    donat bons o mals resultats. Restringir l'accés al registre quan els hiperparàmetres siguin confidencials.
+  primaryStudies:
+  - P8
+  - P14
+changes:
+- annotation: A-41
+  text: >-
+    Tenir en compte la documentació de les iteracions anteriors abans de començar, per evitar repetir feina
+  redVotes: 3
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Registre d'optimització del model de les iteracions anteriors.
+  - kind: added
+    target: A1
+    text: Revisar els resultats d'optimització anteriors
+- annotation: A-42
+  text: >-
+    Definir millor què vol dir millorar un model (latència, dispersió del rendiment entre conjunts de dades, …)
+  redVotes: 1
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Marc d'avaluació.
+  - kind: added
+    text: l'A1 defineix la millora que es pretén a partir de les seves mètriques

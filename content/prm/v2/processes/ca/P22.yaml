@@ -1,0 +1,140 @@
+id: P22
+number: 22
+origin: standards-and-literature
+name: Procés de validació contínua
+purpose: >-
+  El propòsit del *Procés de validació contínua* és fer el seguiment de les dades d'entrada i de les sortides del
+  model després del desplegament per detectar problemes de manera primerenca. Monitorant les mètriques pertinents
+  en producció, ajuda a identificar problemes com la deriva de dades o la degradació del rendiment abans que
+  provoquin fallades.
+outcomes:
+- id: a
+  text: Es monitoren les dades de producció per detectar deriva, canvis d'esquema i anomalies.
+- id: b
+  text: >-
+    S'avalua el comportament del model mitjançant el seguiment del rendiment i les desviacions estadístiques.
+- id: c
+  text: S'analitzen la confiança i la incertesa del model per detectar-ne la degradació.
+- id: d
+  text: Es fa el seguiment de les mètriques operacionals, com la latència i l'ús de recursos.
+- id: e
+  text: Es configuren mecanismes d'alerta per notificar les desviacions a les parts interessades.
+- id: f
+  text: >-
+    Es produeix un Registre de monitoratge que documenta els indicadors, les alertes i els procediments de
+    resposta.
+inputs:
+- workProduct: live-model-outputs
+  name: Sortides del model en producció
+  description: Les prediccions amb dades reals, registrades juntament amb les seves entrades.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: >-
+    Les mètriques de dades, de model, d'entrenament i de cost, les línies de base i els bancs de proves que
+    s'empren per a l'avaluació.
+  serves:
+  - a
+  - b
+  - e
+- workProduct: architecture-requirements-specification
+  name: Especificació de requisits d'arquitectura
+  description: >-
+    Els requisits d'interfície i els indicadors i objectius de nivell de servei que l'arquitectura ha de
+    suportar.
+  serves:
+  - d
+  - e
+- workProduct: system-validation-report
+  name: Informe de validació del sistema
+  description: Els resultats obtinguts en condicions d'operació i la decisió d'acceptació.
+  serves:
+  - b
+outputs:
+- workProduct: monitoring-record
+  name: Registre de monitoratge
+  description: Els indicadors seguits, les observacions, les incidències i les responsabilitats.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - f
+- workProduct: alerting-configuration
+  name: Configuració d'alertes
+  description: Els llindars, les regles i les respostes de cada alerta.
+  serves:
+  - e
+activities:
+- id: A1
+  title: Monitorar les dades d'entrada
+  description: >-
+    Comparar les dades rebudes en producció amb les dades amb què es va entrenar el model i amb les dades de
+    producció anteriors, emprant les mètriques de dades definides al Marc d'avaluació, per detectar deriva en les
+    seves distribucions, deteriorament de la seva qualitat i canvis en la seva estructura o el seu significat.
+    Monitorar les fonts i els sistemes que subministren les dades, perquè se'n detectin els canvis, les fallades o
+    l'envelliment fins i tot quan no produeixin cap anomalia evident en els valors. Seleccionar mètodes de
+    comparació adequats al volum i a la dimensionalitat de les dades, i tenir en compte que els canvis també poden
+    sorgir de l'ús del model fora de la seva finalitat prevista o de la reacció dels usuaris a les seves sortides.
+  primaryStudies:
+  - P8
+  - P10
+  - P13
+  - P17
+  - P18
+- id: A2
+  title: Monitorar el comportament del model
+  description: >-
+    Fer el seguiment del rendiment del model en producció respecte de les mètriques definides al Marc d'avaluació,
+    prenent com a referència el rendiment observat durant la validació del sistema, mesurant-lo directament quan
+    es disposi de la veritat de referència i inferint-lo de la distribució de les seves sortides quan no se'n
+    disposi. Monitorar els altres requisits que s'espera que canviïn amb el temps, com l'equitat, la
+    transparència, la privadesa i el temps d'execució, juntament amb indicadors operacionals, comparats amb els
+    objectius de nivell de servei de l'Especificació de requisits d'arquitectura, que confirmin que el model
+    s'executa i consumeix recursos tal com s'espera. Distingir la degradació gradual causada per dades canviants
+    de la pèrdua de validesa causada per canvis en el mateix problema, i considerar l'antiguitat del model i els
+    efectes de les actualitzacions anteriors com a indicadors per si mateixos.
+  primaryStudies:
+  - P3
+  - P8
+  - P10
+  - P11
+  - P13
+  - P16
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Configurar les alertes
+  description: >-
+    Definir per a cada indicador monitorat els llindars, derivant-los dels objectius de nivell de servei quan
+    n'hi hagi, la freqüència d'avaluació i la resposta esperada, equilibrant la detecció de problemes reals amb el
+    nombre d'alertes que no condueixen a cap acció. Formular les alertes de manera que transmetin l'abast i
+    l'efecte probable de la desviació, prioritzar les que afecten els elements dels quals depèn el servei i
+    associar cadascuna amb les accions que s'han de dur a terme. Configurar les respostes automatitzades que
+    autoritza l'estratègia de manteniment, com les barreres de protecció a les sortides o el canvi a un model
+    alternatiu, i dirigir al procés de manteniment les alertes que requereixen una decisió sobre el model.
+    Revisar la configuració cada vegada que s'actualitzi el model.
+  primaryStudies:
+  - P6
+  - P14
+  - P17
+  literature:
+  - breckMLTestScore2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A4
+  title: Documentar el monitoratge
+  description: >-
+    Registrar al Registre de monitoratge els indicadors que se segueixen, les regles d'alerta i la justificació de
+    cada llindar, les observacions i els resultats de validació al llarg del temps, i les persones responsables de
+    respondre a cada alerta. Vincular cada observació amb la versió del model que era en servei quan es va fer,
+    perquè es pugui relacionar amb el llinatge del model que manté el procés de manteniment. Mantenir el registre
+    coherent entre els sistemes de l'organització, perquè el monitoratge de models diferents continuï essent
+    comparable.
+  primaryStudies:
+  - P10
+  - P14
+  - P17

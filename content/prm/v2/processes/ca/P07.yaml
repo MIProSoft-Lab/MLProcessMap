@@ -1,0 +1,203 @@
+id: P07
+number: 7
+origin: decomposed
+name: Procés de definició de mètriques de verificació i bancs de proves
+purpose: >-
+  El propòsit del *Procés de definició de mètriques de verificació i bancs de proves* és establir un marc per
+  definir els objectius d'avaluació, les mètriques quantitatives, les línies de base i les plantilles d'informe al
+  llarg del cicle de vida. Aquest procés crea indicadors mesurables de la qualitat de les dades, el comportament
+  del model, l'eficiència de l'entrenament, el cost i els atributs no funcionals del sistema a partir dels
+  requisits del projecte.
+outcomes:
+- id: a
+  text: >-
+    Un marc d'avaluació coherent guia les activitats de prova i de verificació.
+- id: b
+  text: >-
+    El rendiment, la fiabilitat, l'eficiència de l'entrenament i el cost s'avaluen amb mètriques pertinents.
+- id: c
+  text: Les mètriques i els bancs de proves són traçables i comparables al llarg del cicle de vida.
+inputs:
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: >-
+    Els requisits funcionals, de rendiment i de qualitat del sistema i la seva línia de base de cost tècnic.
+  serves:
+  - a
+  - b
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: >-
+    Els valors esperats, els formats, la qualitat i les metadades de les dades que necessita el sistema.
+  serves:
+  - a
+  - b
+- workProduct: architecture-requirements-specification
+  name: Especificació de requisits d'arquitectura
+  description: >-
+    Els requisits d'interfície i els indicadors i objectius de nivell de servei que l'arquitectura ha de
+    suportar.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: cost-and-resource-constraint-record
+  name: Registre de restriccions de cost i recursos
+  description: >-
+    Els requisits computacionals estimats, els costs d'entrenament i els límits de recursos d'inferència de la
+    classe de solució escollida.
+  serves:
+  - b
+outputs:
+- workProduct: evaluation-framework
+  name: Marc d'avaluació
+  description: >-
+    Les mètriques de dades, de model, d'entrenament i de cost, les línies de base i els bancs de proves que
+    s'empren per a l'avaluació.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: reporting-templates
+  name: Plantilles d'informe
+  description: Formats normalitzats per informar de les mètriques i fer-ne el seguiment.
+  serves:
+  - c
+activities:
+- id: A1
+  title: Definir els objectius d'avaluació
+  description: >-
+    Derivar els objectius d'avaluació dels requisits tècnics, dels objectius de nivell de servei i del context per
+    establir objectius mesurables. Formular objectius d'avaluació d'alt nivell i límits de rendiment acceptables
+    en totes les dimensions de qualitat per orientar l'estratègia de verificació, indicant l'abast del que s'ha de
+    verificar, els resultats esperats i la prioritat de cada element, ja que una verificació exhaustiva no és
+    assolible i l'estratègia equilibra la cobertura amb les restriccions. Formular cada objectiu de manera que
+    sigui específic, mesurable, assolible, pertinent i acotat en el temps. Registrar el raonament que hi ha
+    darrere cada mètrica escollida i indicar qui en fa la valoració quan un criteri és subjectiu. Alinear els
+    objectius d'avaluació amb les expectatives de l'organització i de les parts interessades.
+  primaryStudies:
+  - P3
+  - P10
+  - P11
+  - P13
+  - P15
+- id: A2
+  title: Definir les mètriques de dades
+  description: >-
+    Definir indicadors i expectatives per validar la qualitat, la cobertura i la integritat del conjunt de dades,
+    a partir de les condicions esperades de les dades indicades als requisits de dades. Formalitzar els
+    invariants de tipus, els rangs de valors de les característiques i els llindars acceptables per permetre la
+    validació automatitzada de les dades, i estendre'ls al domini esperat de les característiques categòriques, a
+    la proporció d'exemples en què una característica ha d'estar present, al nombre de valors que pot tenir i a la
+    verificació de les etiquetes subministrades externament. Establir indicadors de qualitat de les dades que
+    mesurin la completesa, el desequilibri de classes i la cobertura de característiques del conjunt de dades per
+    evitar el biaix de representació.
+  primaryStudies:
+  - P3
+  - P10
+  - P13
+  - P15
+  - P17
+- id: A3
+  title: Definir les mètriques de model i d'entrenament
+  description: >-
+    Seleccionar mètriques que recullin el rendiment predictiu, el calibratge i el comportament no funcional del
+    model, i indicar què significa cada mesura per al domini del model. Desglossar les avaluacions de rendiment
+    per segments demogràfics i definits per característiques per evitar el biaix, i determinar quins segments
+    mereixen aquesta atenció. Formular criteris de verificació que recullin el calibratge de les prediccions i les
+    distribucions de probabilitat durant la inferència. Incloure mètriques del mateix procés d'entrenament, com el
+    temps d'entrenament, l'ús de recursos i la convergència, perquè es pugui comparar l'eficiència de
+    l'entrenament entre experiments. Detallar el conjunt d'indicadors que s'informa per a públics sense formació
+    en aprenentatge automàtic, i fixar la definició de qualsevol propietat discutida, com l'equitat, abans de
+    mesurar-la.
+- id: A4
+  title: Definir els bancs de proves i les línies de base
+  description: >-
+    Definir punts de referència per contextualitzar el rendiment del model. Definir línies de base (com ara
+    models més simples, heurístiques o implementacions basades en regles) per confirmar el funcionament del model
+    i el seu valor, inclosa qualsevol solució que no sigui d'aprenentatge automàtic que ja estigui en servei.
+    Establir com se separaran les dades que serveixen per seleccionar entre models candidats de les dades
+    reservades per jutjar si el model seleccionat generalitza. Incorporar punts de referència (com ara el
+    rendiment humà, els bancs de proves de la competència o els resultats publicats de l'estat de l'art) per
+    avaluar la competència del model.
+  primaryStudies:
+  - P10
+  - P11
+  - P13
+  - P15
+- id: A5
+  title: Definir la verificació de cost i de recursos
+  description: >-
+    Establir les mètriques amb què es verifica el sistema respecte de les seves restriccions de cost i recursos,
+    tenint en compte el cost de l'entrenament, el cost d'inferència per petició i el consum de recursos del
+    sistema en operació. Derivar els llindars d'aquestes mètriques de les restriccions de cost i recursos i dels
+    objectius de nivell de servei, i definir a partir de quina desviació s'ha d'informar d'un resultat.
+- id: A6
+  title: Definir les normes d'informe
+  description: >-
+    Definir les plantilles d'informe per recollir les mètriques al llarg del cicle de vida. Normalitzar les
+    pautes per registrar els resultats de l'avaluació, les decisions i els paràmetres del model. Definir fluxos de
+    treball de documentació per als supòsits, els compromisos, les limitacions i les consideracions entre equips i
+    parts interessades, i fixar el contingut mínim que ha d'assolir cada registre.
+  primaryStudies:
+  - P3
+  - P10
+  - P11
+  - P12
+  - P15
+- id: A7
+  title: Connectar amb la verificació contínua
+  description: >-
+    Planificar com estendre les mètriques de desenvolupament a la validació i la verificació. Planificar el
+    monitoratge dels fluxos de dades en temps real per detectar canvis de distribució i la degradació del model.
+    Establir llindars d'alerta per assenyalar regressions de qualitat, violacions de l'esquema o pics anòmals
+    d'entrades, i determinar què s'ha de registrar, durant quant de temps i amb quina protecció contra alteracions
+    perquè es pugui reconstruir el comportament després d'un incident. Conservar les mesures de negoci juntament
+    amb les tècniques, ja que un sistema pot satisfer els seus criteris tècnics i deixar alhora d'aportar el
+    resultat per al qual es va construir.
+  primaryStudies:
+  - P10
+  - P12
+  - P13
+  - P15
+changes:
+- annotation: A-23
+  text: >-
+    Hi manquen les sortides del *Procés de definició de requisits del sistema* com a entrades del procés
+  redVotes: 0
+  yellowVotes: 4
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Especificació de requisits de dades
+  - kind: added
+    target: Entrada
+    text: Especificació de requisits d'arquitectura
+  - kind: updated
+    target: A1
+    text: objectius derivats dels objectius de nivell de servei
+  - kind: updated
+    target: A2
+    text: mètriques basades en els requisits de dades
+- annotation: A-24
+  text: Hi manquen mètriques d'entrenament, de costs i bancs de proves competitius
+  redVotes: 2
+  yellowVotes: 3
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Registre de restriccions de cost i recursos
+  - kind: updated
+    target: A3
+    text: Definir les mètriques de model i d'entrenament
+  - kind: updated
+    target: A4
+    text: bancs de proves de l'estat de l'art
+  - kind: added
+    target: A5
+    text: Definir la verificació de cost i de recursos
+  - kind: updated
+    target: Propòsit, resultat (b) i sortida
+    text: el Marc d'avaluació inclou mètriques d'entrenament i de cost

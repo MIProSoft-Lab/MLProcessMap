@@ -1,0 +1,186 @@
+id: P08
+number: 8
+origin: decomposed
+name: Procés d'identificació de fonts de dades
+purpose: >-
+  El propòsit del *Procés d'identificació de fonts de dades* és descobrir i documentar conjunts de dades candidats
+  de repositoris tant interns com externs per establir els fonaments del model d'aprenentatge automàtic. Extreu
+  les especificacions de dades dels requisits de dades i comprova si les fonts de dades descobertes tenen
+  implicacions de llicència, legals o ètiques abans que tengui lloc cap recollida o ingesta de dades.
+outcomes:
+- id: a
+  text: >-
+    S'identifiquen, s'avaluen, es vinculen als requisits de dades i es documenten les fonts de dades pertinents.
+- id: b
+  text: >-
+    Es caracteritzen la disponibilitat, la qualitat i les metadades dels conjunts de dades interns i externs,
+    incloses les fonts no documentades.
+- id: c
+  text: S'identifiquen les condicions legals, ètiques i de privadesa.
+- id: d
+  text: S'identifiquen les mancances de dades i les fonts complementàries.
+- id: e
+  text: S'estableixen les relacions entre els requisits de dades i les fonts.
+inputs:
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: >-
+    Els valors esperats, els formats, la qualitat i les metadades de les dades que necessita el sistema.
+  serves:
+  - a
+  - d
+  - e
+- workProduct: data-landscape-assessment
+  name: Avaluació del panorama de dades
+  description: La viabilitat d'una solució basada en dades segons les dades i els recursos disponibles.
+  serves:
+  - b
+  - d
+outputs:
+- workProduct: data-catalog
+  name: Catàleg de dades
+  description: >-
+    L'inventari de fonts internes i externes, amb la seva vinculació als requisits de dades, l'estat de la seva
+    documentació, les avaluacions de qualitat i les revisions legals i ètiques.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Analitzar els requisits de dades
+  description: >-
+    Traduir els requisits del sistema en especificacions de dades que guiïn l'estratègia de cerca de conjunts de
+    dades. Especificar les propietats fonamentals de les dades, com les variables objectiu, els dominis de les
+    característiques, els esquemes esperats, els límits de volum i els paràmetres temporals o geogràfics, per
+    centrar els esforços de recollida en els conjunts de dades pertinents. Indicar la distribució que han de
+    presentar les dades perquè cada cas que el sistema ha de distingir hi estigui representat en quantitat
+    suficient, i acordar els rangs admissibles amb un expert del domini en lloc d'inferir-los de la mostra que hi
+    hagi disponible.
+  primaryStudies:
+  - P10
+  - P13
+- id: A2
+  title: Inventariar i vincular les fonts de dades internes
+  description: >-
+    Descobrir i avaluar els actius de dades existents distribuïts pels sistemes interns de l'organització, i
+    vincular cada candidat amb les especificacions de dades definides a l'A1 per determinar-ne la pertinença, de
+    manera que la descoberta interna quedi filtrada pels requisits en lloc de produir un inventari general.
+    Emprar els catàlegs de dades o els repositoris de metadades, quan n'hi hagi, per avaluar les fonts candidates
+    disponibles, afavorir la reutilització d'actius i identificar les mancances de dades internes, registrant per
+    a cada candidat el seu propietari, les normes que en regulen l'ús i el nivell de control que exigeix la seva
+    criticitat. Establir quin accés es concedirà realment a l'equip, ja que els privilegis poden variar dins un
+    mateix projecte, i identificar on caldrà conciliar fonts que registren els mateixos esdeveniments en formats
+    incompatibles.
+- id: A3
+  title: Recollir i avaluar la documentació existent
+  description: >-
+    Per a cada font interna candidata, reunir la documentació que ja existeix, com diccionaris de dades,
+    definicions d'esquema, entrades de catàleg i el coneixement que tenen els propietaris de la font, i verificar
+    que està disponible, actualitzada i és coherent amb la font que descriu. Prioritzar les fonts documentades
+    quan hi hagi alternatives, i registrar quines fonts no tenen prou documentació perquè es puguin examinar abans
+    de recollir-ne cap dada.
+- id: A4
+  title: Fer la descoberta tècnica de les fonts
+  description: >-
+    Quan la documentació falti o sigui insuficient, examinar directament la font per recuperar-ne l'estructura,
+    inclosos l'esquema, les claus, els tipus de camp, els rangs de valors i la freqüència d'actualització, i
+    confirmar el significat de cada camp amb els propietaris de la font o amb experts del domini. Aquesta
+    descoberta es limita a establir què conté una font i si pot satisfer els requisits de dades; la
+    caracterització de les dades recollides correspon al *Procés d'anàlisi exploratòria de dades*.
+- id: A5
+  title: Identificar les fonts de dades externes
+  description: >-
+    Descobrir conjunts de dades complementaris d'entorns externs, com registres públics, portals de dades obertes
+    i proveïdors comercials. Cercar en repositoris públics i portals de dades obertes, considerar els proveïdors
+    comercials i considerar la generació de les dades mitjançant assajos controlats o síntesi quan no existeixi
+    cap font adequada. Fer una avaluació formal del risc de qualsevol proveïdor abans de l'adquisició, que tengui
+    en compte la seva cadena de subministrament, el preprocessament ja aplicat a les dades, les seves pràctiques
+    de governança i les polítiques que el vinculen. Obtenir qualsevol conjunt de dades preexistent d'una font de
+    confiança per mitjans que en garanteixin la integritat durant la transmissió, i, quan les dades se
+    sintetitzin, establir que representen el domini operacional previst i no el comportament del generador.
+  primaryStudies:
+  - P3
+  - P4
+  - P8
+  - P9
+  - P16
+  - P17
+- id: A6
+  title: Revisar les llicències de les dades
+  description: >-
+    Avaluar les condicions d'ús, les proteccions de drets d'autor i els acords de distribució associats als
+    conjunts de dades candidats. Comprovar les condicions de llicència abans de la integració al pipeline perquè
+    només s'incloguin conjunts de dades que respectin els límits contractuals i els drets de propietat
+    intel·lectual, i comprovar tant les condicions que afecten les dades subjacents a un artefacte candidat com
+    les del mateix artefacte.
+  primaryStudies:
+  - P10
+  - P16
+- id: A7
+  title: Revisar els aspectes legals
+  description: >-
+    Avaluar els conjunts de dades candidats d'acord amb la normativa de protecció de dades i les polítiques de
+    privadesa aplicables. Verificar els mecanismes de consentiment i la finalitat per a la qual se'n va autoritzar
+    la recollida, i avaluar els riscs de reidentificació, amb una atenció especial a la vinculació amb informació
+    auxiliar disponible en altres llocs. Registrar els drets d'accés, la propietat i les condicions de
+    conservació associades a cada font.
+  primaryStudies:
+  - P3
+  - P16
+- id: A8
+  title: Fer la revisió ètica
+  description: >-
+    Examinar els conjunts de dades candidats per detectar biaixos de representació, desequilibris de mostra i
+    possibles danys socials. Avaluar la cobertura demogràfica i la diversitat contextual abans de l'entrenament, i
+    anomenar les categories demogràfiques que han de cobrir les dades, per evitar que els models posteriors
+    produeixin resultats injustos o discriminatoris.
+  primaryStudies:
+  - P3
+  - P10
+- id: A9
+  title: Documentar les fonts
+  description: >-
+    Registrar les metadades sobre l'origen del conjunt de dades, l'estructura de l'esquema, els drets d'accés i
+    les limitacions conegudes. Registrar aquests detalls per donar suport a la reproductibilitat i a l'extracció i
+    la manipulació futures del conjunt de dades, incloses la llicència amb què es disposa de cada actiu i
+    l'associació entre un conjunt de dades i els experiments i pipelines que l'han consumit.
+  primaryStudies:
+  - P3
+  - P9
+  - P10
+  - P17
+changes:
+- annotation: A-25
+  text: Cap activitat no estableix relacions entre l'A1 i l'A2
+  redVotes: 0
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A2
+    text: Inventariar i vincular les fonts de dades internes
+  - kind: updated
+    target: Resultat (a)
+    text: fonts vinculades als requisits de dades
+- annotation: A-26
+  text: >-
+    Moltes fonts de dades no estan documentades; s'haurien de sol·licitar primer les fonts documentades
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: A3
+    text: Recollir i avaluar la documentació existent
+  - kind: added
+    target: A4
+    text: Fer la descoberta tècnica de les fonts
+  - kind: updated
+    target: Resultat (b)
+    text: inclou les metadades i les fonts no documentades
+  - kind: updated
+    target: Sortida
+    text: el Catàleg de dades inclou l'estat de la documentació
