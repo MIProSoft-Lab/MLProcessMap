@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: If you use the PRM or this website, please cite the doctoral thesis below.
+type: software
+title: MLProcessMap
+abstract: >-
+  A website to explore the Process Reference Model (PRM) for the Machine Learning lifecycle
+  from the doctoral thesis, and to build custom lifecycle models from it.
+version: 1.0.0
+authors:
+  - family-names: Crespí Tobeña
+    given-names: Antonio
+    orcid: https://orcid.org/0009-0000-0046-8330
+    affiliation: Universitat de les Illes Balears
+repository-code: https://github.com/MIProSoft-Lab/MLProcessMap
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - process reference model
+  - machine learning
+  - ML lifecycle
+preferred-citation:
+  type: thesis
+  thesis-type: Doctoral thesis
+  title: A Process Reference Model for Machine Learning Applications
+  authors:
+    - family-names: Crespí Tobeña
+      given-names: Antonio
+      orcid: https://orcid.org/0009-0000-0046-8330
+  institution:
+    name: Universitat de les Illes Balears
+  year: 2027
