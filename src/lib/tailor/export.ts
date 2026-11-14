@@ -78,7 +78,7 @@ export function csv(ctx: Omit<ExportContext, 'link'>) {
       lines.push([x.p.id, q(x.p.name), q(ph ? phaseName(state, ph, s) : ''), a.id, q(a.title), a.included ? 'yes' : 'no', q(x.included ? '' : x.rationale)].join(','));
     }
   }
-  return lines.join('\n');
+  return '\uFEFF' + lines.join('\n');
 }
 
 export function json(ctx: ExportContext) {

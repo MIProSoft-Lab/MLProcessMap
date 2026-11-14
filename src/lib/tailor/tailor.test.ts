@@ -146,6 +146,10 @@ describe('exports', () => {
     expect(md).toContain('- P02 Process P02: Reused, "as is"');
   });
 
+  it('start the CSV with a byte order mark, for Excel', () => {
+    expect(csv(ctx()).startsWith('\uFEFFprocess_id,')).toBe(true);
+  });
+
   it('quote CSV fields', () => {
     expect(csv(ctx()).split('\n')[3]).toBe('P02,"Process P02","",A1,"First of P02",no,"Reused, ""as is"""');
   });
@@ -182,7 +186,7 @@ describe('importing an export', () => {
   });
 
   it('reads the CSV export, with the version from the file name', async () => {
-    const text = '﻿' + csv({ state: model(), version: v2, s });
+    const text = csv({ state: model(), version: v2, s });
     const m = await readModel(text, 'fraud-detection-v2.csv', options);
     expect(essentials(m)).toEqual({ ...expected, phases: [['Build', ['P01']], ['Phase 2', ['P03']]] });
     expect(m.csv).toBe(true);
