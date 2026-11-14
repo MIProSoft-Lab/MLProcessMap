@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import { getVersion, getProcess, pick, versions } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
-import { plain } from '../../../lib/text';
+import { plain, searchKey } from '../../../lib/text';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
@@ -14,10 +14,7 @@ const v = getVersion(version);
 
 const tile = (id: string) => {
   const { data: p, translated } = getProcess(version, id, locale);
-  const search = [p.name, p.purpose, ...p.outcomes.map((o) => o.text), ...p.activities.map((a) => `${a.title} ${a.description}`)]
-    .map(plain)
-    .join(' ')
-    .toLowerCase();
+  const search = searchKey([p.name, p.purpose, ...p.outcomes.map((o) => o.text), ...p.activities.map((a) => `${a.title} ${a.description}`)].map(plain).join(' '));
   return { p, translated, search };
 };
 const groups = v.topology.map((g) => ({ name: pick(g.group, locale), columns: g.columns.map((c) => c.map(tile)) }));
@@ -78,6 +75,7 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
 
 <script>
   import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
+  import { searchKey } from '../../../lib/text';
 
   openLinksInModal(document.getElementById('main')!, createProcessModal());
 
@@ -85,7 +83,7 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
   const items = [...document.querySelectorAll<HTMLElement>('[data-search]')];
   const empty = document.querySelector<HTMLElement>('#empty')!;
   const apply = () => {
-    const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+    const words = searchKey(input.value).split(/\s+/).filter(Boolean);
     let shown = 0;
     for (const el of items) {
       const match = words.every((w) => el.dataset.search!.includes(w));

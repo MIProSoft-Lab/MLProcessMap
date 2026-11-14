@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import { getProcess, getWorkProducts, versions } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
+import { searchKey } from '../../../lib/text';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
@@ -41,7 +42,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
       <tbody>
         {
           wps.map((w) => (
-            <tr id={w.id} data-type={w.type} data-search={w.name.toLowerCase()}>
+            <tr id={w.id} data-type={w.type} data-search={searchKey(w.name)}>
               <td>
                 <strong>{w.name}</strong>
               </td>
@@ -82,21 +83,31 @@ const types = ['information-item', 'artifact', 'record'] as const;
       </tbody>
     </table>
   </div>
+  <p id="empty" class="muted" hidden>{t('wp.noResults')}</p>
   <ProcessModal locale={locale} />
 </Layout>
 
 <script>
   import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
+  import { searchKey } from '../../../lib/text';
 
   openLinksInModal(document.getElementById('main')!, createProcessModal());
 
   const input = document.querySelector<HTMLInputElement>('#q')!;
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-type]:is(button)')];
   const rows = [...document.querySelectorAll<HTMLTableRowElement>('tbody tr')];
+  const table = document.querySelector<HTMLElement>('.table-wrap')!;
+  const empty = document.querySelector<HTMLElement>('#empty')!;
   let type = '';
   const apply = () => {
-    const q = input.value.toLowerCase().trim();
-    for (const r of rows) r.hidden = (type !== '' && r.dataset.type !== type) || !r.dataset.search!.includes(q);
+    const q = searchKey(input.value).trim();
+    let shown = 0;
+    for (const r of rows) {
+      r.hidden = (type !== '' && r.dataset.type !== type) || !r.dataset.search!.includes(q);
+      if (!r.hidden) shown++;
+    }
+    table.hidden = shown === 0;
+    empty.hidden = shown > 0;
   };
   input.addEventListener('input', apply);
   for (const b of buttons) {
