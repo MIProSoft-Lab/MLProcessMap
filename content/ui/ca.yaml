@@ -115,6 +115,7 @@ wp:
   producers: Produït per
   consumers: Emprat per
   filter: Filtra els productes de treball
+  noResults: Cap producte de treball coincideix amb el filtre.
   all: Tots
 compare:
   title: Compara versions
@@ -156,7 +157,7 @@ lc:
   zoomHint: Ctrl + roda o pessiga per fer zoom, arrossega per moure't
 tailor:
   title: Crea un model de cicle de vida per al teu projecte
-  intro: "Crea un model de cicle de vida a mida a partir dels processos del PRM: tria els processos i les activitats que necessita el teu projecte, organitza'ls en fases i marca les fases que es repeteixen i els bucles que tornen a fases anteriors. El model es guarda a l'enllaç, així que el pots compartir."
+  intro: "Crea un model de cicle de vida a mida a partir dels processos del PRM: tria els processos i les activitats que necessita el teu projecte, organitza'ls en fases, marca les que es repeteixen i els bucles que tornen a fases anteriors. Pots compartir el model copiant la URL o exportant-lo."
   project: Nom del model de cicle de vida
   version: Versió del PRM
   start: Comença des de

@@ -118,6 +118,7 @@ wp:
   producers: Produced by
   consumers: Used by
   filter: Filter work products
+  noResults: No work product matches your filter.
   all: All
 compare:
   title: Compare versions

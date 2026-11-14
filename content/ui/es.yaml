@@ -28,7 +28,7 @@ home:
   card-references: Consulta los estudios primarios de la revisión sistemática de la literatura y la literatura especializada que citan los procesos.
   overview: Qué encontrarás aquí
   thesisHeading: Parte de una tesis doctoral
-  thesisText: "Esta web publica el Modelo de Referencia de Procesos desarrollado en la tesis doctoral *{title}*. La tesis estudia cómo se describe el desarrollo de ML en el ámbito académico y en la industria, lo compara con las normas internacionales de procesos de ciclo de vida y propone un modelo de referencia posteriormente evaluado con profesionales."
+  thesisText: "Esta página publica el Modelo de Referencia de Procesos desarrollado en la tesis doctoral *{title}*. La tesis estudia cómo se describe el desarrollo de ML en el ámbito académico y en la industria, lo compara con las normas internacionales de procesos de ciclo de vida y propone un modelo de referencia posteriormente evaluado con profesionales."
   author: Autor
   supervisor: Director
   supervisors: Directores
@@ -115,6 +115,7 @@ wp:
   producers: Producido por
   consumers: Usado por
   filter: Filtrar productos de trabajo
+  noResults: Ningún producto de trabajo coincide con el filtro.
   all: Todos
 compare:
   title: Comparar versiones
@@ -156,7 +157,7 @@ lc:
   zoomHint: Ctrl + rueda o pellizca para hacer zoom, arrastra para moverte
 tailor:
   title: Crea un modelo de ciclo de vida para tu proyecto
-  intro: "Crea un modelo de ciclo de vida a medida a partir de los procesos del PRM: elige los procesos y actividades que necesita tu proyecto, organízalos en fases y marca las fases que se repiten y los bucles que vuelven a fases anteriores. El modelo se guarda en el enlace, así que puedes compartirlo."
+  intro: "Crea un modelo de ciclo de vida a medida a partir de los procesos del PRM: elige los procesos y actividades que necesita tu proyecto, organízalos en fases, marca cuales se repiten y los bucles que vuelven a fases anteriores. Puedes compartir el modelo copiando la URL o exportándolo."
   project: Nombre del modelo de ciclo de vida
   version: Versión del PRM
   start: Empezar desde
@@ -197,7 +198,7 @@ tailor:
   phase-unassign: Quitar {id} de la fase
   phase-none: Sin fase
   phase-of: Fase de {id}
-  unassigned: Procesos del modelo sin fase
+  unassigned: Procesos no asignados a una fase
   unassigned-none: Todos los procesos del modelo están en una fase.
   preview: Vista previa
   preview-empty: Añade una fase para ver el diagrama del ciclo de vida.

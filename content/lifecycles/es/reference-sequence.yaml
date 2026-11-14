@@ -3,10 +3,9 @@ name: Secuencia de referencia (ejemplo)
 status: draft
 prmVersion: v2
 description: >-
-  Una disposición de ejemplo de los procesos del PRM en el orden de la topología, con las fases de
+  Una disposición de ejemplo de los procesos del PRM, con las fases de
   preparación de los datos y de modelado repetidas hasta que el modelo cumple sus criterios de éxito.
-  Muestra cómo se define una plantilla de ciclo de vida; no es uno de los modelos de ciclo de vida de la
-  revisión de la literatura.
+  Muestra cómo se define una plantilla de ciclo de vida.
 phases:
   - id: problem
     name: Problema y requisitos
@@ -32,4 +31,4 @@ phases:
     processes: [P22, P23, P24, P25]
     iterative: true
     returnsTo: data
-    returnNote: La validación continua detecta la deriva y desencadena el reentrenamiento con datos nuevos.
+    returnNote: La validación continua detecta la deriva y desencadena el reentrenamiento.
