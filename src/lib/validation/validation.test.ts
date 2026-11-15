@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { readContentFiles } from '../content/read-files';
 import { fixture, toFiles, type Fixture } from './fixtures';
-import { errors, formatIssues, validate, type Issue } from './index';
+import { errors, formatIssues, validate, validateOnce, type Issue } from './index';
 
 const P01 = '/content/prm/v1/processes/en/P01.yaml';
 const P01es = '/content/prm/v1/processes/es/P01.yaml';
@@ -277,6 +277,17 @@ describe('rules', () => {
       'ui-translations: /content/ui/es.yaml: "nav.count" uses the placeholders {total}, but the English text uses {n}.',
       'ui-translations: /content/ui/es.yaml: "nav.extra" does not exist in content/ui/en.yaml.',
     ]);
+  });
+});
+
+describe('validateOnce', () => {
+  it('checks a set of files once, and a new set again', () => {
+    const files = toFiles(fixture());
+    expect(validateOnce(files)).toBe(validateOnce(files));
+    const broken = fixture();
+    broken[P01].id = 'P09';
+    expect(errors(validateOnce(toFiles(broken)))).not.toEqual([]);
+    expect(errors(validateOnce(toFiles(fixture())))).toEqual([]);
   });
 });
 

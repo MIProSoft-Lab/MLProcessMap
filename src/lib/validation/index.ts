@@ -46,3 +46,16 @@ export function validate(files: ContentFiles): Issue[] {
   for (const rule of rules) rule.check({ files, content, report: report.for(rule.id, rule.severity) });
   return report.issues;
 }
+
+const validated = new WeakMap<ContentFiles, Issue[]>();
+
+/**
+ * validate(), run once for each set of files. Every page asks for the result;
+ * the dev server loads a new set when a content file changes, so an edit is
+ * checked again without a restart.
+ */
+export function validateOnce(files: ContentFiles): Issue[] {
+  let issues = validated.get(files);
+  if (!issues) validated.set(files, (issues = validate(files)));
+  return issues;
+}

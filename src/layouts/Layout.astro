@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { site, pick, versions, defaultVersion, contentFiles } from '../lib/content';
-import { validate, formatIssues, errors } from '../lib/validation';
+import { validateOnce, formatIssues, errors } from '../lib/validation';
 import { edition, otherEditionUrl } from '../lib/edition';
 import ProcessHover from '../components/ProcessHover.astro';
 import AcronymHover from '../components/AcronymHover.astro';
@@ -28,9 +28,9 @@ const t = useTranslations(locale);
 const siteTitle = pick(site.title, locale);
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
 
-// Fail the build on content errors, once per build. Warnings are left to
-// npm run check:content.
-const issues = errors((globalThis as any).__prmValidation ??= validate(contentFiles));
+// Fail the build on content errors, checked once per set of content files.
+// Warnings are left to npm run check:content.
+const issues = errors(validateOnce(contentFiles));
 if (issues.length) throw new Error(`Content errors (run npm run check:content to list them again):\n\n${formatIssues(issues)}`);
 
 // Same page in the other languages.
