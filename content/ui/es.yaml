@@ -209,6 +209,9 @@ tailor:
   import: Importar
   import-note: Abre un modelo de ciclo de vida exportado desde esta página como JSON, YAML o CSV. Sustituye el modelo que estás editando, así que copia antes su enlace si quieres conservarlo.
   import-open: Abrir un archivo
+  restore-text: "Este navegador ha guardado el último modelo que editaste aquí:"
+  restore-yes: Continuar con él
+  restore-no: Descartarlo
   import-done: "Se ha abierto {file}."
   import-csv: Un archivo CSV solo guarda los procesos, las actividades y los nombres de las fases, así que revisa la versión del PRM, el orden de las fases y los bucles.
   import-skipped: "El PRM {v} no tiene {ids}, así que se han dejado fuera."

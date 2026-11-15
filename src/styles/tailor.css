@@ -60,6 +60,18 @@
   margin: 16px 0 6px;
 }
 
+/* The offer to continue with the last model edited in this browser. */
+.tailor-page .restore:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+
+.tailor-page .restore span {
+  flex: 1 1 260px;
+}
+
 .tailor-page .exports {
   display: flex;
   flex-wrap: wrap;

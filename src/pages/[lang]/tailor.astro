@@ -101,6 +101,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   <h1>{t('tailor.title')}</h1>
   <p class="muted prose">{t('tailor.intro')}</p>
   <noscript><p class="notice">{t('tailor.noscript')}</p></noscript>
+  <p id="restore" class="notice restore no-print" role="status" hidden>
+    <span>{t('tailor.restore-text')} <strong id="restore-name"></strong></span>
+    <button type="button" id="restore-yes">{t('tailor.restore-yes')}</button>
+    <button type="button" id="restore-no">{t('tailor.restore-no')}</button>
+  </p>
 
   <div class="controls card no-print">
     <label>
@@ -217,12 +222,44 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   const version = (id: string) => model.versionOf(data, id);
 
+  // The last model edited is also kept in the browser, to offer it again on a
+  // visit that starts without one. Opening a model does not replace it; editing does.
+  const STORE = 'prm-tool:tailor:last';
+  const stored = {
+    get() {
+      try {
+        return localStorage.getItem(STORE);
+      } catch {
+        return null; // Storage can be blocked, and the builder works without it.
+      }
+    },
+    set(hash: string | null) {
+      try {
+        hash === null ? localStorage.removeItem(STORE) : localStorage.setItem(STORE, hash);
+      } catch {}
+    },
+  };
+  const last = location.hash.length > 1 ? null : stored.get();
+
   let state = model.fromHash(data, location.hash.slice(1));
 
   const syncPhases = () => model.syncPhases(state, version(state.version));
   syncPhases();
 
-  const toHash = () => history.replaceState(null, '', `#${model.toHash(state)}`);
+  /** The model without the open tab, which is not part of it. */
+  const modelKey = (x: State) => model.toHash({ ...x, tab: 'processes' });
+  const opened = modelKey(state);
+  let edited = false;
+  const restore = $('#restore');
+
+  const toHash = () => {
+    const hash = model.toHash(state);
+    history.replaceState(null, '', `#${hash}`);
+    edited ||= modelKey(state) !== opened;
+    if (!edited) return;
+    stored.set(hash);
+    restore.hidden = true;
+  };
 
   // --- Rendering ---------------------------------------------------------
 
@@ -758,5 +795,23 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   // --- Start ------------------------------------------------------------
 
   load(state);
+
+  const lastState = last ? model.fromHash(data, last) : null;
+  if (lastState && modelKey(lastState) !== opened) {
+    const done = () => {
+      restore.hidden = true;
+      $('#project').focus();
+    };
+    $('#restore-name').textContent = lastState.project || s('tailor.untitled');
+    $('#restore-yes').addEventListener('click', () => {
+      load(lastState);
+      done();
+    });
+    $('#restore-no').addEventListener('click', () => {
+      stored.set(null);
+      done();
+    });
+    restore.hidden = false;
+  }
 </script>
 

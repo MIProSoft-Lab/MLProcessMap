@@ -209,6 +209,9 @@ tailor:
   import: Importa
   import-note: Obre un model de cicle de vida exportat des d'aquesta pàgina com a JSON, YAML o CSV. Substitueix el model que estàs editant, així que copia'n abans l'enllaç si el vols conservar.
   import-open: Obre un fitxer
+  restore-text: "Aquest navegador ha desat el darrer model que vas editar aquí:"
+  restore-yes: Continua-hi
+  restore-no: Descarta'l
   import-done: "S'ha obert {file}."
   import-csv: Un fitxer CSV només desa els processos, les activitats i els noms de les fases, així que revisa la versió del PRM, l'ordre de les fases i els bucles.
   import-skipped: "El PRM {v} no té {ids}, així que s'han deixat fora."

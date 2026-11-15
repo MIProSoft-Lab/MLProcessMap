@@ -212,6 +212,9 @@ tailor:
   import: Import
   import-note: Open a lifecycle model exported from this page as JSON, YAML or CSV. It replaces the model you are editing, so copy its link first if you want to keep it.
   import-open: Open a file
+  restore-text: "This browser has kept the last model you edited here:"
+  restore-yes: Continue with it
+  restore-no: Discard it
   import-done: "Opened {file}."
   import-csv: A CSV file keeps only the processes, activities and phase names, so check the PRM version, the order of the phases and the loops.
   import-skipped: "PRM {v} has no {ids}, so they were left out."
