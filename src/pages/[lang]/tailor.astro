@@ -6,6 +6,8 @@ import '../../styles/tailor.css';
 import { versions, defaultVersion, getProcesses, getWorkProducts, lifecycleIds, getLifecycle, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { plain } from '../../lib/text';
+import { diagramKeys } from '../../lib/lifecycle-diagram';
+import { exportKeys } from '../../lib/tailor/export';
 import { useTranslations, href, type Locale, type UiKey } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
@@ -44,28 +46,26 @@ const data = {
   }),
 };
 
+// The strings of the page's script; the drawing and the exports list their own.
 const keys: UiKey[] = [
+  ...diagramKeys,
+  ...exportKeys,
   'tailor.selected',
   'tailor.allCovered',
   'tailor.copied',
   'tailor.copyLink',
   'tailor.rationale',
-  'tailor.excluded',
   'tailor.start-all',
   'tailor.start-none',
-  'tailor.project',
-  'tailor.version',
   'process.activities',
   'process.producedBy',
   'nav.lifecycles',
   'modal.details',
-  'tailor.phase-new',
   'tailor.phase-name',
   'tailor.phase-up',
   'tailor.phase-down',
   'tailor.phase-remove',
   'tailor.phase-description',
-  'tailor.phase-returnsTo',
   'tailor.phase-noReturn',
   'tailor.phase-returnNote',
   'tailor.phase-drop',
@@ -73,26 +73,13 @@ const keys: UiKey[] = [
   'tailor.phase-unassign',
   'tailor.phase-none',
   'tailor.phase-of',
-  'tailor.unassigned',
   'tailor.unassigned-none',
   'tailor.phases-summary',
-  'tailor.untitled',
   'tailor.import-done',
   'tailor.import-csv',
   'tailor.import-skipped',
   'tailor.import-version',
   'tailor.import-error',
-  'lc.iterative',
-  'lc.diagram',
-  'lc.diagramDesc',
-  'lc.legendRepeated',
-  'lc.legendLoop',
-  'lc.tipProcesses',
-  'lc.tipReturns',
-  'lc.tipReceives',
-  'origin.standards-and-literature',
-  'origin.standards-only',
-  'origin.decomposed',
 ];
 const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 ---
@@ -204,7 +191,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 <script>
   import { createProcessModal, openLinksInModal } from '../../lib/process-modal';
   import { diagramSvgs } from '../../lib/lifecycle-diagram';
-  import { escapeHtml as esc, format } from '../../lib/text';
+  import { translator } from '../../lib/client-strings';
+  import { escapeHtml as esc } from '../../lib/text';
   import * as model from '../../lib/tailor/model';
   import type { Data, Phase, Proc, State } from '../../lib/tailor/model';
   import * as exporter from '../../lib/tailor/export';
@@ -214,7 +202,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     data: Data;
     strings: Record<string, string>;
   };
-  const s = (k: string, vars: Record<string, string | number> = {}) => format(strings[k] ?? k, vars);
+  const s = translator(strings);
   const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
   const { phase, phasesOf, slug } = model;
 

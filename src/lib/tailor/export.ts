@@ -4,6 +4,9 @@
 import type { Translate } from '../lifecycle-diagram';
 import { phaseOf, slug, type Phase, type State, type Version } from './model';
 
+/** The interface strings the exports use. */
+export const exportKeys = ['tailor.untitled', 'tailor.phase-new', 'tailor.phase-returnsTo', 'tailor.unassigned', 'tailor.excluded', 'lc.iterative'];
+
 export interface ExportContext {
   state: State;
   /** The version of the model. */
