@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { parse } from 'yaml';
+import { lifecycleSchema } from '../content/schemas';
 import { format } from '../text';
 import { csv, json, lifecyclePhases, markdown, yaml } from './export';
 import { fromObject, parseCsv, readModel } from './import';
@@ -165,6 +167,20 @@ describe('exports', () => {
     const out = yaml({ ...model(), project: 'yes' }, s);
     expect(out).toContain('id: yes\nname: "yes"\n');
     expect(out).toContain('    returnsTo: build\n    returnNote: on drift\n');
+  });
+
+  it('write lifecycle YAML the site accepts when names look like numbers or dates', () => {
+    const names = ['2026', '42', '1e3', '0x1F', '1.5', '2026-11-15'];
+    for (const project of names) {
+      const state = model();
+      state.phases[0].name = project;
+      const file = lifecycleSchema.parse(parse(yaml({ ...state, project, description: project }, s)));
+      expect(file.name).toBe(project);
+      expect(file.description).toBe(project);
+      expect(file.phases[0].name).toBe(project);
+      expect(file.phases[1].returnsTo).toBe(file.phases[0].id);
+    }
+    expect(yaml({ ...model(), project: '3D vision' }, s)).toContain('id: 3d-vision\nname: 3D vision\n');
   });
 });
 
