@@ -98,6 +98,13 @@ describe('the model in the URL hash', () => {
     expect([...fromHash(data, 'v=v1&p=P01,P03,P99').selected]).toEqual(['P01']);
     expect(fromHash(data, 'v=v9').version).toBe('v2');
   });
+
+  it('ignores a rationale in the link that is not an object of texts', () => {
+    for (const r of ['null', '[]', '"text"', '42', '{broken']) {
+      expect(fromHash(data, `r=${encodeURIComponent(r)}`).rationale).toEqual({});
+    }
+    expect(fromHash(data, `r=${encodeURIComponent('{"P02":"not needed","P03":5}')}`).rationale).toEqual({ P02: 'not needed' });
+  });
 });
 
 describe('the phases', () => {

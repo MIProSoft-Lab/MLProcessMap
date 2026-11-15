@@ -123,7 +123,10 @@ export function fromHash(data: Data, hash: string): State {
   const selected = h.has('p') ? h.get('p')!.split(',').filter(Boolean) : lc ? lc.processes : all;
   let rationale: Record<string, string> = {};
   try {
-    rationale = JSON.parse(h.get('r') ?? '{}');
+    const r: unknown = JSON.parse(h.get('r') ?? '{}');
+    if (r && typeof r === 'object' && !Array.isArray(r)) {
+      rationale = Object.fromEntries(Object.entries(r).filter(([, text]) => typeof text === 'string'));
+    }
   } catch {}
   return {
     version: v.id,
