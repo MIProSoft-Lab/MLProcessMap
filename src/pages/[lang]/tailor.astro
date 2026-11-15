@@ -283,7 +283,41 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     return `<select class="phase-select" data-phase-of="${id}" aria-label="${esc(s('tailor.phase-of', { id }))}">${options}</select>`;
   }
 
+  /**
+   * Redrawing replaces every row, which would close the open lists and drop the
+   * keyboard focus. This notes both before a redraw and returns the way to put them back.
+   */
+  function rememberView() {
+    const rows = 'li.proc, li.phase-card';
+    const rowSel = (row: HTMLElement) =>
+      row.dataset.phase !== undefined ? `#phases [data-phase="${CSS.escape(row.dataset.phase)}"]` : `#processes [data-id="${CSS.escape(row.dataset.id!)}"]`;
+    const open = [...document.querySelectorAll<HTMLElement>('#processes details[open], #phases details[open]')].map((d) => rowSel(d.closest<HTMLElement>(rows)!));
+    const active = document.activeElement;
+    const row = active instanceof HTMLElement && (list.contains(active) || phaseList.contains(active)) ? active.closest<HTMLElement>(rows) : null;
+    // The focused control is found again by its tag and data attributes, e.g. input[data-proc="P01"].
+    const focused = row && {
+      row: rowSel(row),
+      el:
+        active!.tagName.toLowerCase() +
+        [...active!.attributes]
+          .filter((a) => a.name.startsWith('data-'))
+          .map((a) => `[${a.name}="${CSS.escape(a.value)}"]`)
+          .join(''),
+    };
+    return () => {
+      for (const sel of open) document.querySelector<HTMLDetailsElement>(`${sel} details`)?.setAttribute('open', '');
+      if (!focused) return;
+      // A control that is gone (a removed chip, a removed phase) hands the focus to its row, or to "Add phase".
+      const again =
+        document.querySelector<HTMLElement>(`${focused.row} ${focused.el}`) ??
+        document.querySelector<HTMLElement>(`${focused.row} :is(input, select, button:not(:disabled))`) ??
+        $('#add-phase');
+      again.focus();
+    };
+  }
+
   function renderList() {
+    const restoreView = rememberView();
     const v = version(state.version);
     list.innerHTML = v.processes
       .map((p) => {
@@ -308,6 +342,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       })
       .join('');
     renderPhases();
+    restoreView();
   }
 
   const chip = (id: string, from: string) => {
@@ -467,6 +502,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!id) return;
     state.selected.add(id);
     renderList();
+    // The button that was pressed is gone: move on to the next one, or to the process just added.
+    ($('#missing').querySelector<HTMLElement>('button') ?? list.querySelector<HTMLElement>(`[data-proc="${id}"]`))?.focus();
   });
 
   $<HTMLInputElement>('#project').addEventListener('input', (e) => {
@@ -582,7 +619,9 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       const j = i + Number(el.dataset.move);
       [state.phases[i], state.phases[j]] = [state.phases[j], state.phases[i]];
       renderList();
-      phaseList.querySelector<HTMLButtonElement>(`.phase-card[data-phase="${CSS.escape(p.id)}"] [data-move="${el.dataset.move}"]:not(:disabled)`)?.focus();
+      // At the top or the bottom the pressed arrow is disabled, so the other one takes the focus.
+      const card = `.phase-card[data-phase="${CSS.escape(p.id)}"]`;
+      (phaseList.querySelector<HTMLButtonElement>(`${card} [data-move="${el.dataset.move}"]:not(:disabled)`) ?? phaseList.querySelector<HTMLButtonElement>(`${card} [data-move]:not(:disabled)`))?.focus();
     } else if (el.hasAttribute('data-remove')) {
       state.phases.splice(i, 1);
       syncPhases();
