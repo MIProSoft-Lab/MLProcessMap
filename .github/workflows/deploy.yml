@@ -70,12 +70,16 @@ jobs:
         uses: actions/configure-pages@v5
       # The content is checked before each build, and the build fails on it
       # too, so a bad edit from the admin panel never reaches the published
-      # site. check:content lists every problem at once.
+      # site. check:content lists every problem at once. The type check and the
+      # tests run here as well, since fixes are pushed without a pull request.
+      # A failure in either edition stops the deploy of both.
       - name: Build the live edition
         working-directory: live
         run: |
           npm ci
           npm run check:content --if-present
+          if [ -d node_modules/@astrojs/check ]; then npm run check; fi
+          npm test --if-present
           npm run build
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
@@ -91,6 +95,8 @@ jobs:
         run: |
           npm ci
           npm run check:content --if-present
+          if [ -d node_modules/@astrojs/check ]; then npm run check; fi
+          npm test --if-present
           npm run build
           mv dist ../live/dist/thesis
         env:
