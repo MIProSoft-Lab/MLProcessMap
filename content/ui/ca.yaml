@@ -12,6 +12,8 @@ nav:
   version: Versió del PRM
   latest: Darrera
   skip: Vés al contingut
+  main: Principal
+  breadcrumb: Ruta de navegació
   theme-dark: Canvia al tema fosc
   theme-light: Canvia al tema clar
 home:
@@ -81,6 +83,7 @@ process:
   prmActivity: Activitat del PRM
   changes: Canvis en aquesta versió
   changesNote: Anotacions del taller d'experts i decisions preses.
+  contents: Contingut
   annotation: Anotació
   votes: Vots
   redVotes: vermells

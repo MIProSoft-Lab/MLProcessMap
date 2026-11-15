@@ -41,7 +41,7 @@ const changes = b?.data.changes ?? [];
 ---
 
 <Layout locale={locale} title={`${name} · ${from} → ${to}`} section="compare" translated={translated}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
+  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, 'compare', slug)}>{t('compare.title')} {from} → {to}</a> / {id}
   </nav>
   <h1><span class="pid">{id}</span> {name}</h1>

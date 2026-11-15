@@ -12,6 +12,8 @@ nav:
   version: Versión del PRM
   latest: Última
   skip: Ir al contenido
+  main: Principal
+  breadcrumb: Ruta de navegación
   theme-dark: Cambiar al tema oscuro
   theme-light: Cambiar al tema claro
 home:
@@ -81,6 +83,7 @@ process:
   prmActivity: Actividad del PRM
   changes: Cambios en esta versión
   changesNote: Anotaciones del taller de expertos y decisiones tomadas.
+  contents: Contenido
   annotation: Anotación
   votes: Votos
   redVotes: rojos

@@ -15,6 +15,8 @@ nav:
   version: PRM version
   latest: Latest
   skip: Skip to content
+  main: Main
+  breadcrumb: Breadcrumb
   theme-dark: Switch to dark theme
   theme-light: Switch to light theme
 home:
@@ -84,6 +86,7 @@ process:
   prmActivity: PRM activity
   changes: Changes in this version
   changesNote: Annotations from the expert workshop and the decisions taken.
+  contents: Contents
   annotation: Annotation
   votes: Votes
   redVotes: red

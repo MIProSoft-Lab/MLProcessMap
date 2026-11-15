@@ -18,7 +18,7 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
 ---
 
 <Layout locale={locale} title={l.name} section="lifecycles" translated={translated}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
+  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, 'lifecycles')}>{t('lc.title')}</a> / {l.name}
   </nav>
   <h1>{l.name}</h1>
