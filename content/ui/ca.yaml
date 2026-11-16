@@ -141,6 +141,8 @@ compare:
   added: Nou a la {version}
   removed: Eliminat a la {version}
   showUnchanged: Mostra les seccions sense canvis
+  unchangedSections: "Seccions sense canvis: {list}."
+  unchangedItems: "Elements sense canvis a les altres seccions: {n}."
 lc:
   title: Models de cicle de vida
   intro: El PRM defineix els processos d'un projecte de ML i deixa el seu ordre i repetició a un model de cicle de vida. Aquestes plantilles organitzen els processos d'una versió del PRM en fases.

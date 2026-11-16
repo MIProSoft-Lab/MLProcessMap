@@ -38,6 +38,12 @@ const sections: Section[] = [
   { key: 'activities', pairs: d.activities, label: (x: any) => x.id, text: (x: any) => `${x.title}. ${x.description}` },
 ];
 const changes = b?.data.changes ?? [];
+
+// What the page leaves out until "Show unchanged sections" is ticked: whole
+// sections without a change, and the unchanged entries of the other sections.
+const allSame = (s: Section) => s.pairs.every((p) => p.status === 'same');
+const unchangedSections = [...(d.purpose === 'same' ? [t('process.purpose')] : []), ...sections.filter(allSame).map((s) => t(`process.${s.key}`))];
+const unchangedItems = sections.filter((s) => !allSame(s)).reduce((n, s) => n + s.pairs.filter((p) => p.status === 'same').length, 0);
 ---
 
 <Layout locale={locale} title={`${name} · ${from} → ${to}`} section="compare" translated={translated}>
@@ -56,7 +62,19 @@ const changes = b?.data.changes ?? [];
     <span><del>{t('change.removed')}</del></span>
   </p>
 
-  <label class="show-same no-print small"><input type="checkbox" id="show-same" /> {t('compare.showUnchanged')}</label>
+  {
+    (unchangedSections.length > 0 || unchangedItems > 0) && (
+      <p class="unchanged no-print small">
+        <label class="show-same">
+          <input type="checkbox" id="show-same" /> {t('compare.showUnchanged')}
+        </label>
+        <span class="muted">
+          {unchangedSections.length > 0 && t('compare.unchangedSections', { list: unchangedSections.join(', ') })}{' '}
+          {unchangedItems > 0 && t('compare.unchangedItems', { n: unchangedItems })}
+        </span>
+      </p>
+    )
+  }
 
   <section class:list={['diff-section', { same: d.purpose === 'same' }]}>
     <h2>{t('process.purpose')}</h2>
@@ -90,9 +108,10 @@ const changes = b?.data.changes ?? [];
 </Layout>
 
 <script>
-  const box = document.querySelector<HTMLInputElement>('#show-same')!;
-  const apply = () => document.body.classList.toggle('show-same', box.checked);
-  box.addEventListener('change', apply);
+  // The box is left out when the two versions have nothing in common to show.
+  const box = document.querySelector<HTMLInputElement>('#show-same');
+  const apply = () => document.body.classList.toggle('show-same', !!box?.checked);
+  box?.addEventListener('change', apply);
   apply();
 </script>
 
@@ -108,12 +127,18 @@ const changes = b?.data.changes ?? [];
     gap: 12px;
   }
 
+  .unchanged {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    align-items: center;
+    margin: 8px 0;
+  }
+
   .show-same {
     display: inline-flex;
     gap: 6px;
     align-items: center;
-    margin: 8px 0;
-    color: var(--muted);
   }
 
   :global(body:not(.show-same)) .same {

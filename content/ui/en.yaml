@@ -144,6 +144,8 @@ compare:
   added: New in {version}
   removed: Removed in {version}
   showUnchanged: Show unchanged sections
+  unchangedSections: "Unchanged sections: {list}."
+  unchangedItems: "Unchanged items in the other sections: {n}."
 lc:
   title: Lifecycle models
   intro: The PRM defines the processes of an ML project and leaves their order and repetition to a lifecycle model. These templates arrange the processes of a PRM version into phases.

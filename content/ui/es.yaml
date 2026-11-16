@@ -141,6 +141,8 @@ compare:
   added: Nuevo en la {version}
   removed: Eliminado en la {version}
   showUnchanged: Mostrar las secciones sin cambios
+  unchangedSections: "Secciones sin cambios: {list}."
+  unchangedItems: "Elementos sin cambios en las demás secciones: {n}."
 lc:
   title: Modelos de ciclo de vida
   intro: El PRM define los procesos de un proyecto de ML y deja su orden y repetición a un modelo de ciclo de vida. Estas plantillas organizan los procesos de una versión del PRM en fases.
