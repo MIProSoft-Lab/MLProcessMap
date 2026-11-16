@@ -207,6 +207,9 @@ tailor:
   phase-noReturn: No loop
   phase-returnNote: When it returns
   phase-drop: Drag processes here
+  phase-drop-touch: Add processes with the menu below
+  bar-selected: "{n} of {total} processes"
+  bar-missing: "Inputs without a producer: {m}"
   phase-addProcess: + Add process
   phase-unassign: Remove {id} from the phase
   phase-none: No phase

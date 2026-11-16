@@ -156,4 +156,12 @@ const changes = b?.data.changes ?? [];
   .text {
     line-height: 1.65;
   }
+
+  /* On a narrow screen the label goes above the text, which takes the full width. */
+  @media (max-width: 560px) {
+    .pairs li {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+  }
 </style>

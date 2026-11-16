@@ -507,4 +507,43 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
   .nowrap {
     white-space: nowrap;
   }
+
+  /* On a narrow screen a version is a block: its name and description, then the count and the status. */
+  @media (max-width: 600px) {
+    .revisions,
+    .revisions tbody {
+      display: block;
+    }
+
+    .revisions tr {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 6px 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .revisions tr:last-child {
+      border-bottom: 0;
+    }
+
+    .revisions td {
+      padding: 0;
+      border: 0;
+    }
+
+    .revisions .rev {
+      width: auto;
+      align-self: start;
+    }
+
+    .revisions td:nth-child(2) {
+      grid-column: 2 / -1;
+    }
+
+    .revisions td:nth-child(3) {
+      grid-column: 2;
+    }
+  }
 </style>

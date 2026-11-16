@@ -69,6 +69,9 @@ const keys: UiKey[] = [
   'tailor.phase-noReturn',
   'tailor.phase-returnNote',
   'tailor.phase-drop',
+  'tailor.phase-drop-touch',
+  'tailor.bar-selected',
+  'tailor.bar-missing',
   'tailor.phase-addProcess',
   'tailor.phase-unassign',
   'tailor.phase-none',
@@ -145,7 +148,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       </div>
     </section>
 
-    <aside class="side no-print">
+    <aside class="side no-print" id="side">
       <div class="card sticky">
         <p id="summary" class="summary"></p>
         <p id="phase-summary" class="small muted" hidden></p>
@@ -180,6 +183,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       <LifecycleDiagram locale={locale} />
     </div>
   </section>
+
+  <a id="mobile-bar" class="mobile-bar no-print" href="#side">
+    <span id="mobile-summary"></span>
+    <span class="mobile-bar-go">{t('tailor.export')} ↓</span>
+  </a>
 
   <div id="print-view" class="print-only"></div>
 
@@ -260,6 +268,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   const procOf = (id: string) => version(state.version).processes.find((p) => p.id === id);
   const phaseOf = (id: string) => model.phaseOf(state, id);
   const unassigned = () => model.unassigned(state, version(state.version));
+  // A touch screen cannot drag the process chips, so an empty phase points at the menu below it.
+  const touch = matchMedia('(pointer: coarse)').matches;
   const phaseLabel = (p: Phase, i: number) => `${String(i + 1).padStart(2, '0')} ${p.name || s('tailor.phase-new', { n: i + 1 })}`;
 
   function phaseSelect(id: string) {
@@ -349,11 +359,19 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         const others = state.phases
           .map((o, k) => (o.id === p.id ? '' : `<option value="${esc(o.id)}" ${o.id === p.returnsTo ? 'selected' : ''}>${esc(phaseLabel(o, k))}</option>`))
           .join('');
-        const add = free.length
-          ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${free
-              .map((f) => `<option value="${f.id}">${f.id} ${esc(f.name)}</option>`)
-              .join('')}</select>`
-          : '';
+        // The menu adds a process without a phase, or moves one here from another
+        // phase, which is the way to arrange them without dragging.
+        const option = (id: string) => `<option value="${id}">${id} ${esc(procOf(id)?.name ?? '')}</option>`;
+        const group = (label: string, ids: string[]) => (ids.length ? `<optgroup label="${esc(label)}">${ids.map(option).join('')}</optgroup>` : '');
+        const choices =
+          group(
+            s('tailor.phase-none'),
+            free.map((f) => f.id),
+          ) +
+          state.phases
+            .map((o, k) => (o.id === p.id ? '' : group(phaseLabel(o, k), o.processes)))
+            .join('');
+        const add = choices ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${choices}</select>` : '';
         return `<li class="phase-card" data-phase="${esc(p.id)}">
           <div class="pc-head">
             <span class="pc-step">${String(i + 1).padStart(2, '0')}</span>
@@ -364,7 +382,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
               <button type="button" data-remove aria-label="${esc(s('tailor.phase-remove'))}" title="${esc(s('tailor.phase-remove'))}">✕</button>
             </span>
           </div>
-          <ul class="pc-procs dropzone" data-drop="${esc(p.id)}">${p.processes.map((id) => chip(id, p.id)).join('') || `<li class="pc-empty small muted">${esc(s('tailor.phase-drop'))}</li>`}</ul>
+          <ul class="pc-procs dropzone" data-drop="${esc(p.id)}">${p.processes.map((id) => chip(id, p.id)).join('') || `<li class="pc-empty small muted">${esc(touch && add ? s('tailor.phase-drop-touch') : s('tailor.phase-drop'))}</li>`}</ul>
           ${add}
           <div class="pc-options small">
             <label><input type="checkbox" data-field="iterative" ${p.iterative ? 'checked' : ''}> ↻ ${esc(s('lc.iterative'))}</label>
@@ -422,6 +440,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       if (el) el.textContent = `${activeActivities(p).length}/${p.activities.length}`;
     }
     const missing = missingInputs();
+    $('#mobile-summary').textContent =
+      s('tailor.bar-selected', { n: state.selected.size, total: v.processes.length }) + (missing.size ? ` · ${s('tailor.bar-missing', { m: missing.size })}` : '');
     $('#missing').innerHTML = missing.size
       ? [...missing]
           .map(([wid, users]) => {
@@ -592,7 +612,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!p) return;
     if (el.dataset.field === 'iterative') p.iterative = el.checked;
     else if (el.dataset.field === 'returnsTo') p.returnsTo = el.value;
-    else if (el.dataset.addTo && el.value) insertInOrder(p, el.value);
+    else if (el.dataset.addTo && el.value) {
+      for (const o of state.phases) if (o !== p) o.processes = o.processes.filter((x) => x !== el.value);
+      insertInOrder(p, el.value);
+    }
     else return;
     renderList();
   });
@@ -818,6 +841,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     modal.open(state.version, id, p?.name);
   });
   openLinksInModal(figure, modal);
+
+  // The bar at the bottom of a narrow screen leads to the summary and the
+  // exports, and steps aside once they are in view.
+  new IntersectionObserver(([entry]) => ($('#mobile-bar').hidden = entry.isIntersecting)).observe($('#side'));
 
   // --- Start ------------------------------------------------------------
 

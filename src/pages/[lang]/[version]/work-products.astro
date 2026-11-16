@@ -49,7 +49,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
               <td>
                 <span class="badge">{t(`wp.type-${w.type}`)}</span>
               </td>
-              <td>
+              <td data-label={t('wp.producers')}>
                 {w.producers.length ? (
                   <span class="chips">
                     {w.producers.map((l) => (
@@ -63,7 +63,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
                   <span class="muted small">{t('process.external')}</span>
                 )}
               </td>
-              <td>
+              <td data-label={t('wp.consumers')}>
                 {w.consumers.length ? (
                   <span class="chips">
                     {w.consumers.map((l) => (
@@ -155,5 +155,54 @@ const types = ['information-item', 'artifact', 'record'] as const;
 
   .wp-table .chip {
     font-size: 0.8rem;
+  }
+
+  /* On a narrow screen each work product is a card: name and type, then who
+     produces it and who uses it, each under its own label. */
+  @media (max-width: 700px) {
+    .wp-table,
+    .wp-table tbody,
+    .wp-table td {
+      display: block;
+    }
+
+    .wp-table thead {
+      display: none;
+    }
+
+    .wp-table tr:not([hidden]) {
+      display: block;
+      padding: 10px 12px 12px;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .wp-table tr:last-child {
+      border-bottom: 0;
+    }
+
+    .wp-table td {
+      padding: 0;
+      border: 0;
+    }
+
+    .wp-table td:first-child {
+      min-width: 0;
+      font-size: 1rem;
+    }
+
+    .wp-table td + td {
+      margin-top: 6px;
+    }
+
+    .wp-table td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      margin: 4px 0;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
   }
 </style>

@@ -58,9 +58,37 @@
   }
 }
 
+/* On a narrow screen the contents are a bar that stays at the top and scrolls sideways. */
 @media (max-width: 999px) {
+  .process-page .layout {
+    gap: 8px;
+  }
+
   .process-page .toc {
-    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: 0 -16px;
+    padding: 0 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .process-page .toc ol {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-left: 0;
+  }
+
+  .process-page .toc a {
+    padding: 10px 16px 10px 0;
+    white-space: nowrap;
+  }
+
+  /* Leave room for the bar above what a link scrolls to. */
+  html:has(.process-page) {
+    scroll-padding-top: 30px;
   }
 }
 

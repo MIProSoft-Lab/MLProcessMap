@@ -515,6 +515,22 @@ code,
   scrollbar-width: none;
 }
 
+/* On a narrow screen the menu scrolls sideways: it fades out on the side that has more. */
+.main-nav ul[data-fade='e'] {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
+}
+
+.main-nav ul[data-fade='s'] {
+  -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent);
+}
+
+.main-nav ul[data-fade='se'] {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+}
+
 .main-nav a {
   display: block;
   padding: 11px 14px 9px;

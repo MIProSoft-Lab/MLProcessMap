@@ -241,6 +241,24 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
         system.addEventListener('change', sync);
         sync();
       })();
+      // On a narrow screen the main menu scrolls sideways: bring the current
+      // section into view and fade the side that has more items.
+      (() => {
+        const list = document.querySelector('.main-nav ul');
+        const current = list.querySelector('[aria-current="page"]');
+        if (current) {
+          const item = current.getBoundingClientRect();
+          const box = list.getBoundingClientRect();
+          list.scrollLeft += item.left - box.left - (box.width - item.width) / 2;
+        }
+        const sync = () => {
+          const max = list.scrollWidth - list.clientWidth;
+          list.dataset.fade = max <= 1 ? '' : (list.scrollLeft > 1 ? 's' : '') + (list.scrollLeft < max - 1 ? 'e' : '');
+        };
+        list.addEventListener('scroll', sync, { passive: true });
+        addEventListener('resize', sync);
+        sync();
+      })();
       // Close the header menus on a click outside them or on Escape.
       (() => {
         const menus = [...document.querySelectorAll('.site-header details.menu')];

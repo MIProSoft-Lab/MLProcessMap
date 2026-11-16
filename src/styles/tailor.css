@@ -326,6 +326,9 @@
 
 .tailor-page .phase-list .pc-add {
   justify-self: start;
+  /* Its longest option must not widen the card. */
+  max-width: 100%;
+  min-width: 0;
   padding: 3px 8px;
   font-size: 0.85rem;
 }
@@ -473,4 +476,39 @@
 
 .tailor-page #preview .lc-diagram {
   margin-top: 8px;
+}
+
+/* On a narrow screen the summary and the exports come after the whole list, so
+   a bar at the bottom shows the count and leads to them. */
+.tailor-page .mobile-bar {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .tailor-page .mobile-bar:not([hidden]) {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-top: 1px solid var(--ink);
+    color: var(--text);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .tailor-page .mobile-bar-go {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .tailor-page #side {
+    scroll-margin-top: 12px;
+  }
 }

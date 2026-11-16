@@ -204,6 +204,9 @@ tailor:
   phase-noReturn: Sin bucle
   phase-returnNote: Cuándo vuelve
   phase-drop: Arrastra procesos aquí
+  phase-drop-touch: Añade procesos con el menú de abajo
+  bar-selected: "{n} de {total} procesos"
+  bar-missing: "Entradas sin productor: {m}"
   phase-addProcess: + Añadir proceso
   phase-unassign: Quitar {id} de la fase
   phase-none: Sin fase

@@ -204,6 +204,9 @@ tailor:
   phase-noReturn: Sense bucle
   phase-returnNote: Quan torna
   phase-drop: Arrossega processos aquí
+  phase-drop-touch: Afegeix processos amb el menú de sota
+  bar-selected: "{n} de {total} processos"
+  bar-missing: "Entrades sense productor: {m}"
   phase-addProcess: + Afegeix un procés
   phase-unassign: Treu {id} de la fase
   phase-none: Sense fase
