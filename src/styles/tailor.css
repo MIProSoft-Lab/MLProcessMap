@@ -562,3 +562,73 @@
     bottom: 60px;
   }
 }
+
+/* The "Start from" menu, a button as tall as the fields beside it. */
+.tailor-page .start-menu {
+  align-self: end;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.tailor-page .start-menu summary {
+  height: 2.5rem;
+  padding: 0 14px;
+  background: var(--surface);
+}
+
+.tailor-page .start-menu ul {
+  min-width: 16rem;
+  max-width: calc(100vw - 32px);
+}
+
+.tailor-page .start-menu li button {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-size: inherit;
+}
+
+.tailor-page .start-menu li button:hover,
+.tailor-page .start-menu li button:focus-visible {
+  background: var(--surface-2);
+  box-shadow: none;
+}
+
+.tailor-page .start-menu .menu-group {
+  margin-top: 4px;
+  padding: 6px 12px 2px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tailor-page .start-menu .menu-foot {
+  margin-top: 4px;
+  padding: 6px 12px 4px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* On a narrow screen the menu opens from the left edge of its button. */
+@media (max-width: 700px) {
+  .tailor-page .start-menu ul {
+    right: auto;
+    left: 0;
+  }
+}
+
+.tailor-page .next-step {
+  margin: 16px 0 0;
+}
+
+.tailor-page .side .count {
+  font-weight: 400;
+  color: var(--muted);
+}

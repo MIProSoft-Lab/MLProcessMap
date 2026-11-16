@@ -176,6 +176,11 @@ tailor:
   start: Start from
   start-all: All processes
   start-none: No processes
+  start-note: "Replaces the model you are editing."
+  next-phases: "Next: arrange into phases"
+  share: Share
+  shareNote: "The link holds the whole model, so anyone who opens it sees it as it is now."
+  yamlDisabled: "Add a phase to export the lifecycle model as YAML."
   selected: "{n} of {total} processes, {a} activities in the model"
   missingInputs: Inputs without a producer in the model
   missingInputsNote: These inputs of the processes in the model are produced by processes you have left out. Make sure your project gets them from somewhere else.

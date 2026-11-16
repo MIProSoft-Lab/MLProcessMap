@@ -173,6 +173,11 @@ tailor:
   start: Comença des de
   start-all: Tots els processos
   start-none: Cap procés
+  start-note: "Substitueix el model que estàs editant."
+  next-phases: "Següent: organitza en fases"
+  share: Comparteix
+  shareNote: "L'enllaç conté tot el model, de manera que qui l'obri el veurà tal com és ara."
+  yamlDisabled: "Afegeix una fase per exportar el model de cicle de vida en YAML."
   selected: "{n} de {total} processos, {a} activitats al model"
   missingInputs: Entrades sense productor al model
   missingInputsNote: Aquestes entrades dels processos del model les produeixen processos que has deixat fora. Assegura't que el teu projecte les obté d'un altre lloc.

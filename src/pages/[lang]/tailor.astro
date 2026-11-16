@@ -57,6 +57,7 @@ const keys: UiKey[] = [
   'tailor.rationale',
   'tailor.start-all',
   'tailor.start-none',
+  'tailor.start-note',
   'process.activities',
   'process.producedBy',
   'nav.lifecycles',
@@ -113,10 +114,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         {versions.map((v) => <option value={v.id}>{v.id} · {pick(v.title, locale)}</option>)}
       </select>
     </label>
-    <label>
-      <span>{t('tailor.start')}</span>
-      <select id="start"></select>
-    </label>
+    <details class="menu start-menu" id="start">
+      <summary>{t('tailor.start')}…</summary>
+      <ul id="start-list"></ul>
+    </details>
   </div>
 
   <div class="layout">
@@ -136,6 +137,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
           <button type="button" id="none">{t('tailor.selectNone')}</button>
         </div>
         <ol id="processes" class="processes"></ol>
+        <p class="next-step"><button type="button" id="next-phases" class="primary button">{t('tailor.next-phases')} →</button></p>
       </div>
 
       <div id="panel-phases" role="tabpanel" aria-labelledby="tab-phases" hidden>
@@ -157,16 +159,25 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       <div class="card sticky">
         <p id="summary" class="summary"></p>
         <p id="phase-summary" class="small muted" hidden></p>
+        <h2>
+          <span>{t('tailor.missingInputs')} <span id="missing-count" class="count"></span></span>
+        </h2>
+        <p id="missing-note" class="small muted" hidden>{t('tailor.missingInputsNote')}</p>
+        <ul id="missing" class="missing small"></ul>
+        <h2>{t('tailor.share')}</h2>
+        <p class="small muted">{t('tailor.shareNote')}</p>
+        <div class="exports">
+          <button type="button" id="copy" class="primary button">{t('tailor.copyLink')}</button>
+        </div>
         <h2>{t('tailor.export')}</h2>
         <div class="exports">
           <button type="button" data-export="md">{t('tailor.markdown')}</button>
           <button type="button" data-export="csv">{t('tailor.csv')}</button>
           <button type="button" data-export="json">{t('tailor.json')}</button>
+          <button type="button" data-export="yaml" id="export-yaml" aria-describedby="yaml-note">{t('tailor.yaml')}</button>
           <button type="button" id="print">{t('tailor.print')}</button>
-          <button type="button" data-export="yaml" id="export-yaml">{t('tailor.yaml')}</button>
-          <button type="button" id="copy" class="primary button">{t('tailor.copyLink')}</button>
         </div>
-        <p class="small muted">{t('tailor.yamlNote')}</p>
+        <p id="yaml-note" class="small muted" data-ready={t('tailor.yamlNote')} data-disabled={t('tailor.yamlDisabled')}></p>
         <h2>{t('tailor.import')}</h2>
         <p class="small muted">{t('tailor.import-note')}</p>
         <div class="exports">
@@ -174,9 +185,6 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
           <input type="file" id="import-file" accept=".json,.yaml,.yml,.csv,application/json,application/yaml,text/csv" hidden />
         </div>
         <p id="import-status" class="small" role="status" hidden></p>
-        <h2>{t('tailor.missingInputs')}</h2>
-        <p class="small muted">{t('tailor.missingInputsNote')}</p>
-        <ul id="missing" class="missing small"></ul>
       </div>
     </aside>
   </div>
@@ -478,11 +486,15 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     phaseSummary.hidden = !state.phases.length;
     phaseSummary.textContent = s('tailor.phases-summary', { n: state.phases.length, u: unassigned().length });
     $<HTMLButtonElement>('#export-yaml').disabled = !state.phases.length;
+    const yamlNote = $('#yaml-note');
+    yamlNote.textContent = state.phases.length ? yamlNote.dataset.ready! : yamlNote.dataset.disabled!;
     for (const p of v.processes) {
       const el = list.querySelector(`[data-count="${p.id}"]`);
       if (el) el.textContent = `${activeActivities(p).length}/${p.activities.length}`;
     }
     const missing = missingInputs();
+    $('#missing-count').textContent = missing.size ? `(${missing.size})` : '';
+    $('#missing-note').hidden = !missing.size;
     $('#mobile-summary').textContent =
       s('tailor.bar-selected', { n: state.selected.size, total: v.processes.length }) + (missing.size ? ` · ${s('tailor.bar-missing', { m: missing.size })}` : '');
     $('#missing').innerHTML = missing.size
@@ -501,9 +513,12 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   function renderStartOptions() {
     const lcs = data.lifecycles.filter((l) => l.version === state.version);
-    $<HTMLSelectElement>('#start').innerHTML =
-      `<option value="">—</option><option value="all">${s('tailor.start-all')}</option><option value="none">${s('tailor.start-none')}</option>` +
-      (lcs.length ? `<optgroup label="${esc(s('nav.lifecycles'))}">${lcs.map((l) => `<option value="lc:${l.id}">${esc(l.name)}</option>`).join('')}</optgroup>` : '');
+    const item = (value: string, label: string) => `<li><button type="button" data-start="${esc(value)}">${esc(label)}</button></li>`;
+    $('#start-list').innerHTML =
+      item('all', s('tailor.start-all')) +
+      item('none', s('tailor.start-none')) +
+      (lcs.length ? `<li class="menu-group">${esc(s('nav.lifecycles'))}</li>${lcs.map((l) => item(`lc:${l.id}`, l.name)).join('')}` : '') +
+      `<li class="menu-foot">${esc(s('tailor.start-note'))}</li>`;
   }
 
   function showTab(tab: State['tab'], focus = false) {
@@ -575,8 +590,22 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     offerUndo(before, s('tailor.undo-version', { v: v.id }));
   });
 
-  $<HTMLSelectElement>('#start').addEventListener('change', (e) => {
-    const value = (e.target as HTMLSelectElement).value;
+  // The "Start from" menu: each item replaces the selection, and a template the phases too.
+  const startMenu = $<HTMLDetailsElement>('#start');
+  const closeStart = (focus = false) => {
+    startMenu.open = false;
+    if (focus) startMenu.querySelector('summary')!.focus();
+  };
+  document.addEventListener('click', (e) => {
+    if (startMenu.open && !startMenu.contains(e.target as Node)) closeStart();
+  });
+  startMenu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && startMenu.open) closeStart(true);
+  });
+
+  $('#start-list').addEventListener('click', (e) => {
+    const value = (e.target as HTMLElement).closest<HTMLElement>('[data-start]')?.dataset.start;
+    if (!value) return;
     const v = version(state.version);
     const before = snapshot();
     let message = value === 'all' ? s('tailor.undo-all') : s('tailor.undo-none');
@@ -594,9 +623,9 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     }
     state.excluded = new Set();
     syncPhases();
-    (e.target as HTMLSelectElement).value = '';
+    closeStart(true);
     renderList();
-    if (value) offerUndo(before, message);
+    offerUndo(before, message);
   });
 
   $('#all').addEventListener('click', () => {
@@ -622,6 +651,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       e.preventDefault();
       showTab(state.tab === 'processes' ? 'phases' : 'processes', true);
     });
+  });
+
+  $('#next-phases').addEventListener('click', () => {
+    showTab('phases', true);
+    $('#tab-phases').scrollIntoView({ block: 'start' });
   });
 
   // --- Events: phases -----------------------------------------------------
