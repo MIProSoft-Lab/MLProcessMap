@@ -4,7 +4,7 @@ origin: decomposed
 name: Data Source Identification Process
 purpose: >-
   The purpose of the *Data Source Identification Process* is to discover and document candidate datasets
-  from both internal and external repositories to establish the foundation for Machine Learning model.
+  from both internal and external repositories to establish the foundation for the Machine Learning model.
   It extracts the data specifications from the data requirements, and checks discovered data sources for
   any licensing, legal, or ethical implications before any data collection or ingestion takes place.
 outcomes:
@@ -53,7 +53,7 @@ activities:
     fundamental data properties, such as target variables, feature domains, expected schemas, volume boundaries,
     and temporal or geographic parameters, to focus collection efforts on relevant datasets. State the
     distribution the data must exhibit so that every case the system is expected to distinguish is represented
-    in sufficient quantity, and agree the admissible ranges with a domain expert rather than inferring
+    in sufficient quantity, and agree on the admissible ranges with a domain expert rather than inferring
     them from whatever sample is available.
   primaryStudies:
   - P10
