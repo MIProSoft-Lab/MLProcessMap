@@ -406,7 +406,7 @@ def parse_bib(path, wanted):
             fields.setdefault(f.group(1).lower(), to_text(val.replace("{", "").replace("}", "")))
         entry = {
             "key": key,
-            "authors": fields.get("author", ""),
+            "authors": plain_names(fields.get("author", "")),
             "title": fields.get("title", ""),
             "year": fields.get("year") or fields.get("date", "")[:4],
         }
@@ -415,6 +415,18 @@ def parse_bib(path, wanted):
                 entry["venue" if f in ("journaltitle", "journal", "booktitle") else f] = fields[f]
         entries[key] = entry
     return [entries[k] for k in sorted(entries)]
+
+
+def plain_names(authors):
+    """biblatex extended names ("family=Deursen, given=Arie, prefix=van, ...") as "van Deursen, Arie"."""
+    out = []
+    for name in re.split(r"\s+and\s+", authors):
+        parts = dict(p.strip().split("=", 1) for p in name.split(",") if "=" in p)
+        if "family" in parts:
+            family = f'{parts["prefix"]} {parts["family"]}' if parts.get("prefix") else parts["family"]
+            name = f'{family}, {parts["given"]}' if parts.get("given") else family
+        out.append(name.strip())
+    return " and ".join(out)
 
 
 # --- Output --------------------------------------------------------------

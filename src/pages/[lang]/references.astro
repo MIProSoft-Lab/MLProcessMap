@@ -44,7 +44,7 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
             <span class="study-id">{s.id}</span>
             <div>
               {url ? <a href={url}>{s.title}</a> : <span>{s.title}</span>} <span class="muted">({s.year})</span>
-              {ref && <div class="small muted" set:html={inline(fullCite(ref))} />}
+              {ref && <div class="small muted" set:html={inline(fullCite(ref, { title: false }))} />}
               <Cited locale={locale} items={citedBy.get(s.id)} />
             </div>
           </li>

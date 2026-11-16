@@ -179,7 +179,7 @@ references:
   url: https://dl.acm.org/doi/10.1145/2523813
 - key: haakman2021-P11
   authors: >-
-    Haakman, Mark and Cruz, Luís and Huijgens, Hennie and family=Deursen, given=Arie, prefix=van, useprefix=true
+    Haakman, Mark and Cruz, Luís and Huijgens, Hennie and van Deursen, Arie
   title: AI Lifecycle Models Need to Be Revised
   year: '2021'
   venue: Empirical Software Engineering
@@ -327,11 +327,11 @@ references:
   doi: 10.48550/arXiv.2501.17834
   url: http://arxiv.org/abs/2501.17834
 - key: polyzotis2018-P17
-  authors: Polyzotis, Neoklis and Roy, Sudip and Euijong, WhangSteven and Zinkevich, Martin
+  authors: Polyzotis, Neoklis and Roy, Sudip and Whang, Steven Euijong and Zinkevich, Martin
   title: Data Lifecycle Challenges in Production Machine Learning
   year: '2018'
   venue: ACM SIGMOD Record
-  publisher: ACMPUB27New York, NY, USA
+  publisher: Association for Computing Machinery
   doi: 10.1145/3299887.3299891
   url: https://dl.acm.org/doi/10.1145/3299887.3299891
 - key: prasad2022-P7

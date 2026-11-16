@@ -14,8 +14,43 @@ export function shortCite(r: Reference | undefined, key = '') {
   return r.year ? `${who}, ${r.year}` : who;
 }
 
-export function fullCite(r: Reference) {
-  const parts = [r.authors, r.year && `(${r.year})`, r.title && `${r.title}.`, r.venue && `*${r.venue}*.`, r.publisher && `${r.publisher}.`];
+/** "Ana" → "A.", "Kai-Uwe" → "K.-U.", "Marco A.S." → "M. A. S.", particles such as "de" kept. */
+function initials(given: string) {
+  return given
+    .split(/[\s.]+/)
+    .filter(Boolean)
+    .map((w) => (/^\p{Ll}/u.test(w) ? w : w.split('-').map((p) => `${p[0]}.`).join('-')))
+    .join(' ');
+}
+
+/** "Surname, Given and Other, Name" → "Surname, G., & Other, N."; names without a comma, such as organizations, kept. */
+export function formatAuthors(authors: string) {
+  const names = authors
+    .split(/\s+and\s+/)
+    .map((a) => a.trim())
+    .filter(Boolean)
+    .map((a) => {
+      const comma = a.indexOf(',');
+      if (comma < 0) return a;
+      const given = initials(a.slice(comma + 1));
+      return given ? `${a.slice(0, comma).trim()}, ${given}` : a.slice(0, comma).trim();
+    });
+  if (names.length < 2) return names.join('');
+  if (names.length === 2) return `${names[0]}, & ${names[1]}`;
+  return `${names.slice(0, -1).join(', ')}, & ${names[names.length - 1]}`;
+}
+
+/** The text followed by a full stop, unless it already ends in a stop, question or exclamation mark. */
+const sentence = (s: string) => (/[.?!]$/.test(s) ? s : `${s}.`);
+
+/**
+ * "Authors (Year). Title. *Venue*. Publisher." Without title and year, for a
+ * listing that shows them on its own.
+ */
+export function fullCite(r: Reference, { title = true } = {}) {
+  const authors = r.authors && formatAuthors(r.authors);
+  const head = title ? [authors, r.year && `(${r.year})`].filter(Boolean).join(' ') : authors;
+  const parts = [head && sentence(head), title && r.title && sentence(r.title), r.venue && (/\.$/.test(r.venue) ? `*${r.venue}*` : `*${r.venue}*.`), r.publisher && sentence(r.publisher)];
   return parts.filter(Boolean).join(' ');
 }
 

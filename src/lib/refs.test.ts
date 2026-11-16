@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Reference } from './content/schemas';
-import { fullCite, referenceUrl, shortCite } from './refs';
+import { formatAuthors, fullCite, referenceUrl, shortCite } from './refs';
 
 const ref = (r: Partial<Reference>): Reference => ({ key: 'k', authors: '', title: '', year: '', ...r });
 
@@ -27,8 +27,32 @@ describe('shortCite', () => {
 
 describe('fullCite', () => {
   it('joins the parts that are present', () => {
-    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests', publisher: 'ACM' }))).toBe('Khan, Arif (2024) A study. *Journal of Tests*. ACM.');
+    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests', publisher: 'ACM' }))).toBe('Khan, A. (2024). A study. *Journal of Tests*. ACM.');
     expect(fullCite(ref({ title: 'A study' }))).toBe('A study.');
+  });
+
+  it('adds no second full stop after an abbreviation or a question', () => {
+    expect(fullCite(ref({ title: 'Is it important?', venue: 'ACM Comput. Surv.', publisher: 'Springer Inc.' }))).toBe('Is it important? *ACM Comput. Surv.* Springer Inc.');
+  });
+
+  it('leaves out the title and year when asked', () => {
+    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests' }), { title: false })).toBe('Khan, A. *Journal of Tests*.');
+  });
+});
+
+describe('formatAuthors', () => {
+  it('writes initials and joins the last author with an ampersand', () => {
+    expect(formatAuthors('Khan, Arif')).toBe('Khan, A.');
+    expect(formatAuthors('Khan, Arif and Lee, Min')).toBe('Khan, A., & Lee, M.');
+    expect(formatAuthors('Khan, Arif and Lee, Min and Ruiz, Ana')).toBe('Khan, A., Lee, M., & Ruiz, A.');
+  });
+
+  it('handles hyphens, abbreviations, particles and organizations', () => {
+    expect(formatAuthors('Schlegel, Kai-Uwe')).toBe('Schlegel, K.-U.');
+    expect(formatAuthors('Netto, Marco A.S.')).toBe('Netto, M. A. S.');
+    expect(formatAuthors('Nascimento, Elizamary de Souza')).toBe('Nascimento, E. de S.');
+    expect(formatAuthors('van Deursen, Arie')).toBe('van Deursen, A.');
+    expect(formatAuthors('ISO/IEC 5338')).toBe('ISO/IEC 5338');
   });
 });
 
