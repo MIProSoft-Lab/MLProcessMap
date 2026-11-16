@@ -58,6 +58,9 @@ origin:
 map:
   title: Mapa de processos
   search: Cerca processos, resultats i activitats
+  matches: "{n} de {total} processos coincideixen"
+  inOutcome: "Resultat {id}"
+  legendHelp: Què signifiquen els colors
   noResults: Cap procés no coincideix amb la cerca.
   legend: Origen
   activities: activitats
@@ -120,7 +123,7 @@ wp:
   type-record: Registre
   producers: Produït per
   consumers: Emprat per
-  filter: Filtra els productes de treball
+  filter: Filtra per producte de treball o procés
   noResults: Cap producte de treball coincideix amb el filtre.
   all: Tots
 compare:

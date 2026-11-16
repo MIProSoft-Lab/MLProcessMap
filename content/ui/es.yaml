@@ -58,6 +58,9 @@ origin:
 map:
   title: Mapa de procesos
   search: Buscar procesos, resultados y actividades
+  matches: "{n} de {total} procesos coinciden"
+  inOutcome: "Resultado {id}"
+  legendHelp: Qué significan los colores
   noResults: Ningún proceso coincide con la búsqueda.
   legend: Origen
   activities: actividades
@@ -120,7 +123,7 @@ wp:
   type-record: Registro
   producers: Producido por
   consumers: Usado por
-  filter: Filtrar productos de trabajo
+  filter: Filtrar por producto de trabajo o proceso
   noResults: Ningún producto de trabajo coincide con el filtro.
   all: Todos
 compare:

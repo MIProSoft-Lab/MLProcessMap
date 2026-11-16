@@ -61,6 +61,9 @@ origin:
 map:
   title: Process map
   search: Search processes, outcomes and activities
+  matches: "{n} of {total} processes match"
+  inOutcome: "Outcome {id}"
+  legendHelp: What the colours mean
   noResults: No process matches your search.
   legend: Origin
   activities: activities
@@ -123,7 +126,7 @@ wp:
   type-record: Record
   producers: Produced by
   consumers: Used by
-  filter: Filter work products
+  filter: Filter by work product or process
   noResults: No work product matches your filter.
   all: All
 compare:

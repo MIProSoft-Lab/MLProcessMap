@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import { getVersion, getProcess, pick, versions } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
-import { plain, searchKey } from '../../../lib/text';
+import { plain } from '../../../lib/text';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
@@ -12,15 +12,23 @@ const { version } = Astro.params as { version: string };
 const t = useTranslations(locale);
 const v = getVersion(version);
 
+// What the search looks through in each process: its name, then every other
+// part with the label shown next to a match found there.
 const tile = (id: string) => {
   const { data: p, translated } = getProcess(version, id, locale);
-  const search = searchKey([p.name, p.purpose, ...p.outcomes.map((o) => o.text), ...p.activities.map((a) => `${a.title} ${a.description}`)].map(plain).join(' '));
-  return { p, translated, search };
+  const fields = [
+    ['', p.name],
+    [t('process.purpose'), p.purpose],
+    ...p.outcomes.map((o) => [t('map.inOutcome', { id: o.id }), o.text]),
+    ...p.activities.map((a) => [a.id, `${a.title}. ${a.description}`]),
+  ].map(([label, text]) => [label, plain(text)]);
+  return { p, translated, fields };
 };
 const groups = v.topology.map((g) => ({ name: pick(g.group, locale), columns: g.columns.map((c) => c.map(tile)) }));
 const translated = groups.every((g) => g.columns.every((c) => c.every((x) => x.translated)));
 const versionLinks = Object.fromEntries(versions.map((x) => [x.id, href(locale, x.id)]));
 const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as const;
+const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).map((x) => [x.p.id, x.fields]));
 ---
 
 <Layout locale={locale} title={`${t('map.title')} ${version}`} section="processes" version={version} versionLinks={versionLinks} translated={translated}>
@@ -31,6 +39,7 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
   <div class="toolbar">
     <label class="visually-hidden" for="q">{t('map.search')}</label>
     <input id="q" type="search" placeholder={t('map.search')} autocomplete="off" />
+    <span id="count" class="small muted" role="status" data-text={t('map.matches')}></span>
     <div class="legend" aria-label={t('map.legend')}>
       {
         origins.map((o) => (
@@ -42,6 +51,22 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
       }
     </div>
   </div>
+  <details class="legend-help small">
+    <summary class="muted">{t('map.legendHelp')}</summary>
+    <dl>
+      {
+        origins.map((o) => (
+          <div>
+            <dt>
+              <span class={`swatch origin-${o}`} />
+              {t(`origin.${o}`)}
+            </dt>
+            <dd class="muted">{t(`origin.${o}-long`)}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </details>
 
   {
     groups.map((g) => (
@@ -50,8 +75,8 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
         <div class="columns">
           {g.columns.map((col) => (
             <ol class="column">
-              {col.map(({ p, search }) => (
-                <li data-search={search}>
+              {col.map(({ p }) => (
+                <li data-id={p.id}>
                   <a class="node" href={href(locale, version, 'processes', p.id)} data-process={p.id} data-version={version} data-name={p.name}>
                     <span class={`node-tab origin-${p.origin}`}>
                       <span>{p.id}</span>
@@ -60,6 +85,7 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
                       </span>
                     </span>
                     <span class="node-name">{p.name}</span>
+                    <span class="node-hit" hidden />
                   </a>
                 </li>
               ))}
@@ -71,27 +97,79 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
   }
   <p id="empty" class="muted" hidden>{t('map.noResults')}</p>
   <ProcessModal locale={locale} />
+  <script type="application/json" id="map-search" set:html={JSON.stringify(searchData).replace(/</g, '\\u003c')} />
 </Layout>
 
 <script>
   import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
-  import { searchKey } from '../../../lib/text';
+  import { escapeHtml, format, searchKey } from '../../../lib/text';
 
   openLinksInModal(document.getElementById('main')!, createProcessModal());
 
+  // Search: dim the processes that do not match, say how many do, and show
+  // where the match is when it is not in the name. The query is kept in the
+  // address, so it is still there on coming back to the map.
+  type Field = { label: string; text: string; key: string };
+  const data = JSON.parse(document.getElementById('map-search')!.textContent!) as Record<string, [string, string][]>;
+  const index = new Map<string, Field[]>(Object.entries(data).map(([id, fields]) => [id, fields.map(([label, text]) => ({ label, text, key: searchKey(text) }))]));
+
   const input = document.querySelector<HTMLInputElement>('#q')!;
-  const items = [...document.querySelectorAll<HTMLElement>('[data-search]')];
+  const items = [...document.querySelectorAll<HTMLElement>('li[data-id]')];
   const empty = document.querySelector<HTMLElement>('#empty')!;
+  const count = document.querySelector<HTMLElement>('#count')!;
+
+  /** The text around the first word found in a field, with the words found marked. */
+  function excerpt(f: Field, words: string[]) {
+    // The key is the text without accents; they line up unless a letter changes length.
+    const aligned = f.key.length === f.text.length;
+    const first = Math.min(...words.map((w) => f.key.indexOf(w)).filter((i) => i >= 0));
+    let start = aligned ? Math.max(0, first - 30) : 0;
+    if (start > 0) {
+      const space = f.text.indexOf(' ', start);
+      if (space >= 0 && space < first) start = space + 1;
+    }
+    const end = Math.min(f.text.length, start + 90);
+    const text = f.text.slice(start, end);
+    const marks = new Array<boolean>(text.length).fill(false);
+    if (aligned) {
+      const key = f.key.slice(start, end);
+      for (const w of words) for (let i = key.indexOf(w); i >= 0; i = key.indexOf(w, i + 1)) marks.fill(true, i, i + w.length);
+    }
+    let html = '';
+    for (let i = 0; i < text.length; ) {
+      let j = i;
+      while (j < text.length && marks[j] === marks[i]) j++;
+      const part = escapeHtml(text.slice(i, j));
+      html += marks[i] ? `<mark>${part}</mark>` : part;
+      i = j;
+    }
+    return `<span class="hit-label">${escapeHtml(f.label)}</span> ${start > 0 ? '…' : ''}${html}${end < f.text.length ? '…' : ''}`;
+  }
+
   const apply = () => {
     const words = searchKey(input.value).split(/\s+/).filter(Boolean);
     let shown = 0;
     for (const el of items) {
-      const match = words.every((w) => el.dataset.search!.includes(w));
+      const [name, ...rest] = index.get(el.dataset.id!)!;
+      const match = words.every((w) => name.key.includes(w) || rest.some((f) => f.key.includes(w)));
       el.classList.toggle('dim', !match);
       if (match) shown++;
+      const hit = el.querySelector<HTMLElement>('.node-hit')!;
+      // The part with most of the words, unless the name has them all.
+      const where =
+        match && words.length && !words.every((w) => name.key.includes(w))
+          ? rest.map((f) => ({ f, n: words.filter((w) => f.key.includes(w)).length })).reduce((a, b) => (b.n > a.n ? b : a))
+          : null;
+      hit.hidden = !where?.n;
+      hit.innerHTML = where?.n ? excerpt(where.f, words) : '';
     }
+    count.textContent = words.length ? format(count.dataset.text!, { n: shown, total: items.length }) : '';
     empty.hidden = shown > 0;
+    const url = new URL(location.href);
+    input.value.trim() ? url.searchParams.set('q', input.value) : url.searchParams.delete('q');
+    history.replaceState(history.state, '', url);
   };
+  input.value = new URLSearchParams(location.search).get('q') ?? '';
   input.addEventListener('input', apply);
   apply();
 </script>
@@ -195,6 +273,60 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
 
   .dim .node {
     opacity: 0.25;
+  }
+
+  /* Where the search matched, when it is not in the name. */
+  .node-hit {
+    padding: 6px 10px 8px;
+    border-top: 1px dashed var(--border);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .node-hit :global(.hit-label) {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text);
+  }
+
+  .node-hit :global(mark) {
+    background: var(--warn-bg);
+    color: inherit;
+    box-shadow: 0 0 0 1px var(--warn-border);
+  }
+
+  .legend-help {
+    margin: -6px 0 16px;
+  }
+
+  .legend-help summary {
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .legend-help dl {
+    display: grid;
+    gap: 8px;
+    margin: 10px 0 0;
+    max-width: 720px;
+  }
+
+  .legend-help dt {
+    font-weight: 600;
+  }
+
+  .legend-help dd {
+    margin: 0 0 0 24px;
+  }
+
+  .legend-help .swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+    vertical-align: -2px;
+    border: 1px solid var(--ink);
   }
 
   @media (max-width: 600px) {

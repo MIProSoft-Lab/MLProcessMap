@@ -42,7 +42,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
       <tbody>
         {
           wps.map((w) => (
-            <tr id={w.id} data-type={w.type} data-search={searchKey(w.name)}>
+            <tr id={w.id} data-type={w.type} data-search={searchKey([w.name, ...[...w.producers, ...w.consumers].map((l) => `${l.process} ${name(l.process)}`)].join(' '))}>
               <td>
                 <strong>{w.name}</strong>
               </td>
@@ -100,10 +100,10 @@ const types = ['information-item', 'artifact', 'record'] as const;
   const empty = document.querySelector<HTMLElement>('#empty')!;
   let type = '';
   const apply = () => {
-    const q = searchKey(input.value).trim();
+    const words = searchKey(input.value).split(/\s+/).filter(Boolean);
     let shown = 0;
     for (const r of rows) {
-      r.hidden = (type !== '' && r.dataset.type !== type) || !r.dataset.search!.includes(q);
+      r.hidden = (type !== '' && r.dataset.type !== type) || !words.every((w) => r.dataset.search!.includes(w));
       if (!r.hidden) shown++;
     }
     table.hidden = shown === 0;
