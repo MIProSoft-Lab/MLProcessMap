@@ -643,6 +643,18 @@ a.chip:hover {
   color: var(--muted);
 }
 
+/* The ID of a primary study (P1, P2, …), outlined so it is not read as a process ID. */
+.study-id {
+  align-self: center;
+  padding: 0 4px;
+  border: 1px solid var(--muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;

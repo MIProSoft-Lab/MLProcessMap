@@ -41,7 +41,7 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
         const url = ref && referenceUrl(ref);
         return (
           <li id={s.id}>
-            <span class="key">{s.id}</span>
+            <span class="study-id">{s.id}</span>
             <div>
               {url ? <a href={url}>{s.title}</a> : <span>{s.title}</span>} <span class="muted">({s.year})</span>
               {ref && <div class="small muted" set:html={inline(fullCite(ref))} />}
@@ -115,6 +115,12 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
   .refs li.highlight {
     background: var(--surface-2);
     outline: 1px solid var(--accent);
+  }
+
+  .refs .study-id {
+    justify-self: start;
+    align-self: start;
+    margin-top: 3px;
   }
 
   .literature li {

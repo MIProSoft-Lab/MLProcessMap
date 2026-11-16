@@ -261,11 +261,16 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                           <>
                             <dt class="label">{t('process.primaryStudies')}</dt>
                             <dd class="chips">
-                              {a.primaryStudies.map((s) => (
-                                <a class="chip" href={`${href(locale, 'references')}#${s}`} title={studyById.get(s)?.title}>
-                                  <span class="num">{s}</span>
-                                </a>
-                              ))}
+                              {a.primaryStudies.map((s) => {
+                                const study = studyById.get(s);
+                                const cite = study?.reference && shortCite(referenceByKey.get(study.reference));
+                                return (
+                                  <a class="chip" href={`${href(locale, 'references')}#${s}`} title={study?.title}>
+                                    <span class="study-id">{s}</span>
+                                    {cite}
+                                  </a>
+                                );
+                              })}
                             </dd>
                           </>
                         ) : null}
