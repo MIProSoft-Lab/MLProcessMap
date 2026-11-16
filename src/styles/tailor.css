@@ -326,9 +326,9 @@
 
 .tailor-page .phase-list .pc-add {
   justify-self: start;
-  /* Its longest option must not widen the card. */
+  /* As wide as its label, not as its longest option. */
+  width: 12rem;
   max-width: 100%;
-  min-width: 0;
   padding: 3px 8px;
   font-size: 0.85rem;
 }
@@ -510,5 +510,55 @@
 
   .tailor-page #side {
     scroll-margin-top: 12px;
+  }
+}
+
+/* The offer to take back an action that replaced work, floating at the bottom
+   so it is in view wherever the action was taken. */
+.tailor-page .undo:not([hidden]) {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 6;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  padding: 8px 8px 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: var(--lift);
+  font-size: 0.9rem;
+}
+
+.tailor-page .undo span {
+  min-width: 0;
+}
+
+.tailor-page .undo button {
+  flex: none;
+}
+
+.tailor-page #undo-yes {
+  background: var(--ink-fill);
+  border-color: var(--ink-fill);
+  color: var(--surface);
+  font-weight: 500;
+}
+
+.tailor-page #undo-close {
+  padding: 6px 9px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+/* Above the bar at the bottom of a narrow screen. */
+@media (max-width: 959px) {
+  .tailor-page .undo:not([hidden]) {
+    bottom: 60px;
   }
 }

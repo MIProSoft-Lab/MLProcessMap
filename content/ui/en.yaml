@@ -210,6 +210,12 @@ tailor:
   phase-drop-touch: Add processes with the menu below
   bar-selected: "{n} of {total} processes"
   bar-missing: "Inputs without a producer: {m}"
+  undo: Undo
+  undo-replaced: "The model was replaced with {name}."
+  undo-all: "All processes selected."
+  undo-none: "All processes removed from the model."
+  undo-phase: "Phase {name} removed."
+  undo-version: "PRM version changed to {v}."
   phase-addProcess: + Add process
   phase-unassign: Remove {id} from the phase
   phase-none: No phase

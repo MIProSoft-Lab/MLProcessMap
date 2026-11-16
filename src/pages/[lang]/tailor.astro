@@ -72,6 +72,11 @@ const keys: UiKey[] = [
   'tailor.phase-drop-touch',
   'tailor.bar-selected',
   'tailor.bar-missing',
+  'tailor.undo-replaced',
+  'tailor.undo-all',
+  'tailor.undo-none',
+  'tailor.undo-phase',
+  'tailor.undo-version',
   'tailor.phase-addProcess',
   'tailor.phase-unassign',
   'tailor.phase-none',
@@ -184,6 +189,12 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     </div>
   </section>
 
+  <p id="undo" class="undo no-print" role="status" hidden>
+    <span id="undo-text"></span>
+    <button type="button" id="undo-yes">{t('tailor.undo')}</button>
+    <button type="button" id="undo-close" aria-label={t('modal.close')}>✕</button>
+  </p>
+
   <a id="mobile-bar" class="mobile-bar no-print" href="#side">
     <span id="mobile-summary"></span>
     <span class="mobile-bar-go">{t('tailor.export')} ↓</span>
@@ -251,11 +262,43 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   const toHash = () => {
     const hash = model.toHash(state);
     history.replaceState(null, '', `#${hash}`);
+    if (undo && modelKey(state) !== undo.after) dismissUndo();
     edited ||= modelKey(state) !== opened;
     if (!edited) return;
     stored.set(hash);
     restore.hidden = true;
   };
+
+  // --- Undo ------------------------------------------------------------
+
+  // An action that replaces work (a template, select all or none, a removed
+  // phase, another PRM version, an imported file) can be taken back until the
+  // next edit, which would otherwise be lost with it.
+  let undo: { before: string; after: string } | null = null;
+  const undoBar = $('#undo');
+  const snapshot = () => model.toHash(state);
+
+  function dismissUndo() {
+    undo = null;
+    undoBar.hidden = true;
+  }
+
+  /** Offer to return to the model as it was before an action, given what `snapshot()` returned then. */
+  function offerUndo(before: string, message: string) {
+    if (before === snapshot()) return;
+    undo = { before, after: modelKey(state) };
+    $('#undo-text').textContent = message;
+    undoBar.hidden = false;
+  }
+
+  $('#undo-yes').addEventListener('click', () => {
+    if (!undo) return;
+    const back = model.fromHash(data, undo.before);
+    dismissUndo();
+    load(back);
+    document.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus();
+  });
+  $('#undo-close').addEventListener('click', dismissUndo);
 
   // --- Rendering ---------------------------------------------------------
 
@@ -521,6 +564,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   });
 
   $<HTMLSelectElement>('#version').addEventListener('change', (e) => {
+    const before = snapshot();
     const v = version((e.target as HTMLSelectElement).value);
     // Keep the processes that exist in both versions; activities may differ.
     const ids = new Set(v.processes.map((p) => p.id));
@@ -528,11 +572,14 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     syncPhases();
     renderStartOptions();
     renderList();
+    offerUndo(before, s('tailor.undo-version', { v: v.id }));
   });
 
   $<HTMLSelectElement>('#start').addEventListener('change', (e) => {
     const value = (e.target as HTMLSelectElement).value;
     const v = version(state.version);
+    const before = snapshot();
+    let message = value === 'all' ? s('tailor.undo-all') : s('tailor.undo-none');
     if (value === 'all') state.selected = new Set(v.processes.map((p) => p.id));
     else if (value === 'none') state.selected = new Set();
     else if (value.startsWith('lc:')) {
@@ -541,6 +588,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       state.phases = phasesOf(lc);
       state.description = lc.description;
       state.project = lc.name;
+      message = s('tailor.undo-replaced', { name: lc.name });
       $<HTMLInputElement>('#project').value = state.project;
       $<HTMLTextAreaElement>('#lc-description').value = state.description;
     }
@@ -548,16 +596,21 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     syncPhases();
     (e.target as HTMLSelectElement).value = '';
     renderList();
+    if (value) offerUndo(before, message);
   });
 
   $('#all').addEventListener('click', () => {
+    const before = snapshot();
     state.selected = new Set(version(state.version).processes.map((p) => p.id));
     renderList();
+    offerUndo(before, s('tailor.undo-all'));
   });
   $('#none').addEventListener('click', () => {
+    const before = snapshot();
     state.selected = new Set();
     syncPhases();
     renderList();
+    offerUndo(before, s('tailor.undo-none'));
   });
 
   // --- Events: tabs -------------------------------------------------------
@@ -634,9 +687,12 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       const card = `.phase-card[data-phase="${CSS.escape(p.id)}"]`;
       (phaseList.querySelector<HTMLButtonElement>(`${card} [data-move="${el.dataset.move}"]:not(:disabled)`) ?? phaseList.querySelector<HTMLButtonElement>(`${card} [data-move]:not(:disabled)`))?.focus();
     } else if (el.hasAttribute('data-remove')) {
+      const before = snapshot();
+      const name = phaseLabel(p, i);
       state.phases.splice(i, 1);
       syncPhases();
       renderList();
+      offerUndo(before, s('tailor.undo-phase', { name }));
     } else if (el.dataset.unassign) {
       p.processes = p.processes.filter((x) => x !== el.dataset.unassign);
       renderList();
@@ -794,6 +850,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       if (!v) throw new ImportError(s('tailor.import-version', { v: m.version || '?' }));
       const ids = new Set(v.processes.map((p) => p.id));
       const unknown = [...new Set([...m.selected, ...m.phases.flatMap((p) => p.processes)])].filter((id) => !ids.has(id));
+      const before = snapshot();
       load({
         version: v.id,
         project: m.project,
@@ -804,6 +861,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         phases: m.phases,
         tab: m.phases.length ? 'phases' : 'processes',
       });
+      offerUndo(before, s('tailor.undo-replaced', { name: file.name }));
       messages.push(s('tailor.import-done', { file: file.name }));
       if (m.csv) messages.push(s('tailor.import-csv'));
       if (unknown.length) messages.push(s('tailor.import-skipped', { v: v.id, ids: unknown.join(', ') }));

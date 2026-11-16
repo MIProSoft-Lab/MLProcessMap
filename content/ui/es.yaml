@@ -207,6 +207,12 @@ tailor:
   phase-drop-touch: Añade procesos con el menú de abajo
   bar-selected: "{n} de {total} procesos"
   bar-missing: "Entradas sin productor: {m}"
+  undo: Deshacer
+  undo-replaced: "El modelo se ha sustituido por {name}."
+  undo-all: "Se han seleccionado todos los procesos."
+  undo-none: "Se han quitado todos los procesos del modelo."
+  undo-phase: "Fase {name} eliminada."
+  undo-version: "Versión del PRM cambiada a {v}."
   phase-addProcess: + Añadir proceso
   phase-unassign: Quitar {id} de la fase
   phase-none: Sin fase
