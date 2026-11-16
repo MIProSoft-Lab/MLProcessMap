@@ -264,6 +264,9 @@ refs:
   literature: Literatura especialitzada
   citedBy: Citat per
   acronyms: Acrònims
+  filter: "Filtra per títol, autor, publicació, estudi o procés (p. ex., P03)"
+  matches: "{n} de {total} referències coincideixen"
+  noResults: Cap referència no coincideix amb el filtre.
 i18n:
   untranslated: Aquest contingut encara no està traduït al {language}. Es mostra en anglès.
 footer:

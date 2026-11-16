@@ -264,6 +264,9 @@ refs:
   literature: Literatura especializada
   citedBy: Citado por
   acronyms: Acrónimos
+  filter: "Filtrar por título, autor, publicación, estudio o proceso (p. ej., P03)"
+  matches: "{n} de {total} referencias coinciden"
+  noResults: Ninguna referencia coincide con el filtro.
 i18n:
   untranslated: Este contenido todavía no está traducido al {language}. Se muestra en inglés.
 footer:
