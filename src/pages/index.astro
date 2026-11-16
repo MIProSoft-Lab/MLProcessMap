@@ -12,10 +12,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <title>MLProcessMap</title>
     <meta http-equiv="refresh" content={`0; url=${base}/${defaultLocale}/`} />
     <script is:inline define:vars={{ base, locales, defaultLocale }}>
-      // Open the site in the reader's language when it is one we have.
-      const wanted = (navigator.languages || [navigator.language])
-        .map((l) => l.slice(0, 2).toLowerCase())
-        .find((l) => locales.includes(l));
+      // Open the site in the language the reader chose last time, or else in
+      // the language of their browser when it is one we have.
+      let saved = null;
+      try {
+        saved = localStorage.getItem('lang');
+      } catch {}
+      const wanted = locales.includes(saved)
+        ? saved
+        : (navigator.languages || [navigator.language]).map((l) => l.slice(0, 2).toLowerCase()).find((l) => locales.includes(l));
       location.replace(`${base}/${wanted || defaultLocale}/`);
     </script>
   </head>

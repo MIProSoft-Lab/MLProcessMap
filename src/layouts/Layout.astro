@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { site, pick, versions, defaultVersion, contentFiles } from '../lib/content';
 import { validateOnce, formatIssues, errors } from '../lib/validation';
 import { edition, otherEditionUrl } from '../lib/edition';
+import pkg from '../../package.json';
 import ProcessHover from '../components/ProcessHover.astro';
 import AcronymHover from '../components/AcronymHover.astro';
 import { useTranslations, languageNames, languageIn, locales, defaultLocale, href, type Locale } from '../i18n/ui';
@@ -35,7 +36,8 @@ if (issues.length) throw new Error(`Content errors (run npm run check:content to
 
 // Same page in the other languages.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const rest = Astro.url.pathname.slice(base.length).split('/').slice(2).join('/');
+// A page without a fixed address, such as the error page, offers the home page in the other languages.
+const rest = indexable ? Astro.url.pathname.slice(base.length).split('/').slice(2).join('/') : '';
 const languageLinks = locales.map((l) => ({ locale: l, href: `${base}/${l}/${rest}` }));
 
 const absolute = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
@@ -55,6 +57,8 @@ const nav = [
 ] as const;
 const repo = import.meta.env.PUBLIC_REPO ? `https://github.com/${import.meta.env.PUBLIC_REPO}` : undefined;
 const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
+// Comments go to the issues of the repository, or by email without one.
+const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email}` : undefined;
 ---
 
 <!doctype html>
@@ -66,7 +70,7 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
     <meta name="description" content={description ?? pick(site.intro, locale)} />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     {/* Searches lead to the live edition; the thesis edition is reached from the thesis. */}
-    {edition === 'thesis' && <meta name="robots" content="noindex" />}
+    {(edition === 'thesis' || !indexable) && <meta name="robots" content="noindex" />}
     {
       indexable && (
         <>
@@ -84,6 +88,7 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
       } catch {}
     </script>
+    <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">{t('nav.skip')}</a>
@@ -205,17 +210,25 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
           </div>
           <div>
             <span class="label">{t('footer.links')}</span>
-            {repo && <a href={repo}>{t('footer.source')}</a>}
-            {repo && ' · '}
-            <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
-            {edition === 'live' && otherEdition && (
-              <>
-                {' · '}
-                <a href={otherEdition}>{t('edition.thesisLink')}</a>
-              </>
-            )}
+            {[
+              repo && <a href={repo}>{t('footer.source')}</a>,
+              feedback && <a href={feedback}>{t('footer.feedback')}</a>,
+              edition === 'live' && otherEdition && <a href={otherEdition}>{t('edition.thesisLink')}</a>,
+            ]
+              .filter(Boolean)
+              .map((link, i) => (
+                <>
+                  {i > 0 && ' · '}
+                  {link}
+                </>
+              ))}
           </div>
         </div>
+        <p class="footer-meta">
+          {repo ? <a href={`${repo}/releases`}>{siteTitle} {t('footer.version', { v: pkg.version })}</a> : <span>{siteTitle} {t('footer.version', { v: pkg.version })}</span>}
+          {' · '}
+          <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
+        </p>
       </div>
     </footer>
     <script is:inline>
@@ -259,6 +272,14 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
         addEventListener('resize', sync);
         sync();
       })();
+      // Remember a language chosen in the menu, so the root address opens in it next time.
+      document.querySelectorAll('.site-header a[hreflang]').forEach((a) =>
+        a.addEventListener('click', () => {
+          try {
+            localStorage.setItem('lang', a.hreflang);
+          } catch {}
+        }),
+      );
       // Close the header menus on a click outside them or on Escape.
       (() => {
         const menus = [...document.querySelectorAll('.site-header details.menu')];

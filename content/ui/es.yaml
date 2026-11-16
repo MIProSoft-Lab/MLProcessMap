@@ -236,7 +236,7 @@ tailor:
   yamlNote: El archivo YAML usa el formato de las plantillas de ciclo de vida, para que un administrador pueda publicar tu modelo en este sitio.
   untitled: Modelo de ciclo de vida sin título
   import: Importar
-  import-note: Abre un modelo de ciclo de vida exportado desde esta página como JSON, YAML o CSV. Sustituye el modelo que estás editando, así que copia antes su enlace si quieres conservarlo.
+  import-note: "Abre un modelo de ciclo de vida exportado desde esta página como JSON, YAML o CSV. Sustituye el modelo que estás editando, y puedes deshacerlo justo después."
   import-open: Abrir un archivo
   restore-text: "Este navegador ha guardado el último modelo que editaste aquí:"
   restore-yes: Continuar con él
@@ -272,8 +272,11 @@ footer:
   licence: Licencia
   links: Enlaces
   license: Contenido bajo CC BY 4.0 · Código bajo MIT
+  feedback: Enviar comentarios
+  version: "v{v}"
 notFound:
   title: Página no encontrada
+  text: "Puede que la dirección esté mal escrita o que la página se haya movido o eliminado."
   back: Volver a la página principal
 edition:
   thesis: Edición de la tesis

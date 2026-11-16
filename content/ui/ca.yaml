@@ -236,7 +236,7 @@ tailor:
   yamlNote: El fitxer YAML empra el format de les plantilles de cicle de vida, perquè un administrador pugui publicar el teu model en aquest lloc.
   untitled: Model de cicle de vida sense títol
   import: Importa
-  import-note: Obre un model de cicle de vida exportat des d'aquesta pàgina com a JSON, YAML o CSV. Substitueix el model que estàs editant, així que copia'n abans l'enllaç si el vols conservar.
+  import-note: "Obre un model de cicle de vida exportat des d'aquesta pàgina com a JSON, YAML o CSV. Substitueix el model que estàs editant, i ho pots desfer just després."
   import-open: Obre un fitxer
   restore-text: "Aquest navegador ha desat el darrer model que vas editar aquí:"
   restore-yes: Continua-hi
@@ -272,8 +272,11 @@ footer:
   licence: Llicència
   links: Enllaços
   license: Contingut sota CC BY 4.0 · Codi sota MIT
+  feedback: Envia comentaris
+  version: "v{v}"
 notFound:
   title: Pàgina no trobada
+  text: "Pot ser que l'adreça estigui mal escrita o que la pàgina s'hagi mogut o eliminat."
   back: Torna a la pàgina principal
 edition:
   thesis: Edició de la tesi

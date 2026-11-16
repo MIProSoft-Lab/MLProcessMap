@@ -239,7 +239,7 @@ tailor:
   yamlNote: The YAML file uses the format of the lifecycle templates, so an admin can publish your model on this site.
   untitled: Untitled lifecycle model
   import: Import
-  import-note: Open a lifecycle model exported from this page as JSON, YAML or CSV. It replaces the model you are editing, so copy its link first if you want to keep it.
+  import-note: "Open a lifecycle model exported from this page as JSON, YAML or CSV. It replaces the model you are editing, and you can undo that right after."
   import-open: Open a file
   restore-text: "This browser has kept the last model you edited here:"
   restore-yes: Continue with it
@@ -275,8 +275,11 @@ footer:
   licence: Licence
   links: Links
   license: Content under CC BY 4.0 · Code under MIT
+  feedback: Send feedback
+  version: "v{v}"
 notFound:
   title: Page not found
+  text: "The address may be mistyped, or the page may have been moved or removed."
   back: Back to the home page
 edition:
   thesis: Thesis edition

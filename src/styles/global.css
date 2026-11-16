@@ -565,6 +565,22 @@ main {
   font-size: 0.875rem;
 }
 
+/* The release and the admin panel, below the title block. */
+.footer-meta {
+  margin: 10px 0 0;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.footer-meta a {
+  color: inherit;
+}
+
+.footer-meta a:hover {
+  color: var(--text);
+}
+
 .title-block {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));

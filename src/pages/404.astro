@@ -1,11 +1,39 @@
 ---
+// The page GitHub Pages serves for any address it does not have. It is built
+// in the default language; a script shows the same page in the language of
+// the address (/es/…, /ca/…), or in the one the reader chose before.
 import Layout from '../layouts/Layout.astro';
-import { defaultLocale, href, useTranslations } from '../i18n/ui';
+import NotFound from '../components/NotFound.astro';
+import { defaultLocale, locales, useTranslations } from '../i18n/ui';
 
 const t = useTranslations(defaultLocale);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout locale={defaultLocale} title={t('notFound.title')} indexable={false}>
-  <h1>{t('notFound.title')}</h1>
-  <p><a href={href(defaultLocale)}>{t('notFound.back')}</a></p>
+  <script is:inline slot="head" define:vars={{ base, locales, defaultLocale }}>
+    (() => {
+      const first = location.pathname.slice(base.length).split('/')[1];
+      let lang = locales.includes(first) ? first : null;
+      if (!lang) {
+        try {
+          const saved = localStorage.getItem('lang');
+          if (locales.includes(saved)) lang = saved;
+        } catch {}
+      }
+      if (!lang || lang === defaultLocale) return;
+      // Replace this page with the one in that language, keeping the address.
+      const root = document.documentElement;
+      root.style.visibility = 'hidden';
+      fetch(`${base}/${lang}/404/`)
+        .then((r) => (r.ok ? r.text() : Promise.reject()))
+        .then((html) => {
+          document.open();
+          document.write(html);
+          document.close();
+        })
+        .catch(() => (root.style.visibility = ''));
+    })();
+  </script>
+  <NotFound locale={defaultLocale} />
 </Layout>
