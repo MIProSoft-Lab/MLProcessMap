@@ -31,7 +31,7 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
 const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).map((x) => [x.p.id, x.fields]));
 ---
 
-<Layout locale={locale} title={`${t('map.title')} ${version}`} section="processes" version={version} versionLinks={versionLinks} translated={translated}>
+<Layout locale={locale} title={`${t('map.title')} ${version}`} description={`${t('home.card-map')} ${pick(v.description, locale)}`} section="processes" version={version} versionLinks={versionLinks} translated={translated}>
   <p class="breadcrumbs">ML-PRM / {version}</p>
   <h1>{t('map.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
   <p class="muted prose">{pick(v.description, locale)}</p>

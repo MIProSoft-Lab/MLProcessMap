@@ -129,6 +129,7 @@ wp:
 compare:
   title: Comparar versiones
   intro: Cambios en el texto de cada proceso entre dos versiones del PRM.
+  description: "Cambios en el texto del {name} entre las versiones {from} y {to} del PRM: resultados, entradas, salidas y actividades añadidos, eliminados o reformulados."
   from: De
   to: A
   unchanged: sin cambios

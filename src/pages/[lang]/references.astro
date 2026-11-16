@@ -30,7 +30,7 @@ for (const version of order) {
 const literature = references.filter((r) => !studies.some((s) => s.reference === r.key)).sort((a, b) => a.authors.localeCompare(b.authors));
 ---
 
-<Layout locale={locale} title={t('refs.title')} section="references">
+<Layout locale={locale} title={t('refs.title')} description={t('home.card-references')} section="references">
   <h1>{t('refs.title')}</h1>
 
   <h2>{t('refs.studies')}</h2>

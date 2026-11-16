@@ -9,6 +9,6 @@ const { locale, from, to } = Astro.props as { locale: Locale; from: string; to: 
 const t = useTranslations(locale);
 ---
 
-<Layout locale={locale} title={`${t('compare.title')} ${from} → ${to}`} section="compare">
+<Layout locale={locale} title={`${t('compare.title')} ${from} → ${to}`} description={t('compare.intro')} section="compare">
   <CompareOverview locale={locale} from={from} to={to} />
 </Layout>

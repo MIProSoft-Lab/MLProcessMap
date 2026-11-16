@@ -93,7 +93,7 @@ const keys: UiKey[] = [
 const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 ---
 
-<Layout locale={locale} title={t('tailor.title')} section="tailor" pageClass="tailor-page">
+<Layout locale={locale} title={t('tailor.title')} description={t('tailor.intro')} section="tailor" pageClass="tailor-page">
   <h1>{t('tailor.title')}</h1>
   <p class="muted prose">{t('tailor.intro')}</p>
   <noscript><p class="notice">{t('tailor.noscript')}</p></noscript>

@@ -28,6 +28,11 @@ const { locale, title, description, section, version, versionLinks, translated =
 const t = useTranslations(locale);
 const siteTitle = pick(site.title, locale);
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
+// Search results and link previews show about 160 characters; cut longer text at a word.
+const fullDescription = (description ?? pick(site.intro, locale)).replace(/\s+/g, ' ').trim();
+const metaDescription = fullDescription.length <= 200 ? fullDescription : `${fullDescription.slice(0, 197).replace(/\s+\S*$/, '')}…`;
+// Region for each language, as Open Graph expects (en_GB, es_ES, ca_ES).
+const ogLocale = (l: Locale) => ({ en: 'en_GB', es: 'es_ES', ca: 'ca_ES' })[l] ?? l;
 
 // Fail the build on content errors, checked once per set of content files.
 // Warnings are left to npm run check:content.
@@ -67,7 +72,16 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    <meta name="description" content={description ?? pick(site.intro, locale)} />
+    <meta name="description" content={metaDescription} />
+    {/* Title card when a link is shared in chat or on social media. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={title ?? siteTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:locale" content={ogLocale(locale)} />
+    {locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={ogLocale(l)} />)}
+    {indexable && Astro.site && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     {/* Searches lead to the live edition; the thesis edition is reached from the thesis. */}
     {(edition === 'thesis' || !indexable) && <meta name="robots" content="noindex" />}

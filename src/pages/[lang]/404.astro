@@ -11,6 +11,6 @@ const locale = Astro.props.locale as Locale;
 const t = useTranslations(locale);
 ---
 
-<Layout locale={locale} title={t('notFound.title')} indexable={false}>
+<Layout locale={locale} title={t('notFound.title')} description={t('notFound.text')} indexable={false}>
   <NotFound locale={locale} />
 </Layout>

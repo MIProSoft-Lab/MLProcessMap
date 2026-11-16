@@ -129,6 +129,7 @@ wp:
 compare:
   title: Compara versions
   intro: Canvis en el text de cada procés entre dues versions del PRM.
+  description: "Canvis en el text del {name} entre les versions {from} i {to} del PRM: resultats, entrades, sortides i activitats afegits, eliminats o reformulats."
   from: De
   to: A
   unchanged: sense canvis

@@ -132,6 +132,7 @@ wp:
 compare:
   title: Compare versions
   intro: Changes in the text of each process between two versions of the PRM.
+  description: "Changes in the text of the {name} between PRM {from} and {to}: outcomes, inputs, outputs and activities added, removed or reworded."
   from: From
   to: To
   unchanged: unchanged

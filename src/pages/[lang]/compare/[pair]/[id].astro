@@ -46,7 +46,7 @@ const unchangedSections = [...(d.purpose === 'same' ? [t('process.purpose')] : [
 const unchangedItems = sections.filter((s) => !allSame(s)).reduce((n, s) => n + s.pairs.filter((p) => p.status === 'same').length, 0);
 ---
 
-<Layout locale={locale} title={`${name} · ${from} → ${to}`} section="compare" translated={translated}>
+<Layout locale={locale} title={`${name} · ${from} → ${to}`} description={t('compare.description', { name, from, to })} section="compare" translated={translated}>
   <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, 'compare', slug)}>{t('compare.title')} {from} → {to}</a> / {id}
   </nav>

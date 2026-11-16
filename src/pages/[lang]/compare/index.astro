@@ -15,6 +15,6 @@ const from = versions[i - 1]?.id;
 const to = versions[i]?.id;
 ---
 
-<Layout locale={locale} title={t('compare.title')} section="compare">
+<Layout locale={locale} title={t('compare.title')} description={t('compare.intro')} section="compare">
   {from && to ? <CompareOverview locale={locale} from={from} to={to} /> : <h1>{t('compare.title')}</h1>}
 </Layout>

@@ -16,7 +16,7 @@ const versionLinks = Object.fromEntries(versions.map((x) => [x.id, href(locale, 
 const types = ['information-item', 'artifact', 'record'] as const;
 ---
 
-<Layout locale={locale} title={t('wp.title')} section="workProducts" version={version} versionLinks={versionLinks}>
+<Layout locale={locale} title={t('wp.title')} description={t('wp.intro')} section="workProducts" version={version} versionLinks={versionLinks}>
   <h1>{t('wp.title')} <span class="muted">· {version}</span></h1>
   <p class="muted prose">{t('wp.intro')}</p>
 
