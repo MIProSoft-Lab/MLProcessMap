@@ -1,0 +1,190 @@
+id: P21
+number: 21
+origin: standards-and-literature
+name: Proceso de validación del sistema
+purpose: >-
+  El propósito del *Proceso de validación del sistema* es probar los modelos de aprendizaje automático
+  como artefactos software, para confirmar que se integran correctamente y se comportan de forma fiable.
+  Se centra en el comportamiento funcional, la compatibilidad con el entorno y la robustez, y no solo
+  en la exactitud predictiva.
+outcomes:
+- id: a
+  text: Se definen el alcance y el plan de pruebas.
+- id: b
+  text: >-
+    Se ejecutan pruebas funcionales y a nivel de API que confirman que las interfaces son correctas.
+- id: c
+  text: Se ejecutan pruebas metamórficas y de aproximación al oráculo.
+- id: d
+  text: Se evalúa el comportamiento en ejecución en cuanto a latencia y recursos.
+- id: e
+  text: Se completan las pruebas de dependencias y de entorno.
+- id: f
+  text: Se llevan a cabo pruebas de estrés y evaluaciones de escenarios de fallo.
+- id: g
+  text: >-
+    Se elabora un Informe de validación del sistema que documenta las pruebas, los resultados y los problemas
+    identificados.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: La aplicación con el modelo, que se va a probar.
+  serves:
+  - b
+  - d
+  - e
+  - f
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: Las métricas, las líneas base y los umbrales para juzgar los resultados.
+  serves:
+  - a
+  - c
+  - d
+- workProduct: reporting-templates
+  name: Plantillas de informe
+  description: Los formatos normalizados para registrar los resultados.
+  serves:
+  - g
+outputs:
+- workProduct: system-validation-report
+  name: Informe de validación del sistema
+  description: Las pruebas realizadas, los resultados y los problemas identificados.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+activities:
+- id: A1
+  title: Planificar las pruebas
+  description: >-
+    Definir la estrategia y el alcance de la validación, incluidas las características del sistema integrado
+    que se van a validar, las técnicas que se aplicarán y las restricciones que limitan lo que puede validarse.
+    Seleccionar un entorno lo más parecido posible al operativo y derivar los escenarios de prueba de
+    la forma en que se espera que se use el sistema, implicando a las partes interesadas cuando sea necesario
+    para que sean representativos. Identificar las entradas reales o sintéticas que se usarán, asegurando
+    que las entradas sintéticas destinadas a representar la operación normal sean creíbles por sí mismas,
+    y planificar la revisión de los datos de prueba a medida que evolucionen el modelo y sus condiciones
+    de operación.
+  primaryStudies:
+  - P8
+  - P10
+- id: A2
+  title: Realizar las pruebas funcionales
+  description: >-
+    Probar las interfaces y las funciones a través de las que se usa el modelo, confirmando que acepta
+    las entradas válidas, rechaza o trata las no válidas sin fallar y devuelve las salidas en la forma
+    esperada. Incluir en las pruebas el código y la configuración que definen el modelo y el pipeline
+    que lo produce. Cuando la salida esperada para una entrada dada no pueda determinarse de antemano,
+    usar relaciones que deban cumplirse entre las salidas de entradas relacionadas, y repetir las pruebas
+    cada vez que cambie el modelo para detectar incompatibilidades con el resto del sistema.
+  primaryStudies:
+  - P4
+  - P6
+  - P8
+  - P11
+  literature:
+  - breckMLTestScore2017
+  - zhangMachineLearningTesting2022
+- id: A3
+  title: Monitorizar el entorno de ejecución
+  description: >-
+    Observar el sistema integrado durante un periodo de validación definido mientras funciona en condiciones
+    reales o representativas, antes de su plena puesta en operación. Evaluar la validez de las predicciones
+    sobre las entradas actuales, reconociendo que la calidad medida sobre datos anteriores solo es una
+    estimación de la calidad sobre los datos reales. Medir la latencia, el rendimiento y el consumo de
+    recursos, comparándolos entre versiones del código, los datos y el modelo para detectar regresiones
+    tanto repentinas como graduales.
+  primaryStudies:
+  - P11
+  - P16
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Probar las dependencias y el entorno
+  description: >-
+    Verificar que el modelo se comporta de forma coherente cuando se despliega en entornos limpios y reproducibles
+    distintos de aquel en el que se desarrolló. Confirmar que sus bibliotecas, plataformas y configuraciones
+    están identificadas, controladas y aprobadas según la política de la organización, y que sus cambios
+    pueden distinguirse de los cambios en el propio modelo. Extender estas comprobaciones a las dependencias
+    de datos del sistema, identificando las señales externas de las que depende el modelo y confirmando
+    que sus versiones están controladas.
+  primaryStudies:
+  - P1
+  - P8
+  - P9
+  - P11
+  literature:
+  - breckMLTestScore2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A5
+  title: Probar los fallos y la robustez
+  description: >-
+    Probar el sistema más allá de su comportamiento habitual, usando condiciones de estrés y entradas
+    no válidas, extremas o perturbadas en todo el dominio de entrada, incluidas las que puedan resultar
+    de fallos en otras partes del sistema. Simular los escenarios de fallo relevantes para el sistema,
+    como fuentes de datos no disponibles o corruptas, inferencia no disponible o tiempos de respuesta
+    excesivos, para confirmar que se degrada de forma controlada y que las medidas de contingencia definidas
+    en la arquitectura se comportan según lo previsto. Confirmar que cualquier mecanismo que limite las
+    salidas del modelo se mantiene cuando el modelo se comporta mal.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+  - P18
+  literature:
+  - polletiHierarchicalFallbackArchitecture2025
+- id: A6
+  title: Probar los procedimientos de reversión
+  description: >-
+    Diseñar y ejecutar pruebas que confirmen que los procedimientos de reversión se activan en las condiciones
+    definidas para ello y pueden llevarse a cabo en el tiempo previsto. Verificar que el modelo restaurado
+    funciona con los datos, las características y los demás elementos del sistema de los que depende,
+    y que sigue siendo compatible con los componentes que consumen sus salidas. Asegurar que los procedimientos
+    están documentados y se ejercitan con regularidad, de modo que no dependan del conocimiento de personas
+    concretas.
+  primaryStudies:
+  - P4
+  - P13
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A7
+  title: Documentar los resultados
+  description: >-
+    Registrar en el Informe de validación del sistema las pruebas realizadas, sus resultados, las anomalías
+    encontradas y las limitaciones y supuestos de la validación, usando las Plantillas de informe para
+    que las validaciones sucesivas sigan siendo comparables. Describir cada problema identificado con
+    información suficiente para que el proceso en el que se originó pueda abordarlo, y hacer el seguimiento
+    de su resolución. Obtener el acuerdo de que se han cumplido los criterios de validación y mantener
+    la trazabilidad entre los resultados de la validación y los requisitos a los que se refieren.
+  primaryStudies:
+  - P8
+  - P15
+  literature:
+  - breckMLTestScore2017
+standards:
+- standard: ''
+  activity: a) Preparar la validación
+  prmActivity: A1
+- standard: ''
+  activity: b) Llevar a cabo la validación
+  prmActivity: A2
+- standard: ''
+  activity: b) Llevar a cabo la validación
+  prmActivity: A3
+- standard: ''
+  activity: b) Llevar a cabo la validación
+  prmActivity: A4
+- standard: ''
+  activity: b) Llevar a cabo la validación
+  prmActivity: A5
+- standard: ''
+  activity: b) Llevar a cabo la validación
+  prmActivity: A6
+- standard: ''
+  activity: c) Gestionar los resultados de la validación
+  prmActivity: A7

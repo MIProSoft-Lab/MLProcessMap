@@ -1,0 +1,173 @@
+id: P03
+number: 3
+origin: standards-and-literature
+name: Procés de definició de requisits del sistema
+purpose: >-
+  El propòsit del *Procés de definició de requisits del sistema* és convertir les necessitats de les parts
+  interessades en un conjunt de requisits del sistema verificables que descriguin què ha de fer el sistema
+  d'aprenentatge automàtic. Defineix el comportament funcional, les necessitats de dades, les interfícies
+  i els objectius de qualitat per crear una línia de base per al disseny i les proves.
+outcomes:
+- id: a
+  text: Es defineixen uns requisits del sistema coherents i viables.
+- id: b
+  text: Es documenten els requisits de funcions, dades, rendiment i interfícies.
+- id: c
+  text: Es resolen els conflictes i s'estableixen els objectius de rendiment.
+- id: d
+  text: >-
+    S'estableix la traçabilitat des de les necessitats de les parts interessades fins als requisits del
+    sistema i les etapes posteriors.
+inputs:
+- workProduct: stakeholder-requirements-specification
+  name: Especificació de requisits de les parts interessades
+  description: Els requisits acordats de les parts interessades i el seu context d'ús.
+  serves:
+  - a
+  - b
+  - c
+  - d
+outputs:
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: >-
+    Els requisits funcionals, de rendiment, de qualitat i d'interfície del sistema, amb la seva traçabilitat.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: >-
+    Els valors esperats, els formats, la qualitat i les metadades de les dades que necessita el sistema.
+  serves:
+  - a
+  - b
+activities:
+- id: A1
+  title: Revisar els requisits de les parts interessades
+  description: >-
+    Analitzar els requisits de les parts interessades per trobar-ne les implicacions per a les dades,
+    els recursos i l'entorn operacional, i identificar quines expectatives no es poden satisfer només
+    amb una especificació determinista. Definir l'estratègia que s'emprarà per identificar, expressar
+    i gestionar els requisits del sistema dins el model de cicle de vida escollit, acceptant que una part
+    del conjunt de requisits només es farà visible quan existeixi un model inicial. Identificar els sistemes
+    facilitadors i les eines necessàries per registrar i mantenir els requisits, ja que les plataformes
+    de gestió d'artefactes rarament cobreixen aquesta activitat.
+  primaryStudies:
+  - P3
+  - P10
+  - P12
+  - P13
+  - P14
+- id: A2
+  title: Definir el comportament funcional
+  description: >-
+    Descriure com el sistema recull i processa les dades, entrena els models i lliura els resultats, expressant
+    el límit funcional en termes de les entrades que accepta i les respostes que produeix. Fixar aviat
+    l'especificació de sortida de cada component d'aprenentatge automàtic perquè el pipeline que l'envolta
+    es pugui dissenyar independentment del desenvolupament del model. Especificar el nivell d'autonomia
+    del sistema, indicant quines decisions continuen en mans d'un operador humà i quins llindars pot ajustar
+    aquest operador, i definir les regles deterministes de reserva que s'apliquen quan el model produeix
+    resultats inesperats o fora de rang.
+  primaryStudies:
+  - P4
+  - P8
+  - P9
+  - P18
+- id: A3
+  title: Identificar els requisits de dades i d'informació
+  description: >-
+    Especificar les fonts de dades, l'emmagatzematge, l'etiquetatge i els criteris de qualitat dels quals
+    depèn el sistema, indicant l'estat esperat de les dades mitjançant els valors admissibles de les característiques,
+    els formats acceptats i les proporcions tolerades de valors absents, amb uns límits fixats per admetre
+    les observacions plausibles del món real i rebutjar la resta. Expressar aquestes condicions com un
+    esquema perquè els processos posteriors puguin verificar les dades entrants amb aquest esquema. Estendre
+    l'especificació a les metadades, tenint en compte la propietat, els drets d'accés, la finalitat d'ús
+    i la conservació, i definir les estructures de dades i els requisits d'integració necessaris perquè
+    les fonts es puguin combinar de manera coherent.
+  primaryStudies:
+  - P3
+  - P8
+  - P10
+  - P12
+  - P13
+- id: A4
+  title: Definir els requisits de rendiment i de qualitat
+  description: >-
+    Fixar objectius mesurables de precisió, latència, robustesa i equitat, juntament amb les condicions
+    d'entrada en què s'espera que aquests objectius es compleixin, i indicar les mètriques que s'empren
+    per avaluar-los en lloc de deixar-ne l'elecció als processos posteriors. Definir el pressupost d'error
+    acceptable i les classes d'error que tenen més impacte operacional. Complementar els objectius predictius
+    amb atributs de qualitat com l'explicabilitat, l'escalabilitat i la complexitat del model, i amb restriccions
+    de recursos que cobreixin el maquinari d'inferència, el pressupost computacional i la infraestructura
+    que requereix el sistema desplegat.
+  primaryStudies:
+  - P1
+  - P3
+  - P4
+  - P6
+  - P8
+  - P10
+  - P11
+  - P13
+- id: A5
+  title: Definir els requisits d'interfície
+  description: >-
+    Identificar com el sistema interactua amb les API, els usuaris i altres components, especificant els
+    fluxos de dades que connecten els components d'aprenentatge automàtic amb els mòduls de programari
+    convencionals i el format en què s'exposen les prediccions. Indicar les propietats no funcionals que
+    s'esperen de la interfície de servei, incloses la disponibilitat, el control d'accés, el registre
+    i l'auditabilitat, de manera que el codi d'entrenament i el de servei es desenvolupin a partir d'una
+    especificació compartida. Tenir en compte les interaccions entre els components d'aprenentatge automàtic,
+    l'entrellaçament dels quals pot propagar errors per tot el sistema quan es tracten com a peces substituïbles
+    de manera independent.
+  primaryStudies:
+  - P1
+  - P2
+  - P4
+  - P10
+- id: A6
+  title: Analitzar i refinar els requisits
+  description: >-
+    Comprovar la coherència, la viabilitat i la verificabilitat dels requisits, resolent els conflictes
+    i els compromisos entre la qualitat predictiva i la resta d'atributs de qualitat abans que avanci
+    el desenvolupament. Considerar riscs com la deriva de dades, el canvi de distribució i la divergència
+    entre les condicions d'entrenament i les d'operació, i confirmar que l'especificació continua essent
+    assolible en aquestes condicions. Planificar un refinament controlat del conjunt de requisits a mesura
+    que els requisits de dades i de model es facin més clars durant el desenvolupament, de manera que
+    els canvis descoberts durant el tractament de les dades es registrin en lloc d'absorbir-se de manera
+    informal.
+  primaryStudies:
+  - P7
+  - P8
+  - P11
+  - P12
+- id: A7
+  title: Establir la traçabilitat
+  description: >-
+    Crear enllaços bidireccionals entre les necessitats de les parts interessades i els requisits del
+    sistema, i estendre'ls als conjunts de dades, les versions del model i els mètodes de verificació
+    amb què es demostrarà cada requisit. Registrar la justificació de les decisions sobre els requisits
+    i obtenir un acord explícit sobre la línia de base resultant. Com que el flux de treball d'aprenentatge
+    automàtic no proporciona cap descomposició jeràrquica formal dels requisits, i les eines disponibles
+    donen poc suport a aquesta activitat, establir la traçabilitat com un acord explícit del projecte
+    recolzat en registres de procedència, en lloc de suposar que la proporciona la infraestructura de
+    desenvolupament.
+  primaryStudies:
+  - P5
+  - P8
+  - P9
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la verificació
+  standardProcess: Procés de verificació
+  note: Procés de definició de mètriques de verificació i bancs de proves
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Definir els requisits del sistema
+  standardProcess: Procés de definició de requisits del sistema
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Definir els requisits del sistema
+  standardProcess: Procés de definició de requisits del sistema
+  note: Procés de definició de mètriques de verificació i bancs de proves

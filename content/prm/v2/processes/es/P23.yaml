@@ -1,0 +1,191 @@
+id: P23
+number: 23
+origin: standards-only
+name: Proceso de operación
+purpose: >-
+  El propósito del *Proceso de operación* es usar el sistema de aprendizaje automático en producción para
+  prestar sus servicios. Mantiene el sistema disponible dentro de los niveles de servicio acordados, gestiona
+  las personas y los recursos necesarios para hacerlo funcionar y atiende los incidentes y las solicitudes de
+  soporte que surgen durante su uso.
+outcomes:
+- id: a
+  text: >-
+    Se define una estrategia de operación y se dispone de sistemas habilitadores y de operadores cualificados.
+- id: b
+  text: El sistema se usa en su entorno operativo y sirve predicciones en la modalidad establecida.
+- id: c
+  text: Los recursos de ejecución se gestionan en función de los objetivos de coste y rendimiento.
+- id: d
+  text: >-
+    Los datos de producción y las cargas de servicio se capturan y gobiernan para su reutilización posterior.
+- id: e
+  text: Se aplican los procedimientos operativos y las medidas de contingencia en condiciones degradadas.
+- id: f
+  text: >-
+    Los incidentes y las solicitudes de soporte se registran, se siguen y se escalan cuando se necesita un
+    cambio.
+- id: g
+  text: >-
+    Se elaboran registros de operación que se trazan hasta los requisitos y las decisiones arquitectónicas.
+inputs:
+- workProduct: deployment-artifacts
+  name: Artefactos de despliegue
+  description: El modelo empaquetado y la instancia en producción que se van a operar.
+  serves:
+  - a
+  - b
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: El sistema software en el que está incorporado el modelo.
+  serves:
+  - b
+  - e
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: La modalidad de servicio y la estrategia de respaldo.
+  serves:
+  - a
+  - b
+  - e
+- workProduct: architecture-requirements-specification
+  name: Especificación de requisitos de arquitectura
+  description: >-
+    Los requisitos de interfaz y los indicadores y objetivos de nivel de servicio que la arquitectura debe
+    soportar.
+  serves:
+  - a
+  - c
+  - g
+- workProduct: disaster-recovery-plan
+  name: Plan de recuperación ante desastres
+  description: >-
+    Las estrategias de copia de seguridad, los objetivos de recuperación y los procedimientos de recuperación
+    de los componentes críticos del sistema.
+  serves:
+  - e
+- workProduct: monitoring-record
+  name: Registro de monitorización
+  description: La información sobre derivas, rendimiento e incidentes.
+  serves:
+  - c
+  - f
+- workProduct: alerting-configuration
+  name: Configuración de alertas
+  description: Las reglas y los umbrales a los que responden los operadores.
+  serves:
+  - e
+  - f
+outputs:
+- workProduct: live-model-outputs
+  name: Salidas del modelo en producción
+  description: Las predicciones servidas sobre datos de producción.
+  serves:
+  - b
+  - d
+- workProduct: operational-procedures
+  name: Procedimientos operativos
+  description: Los manuales de operación, los procedimientos de contingencia y la documentación de usuario.
+  serves:
+  - a
+  - e
+- workProduct: operation-records
+  name: Registros de operación
+  description: El rendimiento del servicio, el uso de recursos, los incidentes y las solicitudes.
+  serves:
+  - c
+  - f
+  - g
+- workProduct: maintenance-requests
+  name: Solicitudes de mantenimiento
+  description: Los problemas que los procedimientos operativos no pueden resolver.
+  serves:
+  - f
+activities:
+- id: A1
+  title: Prepararse para la operación
+  description: >-
+    Definir la estrategia de operación, incluidas la capacidad, la disponibilidad y el tiempo de respuesta
+    esperados de los servicios, los modos de operación y las operaciones de contingencia, y las medidas que
+    permiten conocer el rendimiento operativo, a partir de los objetivos de nivel de servicio de la
+    Especificación de requisitos de arquitectura y de las disposiciones de servicio y de respaldo definidas en
+    la arquitectura. Identificar y obtener los sistemas habilitadores necesarios para operar el sistema.
+    Definir los requisitos de cualificación de los operadores, formarlos y asignarlos, y establecer cómo
+    cooperan con los equipos responsables de los datos y del modelo, teniendo en cuenta que el modelo puede
+    ejecutarse en una forma distinta de la usada en el desarrollo.
+  primaryStudies:
+  - P4
+  - P10
+  - P16
+- id: A2
+  title: Operar el sistema y gestionar los recursos de ejecución
+  description: >-
+    Usar el sistema en su entorno operativo según su modalidad de servicio establecida, de modo que los
+    servicios se presten dentro de los niveles de servicio acordados. Asignar y ajustar los recursos de
+    cómputo, memoria, almacenamiento y energía necesarios para mantener el servicio, equilibrando la capacidad
+    y el rendimiento con el coste de operación. Actuar sobre el consumo de recursos y el rendimiento medidos
+    por el proceso de validación continua e identificar oportunidades para reducir el coste de operación sin
+    degradar el servicio.
+  primaryStudies:
+  - P1
+  - P9
+  - P18
+- id: A3
+  title: Gobernar los datos de producción y las cargas de servicio
+  description: >-
+    Determinar qué datos de entrada y de salida producidos durante la operación se capturan, en qué proporción
+    y con qué finalidad, considerando su posible reutilización para la monitorización, el análisis y el
+    entrenamiento futuro. Preservar la trazabilidad de los datos capturados hasta las peticiones y las
+    versiones del modelo que los produjeron y proteger su integridad para que no puedan alterarse antes de
+    usarse. Controlar el acceso a los datos capturados con el mismo nivel que los datos de origen, considerar
+    cómo puede influir el modelo en los datos de los que aprenderá más adelante y asegurar que obligaciones
+    como las solicitudes de supresión de datos se aplican a todo lo derivado de esos datos.
+  primaryStudies:
+  - P10
+  literature:
+  - breckMLTestScore2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A4
+  title: Aplicar los procedimientos operativos y las medidas de contingencia
+  description: >-
+    Desarrollar, y automatizar cuando sea viable, los procedimientos de la operación rutinaria, incluidas las
+    solicitudes de servicio y de cambio, la resolución de problemas y la notificación de incidentes, para
+    reducir el riesgo de anomalías operativas. Aplicar las medidas de contingencia definidas en la
+    arquitectura, como los modos de operación degradados o los modelos alternativos, cuando los fallos en las
+    fuentes de datos, la infraestructura o los sistemas circundantes impidan el servicio normal aunque el
+    propio modelo siga siendo válido. Asegurar que los operadores conocen el rendimiento esperado de cada modo
+    de contingencia antes de entrar en él y mantener estos procedimientos en un plan de continuidad coherente
+    con los procedimientos de recuperación del Plan de recuperación ante desastres.
+  primaryStudies:
+  - P18
+  literature:
+  - polletiHierarchicalFallbackArchitecture2025
+- id: A5
+  title: Gestionar los incidentes y dar soporte a los usuarios
+  description: >-
+    Registrar y clasificar los incidentes, las reclamaciones y las solicitudes de servicio, distinguiendo los
+    fallos del servicio de los errores esperables en un modelo probabilístico y examinando los casos
+    notificados con la versión del modelo que los produjo. Restablecer la operación normal mediante
+    procedimientos operativos validados o soluciones provisionales y escalar las cuestiones sobre el
+    comportamiento del modelo a los equipos responsables del modelo. Emitir una solicitud de mantenimiento
+    siempre que un problema requiera un cambio en los datos, el modelo o el código, e informar a los usuarios
+    de las limitaciones y los riesgos del sistema para favorecer su uso correcto.
+  primaryStudies:
+  - P3
+  - P8
+  - P11
+  literature:
+  - breckMLTestScore2017
+- id: A6
+  title: Registrar e informar de los resultados de la operación
+  description: >-
+    Documentar el rendimiento del servicio, la disponibilidad, el consumo de recursos y el coste, junto con
+    los incidentes, las solicitudes de soporte y las anomalías encontradas, e informar de ellos frente a los
+    objetivos de nivel de servicio. Vincular cada registro con la versión del modelo en servicio en ese
+    momento y mantener la trazabilidad entre los servicios operativos y los requisitos, el concepto operativo
+    y las versiones publicadas. Poner los registros a disposición de los procesos que dependen de ellos, en
+    particular para fundamentar las acciones de mantenimiento y las decisiones sobre la frecuencia del
+    entrenamiento y la elección del algoritmo.
+  primaryStudies:
+  - P1
+  - P9
+  - P16

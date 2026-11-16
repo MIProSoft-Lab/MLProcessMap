@@ -6,6 +6,7 @@ import ProcessModal from '../../../components/ProcessModal.astro';
 import { getLifecycle, getProcess, processIds } from '../../../lib/content';
 import { lifecyclePaths } from '../../../lib/paths';
 import { prose } from '../../../lib/acronyms';
+import { plain } from '../../../lib/text';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = lifecyclePaths;
@@ -17,8 +18,8 @@ const included = new Set(l.phases.flatMap((p) => p.processes));
 const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
 ---
 
-<Layout locale={locale} title={l.name} section="lifecycles" translated={translated}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
+<Layout locale={locale} title={l.name} description={l.description ? plain(l.description) : t('lc.intro')} section="lifecycles" translated={translated}>
+  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, 'lifecycles')}>{t('lc.title')}</a> / {l.name}
   </nav>
   <h1>{l.name}</h1>

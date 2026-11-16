@@ -6,32 +6,32 @@ acronyms:
   expansion:
     en: Artificial Intelligence
     es: Inteligencia Artificial
-    ca: Intel·ligència Artificial
+    ca: Intel·ligència artificial
 - id: API
   expansion:
     en: Application Programming Interface
     es: Interfaz de Programación de Aplicaciones
-    ca: Interfície de Programació d'Aplicacions
+    ca: Interfície de programació d'aplicacions
 - id: CTO
   expansion:
     en: Chief Technology Officer
     es: Director de Tecnología
-    ca: Director de Tecnologia
+    ca: Director de tecnologia
 - id: KPI
   expansion:
     en: Key Performance Indicator
     es: Indicador Clave de Rendimiento
-    ca: Indicador Clau de Rendiment
+    ca: Indicador clau de rendiment
 - id: ML
   expansion:
     en: Machine Learning
     es: Aprendizaje Automático
-    ca: Aprenentatge Automàtic
+    ca: Aprenentatge automàtic
 - id: OCR
   expansion:
     en: Optical Character Recognition
     es: Reconocimiento Óptico de Caracteres
-    ca: Reconeixement Òptic de Caràcters
+    ca: Reconeixement òptic de caràcters
 - id: PRM
   expansion:
     en: Process Reference Model
@@ -41,9 +41,9 @@ acronyms:
   expansion:
     en: Service Level Indicator
     es: Indicador de Nivel de Servicio
-    ca: Indicador de Nivell de Servei
+    ca: Indicador de nivell de servei
 - id: SLO
   expansion:
     en: Service Level Objective
     es: Objetivo de Nivel de Servicio
-    ca: Objectiu de Nivell de Servei
+    ca: Objectiu de nivell de servei

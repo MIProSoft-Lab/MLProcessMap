@@ -1,0 +1,166 @@
+id: P20
+number: 20
+origin: standards-and-literature
+name: Proceso de transición
+purpose: >-
+  El propósito del *Proceso de transición* es llevar un modelo entrenado, validado y probado a un entorno de
+  producción en el que pueda hacer predicciones. Salva la distancia entre la experimentación y la operación,
+  de modo que los modelos funcionen de forma fiable en condiciones reales.
+outcomes:
+- id: a
+  text: Se realiza la transición de un modelo entrenado a un entorno de producción preparado y configurado.
+- id: b
+  text: El modelo se empaqueta en un artefacto de despliegue normalizado y portable.
+- id: c
+  text: Se registra un modelo versionado en un registro con sus metadatos.
+- id: d
+  text: El modelo desplegado se carga correctamente y se expone mediante interfaces definidas.
+- id: e
+  text: El despliegue se ejecuta con procedimientos que admiten la monitorización y la reversión.
+- id: f
+  text: >-
+    Se elabora un Registro de despliegue que documenta las decisiones, las configuraciones y las acciones del
+    despliegue.
+inputs:
+- workProduct: model-artifact
+  name: Artefacto del modelo
+  description: El modelo validado y probado que se va a desplegar.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: La estrategia de despliegue y el entorno de destino.
+  serves:
+  - a
+  - e
+- workProduct: disaster-recovery-plan
+  name: Plan de recuperación ante desastres
+  description: >-
+    Las estrategias de copia de seguridad, los objetivos de recuperación y los procedimientos de recuperación
+    de los componentes críticos del sistema.
+  serves:
+  - a
+  - e
+outputs:
+- workProduct: deployment-artifacts
+  name: Artefactos de despliegue
+  description: El modelo empaquetado, la entrada en el registro y la instancia en producción.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+- workProduct: deployment-record
+  name: Registro de despliegue
+  description: Las configuraciones, las versiones y las desviaciones respecto al plan.
+  serves:
+  - e
+  - f
+activities:
+- id: A1
+  title: Preparar el entorno
+  description: >-
+    Aprovisionar y configurar la infraestructura, el software y los recursos del entorno operativo según los
+    requisitos de instalación y las decisiones sobre hardware tomadas en la arquitectura. Confirmar que el
+    entorno proporciona la capacidad de cómputo y de memoria que necesita el modelo, y que los supuestos
+    hechos durante el desarrollo sobre el hardware, la plataforma y la configuración siguen siendo válidos en
+    él, ya que las diferencias entre entornos pueden cambiar el comportamiento del modelo. Establecer los
+    controles de acceso, el registro y los demás servicios habilitadores de los que depende el modelo
+    desplegado, junto con los recursos que requieren los procedimientos de recuperación del Plan de
+    recuperación ante desastres, y demostrar que están listos antes de instalar el modelo.
+  primaryStudies:
+  - P1
+  - P3
+  - P8
+  - P10
+  - P11
+  - P13
+- id: A2
+  title: Empaquetar y contenerizar el modelo
+  description: >-
+    Combinar el modelo entrenado con el código necesario para servirlo, incluidos su preprocesamiento y su
+    posprocesamiento, y con las bibliotecas, entornos de ejecución y configuraciones de los que depende, en
+    una unidad desplegable que pueda instalarse de forma coherente en el entorno operativo. Cuando los
+    requisitos operativos lo exijan, convertir o reimplementar el modelo en un formato distinto del usado en
+    el desarrollo y confirmar que la conversión preserva su comportamiento. Asegurar que el procesamiento
+    aplicado a las entradas y las salidas es el mismo en desarrollo y en producción, y que está claro qué
+    partes del modelo contiene la unidad y cuáles se obtienen en tiempo de ejecución.
+  primaryStudies:
+  - P1
+  - P7
+  - P9
+  - P10
+  - P11
+- id: A3
+  title: Versionar y registrar el modelo
+  description: >-
+    Registrar cada modelo desplegable en un repositorio central con una versión única, su etapa del ciclo de
+    vida y los metadatos necesarios para trazarlo hasta el código, los datos y la configuración que lo
+    produjeron. Controlar la aprobación de cada versión y registrar las transiciones entre etapas, junto con
+    la distribución de cada versión a los entornos en los que se instala. Mantener registradas y disponibles
+    las versiones anteriores, para que siempre se sepa qué versión está en servicio y pueda restaurarse una
+    anterior cuando sea necesario.
+  primaryStudies:
+  - P1
+  - P4
+  - P6
+  - P7
+  - P9
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Ejecutar el despliegue
+  description: >-
+    Instalar el modelo empaquetado en el entorno operativo según la estrategia de despliegue definida en la
+    arquitectura y conectarlo con los sistemas con los que interopera mediante las interfaces definidas.
+    Confirmar que el modelo se carga, se inicializa y sirve predicciones sobre entradas de producción, que sus
+    interfaces solo exponen la información prevista y que su rendimiento en condiciones reales es coherente
+    con el observado durante la validación. Revisar la preparación del sistema para la operación, incluidas su
+    seguridad y su soporte a los procedimientos de recuperación del Plan de recuperación ante desastres, y
+    confirmar que la versión anterior sigue disponible para ser restaurada antes de poner plenamente en
+    servicio la nueva.
+  primaryStudies:
+  - P3
+  - P6
+  - P8
+  - P13
+  - P15
+  - P16
+  - P18
+  literature:
+  - breckMLTestScore2017
+- id: A5
+  title: Documentar el despliegue
+  description: >-
+    Registrar en el Registro de despliegue las configuraciones, versiones, parámetros y el entorno usados, los
+    resultados del despliegue y cualquier anomalía o incidente encontrado junto con las condiciones en que se
+    produjo. Anotar cualquier diferencia respecto a la estrategia de despliegue definida en la arquitectura,
+    para que el registro complemente esa documentación en lugar de repetirla. Mantener la trazabilidad entre
+    los elementos desplegados y sus versiones aprobadas, y poner a disposición de los responsables de la
+    operación del sistema la información necesaria para operarlo.
+  primaryStudies:
+  - P3
+  - P11
+  - P14
+  - P15
+  - P16
+changes:
+- annotation: A-49
+  text: "Definir el tipo de despliegue: canario, A/B, azul-verde"
+  redVotes: 2
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: A-20
+  raisedElsewhere: true
+  text: No se define un Plan de recuperación ante desastres
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Plan de recuperación ante desastres

@@ -69,7 +69,7 @@ activities:
     Partition data into training and test sets (and optionally validation sets), using a holdout or a
     train, validation, and test split, or cross-validation for smaller datasets. Hold back a test set
     disjoint from the training and validation sets for the final evaluation, and consider using stratified
-    sampling when class are unbalanced or the balance is important.
+    sampling when classes are unbalanced or the balance is important.
   primaryStudies:
   - P3
   - P13

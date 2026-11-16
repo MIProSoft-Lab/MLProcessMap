@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import { getProcess, getWorkProducts, versions } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
+import { searchKey } from '../../../lib/text';
 import { useTranslations, href, type Locale } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
@@ -15,7 +16,7 @@ const versionLinks = Object.fromEntries(versions.map((x) => [x.id, href(locale, 
 const types = ['information-item', 'artifact', 'record'] as const;
 ---
 
-<Layout locale={locale} title={t('wp.title')} section="workProducts" version={version} versionLinks={versionLinks}>
+<Layout locale={locale} title={t('wp.title')} description={t('wp.intro')} section="workProducts" version={version} versionLinks={versionLinks}>
   <h1>{t('wp.title')} <span class="muted">· {version}</span></h1>
   <p class="muted prose">{t('wp.intro')}</p>
 
@@ -41,14 +42,14 @@ const types = ['information-item', 'artifact', 'record'] as const;
       <tbody>
         {
           wps.map((w) => (
-            <tr id={w.id} data-type={w.type} data-search={w.name.toLowerCase()}>
+            <tr id={w.id} data-type={w.type} data-search={searchKey([w.name, ...[...w.producers, ...w.consumers].map((l) => `${l.process} ${name(l.process)}`)].join(' '))}>
               <td>
                 <strong>{w.name}</strong>
               </td>
               <td>
                 <span class="badge">{t(`wp.type-${w.type}`)}</span>
               </td>
-              <td>
+              <td data-label={t('wp.producers')}>
                 {w.producers.length ? (
                   <span class="chips">
                     {w.producers.map((l) => (
@@ -62,7 +63,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
                   <span class="muted small">{t('process.external')}</span>
                 )}
               </td>
-              <td>
+              <td data-label={t('wp.consumers')}>
                 {w.consumers.length ? (
                   <span class="chips">
                     {w.consumers.map((l) => (
@@ -82,21 +83,31 @@ const types = ['information-item', 'artifact', 'record'] as const;
       </tbody>
     </table>
   </div>
+  <p id="empty" class="muted" hidden>{t('wp.noResults')}</p>
   <ProcessModal locale={locale} />
 </Layout>
 
 <script>
   import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
+  import { searchKey } from '../../../lib/text';
 
   openLinksInModal(document.getElementById('main')!, createProcessModal());
 
   const input = document.querySelector<HTMLInputElement>('#q')!;
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-type]:is(button)')];
   const rows = [...document.querySelectorAll<HTMLTableRowElement>('tbody tr')];
+  const table = document.querySelector<HTMLElement>('.table-wrap')!;
+  const empty = document.querySelector<HTMLElement>('#empty')!;
   let type = '';
   const apply = () => {
-    const q = input.value.toLowerCase().trim();
-    for (const r of rows) r.hidden = (type !== '' && r.dataset.type !== type) || !r.dataset.search!.includes(q);
+    const words = searchKey(input.value).split(/\s+/).filter(Boolean);
+    let shown = 0;
+    for (const r of rows) {
+      r.hidden = (type !== '' && r.dataset.type !== type) || !words.every((w) => r.dataset.search!.includes(w));
+      if (!r.hidden) shown++;
+    }
+    table.hidden = shown === 0;
+    empty.hidden = shown > 0;
   };
   input.addEventListener('input', apply);
   for (const b of buttons) {
@@ -144,5 +155,54 @@ const types = ['information-item', 'artifact', 'record'] as const;
 
   .wp-table .chip {
     font-size: 0.8rem;
+  }
+
+  /* On a narrow screen each work product is a card: name and type, then who
+     produces it and who uses it, each under its own label. */
+  @media (max-width: 700px) {
+    .wp-table,
+    .wp-table tbody,
+    .wp-table td {
+      display: block;
+    }
+
+    .wp-table thead {
+      display: none;
+    }
+
+    .wp-table tr:not([hidden]) {
+      display: block;
+      padding: 10px 12px 12px;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .wp-table tr:last-child {
+      border-bottom: 0;
+    }
+
+    .wp-table td {
+      padding: 0;
+      border: 0;
+    }
+
+    .wp-table td:first-child {
+      min-width: 0;
+      font-size: 1rem;
+    }
+
+    .wp-table td + td {
+      margin-top: 6px;
+    }
+
+    .wp-table td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      margin: 4px 0;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
   }
 </style>

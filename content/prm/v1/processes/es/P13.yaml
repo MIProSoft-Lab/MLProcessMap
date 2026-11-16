@@ -1,0 +1,141 @@
+id: P13
+number: 13
+origin: decomposed
+name: Proceso de etiquetado de datos
+purpose: >-
+  El propósito del *Proceso de etiquetado de datos* es asignar valores objetivo o categorías correctos
+  a las muestras de datos individuales. Estas etiquetas permiten que los modelos supervisados aprendan
+  la relación entre los datos de entrada y las salidas esperadas.
+outcomes:
+- id: a
+  text: >-
+    Se obtiene un conjunto de datos etiquetado en el que se asignan valores objetivo a las muestras.
+- id: b
+  text: Se elabora un Documento de pautas de etiquetado que describe los objetivos y las instrucciones.
+- id: c
+  text: >-
+    Se registran los metadatos del etiquetado, incluidos los anotadores, las herramientas y las marcas
+    de tiempo.
+- id: d
+  text: Se documentan los resultados del control de calidad de las etiquetas asignadas.
+- id: e
+  text: >-
+    Se elabora un Registro de etiquetado de datos que documenta el proceso de etiquetado completo y su
+    configuración.
+inputs:
+- workProduct: enriched-dataset
+  name: Conjunto de datos enriquecido
+  description: El conjunto de datos preparado para la anotación.
+  serves:
+  - a
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los requisitos que definen los valores objetivo.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: labeled-dataset
+  name: Conjunto de datos etiquetado
+  description: El conjunto de datos con valores objetivo o categorías asignados a cada muestra.
+  serves:
+  - a
+- workProduct: data-labeling-record
+  name: Registro de etiquetado de datos
+  description: >-
+    Las pautas de etiquetado, los metadatos de los anotadores, los resultados del control de calidad y
+    la configuración del proceso.
+  serves:
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Planificar las actividades de etiquetado
+  description: >-
+    Seleccionar los subconjuntos de datos, especificar los objetivos y diseñar las pautas de anotación.
+    Seleccionar los datos que vale la pena etiquetar y planificar si las etiquetas deben reutilizarse
+    en otras tareas. Decidir quién etiqueta los datos, sopesando anotadores internos, expertos del dominio
+    y trabajadores de *crowdsourcing* en función del coste, la calidad, la comprensión del problema requerida,
+    la confidencialidad de los datos y la composición del grupo de etiquetadores. Elegir y evaluar el
+    método y las herramientas de etiquetado. Redactar las definiciones e instrucciones y refinar las pautas
+    con los comentarios de los anotadores.
+  primaryStudies:
+  - P3
+  - P10
+  literature:
+  - fredrikssonDataLabelingEmpirical2020
+  - haliburtonUncoveringLabelerBias2025
+  - sabouCorpusAnnotationCrowdsourcing2014
+  - zhaDatacentricArtificialIntelligence2025
+  - hutchinsonAccountabilityMachineLearning2021
+- id: A2
+  title: Formar a los anotadores
+  description: >-
+    Informar a los anotadores, proporcionarles práctica y realizar ejercicios de calibración, evaluando
+    que son competentes en el dominio y que están formados en el uso de la herramienta de etiquetado.
+    Formar a los anotadores para que sigan las instrucciones escritas y no su propia interpretación del
+    propósito, calibrarlos frente a etiquetas de referencia (*gold standard*) para estimar y corregir
+    el sesgo de cada anotador y filtrar a los colaboradores mediante pruebas de competencia.
+  literature:
+  - artsteinIntercoderAgreementComputational2008
+  - snowCheapFastbutIt2008
+  - sabouCorpusAnnotationCrowdsourcing2014
+- id: A3
+  title: Asignar las etiquetas
+  description: >-
+    Ejecutar el etiquetado con métodos como la anotación manual, el *crowdsourcing*, el etiquetado semisupervisado,
+    el aprendizaje activo o la preanotación por un modelo validada por personas. Cuando las etiquetas
+    sean ruidosas, obtener varias etiquetas para elementos seleccionados e integrarlas, por ejemplo por
+    votación mayoritaria, e incluir preguntas con respuestas verificables para desincentivar las respuestas
+    de poco esfuerzo. Cuando las etiquetas se generen de forma programática, tener en cuenta que una mayor
+    automatización puede reducir la exactitud de las etiquetas.
+  primaryStudies:
+  - P10
+  literature:
+  - roh2021
+  - zhaDatacentricArtificialIntelligence2025
+  - snowCheapFastbutIt2008
+  - shengGetAnotherLabel2008
+  - fredrikssonDataLabelingEmpirical2020
+- id: A4
+  title: Validar las etiquetas
+  description: >-
+    Evaluar el acuerdo, comparar con etiquetas de referencia y revisar las etiquetas de baja calidad,
+    ajustando la profundidad de la revisión y la corrección al riesgo de la aplicación. Medir el acuerdo
+    con coeficientes corregidos por azar, intercalar elementos de referencia para evaluar a cada anotador
+    y hacer que expertos del dominio validen las etiquetas. Identificar a partir de los datos las etiquetas
+    probablemente erróneas, considerando las fuentes de ruido en las etiquetas, y comprobar si el acuerdo
+    dentro del grupo de etiquetadores puede ocultar un sesgo compartido.
+  primaryStudies:
+  - P3
+  - P8
+  literature:
+  - artsteinIntercoderAgreementComputational2008
+  - sabouCorpusAnnotationCrowdsourcing2014
+  - snowCheapFastbutIt2008
+  - haliburtonUncoveringLabelerBias2025
+  - fredrikssonDataLabelingEmpirical2020
+  - frenayClassificationPresenceLabel2014
+  - northcuttConfidentLearningEstimating2021
+- id: A5
+  title: Documentar el proceso de etiquetado
+  description: >-
+    Registrar las pautas, las configuraciones de las herramientas y los métodos de aseguramiento de la
+    calidad en el Registro de etiquetado de datos, junto con las características demográficas de los anotadores
+    y de quienes elaboraron las pautas, cómo se llevó a cabo el etiquetado previsto y qué imprevistos
+    surgieron, y cuándo se asignó cada etiqueta, ya que las etiquetas pueden volverse incorrectas con
+    el tiempo.
+  primaryStudies:
+  - P9
+  literature:
+  - benderDataStatementsNatural2018
+  - hutchinsonAccountabilityMachineLearning2021
+  - haliburtonUncoveringLabelerBias2025
+standards:
+- standard: ISO/IEC 5338
+  activity: b) Llevar a cabo el etiquetado de datos
+- standard: ISO/IEC 5338
+  activity: e) Documentar el linaje y la procedencia de los datos
+  note: Repartido entre todos los procesos de datos

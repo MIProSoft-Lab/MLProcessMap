@@ -6,6 +6,8 @@ import '../../styles/tailor.css';
 import { versions, defaultVersion, getProcesses, getWorkProducts, lifecycleIds, getLifecycle, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { plain } from '../../lib/text';
+import { diagramKeys } from '../../lib/lifecycle-diagram';
+import { exportKeys } from '../../lib/tailor/export';
 import { useTranslations, href, type Locale, type UiKey } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
@@ -44,63 +46,62 @@ const data = {
   }),
 };
 
+// The strings of the page's script; the drawing and the exports list their own.
 const keys: UiKey[] = [
+  ...diagramKeys,
+  ...exportKeys,
   'tailor.selected',
   'tailor.allCovered',
   'tailor.copied',
   'tailor.copyLink',
   'tailor.rationale',
-  'tailor.excluded',
   'tailor.start-all',
   'tailor.start-none',
-  'tailor.project',
-  'tailor.version',
+  'tailor.start-note',
   'process.activities',
   'process.producedBy',
   'nav.lifecycles',
   'modal.details',
-  'tailor.phase-new',
   'tailor.phase-name',
   'tailor.phase-up',
   'tailor.phase-down',
   'tailor.phase-remove',
   'tailor.phase-description',
-  'tailor.phase-returnsTo',
   'tailor.phase-noReturn',
   'tailor.phase-returnNote',
   'tailor.phase-drop',
+  'tailor.phase-drop-touch',
+  'tailor.bar-selected',
+  'tailor.bar-missing',
+  'tailor.undo-replaced',
+  'tailor.undo-all',
+  'tailor.undo-none',
+  'tailor.undo-phase',
+  'tailor.undo-version',
   'tailor.phase-addProcess',
   'tailor.phase-unassign',
   'tailor.phase-none',
   'tailor.phase-of',
-  'tailor.unassigned',
   'tailor.unassigned-none',
   'tailor.phases-summary',
-  'tailor.untitled',
   'tailor.import-done',
   'tailor.import-csv',
   'tailor.import-skipped',
   'tailor.import-version',
   'tailor.import-error',
-  'lc.iterative',
-  'lc.diagram',
-  'lc.diagramDesc',
-  'lc.legendRepeated',
-  'lc.legendLoop',
-  'lc.tipProcesses',
-  'lc.tipReturns',
-  'lc.tipReceives',
-  'origin.standards-and-literature',
-  'origin.standards-only',
-  'origin.decomposed',
 ];
 const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 ---
 
-<Layout locale={locale} title={t('tailor.title')} section="tailor" pageClass="tailor-page">
+<Layout locale={locale} title={t('tailor.title')} description={t('tailor.intro')} section="tailor" pageClass="tailor-page">
   <h1>{t('tailor.title')}</h1>
   <p class="muted prose">{t('tailor.intro')}</p>
   <noscript><p class="notice">{t('tailor.noscript')}</p></noscript>
+  <p id="restore" class="notice restore no-print" role="status" hidden>
+    <span>{t('tailor.restore-text')} <strong id="restore-name"></strong></span>
+    <button type="button" id="restore-yes">{t('tailor.restore-yes')}</button>
+    <button type="button" id="restore-no">{t('tailor.restore-no')}</button>
+  </p>
 
   <div class="controls card no-print">
     <label>
@@ -113,10 +114,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         {versions.map((v) => <option value={v.id}>{v.id} · {pick(v.title, locale)}</option>)}
       </select>
     </label>
-    <label>
-      <span>{t('tailor.start')}</span>
-      <select id="start"></select>
-    </label>
+    <details class="menu start-menu" id="start">
+      <summary>{t('tailor.start')}…</summary>
+      <ul id="start-list"></ul>
+    </details>
   </div>
 
   <div class="layout">
@@ -136,6 +137,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
           <button type="button" id="none">{t('tailor.selectNone')}</button>
         </div>
         <ol id="processes" class="processes"></ol>
+        <p class="next-step"><button type="button" id="next-phases" class="primary button">{t('tailor.next-phases')} →</button></p>
       </div>
 
       <div id="panel-phases" role="tabpanel" aria-labelledby="tab-phases" hidden>
@@ -153,20 +155,29 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       </div>
     </section>
 
-    <aside class="side no-print">
+    <aside class="side no-print" id="side">
       <div class="card sticky">
         <p id="summary" class="summary"></p>
         <p id="phase-summary" class="small muted" hidden></p>
+        <h2>
+          <span>{t('tailor.missingInputs')} <span id="missing-count" class="count"></span></span>
+        </h2>
+        <p id="missing-note" class="small muted" hidden>{t('tailor.missingInputsNote')}</p>
+        <ul id="missing" class="missing small"></ul>
+        <h2>{t('tailor.share')}</h2>
+        <p class="small muted">{t('tailor.shareNote')}</p>
+        <div class="exports">
+          <button type="button" id="copy" class="primary button">{t('tailor.copyLink')}</button>
+        </div>
         <h2>{t('tailor.export')}</h2>
         <div class="exports">
           <button type="button" data-export="md">{t('tailor.markdown')}</button>
           <button type="button" data-export="csv">{t('tailor.csv')}</button>
           <button type="button" data-export="json">{t('tailor.json')}</button>
+          <button type="button" data-export="yaml" id="export-yaml" aria-describedby="yaml-note">{t('tailor.yaml')}</button>
           <button type="button" id="print">{t('tailor.print')}</button>
-          <button type="button" data-export="yaml" id="export-yaml">{t('tailor.yaml')}</button>
-          <button type="button" id="copy" class="primary button">{t('tailor.copyLink')}</button>
         </div>
-        <p class="small muted">{t('tailor.yamlNote')}</p>
+        <p id="yaml-note" class="small muted" data-ready={t('tailor.yamlNote')} data-disabled={t('tailor.yamlDisabled')}></p>
         <h2>{t('tailor.import')}</h2>
         <p class="small muted">{t('tailor.import-note')}</p>
         <div class="exports">
@@ -174,9 +185,6 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
           <input type="file" id="import-file" accept=".json,.yaml,.yml,.csv,application/json,application/yaml,text/csv" hidden />
         </div>
         <p id="import-status" class="small" role="status" hidden></p>
-        <h2>{t('tailor.missingInputs')}</h2>
-        <p class="small muted">{t('tailor.missingInputsNote')}</p>
-        <ul id="missing" class="missing small"></ul>
       </div>
     </aside>
   </div>
@@ -189,6 +197,17 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     </div>
   </section>
 
+  <p id="undo" class="undo no-print" role="status" hidden>
+    <span id="undo-text"></span>
+    <button type="button" id="undo-yes">{t('tailor.undo')}</button>
+    <button type="button" id="undo-close" aria-label={t('modal.close')}>✕</button>
+  </p>
+
+  <a id="mobile-bar" class="mobile-bar no-print" href="#side">
+    <span id="mobile-summary"></span>
+    <span class="mobile-bar-go">{t('tailor.export')} ↓</span>
+  </a>
+
   <div id="print-view" class="print-only"></div>
 
   <ProcessModal locale={locale} />
@@ -199,7 +218,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 <script>
   import { createProcessModal, openLinksInModal } from '../../lib/process-modal';
   import { diagramSvgs } from '../../lib/lifecycle-diagram';
-  import { escapeHtml as esc, format } from '../../lib/text';
+  import { translator } from '../../lib/client-strings';
+  import { escapeHtml as esc } from '../../lib/text';
   import * as model from '../../lib/tailor/model';
   import type { Data, Phase, Proc, State } from '../../lib/tailor/model';
   import * as exporter from '../../lib/tailor/export';
@@ -209,7 +229,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     data: Data;
     strings: Record<string, string>;
   };
-  const s = (k: string, vars: Record<string, string | number> = {}) => format(strings[k] ?? k, vars);
+  const s = translator(strings);
   const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
   const { phase, phasesOf, slug } = model;
 
@@ -217,12 +237,76 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   const version = (id: string) => model.versionOf(data, id);
 
+  // The last model edited is also kept in the browser, to offer it again on a
+  // visit that starts without one. Opening a model does not replace it; editing does.
+  const STORE = 'prm-tool:tailor:last';
+  const stored = {
+    get() {
+      try {
+        return localStorage.getItem(STORE);
+      } catch {
+        return null; // Storage can be blocked, and the builder works without it.
+      }
+    },
+    set(hash: string | null) {
+      try {
+        hash === null ? localStorage.removeItem(STORE) : localStorage.setItem(STORE, hash);
+      } catch {}
+    },
+  };
+  const last = location.hash.length > 1 ? null : stored.get();
+
   let state = model.fromHash(data, location.hash.slice(1));
 
   const syncPhases = () => model.syncPhases(state, version(state.version));
   syncPhases();
 
-  const toHash = () => history.replaceState(null, '', `#${model.toHash(state)}`);
+  /** The model without the open tab, which is not part of it. */
+  const modelKey = (x: State) => model.toHash({ ...x, tab: 'processes' });
+  const opened = modelKey(state);
+  let edited = false;
+  const restore = $('#restore');
+
+  const toHash = () => {
+    const hash = model.toHash(state);
+    history.replaceState(null, '', `#${hash}`);
+    if (undo && modelKey(state) !== undo.after) dismissUndo();
+    edited ||= modelKey(state) !== opened;
+    if (!edited) return;
+    stored.set(hash);
+    restore.hidden = true;
+  };
+
+  // --- Undo ------------------------------------------------------------
+
+  // An action that replaces work (a template, select all or none, a removed
+  // phase, another PRM version, an imported file) can be taken back until the
+  // next edit, which would otherwise be lost with it.
+  let undo: { before: string; after: string } | null = null;
+  const undoBar = $('#undo');
+  const snapshot = () => model.toHash(state);
+
+  function dismissUndo() {
+    undo = null;
+    undoBar.hidden = true;
+  }
+
+  /** Offer to return to the model as it was before an action, given what `snapshot()` returned then. */
+  function offerUndo(before: string, message: string) {
+    if (before === snapshot()) return;
+    undo = { before, after: modelKey(state) };
+    $('#undo-text').textContent = message;
+    undoBar.hidden = false;
+  }
+
+  $('#undo-yes').addEventListener('click', () => {
+    if (!undo) return;
+    const back = model.fromHash(data, undo.before);
+    dismissUndo();
+    load(back);
+    document.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus();
+  });
+  $('#undo-close').addEventListener('click', dismissUndo);
 
   // --- Rendering ---------------------------------------------------------
 
@@ -235,6 +319,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   const procOf = (id: string) => version(state.version).processes.find((p) => p.id === id);
   const phaseOf = (id: string) => model.phaseOf(state, id);
   const unassigned = () => model.unassigned(state, version(state.version));
+  // A touch screen cannot drag the process chips, so an empty phase points at the menu below it.
+  const touch = matchMedia('(pointer: coarse)').matches;
   const phaseLabel = (p: Phase, i: number) => `${String(i + 1).padStart(2, '0')} ${p.name || s('tailor.phase-new', { n: i + 1 })}`;
 
   function phaseSelect(id: string) {
@@ -246,7 +332,41 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     return `<select class="phase-select" data-phase-of="${id}" aria-label="${esc(s('tailor.phase-of', { id }))}">${options}</select>`;
   }
 
+  /**
+   * Redrawing replaces every row, which would close the open lists and drop the
+   * keyboard focus. This notes both before a redraw and returns the way to put them back.
+   */
+  function rememberView() {
+    const rows = 'li.proc, li.phase-card';
+    const rowSel = (row: HTMLElement) =>
+      row.dataset.phase !== undefined ? `#phases [data-phase="${CSS.escape(row.dataset.phase)}"]` : `#processes [data-id="${CSS.escape(row.dataset.id!)}"]`;
+    const open = [...document.querySelectorAll<HTMLElement>('#processes details[open], #phases details[open]')].map((d) => rowSel(d.closest<HTMLElement>(rows)!));
+    const active = document.activeElement;
+    const row = active instanceof HTMLElement && (list.contains(active) || phaseList.contains(active)) ? active.closest<HTMLElement>(rows) : null;
+    // The focused control is found again by its tag and data attributes, e.g. input[data-proc="P01"].
+    const focused = row && {
+      row: rowSel(row),
+      el:
+        active!.tagName.toLowerCase() +
+        [...active!.attributes]
+          .filter((a) => a.name.startsWith('data-'))
+          .map((a) => `[${a.name}="${CSS.escape(a.value)}"]`)
+          .join(''),
+    };
+    return () => {
+      for (const sel of open) document.querySelector<HTMLDetailsElement>(`${sel} details`)?.setAttribute('open', '');
+      if (!focused) return;
+      // A control that is gone (a removed chip, a removed phase) hands the focus to its row, or to "Add phase".
+      const again =
+        document.querySelector<HTMLElement>(`${focused.row} ${focused.el}`) ??
+        document.querySelector<HTMLElement>(`${focused.row} :is(input, select, button:not(:disabled))`) ??
+        $('#add-phase');
+      again.focus();
+    };
+  }
+
   function renderList() {
+    const restoreView = rememberView();
     const v = version(state.version);
     list.innerHTML = v.processes
       .map((p) => {
@@ -271,6 +391,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       })
       .join('');
     renderPhases();
+    restoreView();
   }
 
   const chip = (id: string, from: string) => {
@@ -289,11 +410,19 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         const others = state.phases
           .map((o, k) => (o.id === p.id ? '' : `<option value="${esc(o.id)}" ${o.id === p.returnsTo ? 'selected' : ''}>${esc(phaseLabel(o, k))}</option>`))
           .join('');
-        const add = free.length
-          ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${free
-              .map((f) => `<option value="${f.id}">${f.id} ${esc(f.name)}</option>`)
-              .join('')}</select>`
-          : '';
+        // The menu adds a process without a phase, or moves one here from another
+        // phase, which is the way to arrange them without dragging.
+        const option = (id: string) => `<option value="${id}">${id} ${esc(procOf(id)?.name ?? '')}</option>`;
+        const group = (label: string, ids: string[]) => (ids.length ? `<optgroup label="${esc(label)}">${ids.map(option).join('')}</optgroup>` : '');
+        const choices =
+          group(
+            s('tailor.phase-none'),
+            free.map((f) => f.id),
+          ) +
+          state.phases
+            .map((o, k) => (o.id === p.id ? '' : group(phaseLabel(o, k), o.processes)))
+            .join('');
+        const add = choices ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${choices}</select>` : '';
         return `<li class="phase-card" data-phase="${esc(p.id)}">
           <div class="pc-head">
             <span class="pc-step">${String(i + 1).padStart(2, '0')}</span>
@@ -304,7 +433,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
               <button type="button" data-remove aria-label="${esc(s('tailor.phase-remove'))}" title="${esc(s('tailor.phase-remove'))}">✕</button>
             </span>
           </div>
-          <ul class="pc-procs dropzone" data-drop="${esc(p.id)}">${p.processes.map((id) => chip(id, p.id)).join('') || `<li class="pc-empty small muted">${esc(s('tailor.phase-drop'))}</li>`}</ul>
+          <ul class="pc-procs dropzone" data-drop="${esc(p.id)}">${p.processes.map((id) => chip(id, p.id)).join('') || `<li class="pc-empty small muted">${esc(touch && add ? s('tailor.phase-drop-touch') : s('tailor.phase-drop'))}</li>`}</ul>
           ${add}
           <div class="pc-options small">
             <label><input type="checkbox" data-field="iterative" ${p.iterative ? 'checked' : ''}> ↻ ${esc(s('lc.iterative'))}</label>
@@ -357,11 +486,17 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     phaseSummary.hidden = !state.phases.length;
     phaseSummary.textContent = s('tailor.phases-summary', { n: state.phases.length, u: unassigned().length });
     $<HTMLButtonElement>('#export-yaml').disabled = !state.phases.length;
+    const yamlNote = $('#yaml-note');
+    yamlNote.textContent = state.phases.length ? yamlNote.dataset.ready! : yamlNote.dataset.disabled!;
     for (const p of v.processes) {
       const el = list.querySelector(`[data-count="${p.id}"]`);
       if (el) el.textContent = `${activeActivities(p).length}/${p.activities.length}`;
     }
     const missing = missingInputs();
+    $('#missing-count').textContent = missing.size ? `(${missing.size})` : '';
+    $('#missing-note').hidden = !missing.size;
+    $('#mobile-summary').textContent =
+      s('tailor.bar-selected', { n: state.selected.size, total: v.processes.length }) + (missing.size ? ` · ${s('tailor.bar-missing', { m: missing.size })}` : '');
     $('#missing').innerHTML = missing.size
       ? [...missing]
           .map(([wid, users]) => {
@@ -378,9 +513,12 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   function renderStartOptions() {
     const lcs = data.lifecycles.filter((l) => l.version === state.version);
-    $<HTMLSelectElement>('#start').innerHTML =
-      `<option value="">—</option><option value="all">${s('tailor.start-all')}</option><option value="none">${s('tailor.start-none')}</option>` +
-      (lcs.length ? `<optgroup label="${esc(s('nav.lifecycles'))}">${lcs.map((l) => `<option value="lc:${l.id}">${esc(l.name)}</option>`).join('')}</optgroup>` : '');
+    const item = (value: string, label: string) => `<li><button type="button" data-start="${esc(value)}">${esc(label)}</button></li>`;
+    $('#start-list').innerHTML =
+      item('all', s('tailor.start-all')) +
+      item('none', s('tailor.start-none')) +
+      (lcs.length ? `<li class="menu-group">${esc(s('nav.lifecycles'))}</li>${lcs.map((l) => item(`lc:${l.id}`, l.name)).join('')}` : '') +
+      `<li class="menu-foot">${esc(s('tailor.start-note'))}</li>`;
   }
 
   function showTab(tab: State['tab'], focus = false) {
@@ -430,6 +568,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!id) return;
     state.selected.add(id);
     renderList();
+    // The button that was pressed is gone: move on to the next one, or to the process just added.
+    ($('#missing').querySelector<HTMLElement>('button') ?? list.querySelector<HTMLElement>(`[data-proc="${id}"]`))?.focus();
   });
 
   $<HTMLInputElement>('#project').addEventListener('input', (e) => {
@@ -439,6 +579,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   });
 
   $<HTMLSelectElement>('#version').addEventListener('change', (e) => {
+    const before = snapshot();
     const v = version((e.target as HTMLSelectElement).value);
     // Keep the processes that exist in both versions; activities may differ.
     const ids = new Set(v.processes.map((p) => p.id));
@@ -446,11 +587,28 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     syncPhases();
     renderStartOptions();
     renderList();
+    offerUndo(before, s('tailor.undo-version', { v: v.id }));
   });
 
-  $<HTMLSelectElement>('#start').addEventListener('change', (e) => {
-    const value = (e.target as HTMLSelectElement).value;
+  // The "Start from" menu: each item replaces the selection, and a template the phases too.
+  const startMenu = $<HTMLDetailsElement>('#start');
+  const closeStart = (focus = false) => {
+    startMenu.open = false;
+    if (focus) startMenu.querySelector('summary')!.focus();
+  };
+  document.addEventListener('click', (e) => {
+    if (startMenu.open && !startMenu.contains(e.target as Node)) closeStart();
+  });
+  startMenu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && startMenu.open) closeStart(true);
+  });
+
+  $('#start-list').addEventListener('click', (e) => {
+    const value = (e.target as HTMLElement).closest<HTMLElement>('[data-start]')?.dataset.start;
+    if (!value) return;
     const v = version(state.version);
+    const before = snapshot();
+    let message = value === 'all' ? s('tailor.undo-all') : s('tailor.undo-none');
     if (value === 'all') state.selected = new Set(v.processes.map((p) => p.id));
     else if (value === 'none') state.selected = new Set();
     else if (value.startsWith('lc:')) {
@@ -459,23 +617,29 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       state.phases = phasesOf(lc);
       state.description = lc.description;
       state.project = lc.name;
+      message = s('tailor.undo-replaced', { name: lc.name });
       $<HTMLInputElement>('#project').value = state.project;
       $<HTMLTextAreaElement>('#lc-description').value = state.description;
     }
     state.excluded = new Set();
     syncPhases();
-    (e.target as HTMLSelectElement).value = '';
+    closeStart(true);
     renderList();
+    offerUndo(before, message);
   });
 
   $('#all').addEventListener('click', () => {
+    const before = snapshot();
     state.selected = new Set(version(state.version).processes.map((p) => p.id));
     renderList();
+    offerUndo(before, s('tailor.undo-all'));
   });
   $('#none').addEventListener('click', () => {
+    const before = snapshot();
     state.selected = new Set();
     syncPhases();
     renderList();
+    offerUndo(before, s('tailor.undo-none'));
   });
 
   // --- Events: tabs -------------------------------------------------------
@@ -487,6 +651,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       e.preventDefault();
       showTab(state.tab === 'processes' ? 'phases' : 'processes', true);
     });
+  });
+
+  $('#next-phases').addEventListener('click', () => {
+    showTab('phases', true);
+    $('#tab-phases').scrollIntoView({ block: 'start' });
   });
 
   // --- Events: phases -----------------------------------------------------
@@ -530,7 +699,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!p) return;
     if (el.dataset.field === 'iterative') p.iterative = el.checked;
     else if (el.dataset.field === 'returnsTo') p.returnsTo = el.value;
-    else if (el.dataset.addTo && el.value) insertInOrder(p, el.value);
+    else if (el.dataset.addTo && el.value) {
+      for (const o of state.phases) if (o !== p) o.processes = o.processes.filter((x) => x !== el.value);
+      insertInOrder(p, el.value);
+    }
     else return;
     renderList();
   });
@@ -545,11 +717,16 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       const j = i + Number(el.dataset.move);
       [state.phases[i], state.phases[j]] = [state.phases[j], state.phases[i]];
       renderList();
-      phaseList.querySelector<HTMLButtonElement>(`.phase-card[data-phase="${CSS.escape(p.id)}"] [data-move="${el.dataset.move}"]:not(:disabled)`)?.focus();
+      // At the top or the bottom the pressed arrow is disabled, so the other one takes the focus.
+      const card = `.phase-card[data-phase="${CSS.escape(p.id)}"]`;
+      (phaseList.querySelector<HTMLButtonElement>(`${card} [data-move="${el.dataset.move}"]:not(:disabled)`) ?? phaseList.querySelector<HTMLButtonElement>(`${card} [data-move]:not(:disabled)`))?.focus();
     } else if (el.hasAttribute('data-remove')) {
+      const before = snapshot();
+      const name = phaseLabel(p, i);
       state.phases.splice(i, 1);
       syncPhases();
       renderList();
+      offerUndo(before, s('tailor.undo-phase', { name }));
     } else if (el.dataset.unassign) {
       p.processes = p.processes.filter((x) => x !== el.dataset.unassign);
       renderList();
@@ -707,6 +884,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       if (!v) throw new ImportError(s('tailor.import-version', { v: m.version || '?' }));
       const ids = new Set(v.processes.map((p) => p.id));
       const unknown = [...new Set([...m.selected, ...m.phases.flatMap((p) => p.processes)])].filter((id) => !ids.has(id));
+      const before = snapshot();
       load({
         version: v.id,
         project: m.project,
@@ -717,6 +895,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         phases: m.phases,
         tab: m.phases.length ? 'phases' : 'processes',
       });
+      offerUndo(before, s('tailor.undo-replaced', { name: file.name }));
       messages.push(s('tailor.import-done', { file: file.name }));
       if (m.csv) messages.push(s('tailor.import-csv'));
       if (unknown.length) messages.push(s('tailor.import-skipped', { v: v.id, ids: unknown.join(', ') }));
@@ -755,8 +934,30 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   });
   openLinksInModal(figure, modal);
 
+  // The bar at the bottom of a narrow screen leads to the summary and the
+  // exports, and steps aside once they are in view.
+  new IntersectionObserver(([entry]) => ($('#mobile-bar').hidden = entry.isIntersecting)).observe($('#side'));
+
   // --- Start ------------------------------------------------------------
 
   load(state);
+
+  const lastState = last ? model.fromHash(data, last) : null;
+  if (lastState && modelKey(lastState) !== opened) {
+    const done = () => {
+      restore.hidden = true;
+      $('#project').focus();
+    };
+    $('#restore-name').textContent = lastState.project || s('tailor.untitled');
+    $('#restore-yes').addEventListener('click', () => {
+      load(lastState);
+      done();
+    });
+    $('#restore-no').addEventListener('click', () => {
+      stored.set(null);
+      done();
+    });
+    restore.hidden = false;
+  }
 </script>
 

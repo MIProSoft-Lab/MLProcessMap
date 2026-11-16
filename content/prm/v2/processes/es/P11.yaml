@@ -1,0 +1,218 @@
+id: P11
+number: 11
+origin: decomposed
+name: Proceso de limpieza de datos
+purpose: >-
+  El propósito del *Proceso de limpieza de datos* es encontrar y corregir los problemas de los datos, como
+  valores ausentes, errores, duplicados e incoherencias. Su objetivo principal es mejorar la calidad de los
+  datos para que puedan usarse de forma fiable en el entrenamiento y la evaluación.
+outcomes:
+- id: a
+  text: Se obtiene un conjunto de datos limpio y verificado, con las acciones realizadas según el plan.
+- id: b
+  text: >-
+    Se elabora un Registro de limpieza de datos que describe las transformaciones, las herramientas y el
+    razonamiento.
+- id: c
+  text: >-
+    Se establecen registros que vinculan los datos originales con los limpios para mantener la trazabilidad.
+- id: d
+  text: >-
+    Se informa de los problemas de calidad de los datos que no han podido resolverse durante la limpieza.
+inputs:
+- workProduct: raw-dataset
+  name: Conjunto de datos en bruto
+  description: Los datos recopilados en el área de preparación.
+  serves:
+  - a
+  - c
+- workProduct: exploratory-data-analysis-report
+  name: Informe de análisis exploratorio de datos
+  description: Un resumen de las características estadísticas, visualizaciones, patrones y tendencias de los datos.
+  serves:
+  - a
+  - b
+- workProduct: data-quality-report
+  name: Informe de calidad de los datos
+  description: >-
+    Documenta los defectos, valores ausentes y valores atípicos que deben tenerse en cuenta al planificar las
+    actividades de limpieza.
+  serves:
+  - a
+  - b
+  - d
+outputs:
+- workProduct: cleaned-dataset
+  name: Conjunto de datos limpio
+  description: Los datos verificados con los problemas resueltos.
+  serves:
+  - a
+- workProduct: data-cleaning-record
+  name: Registro de limpieza de datos
+  description: >-
+    Un registro de las transformaciones aplicadas, las herramientas usadas, los vínculos de trazabilidad entre
+    los datos en bruto y los limpios y los problemas de calidad no resueltos.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Planificar las actividades de limpieza
+  description: >-
+    Definir un plan que identifique los problemas que deben abordarse a partir del Informe de análisis
+    exploratorio de datos y del Informe de calidad de los datos. Para cada problema, decidir si se corrige, se
+    elimina o se ignora deliberadamente, si se espera que su limpieza mejore el modelo, qué parte de los datos
+    se ve afectada y cómo se aplicará la corrección a todos los datos recibidos hasta el momento. Elegir cada
+    técnica según el tipo de error, tener en cuenta los umbrales de los que depende y considerar cómo la
+    limpieza de un tipo de error afecta a los demás. Preferir resolver la causa de un defecto en su origen
+    antes que añadir código de limpieza, e identificar los datos que deban filtrarse por motivos de sesgo,
+    privacidad o sensibilidad. Seleccionar técnicas y herramientas que puedan automatizarse y reutilizarse en
+    lugar de aplicarse mediante scripts *ad hoc*.
+  primaryStudies:
+  - P10
+  - P14
+  - P17
+  literature:
+  - whangDataCollectionQuality2023
+  - coteDataCleaningMachine2024
+  - foidlDataSmellsCategories2022
+  - wongsuphasawatGoalsProcessChallenges2019
+  - kandelWranglerInteractiveVisual2011
+- id: A2
+  title: Tratar los valores ausentes
+  description: >-
+    Eliminar o rellenar las entradas vacías mediante imputación o estimadores, como la imputación estadística
+    por la media, la mediana o la moda, la interpolación, la imputación por regresión o *hot-deck*, los
+    vecinos más cercanos, las predicciones de un modelo o la imputación múltiple cuando deba representarse la
+    incertidumbre de los valores imputados. Identificar los valores ausentes encubiertos codificados como
+    valores válidos de la característica y sustituir los valores ausentes por un símbolo distinto cuando su
+    patrón sea informativo. Comparar el rendimiento del modelo con distintas técnicas de imputación antes de
+    adoptar una y mantener recuperables los valores originales para que los valores imputados puedan
+    distinguirse de los observados.
+  primaryStudies:
+  - P3
+  - P13
+  - P14
+  - P16
+  literature:
+  - nazabalDataEngineeringData2020
+  - coteDataCleaningMachine2024
+  - recupitoUnmaskingDataSecrets2024
+- id: A3
+  title: Eliminar los registros duplicados
+  description: >-
+    Eliminar las entradas repetidas que podrían sesgar los modelos, prestando especial atención a los datos
+    combinados de varias fuentes, y eliminar las observaciones redundantes o irrelevantes. Excluir de las
+    características los identificadores que no aportan información al modelo, pero conservarlos para vincular
+    los registros limpios con sus fuentes.
+  primaryStudies:
+  - P7
+  - P11
+  literature:
+  - recupitoUnmaskingDataSecrets2024
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A4
+  title: Normalizar los formatos
+  description: >-
+    Hacer coherente el formato en todo el conjunto de datos, como las fechas y las unidades, convirtiendo los
+    valores con varias representaciones de una misma entidad en una única forma canónica, conciliando
+    mayúsculas, ortografía, abreviaturas y valores con significados similares, y alineando todos los registros
+    al mismo nivel de granularidad. Automatizar las correcciones cuando la regla esté clara, usando tipos de
+    datos semánticos para dar soporte a la validación y la conversión, y proporcionar un procedimiento
+    documentado para los casos que requieran intervención humana. Verificar que las conversiones no introducen
+    nuevos defectos y asegurar que cada regla de normalización puede aplicarse de forma idéntica en desarrollo
+    y en producción.
+  primaryStudies:
+  - P7
+  - P11
+  - P14
+  - P17
+  literature:
+  - nazabalDataEngineeringData2020
+  - kandelWranglerInteractiveVisual2011
+  - foidlDataSmellsCategories2022
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A5
+  title: Corregir los valores atípicos
+  description: >-
+    Identificar y eliminar o corregir los valores que se desvían significativamente de los rangos esperados,
+    actuando según el origen probable registrado para cada anomalía en el Informe de análisis exploratorio de
+    datos. Corregir o eliminar los valores que se consideren errores, y etiquetar y conservar los casos reales
+    pero poco frecuentes cuando el problema los requiera para el desarrollo o la evaluación, o cuando
+    detectarlos sea el objetivo del modelo. Evaluar cualquier filtro de ruido antes de aplicarlo, ya que un
+    filtro inadecuado puede eliminar parte de la señal, comprobar si hay registros que puedan haberse
+    inyectado deliberadamente y documentar el ruido ignorado por encontrarse en campos irrelevantes para el
+    objetivo.
+  primaryStudies:
+  - P3
+  - P13
+  - P14
+  - P16
+  literature:
+  - coteDataCleaningMachine2024
+  - nazabalDataEngineeringData2020
+  - whangDataCollectionQuality2023
+  - recupitoUnmaskingDataSecrets2024
+- id: A6
+  title: Emparejar entidades
+  description: >-
+    Identificar los registros estructurados que se refieren al mismo objeto del mundo real aunque sus nombres,
+    identificadores o formatos difieran, incluidos los registros conciliados entre fuentes que usan sistemas
+    temporales o niveles de granularidad distintos. Agrupar los registros en bloques para limitar las
+    comparaciones necesarias, compararlos mediante *tokens* compartidos, representaciones latentes o un modelo
+    aprendido, y fusionar o vincular las coincidencias según el plan.
+  primaryStudies:
+  - P16
+  literature:
+  - coteDataCleaningMachine2024
+  - wongsuphasawatGoalsProcessChallenges2019
+- id: A7
+  title: Limpiar las etiquetas
+  description: >-
+    Corregir las etiquetas de clase incorrectas o ruidosas mediante reglas o revisión experta, abordando las
+    etiquetas que llegan con los datos recopilados, como resultados históricos o etiquetas de servicios
+    externos. Verificar las etiquetas externas frente a otras conocidas y ajustar la profundidad de la
+    revisión al riesgo de la aplicación, teniendo en cuenta que las etiquetas incorrectas afectan tanto al
+    entrenamiento como a la evaluación con la que se selecciona un modelo. Detectar las etiquetas
+    probablemente erróneas mediante la confianza del modelo, la pérdida, el efecto de eliminar o reetiquetar
+    un registro o su distancia al resto de su clase, teniendo en cuenta que el ruido sistemático puede escapar
+    a estos métodos. Reservar el reetiquetado manual por expertos del dominio para los casos que requieran una
+    confianza alta, priorizando las muestras con la menor corrección estimada de la etiqueta cuando los
+    recursos sean limitados.
+  primaryStudies:
+  - P8
+  - P17
+  literature:
+  - bernhardtActiveLabelCleaning2022
+  - coteDataCleaningMachine2024
+  - whangDataCollectionQuality2023
+- id: A8
+  title: Documentar las acciones de limpieza
+  description: >-
+    Registrar las operaciones, herramientas y justificaciones en el Registro de limpieza de datos para
+    garantizar la transparencia, indicando para cada problema del Informe de calidad de los datos la decisión
+    tomada, las muestras descartadas y los criterios usados para descartarlas, y los problemas aún pendientes
+    junto con su posible efecto en los resultados. Mantener las transformaciones como un script revisable y
+    reutilizable, mantener los vínculos entre los registros en bruto y los limpios, verificar el conjunto de
+    datos limpio frente al original y frente al esquema de datos, y probar el propio código de limpieza.
+    Mantener el registro actualizado durante todo el proceso y transmitir los problemas no resueltos a los
+    procesos siguientes.
+  primaryStudies:
+  - P5
+  - P10
+  - P13
+  - P14
+  literature:
+  - kandelWranglerInteractiveVisual2011
+  - Schelter2017
+  - sneedProcessAssessingData2011
+  - breckMLTestScore2017
+  - nazabalDataEngineeringData2020
+changes:
+- annotation: A-32
+  text: La trazabilidad es lo ideal, pero documentar todas las decisiones es complicado en la práctica
+  redVotes: 0
+  yellowVotes: 3
+  decision: rejected
+  changes: []

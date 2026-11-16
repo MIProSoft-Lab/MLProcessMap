@@ -12,10 +12,11 @@ nav:
   version: Versión del PRM
   latest: Última
   skip: Ir al contenido
+  main: Principal
+  breadcrumb: Ruta de navegación
   theme-dark: Cambiar al tema oscuro
   theme-light: Cambiar al tema claro
 home:
-  explore: Explorar los procesos
   versions: Versiones
   current: actual
   superseded: sustituida
@@ -28,11 +29,15 @@ home:
   card-compare: Consulta qué ha cambiado entre versiones del PRM y por qué.
   card-references: Consulta los estudios primarios de la revisión sistemática de la literatura y la literatura especializada que citan los procesos.
   overview: Qué encontrarás aquí
+  cta-map: Explora el mapa de procesos
+  cta-tailor: Crea un modelo de ciclo de vida
   thesisHeading: Parte de una tesis doctoral
-  thesisText: "Este sitio publica el Modelo de Referencia de Procesos desarrollado en la tesis doctoral *{title}*. La tesis estudia cómo se describe el desarrollo de ML en el ámbito académico y en la industria, lo compara con las normas internacionales de procesos de ciclo de vida y propone un modelo de referencia evaluado con profesionales."
+  thesisText: "Esta página publica el Modelo de Referencia de Procesos desarrollado en la tesis doctoral *{title}*. La tesis estudia cómo se describe el desarrollo de ML en el ámbito académico y en la industria, lo compara con las normas internacionales de procesos de ciclo de vida y propone un modelo de referencia posteriormente evaluado con profesionales."
   author: Autor
   supervisor: Director
   supervisors: Directores
+  orcid: "ORCID iD de {name}"
+  personPage: "Página personal de {name}"
   year: Año
   originHeading: Cómo se construyó el PRM
   cite: Cómo citar
@@ -53,6 +58,9 @@ origin:
 map:
   title: Mapa de procesos
   search: Buscar procesos, resultados y actividades
+  matches: "{n} de {total} procesos coinciden"
+  inOutcome: "Resultado {id}"
+  legendHelp: Qué significan los colores
   noResults: Ningún proceso coincide con la búsqueda.
   legend: Origen
   activities: actividades
@@ -74,6 +82,7 @@ process:
   literature: Literatura especializada
   changes: Cambios en esta versión
   changesFrom: "Cambios respecto a {version}, la versión anterior del PRM."
+  contents: Contenido
   annotation: Anotación
   votes: Votos
   previous: Proceso anterior
@@ -96,11 +105,13 @@ wp:
   type-record: Registro
   producers: Producido por
   consumers: Usado por
-  filter: Filtrar productos de trabajo
+  filter: Filtrar por producto de trabajo o proceso
+  noResults: Ningún producto de trabajo coincide con el filtro.
   all: Todos
 compare:
   title: Comparar versiones
   intro: Cambios en el texto de cada proceso entre dos versiones del PRM.
+  description: "Cambios en el texto del {name} entre las versiones {from} y {to} del PRM: resultados, entradas, salidas y actividades añadidos, eliminados o reformulados."
   from: De
   to: A
   unchanged: sin cambios
@@ -109,6 +120,11 @@ compare:
   removed: Eliminado en la {version}
   showUnchanged: Mostrar las secciones sin cambios
   allChanges: "Todos los procesos comparados, {from} → {to}"
+  legend: "En resultados, entradas, salidas y actividades:"
+  legend-added: añadidos
+  legend-removed: eliminados
+  unchangedSections: "Secciones sin cambios: {list}."
+  unchangedItems: "Elementos sin cambios en las demás secciones: {n}."
 lc:
   title: Modelos de ciclo de vida
   intro: El PRM define los procesos de un proyecto de ML y deja su orden y repetición a un modelo de ciclo de vida. Estas plantillas organizan los procesos de una versión del PRM en fases.
@@ -138,12 +154,17 @@ lc:
   zoomHint: Ctrl + rueda o pellizca para hacer zoom, arrastra para moverte
 tailor:
   title: Crea un modelo de ciclo de vida para tu proyecto
-  intro: "Crea un modelo de ciclo de vida a medida a partir de los procesos del PRM: elige los procesos y actividades que necesita tu proyecto, organízalos en fases y marca las fases que se repiten y los bucles que vuelven a fases anteriores. El modelo se guarda en el enlace, así que puedes compartirlo."
+  intro: "Crea un modelo de ciclo de vida a medida a partir de los procesos del PRM: elige los procesos y actividades que necesita tu proyecto, organízalos en fases, marca cuales se repiten y los bucles que vuelven a fases anteriores. Puedes compartir el modelo copiando la URL o exportándolo."
   project: Nombre del modelo de ciclo de vida
   version: Versión del PRM
   start: Empezar desde
   start-all: Todos los procesos
   start-none: Ningún proceso
+  start-note: "Sustituye el modelo que estás editando."
+  next-phases: "Siguiente: organizar en fases"
+  share: Compartir
+  shareNote: "El enlace contiene todo el modelo, así que quien lo abra lo verá tal como está ahora."
+  yamlDisabled: "Añade una fase para exportar el modelo de ciclo de vida en YAML."
   selected: "{n} de {total} procesos, {a} actividades en el modelo"
   missingInputs: Entradas sin productor en el modelo
   missingInputsNote: Estas entradas de los procesos del modelo las producen procesos que has dejado fuera. Asegúrate de que tu proyecto las obtiene de otro lugar.
@@ -175,11 +196,20 @@ tailor:
   phase-noReturn: Sin bucle
   phase-returnNote: Cuándo vuelve
   phase-drop: Arrastra procesos aquí
+  phase-drop-touch: Añade procesos con el menú de abajo
+  bar-selected: "{n} de {total} procesos"
+  bar-missing: "Entradas sin productor: {m}"
+  undo: Deshacer
+  undo-replaced: "El modelo se ha sustituido por {name}."
+  undo-all: "Se han seleccionado todos los procesos."
+  undo-none: "Se han quitado todos los procesos del modelo."
+  undo-phase: "Fase {name} eliminada."
+  undo-version: "Versión del PRM cambiada a {v}."
   phase-addProcess: + Añadir proceso
   phase-unassign: Quitar {id} de la fase
   phase-none: Sin fase
   phase-of: Fase de {id}
-  unassigned: Procesos del modelo sin fase
+  unassigned: Procesos no asignados a una fase
   unassigned-none: Todos los procesos del modelo están en una fase.
   preview: Vista previa
   preview-empty: Añade una fase para ver el diagrama del ciclo de vida.
@@ -188,8 +218,11 @@ tailor:
   yamlNote: El archivo YAML usa el formato de las plantillas de ciclo de vida, para que un administrador pueda publicar tu modelo en este sitio.
   untitled: Modelo de ciclo de vida sin título
   import: Importar
-  import-note: Abre un modelo de ciclo de vida exportado desde esta página como JSON, YAML o CSV. Sustituye el modelo que estás editando, así que copia antes su enlace si quieres conservarlo.
+  import-note: "Abre un modelo de ciclo de vida exportado desde esta página como JSON, YAML o CSV. Sustituye el modelo que estás editando, y puedes deshacerlo justo después."
   import-open: Abrir un archivo
+  restore-text: "Este navegador ha guardado el último modelo que editaste aquí:"
+  restore-yes: Continuar con él
+  restore-no: Descartarlo
   import-done: "Se ha abierto {file}."
   import-csv: Un archivo CSV solo guarda los procesos, las actividades y los nombres de las fases, así que revisa la versión del PRM, el orden de las fases y los bucles.
   import-skipped: "El PRM {v} no tiene {ids}, así que se han dejado fuera."
@@ -212,6 +245,9 @@ refs:
   literature: Literatura especializada
   citedBy: Citado por
   acronyms: Acrónimos
+  filter: "Filtrar por título, autor, publicación, estudio o proceso (p. ej., P03)"
+  matches: "{n} de {total} referencias coinciden"
+  noResults: Ninguna referencia coincide con el filtro.
 i18n:
   untranslated: Este contenido todavía no está traducido al {language}. Se muestra en inglés.
 footer:
@@ -221,8 +257,11 @@ footer:
   licence: Licencia
   links: Enlaces
   license: Contenido bajo CC BY 4.0 · Código bajo MIT
+  feedback: Enviar comentarios
+  version: "v{v}"
 notFound:
   title: Página no encontrada
+  text: "Puede que la dirección esté mal escrita o que la página se haya movido o eliminado."
   back: Volver a la página principal
 edition:
   thesis: Edición de la tesis

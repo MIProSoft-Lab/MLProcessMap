@@ -1,0 +1,140 @@
+id: P22
+number: 22
+origin: standards-and-literature
+name: Proceso de validación continua
+purpose: >-
+  El propósito del *Proceso de validación continua* es hacer el seguimiento de los datos de entrada y
+  de las salidas del modelo después del despliegue para detectar problemas pronto. Al monitorizar las
+  métricas pertinentes en producción, ayuda a identificar problemas como la deriva de los datos o la degradación
+  del rendimiento antes de que provoquen fallos.
+outcomes:
+- id: a
+  text: Se monitorizan los datos de producción para detectar derivas, cambios de esquema y anomalías.
+- id: b
+  text: >-
+    Se evalúa el comportamiento del modelo mediante el seguimiento del rendimiento y de las desviaciones
+    estadísticas.
+- id: c
+  text: Se analizan la confianza y la incertidumbre del modelo para detectar su degradación.
+- id: d
+  text: Se hace el seguimiento de las métricas operativas, como la latencia y el uso de recursos.
+- id: e
+  text: Se configuran mecanismos de alerta para notificar las desviaciones a las partes interesadas.
+- id: f
+  text: >-
+    Se elabora un Registro de monitorización que documenta los indicadores, las alertas y los procedimientos
+    de respuesta.
+inputs:
+- workProduct: live-model-outputs
+  name: Salidas del modelo en producción
+  description: Las predicciones sobre datos reales, registradas junto con sus entradas.
+  serves:
+  - a
+  - b
+  - c
+  - d
+outputs:
+- workProduct: monitoring-record
+  name: Registro de monitorización
+  description: Los indicadores supervisados, las observaciones, los incidentes y las responsabilidades.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - f
+- workProduct: alerting-configuration
+  name: Configuración de alertas
+  description: Los umbrales, las reglas y las respuestas de cada alerta.
+  serves:
+  - e
+activities:
+- id: A1
+  title: Monitorizar los datos de entrada
+  description: >-
+    Comparar los datos recibidos en producción con los datos con los que se entrenó el modelo y con los
+    datos de producción anteriores, para detectar derivas en sus distribuciones, deterioros en su calidad
+    y cambios en su estructura o su significado. Monitorizar las fuentes y los sistemas que suministran
+    los datos, de modo que se detecten sus cambios, fallos o envejecimiento aunque no produzcan ninguna
+    anomalía evidente en los valores. Seleccionar métodos de comparación adecuados al volumen y la dimensionalidad
+    de los datos, y considerar que los cambios también pueden deberse al uso del modelo fuera de su finalidad
+    prevista o a la reacción de los usuarios ante sus salidas.
+  primaryStudies:
+  - P8
+  - P10
+  - P13
+  - P17
+  - P18
+- id: A2
+  title: Monitorizar el comportamiento del modelo
+  description: >-
+    Hacer el seguimiento del rendimiento del modelo en producción frente a las métricas establecidas,
+    midiéndolo directamente cuando se disponga de los valores reales e infiriéndolo de la distribución
+    de sus salidas cuando no. Monitorizar los demás requisitos que se espera que cambien con el tiempo,
+    como la equidad, la transparencia, la privacidad y el tiempo de ejecución, junto con indicadores operativos
+    que confirmen que el modelo funciona y consume recursos según lo previsto. Distinguir la degradación
+    gradual causada por el cambio de los datos de la pérdida de validez causada por cambios en el propio
+    problema, y considerar la antigüedad del modelo y los efectos de las actualizaciones anteriores como
+    indicadores en sí mismos.
+  primaryStudies:
+  - P3
+  - P8
+  - P10
+  - P11
+  - P13
+  - P16
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Configurar las alertas
+  description: >-
+    Definir para cada indicador monitorizado los umbrales, la frecuencia de evaluación y la respuesta
+    esperada, equilibrando la detección de problemas reales con el número de alertas que no dan lugar
+    a ninguna acción. Formular las alertas de modo que transmitan el alcance y el efecto probable de la
+    desviación, priorizar las que afectan a los elementos de los que depende el servicio y asociar a cada
+    una las acciones que deben realizarse. Configurar las respuestas automatizadas autorizadas por la
+    estrategia de mantenimiento, como las barreras de protección sobre las salidas o el cambio a un modelo
+    alternativo, y dirigir al proceso de mantenimiento las alertas que requieran una decisión sobre el
+    modelo. Revisar la configuración cada vez que se actualice el modelo.
+  primaryStudies:
+  - P6
+  - P14
+  - P17
+  literature:
+  - breckMLTestScore2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A4
+  title: Documentar la monitorización
+  description: >-
+    Registrar en el Registro de monitorización los indicadores supervisados, las reglas de alerta y la
+    justificación de cada umbral, las observaciones y los resultados de validación a lo largo del tiempo,
+    y las personas responsables de responder a cada alerta. Vincular cada observación con la versión del
+    modelo que estaba en servicio cuando se hizo, de modo que pueda relacionarse con el linaje del modelo
+    que mantiene el proceso de mantenimiento. Mantener el registro coherente entre los sistemas de la
+    organización, para que la monitorización de distintos modelos siga siendo comparable.
+  primaryStudies:
+  - P10
+  - P14
+  - P17
+standards:
+- standard: ''
+  activity: a) Monitorizar la deriva de datos
+  prmActivity: A1
+- standard: ''
+  activity: b) Monitorizar la deriva de concepto
+  prmActivity: A2
+- standard: ''
+  activity: c) Monitorizar otros requisitos que se espera que cambien con el tiempo
+  prmActivity: A2
+- standard: ''
+  activity: d) Decidir si se realiza el mantenimiento
+  prmActivity: A3
+- standard: ''
+  activity: e) Aplicar barreras de protección
+  prmActivity: A3
+- standard: ''
+  activity: f) Determinar la frecuencia de la validación
+  prmActivity: A3
+- standard: ''
+  activity: ''
+  prmActivity: A4

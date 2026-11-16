@@ -253,8 +253,10 @@ export const GET: APIRoute = () => {
             fields: [
               localizedText('title', 'Title'),
               { name: 'author', label: 'Author', widget: 'string' },
+              { name: 'orcid', label: 'Author ORCID iD', widget: 'string', required: false, hint: 'As 0000-0000-0000-0000.' },
               { name: 'email', label: 'Author email', widget: 'string', required: false, hint: 'Shown in the footer.' },
               { name: 'institution', label: 'Institution', widget: 'string', required: false },
+              localizedText('institutionUrl', 'Institution website'),
               localizedText('intro', 'Introduction', 'text'),
               {
                 name: 'thesis',
@@ -265,7 +267,17 @@ export const GET: APIRoute = () => {
                 fields: [
                   { name: 'title', label: 'Title', widget: 'string' },
                   { name: 'year', label: 'Year', widget: 'string' },
-                  { name: 'supervisors', label: 'Supervisors', widget: 'list', required: false },
+                  {
+                    name: 'supervisors',
+                    label: 'Supervisors',
+                    widget: 'list',
+                    required: false,
+                    summary: '{{fields.name}}',
+                    fields: [
+                      { name: 'name', label: 'Name', widget: 'string' },
+                      { name: 'orcid', label: 'ORCID iD', widget: 'string', required: false, hint: 'As 0000-0000-0000-0000.' },
+                    ],
+                  },
                 ],
               },
               {
@@ -297,8 +309,9 @@ export const GET: APIRoute = () => {
                 summary: '{{fields.name}}',
                 fields: [
                   { name: 'name', label: 'Name', widget: 'string' },
+                  { name: 'orcid', label: 'ORCID iD', widget: 'string', required: false, hint: 'As 0000-0000-0000-0000.' },
                   localizedText('role', 'Role'),
-                  { name: 'url', label: 'Link', widget: 'string', required: false },
+                  { ...localizedText('url', 'Personal page'), required: false },
                 ],
               },
               {

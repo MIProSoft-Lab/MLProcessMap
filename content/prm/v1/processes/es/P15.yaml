@@ -1,0 +1,136 @@
+id: P15
+number: 15
+origin: decomposed
+name: Proceso de entrenamiento del modelo
+purpose: >-
+  El propósito del *Proceso de entrenamiento del modelo* es instanciar las técnicas de modelado seleccionadas
+  y ajustarlas a los conjuntos de datos preparados. Aplica los modelos al conjunto de entrenamiento de
+  forma controlada para crear un artefacto reproducible, transparente y listo para la evaluación.
+outcomes:
+- id: a
+  text: >-
+    El conjunto de datos se divide en conjuntos de entrenamiento, prueba y validación para evitar la fuga
+    de datos.
+- id: b
+  text: Se entrenan instancias de las técnicas de modelado seleccionadas con los datos preparados.
+- id: c
+  text: >-
+    Se registran las configuraciones de entrenamiento, incluidos los hiperparámetros y las semillas aleatorias.
+- id: d
+  text: Se incorporan a los modelos medidas de interpretabilidad y transparencia.
+- id: e
+  text: >-
+    Se elabora un Registro de entrenamiento del modelo que resume los procedimientos y los resultados.
+- id: f
+  text: Se almacenan los modelos entrenados y sus metadatos para su evaluación.
+inputs:
+- workProduct: model-selection-record
+  name: Registro de selección del modelo
+  description: Las técnicas seleccionadas para el entrenamiento.
+  serves:
+  - b
+- workProduct: labeled-dataset
+  name: Conjunto de datos etiquetado
+  description: El conjunto de datos etiquetado y procesado.
+  serves:
+  - a
+  - b
+- workProduct: optimized-model-configuration
+  name: Configuración optimizada del modelo
+  description: La configuración de una nueva versión del modelo.
+  serves:
+  - b
+  - c
+  optional: true
+outputs:
+- workProduct: model-artifact
+  name: Artefacto del modelo
+  description: El modelo ajustado, con sus medidas de transparencia.
+  serves:
+  - b
+  - d
+  - f
+- workProduct: dataset-partitions
+  name: Particiones del conjunto de datos
+  description: Los conjuntos de entrenamiento, validación y prueba.
+  serves:
+  - a
+  - f
+- workProduct: model-training-record
+  name: Registro de entrenamiento del modelo
+  description: >-
+    Las configuraciones, las semillas aleatorias, los procedimientos y los resultados del entrenamiento.
+  serves:
+  - c
+  - d
+  - e
+  - f
+activities:
+- id: A1
+  title: Crear las particiones de datos
+  description: >-
+    Dividir los datos en conjuntos de entrenamiento y de prueba (y, opcionalmente, de validación), usando
+    una partición de reserva o una división en entrenamiento, validación y prueba, o la validación cruzada
+    para conjuntos de datos más pequeños. Reservar para la evaluación final un conjunto de prueba disjunto
+    de los conjuntos de entrenamiento y validación, y considerar el muestreo estratificado cuando las
+    clases estén desequilibradas o el equilibrio sea importante.
+  primaryStudies:
+  - P3
+  - P13
+  - P16
+- id: A2
+  title: Inicializar y ajustar el modelo
+  description: >-
+    Instanciar los algoritmos y minimizar las funciones de pérdida sobre el conjunto de entrenamiento,
+    alineando el objetivo con los criterios de éxito del negocio y aplicando regularización para evitar
+    el sobreajuste sin caer en el subajuste. Registrar la configuración de los parámetros con la justificación
+    de cada elección, describir el modelo resultante y cualquier dificultad para interpretarlo, y volver
+    a ajustar el modelo con la Configuración optimizada del modelo cuando se requiera una nueva versión.
+  primaryStudies:
+  - P3
+  - P13
+  - P14
+- id: A3
+  title: Mejorar la transparencia
+  description: >-
+    Usar modelos interpretables o técnicas de explicabilidad, añadiendo métodos de explicación intrínsecos
+    o extrínsecos cuando la técnica seleccionada no sea interpretable por sí misma. Sopesar los métodos
+    agnósticos respecto al modelo frente a los específicos del modelo, considerar el uso de las explicaciones
+    para refinar el modelo y seleccionar métodos que no comprometan la privacidad.
+  primaryStudies:
+  - P3
+  - P6
+  - P8
+  - P16
+- id: A4
+  title: Documentar la configuración
+  description: >-
+    Registrar la configuración de los hiperparámetros, las semillas aleatorias, el algoritmo, el conjunto
+    de datos y el entorno de ejecución, incluidas las versiones del software y el hardware.
+  primaryStudies:
+  - P8
+  - P13
+- id: A5
+  title: Almacenar el modelo y los registros
+  description: >-
+    Almacenar el Artefacto del modelo y las Particiones del conjunto de datos junto con el Registro de
+    entrenamiento del modelo en una ubicación controlada bajo gestión de la configuración, versionando
+    conjuntamente los datos de entrenamiento, la configuración y el código, registrando cualquier anomalía
+    y manteniendo cada modelo trazable hasta los registros del conjunto de datos a partir de los que se
+    construyó.
+  primaryStudies:
+  - P9
+  - P10
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la implementación
+  standardProcess: Proceso de implementación
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Llevar a cabo la implementación
+  standardProcess: Proceso de implementación
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar los resultados de la implementación
+  standardProcess: Proceso de implementación
+- standard: ISO/IEC 5338
+  activity: b) Entrenamiento del modelo
+  standardProcess: Proceso de implementación

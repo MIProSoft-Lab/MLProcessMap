@@ -1,0 +1,24 @@
+---
+// The ORCID iD icon linking to a person's ORCID record, shown after their name.
+interface Props {
+  id: string;
+  label: string;
+}
+const { id, label } = Astro.props;
+---
+
+<a class="orcid" href={`https://orcid.org/${id}`} aria-label={label} title={`https://orcid.org/${id}`}>
+  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+    <circle cx="12" cy="12" r="12" fill="#A6CE39"></circle>
+    <text x="12" y="16.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#fff">iD</text>
+  </svg>
+</a>
+
+<style>
+  .orcid {
+    display: inline-flex;
+    margin-left: 6px;
+    vertical-align: -2px;
+    text-decoration: none;
+  }
+</style>

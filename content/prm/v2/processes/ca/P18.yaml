@@ -1,0 +1,114 @@
+id: P18
+number: 18
+origin: standards-and-literature
+name: Procés d'integració
+purpose: >-
+  El propòsit del *Procés d'integració* és incorporar el model entrenat al sistema de programari perquè pugui
+  proporcionar prediccions en temps d'inferència. Connecta el model amb el codi font i les aplicacions de negoci,
+  adaptant-ne les interfícies i implementant les salvaguardes necessàries.
+outcomes:
+- id: a
+  text: >-
+    El model entrenat s'integra mitjançant interfícies compatibles per a les dades d'entrada i de sortida.
+- id: b
+  text: S'actualitza el codi font per incorporar el model als fluxos de treball del sistema.
+- id: c
+  text: S'implementen salvaguardes i mecanismes de reserva per gestionar les fallades.
+- id: d
+  text: >-
+    Es produeix un Registre d'integració que documenta els passos d'integració, els canvis de codi i les
+    interfícies.
+- id: e
+  text: S'estableix la traçabilitat entre el model i els components del sistema.
+inputs:
+- workProduct: model-artifact
+  name: Artefacte del model
+  description: El model aprovat per al seu ús.
+  serves:
+  - a
+- workProduct: system-codebase
+  name: Codi font del sistema
+  description: El codi font existent del sistema de programari.
+  serves:
+  - a
+  - b
+- workProduct: system-architecture-documentation
+  name: Documentació de l'arquitectura del sistema
+  description: >-
+    L'estructura del sistema, inclosa la disposició per tolerar sortides incorrectes.
+  serves:
+  - a
+  - c
+  - e
+- workProduct: design-baseline
+  name: Línia de base del disseny
+  description: >-
+    El disseny dels components i les interfícies a través dels quals es connecta el model.
+  serves:
+  - a
+  - b
+  - e
+outputs:
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: >-
+    El programari amb el model incorporat, incloses les interfícies adaptades i les salvaguardes.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: integration-record
+  name: Registre d'integració
+  description: >-
+    Els canvis de codi, les interfícies, les salvaguardes i els enllaços de traçabilitat entre el model i els
+    components del sistema.
+  serves:
+  - d
+  - e
+activities:
+- id: A1
+  title: Integrar el model a l'aplicació
+  description: >-
+    Connectar l'artefacte del model amb el codi font, creant interfícies per a les dades i actualitzant els mòduls,
+    vinculant les entrades del sistema amb el model i les seves sortides amb els components que les empren, i
+    implementant el preprocessament i el postprocessament que requereixen en un sol lloc en lloc de dispersar-los
+    pel codi font. Encapsular el model i els seus paquets darrere interfícies comunes, emprar frameworks i
+    preprocessament compartits perquè el servei coincideixi amb l'entrenament, i restringir l'accés a les
+    prediccions perquè tots els consumidors siguin coneguts i estiguin protegits davant actualitzacions del model
+    incompatibles.
+  primaryStudies:
+  - P4
+  - P10
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A2
+  title: Implementar les salvaguardes
+  description: >-
+    Afegir capes de protecció, com comprovacions basades en regles o rutines de reserva, per gestionar les
+    prediccions poc fiables, implementant la disposició escollida a l'arquitectura. Detectar les sortides
+    incorrectes monitorant les entrades i els components que les proporcionen, comparant les sortides amb valors
+    raonables o emprant una mesura de confiança, i substituir-les amb el mecanisme descrit a la Documentació de
+    l'arquitectura del sistema.
+  primaryStudies:
+  - P8
+  - P13
+- id: A3
+  title: Documentar la integració
+  description: >-
+    Registrar els canvis de codi, els fluxos de dades, les interaccions i els enllaços de traçabilitat al Registre
+    d'integració per donar suport al manteniment i a la reproductibilitat, incloses les anomalies trobades i les
+    seves causes. Mantenir la traçabilitat bidireccional entre els elements integrats i les definicions
+    d'arquitectura, de disseny, de requisits i d'interfície. Identificar el model per la seva versió i per les
+    dades emprades per construir-lo i provar-lo, enumerar els components que consumeixen les seves prediccions,
+    descriure com es connecten els models que interactuen, i lliurar a la gestió de la configuració els artefactes
+    seleccionats per a les línies de base.
+  literature:
+  - ISO12207
+  - ISO5338
+changes:
+- annotation: A-44
+  text: Implementar revisions entre iguals per a la documentació tècnica
+  redVotes: 0
+  yellowVotes: 3
+  decision: rejected
+  changes: []

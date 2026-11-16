@@ -4,7 +4,8 @@ import Cited from '../../components/Cited.astro';
 import { studies, references, acronyms, getProcesses, defaultVersion, versions, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { fullCite, referenceByKey, referenceUrl } from '../../lib/refs';
-import { inline } from '../../lib/text';
+import { inline, searchKey } from '../../lib/text';
+import type { Reference } from '../../lib/content/schemas';
 import { useTranslations, type Locale } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
@@ -27,24 +28,43 @@ for (const version of order) {
     }
   }
 }
+// What the filter looks in: the words of the entry, and the identifiers of the
+// study and of the processes and activities that cite it ("p3", "p03", "p03.a4").
+const words = (r: Reference | undefined, extra: string[] = []) =>
+  searchKey([...extra, r?.title, r?.authors, r?.venue, r?.publisher, r?.year].filter(Boolean).join(' '));
+const ids = (key: string, own: string[] = []) =>
+  [...own, ...(citedBy.get(key) ?? []).flatMap((c) => [c.process, `${c.process}.${c.activity}`])].map((x) => x.toLowerCase()).join(' ');
 const literature = references.filter((r) => !studies.some((s) => s.reference === r.key)).sort((a, b) => a.authors.localeCompare(b.authors));
 ---
 
-<Layout locale={locale} title={t('refs.title')} section="references">
+<Layout locale={locale} title={t('refs.title')} description={t('home.card-references')} section="references">
   <h1>{t('refs.title')}</h1>
 
-  <h2>{t('refs.studies')}</h2>
+  <div class="toolbar">
+    <label class="visually-hidden" for="q">{t('refs.filter')}</label>
+    <input id="q" type="search" placeholder={t('refs.filter')} autocomplete="off" />
+    <span id="count" class="small muted" role="status" data-text={t('refs.matches')}></span>
+  </div>
+  <nav class="jump small" aria-label={t('process.contents')}>
+    <a href="#studies">{t('refs.studies')} <span class="num" data-count="studies">{studies.length}</span></a>
+    <a href="#literature">{t('refs.literature')} <span class="num" data-count="literature">{literature.length}</span></a>
+    {acronyms.length > 0 && <a href="#acronyms">{t('refs.acronyms')} <span class="num" data-count="acronyms">{acronyms.length}</span></a>}
+  </nav>
+  <p id="empty" class="muted" hidden>{t('refs.noResults')}</p>
+
+  <section data-group="studies">
+  <h2 id="studies">{t('refs.studies')}</h2>
   <ol class="refs">
     {
       studies.map((s) => {
         const ref = s.reference ? referenceByKey.get(s.reference) : undefined;
         const url = ref && referenceUrl(ref);
         return (
-          <li id={s.id}>
-            <span class="key">{s.id}</span>
+          <li id={s.id} data-ref data-text={words(ref, [s.title, s.year ? String(s.year) : ''])} data-ids={ids(s.id, [s.id])}>
+            <span class="study-id">{s.id}</span>
             <div>
               {url ? <a href={url}>{s.title}</a> : <span>{s.title}</span>} <span class="muted">({s.year})</span>
-              {ref && <div class="small muted" set:html={inline(fullCite(ref))} />}
+              {ref && <div class="small muted" set:html={inline(fullCite(ref, { title: false }))} />}
               <Cited locale={locale} items={citedBy.get(s.id)} />
             </div>
           </li>
@@ -52,14 +72,16 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
       })
     }
   </ol>
+  </section>
 
-  <h2>{t('refs.literature')}</h2>
+  <section data-group="literature">
+  <h2 id="literature">{t('refs.literature')}</h2>
   <ol class="refs literature">
     {
       literature.map((r) => {
         const url = referenceUrl(r);
         return (
-          <li id={r.key}>
+          <li id={r.key} data-ref data-text={words(r)} data-ids={ids(r.key)}>
             <div>
               <span set:html={inline(fullCite(r))} /> {url && <a class="small" href={url}>↗</a>}
               <Cited locale={locale} items={citedBy.get(r.key)} />
@@ -69,32 +91,124 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
       })
     }
   </ol>
+  </section>
 
   {
     acronyms.length > 0 && (
-      <>
+      <section data-group="acronyms">
         <h2 id="acronyms">{t('refs.acronyms')}</h2>
         <dl class="acronyms">
           {[...acronyms]
             .sort((a, b) => a.id.localeCompare(b.id))
             .map((a) => (
-              <div id={`acronym-${a.id}`}>
+              <div id={`acronym-${a.id}`} data-text={searchKey(`${a.id} ${pick(a.expansion, locale)}`)}>
                 <dt class="key">{a.id}</dt>
                 <dd>{pick(a.expansion, locale)}</dd>
               </div>
             ))}
         </dl>
-      </>
+      </section>
     )
   }
 </Layout>
 
 <script>
+  import { format, searchKey } from '../../lib/text';
+
   const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
   target?.classList.add('highlight');
+
+  // Filter: every word has to be in the entry, except a study, process or
+  // activity identifier (P3, P03, P03.A4), which has to match one exactly, so
+  // that P1 does not also find P10 to P16. The query is kept in the address.
+  const input = document.querySelector<HTMLInputElement>('#q')!;
+  const count = document.querySelector<HTMLElement>('#count')!;
+  const empty = document.querySelector<HTMLElement>('#empty')!;
+  const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')].map((section) => ({
+    section,
+    name: section.dataset.group!,
+    items: [...section.querySelectorAll<HTMLElement>('[data-text]')].map((el) => ({ el, text: el.dataset.text!, ids: new Set((el.dataset.ids ?? '').split(' ')) })),
+  }));
+  const references = groups.flatMap((g) => (g.name === 'acronyms' ? [] : g.items));
+  const id = /^p\d+(\.a\d+)?$/;
+
+  const apply = () => {
+    const words = searchKey(input.value).replace(/·/g, '.').split(/\s+/).filter(Boolean);
+    const matches = (item: (typeof references)[number]) => words.every((w) => (id.test(w) ? item.ids.has(w) : item.text.includes(w)));
+    let shown = 0;
+    for (const g of groups) {
+      let n = 0;
+      for (const item of g.items) {
+        const on = matches(item);
+        item.el.hidden = !on;
+        if (on) n++;
+      }
+      g.section.hidden = n === 0;
+      const badge = document.querySelector<HTMLElement>(`[data-count="${g.name}"]`);
+      if (badge) {
+        badge.textContent = String(n);
+        badge.closest('a')!.hidden = n === 0;
+      }
+      if (g.name !== 'acronyms') shown += n;
+    }
+    // Mark the citations of the process or activity searched for.
+    const cited = words.filter((w) => id.test(w));
+    document.querySelectorAll<HTMLElement>('[data-cite]').forEach((chip) => {
+      const c = chip.dataset.cite!;
+      chip.classList.toggle('hit', cited.some((w) => c === w || c.startsWith(`${w}.`)));
+    });
+    count.textContent = words.length ? format(count.dataset.text!, { n: shown, total: references.length }) : '';
+    empty.hidden = groups.some((g) => !g.section.hidden);
+    const url = new URL(location.href);
+    input.value.trim() ? url.searchParams.set('q', input.value) : url.searchParams.delete('q');
+    history.replaceState(history.state, '', url);
+  };
+  input.value = new URLSearchParams(location.search).get('q') ?? '';
+  input.addEventListener('input', apply);
+  if (input.value) apply();
 </script>
 
 <style>
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    margin: 16px 0 10px;
+  }
+
+  .toolbar input {
+    flex: 1 1 280px;
+    max-width: 460px;
+  }
+
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin-bottom: 8px;
+  }
+
+  .jump .num {
+    color: var(--muted);
+    margin-left: 2px;
+  }
+
+  .refs :global(.chip.hit) {
+    background: var(--surface-2);
+    outline: 1px solid var(--accent);
+  }
+
+  h2[id] {
+    scroll-margin-top: 16px;
+  }
+
+  /* The filter hides entries with the hidden attribute, which display: grid would override. */
+  .refs li[hidden],
+  .acronyms div[hidden] {
+    display: none;
+  }
+
   .refs {
     list-style: none;
     padding: 0;
@@ -115,6 +229,12 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
   .refs li.highlight {
     background: var(--surface-2);
     outline: 1px solid var(--accent);
+  }
+
+  .refs .study-id {
+    justify-self: start;
+    align-self: start;
+    margin-top: 3px;
   }
 
   .literature li {

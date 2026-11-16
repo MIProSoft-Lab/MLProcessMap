@@ -1,0 +1,211 @@
+id: P01
+number: 1
+origin: standards-and-literature
+name: Proceso de análisis del negocio o de la misión
+purpose: >-
+  El propósito del *Proceso de análisis del negocio o de la misión* es definir el problema o la oportunidad de
+  negocio que motiva un proyecto, caracterizar el espacio de soluciones disponible y determinar qué clases de
+  solución pueden abordar el problema. Este proceso se centra en traducir las necesidades organizativas de
+  alto nivel en objetivos técnicos cuantificables y sirve como punto de decisión inicial para determinar si un
+  enfoque de aprendizaje automático está justificado.
+outcomes:
+- id: a
+  text: Se define un enunciado técnico del problema con sus restricciones de éxito y sus riesgos.
+- id: b
+  text: Se comparan las clases de solución técnica y se selecciona una clase preferente.
+- id: c
+  text: >-
+    Se establecen las restricciones de coste computacional y operativo de la clase de solución seleccionada.
+- id: d
+  text: Se establece la trazabilidad entre el problema, los KPI y la justificación de la solución.
+inputs:
+- workProduct: business-goals-and-constraints
+  name: Objetivos y restricciones del negocio
+  description: Los objetivos de la organización y los límites dentro de los cuales deben alcanzarse.
+  serves:
+  - a
+  - b
+  - c
+  - d
+outputs:
+- workProduct: technical-problem-statement
+  name: Enunciado técnico del problema
+  description: >-
+    El problema expresado en términos de datos, con sus criterios de éxito, los riesgos iniciales y el
+    concepto operativo.
+  serves:
+  - a
+  - d
+- workProduct: solution-class-selection-record
+  name: Registro de selección de la clase de solución
+  description: Las clases de solución comparadas, la seleccionada y su justificación.
+  serves:
+  - b
+  - d
+- workProduct: data-landscape-assessment
+  name: Evaluación del panorama de datos
+  description: La viabilidad de una solución basada en datos según los datos y los recursos disponibles.
+  serves:
+  - a
+  - b
+- workProduct: cost-and-resource-constraint-record
+  name: Registro de restricciones de coste y recursos
+  description: >-
+    Los requisitos computacionales estimados, los costes de entrenamiento y los límites de recursos de
+    inferencia de la clase de solución seleccionada.
+  serves:
+  - c
+activities:
+- id: A1
+  title: Enunciar el problema y los criterios de éxito
+  description: >-
+    Formular el problema concreto de la misión o del negocio traduciendo las necesidades operativas de alto
+    nivel en objetivos técnicos cuantificables para determinar si un enfoque basado en datos es adecuado,
+    caracterizando el problema sin presuponer una solución y reformulándolo cuando otro planteamiento lo haría
+    más abordable. Definir criterios de éxito medibles que vayan más allá de las métricas de rendimiento
+    técnico para verificar que el modelo aporta un valor real al negocio, separando los criterios expresados
+    en términos de negocio de los expresados en términos técnicos, añadiendo un indicador económico con el que
+    pueda justificarse más adelante la inversión e indicando quién juzga cada criterio cuando el juicio es
+    subjetivo. Las medidas de efectividad negociadas con las partes interesadas y las métricas que las hacen
+    operativas las establecen, respectivamente, el *Proceso de definición de necesidades y requisitos de las
+    partes interesadas* y el *Proceso de definición de requisitos del sistema*.
+  primaryStudies:
+  - P10
+  - P12
+  - P13
+  - P14
+  - P15
+  - P16
+- id: A2
+  title: Caracterizar el panorama de datos
+  description: >-
+    Evaluar el entorno de datos de la organización para determinar si el problema definido puede resolverse
+    mediante aprendizaje automático, considerando tanto los activos actuales como los datos que puedan
+    recopilarse a lo largo del ciclo de vida del proyecto, y establecer si la organización puede acceder a sus
+    propios datos y usarlos legalmente, y no solo si los posee. Esta actividad incorpora el estudio de
+    viabilidad: evalúa la viabilidad del proyecto y los requisitos de datos para establecer umbrales de éxito
+    iniciales, fija limitaciones que sirven como señal para detener o redefinir el alcance si los recursos o
+    los datos son insuficientes y considera una prueba de concepto cuando la técnica no se ha aplicado antes
+    en el dominio. Evaluar en el mismo paso los recursos de personal, de cómputo y de software de los que
+    dependería el enfoque. Esta actividad solo establece la viabilidad; el descubrimiento, la catalogación y
+    el cribado de conjuntos de datos candidatos concretos corresponden al *Proceso de identificación de
+    fuentes de datos*.
+  primaryStudies:
+  - P11
+  - P13
+  - P14
+  - P16
+  - P18
+- id: A3
+  title: Identificar los riesgos iniciales
+  description: >-
+    Traducir los riesgos de alto nivel en consideraciones técnicas propias del aprendizaje automático,
+    identificando los posibles modos de fallo de ingeniería y las vulnerabilidades en los datos, los modelos,
+    las interfaces de software y los límites normativos. Esta revisión establece salvaguardas tempranas frente
+    a riesgos técnicos como la escasez de datos, el entrelazamiento de componentes, las amenazas de seguridad
+    y la exposición de la privacidad antes de que comience el desarrollo, y opera a nivel del sistema y no del
+    modelo individual, de modo que la interpretabilidad se evalúa como la cuestión de si se requiere un
+    enfoque intrínsecamente interpretable, y la adopción, como una cuestión de preparación de la organización.
+    Incluir los riesgos normativos que pueden prohibir directamente un objetivo, como las restricciones a
+    reutilizar datos personales con una finalidad distinta de aquella para la que se recogieron, y la
+    obligación de explicar qué datos fundamentaron una decisión.
+  primaryStudies:
+  - P2
+  - P3
+  - P6
+  - P11
+  - P13
+  - P14
+  - P16
+  - P18
+- id: A4
+  title: Definir los conceptos operativos
+  description: >-
+    Establecer los parámetros operativos y arquitectónicos de alto nivel del sistema planificando la
+    integración de los componentes de aprendizaje automático en el ecosistema de software más amplio, y
+    esbozar de forma preliminar cómo se adquiriría, desplegaría, mantendría y, finalmente, retiraría el
+    sistema resultante. Decidir si la aplicación que lo rodea se diseña junto con el componente de aprendizaje
+    automático o después, ya que aplazarla aplaza el esfuerzo de integración y de ingeniería de datos, pero no
+    lo elimina. Planificar la estrategia de cómputo e infraestructura que requeriría el enfoque en cuanto este
+    parezca prometedor. Estos conceptos siguen siendo preliminares y el *Proceso de definición de necesidades
+    y requisitos de las partes interesadas* los concreta en un contexto de uso, unos escenarios operativos y
+    unos límites de interfaz.
+  primaryStudies:
+  - P2
+  - P7
+  - P10
+  - P18
+- id: A5
+  title: Comparar las alternativas de solución
+  description: >-
+    Explorar las posibles clases de solución técnica para establecer una línea base preliminar de modelos
+    viables para la misión definida. Este análisis contrasta los enfoques basados en datos con las soluciones
+    tradicionales para confirmar que una implementación de aprendizaje automático está justificada, incluidas
+    las alternativas computacionales no inteligentes, y los evalúa con criterios y un vocabulario común
+    acordados de antemano, para que la novedad no sustituya al valor. Preferir los enfoques de menor capacidad
+    como línea base inicial y aumentar la capacidad solo cuando se demuestre que la complejidad añadida
+    compensa, y realizar aquí la evaluación preliminar de herramientas y técnicas, ya que esa elección
+    condiciona todo el proyecto. Registrar sistemáticamente las alternativas no seleccionadas, tanto para
+    dejar constancia de la justificación como porque una alternativa que no es de aprendizaje automático es lo
+    que permite disponer de una solución determinista de respaldo si en operación no puede confiarse en la
+    elección principal.
+  primaryStudies:
+  - P10
+  - P11
+  - P13
+  - P14
+  - P16
+- id: A6
+  title: Analizar la viabilidad computacional y operativa
+  description: >-
+    Estimar las demandas de procesamiento de las clases de solución candidatas tanto para el entrenamiento
+    como para la inferencia, incluidos los costes de entrenamiento previstos, la latencia y el rendimiento
+    requeridos en operación y la infraestructura necesaria para mantenerlos. Establecer los límites de
+    recursos que debe respetar la clase de solución seleccionada, de modo que el coste computacional y
+    operativo se trate como una restricción técnica desde el principio.
+- id: A7
+  title: Definir las necesidades de documentación y de evidencias
+  description: >-
+    Especificar los requisitos de registro e información de todos los artefactos del sistema para garantizar
+    su auditabilidad y mantenibilidad, determinando a partir del contexto normativo y de gobernanza qué deberá
+    demostrar más adelante la organización sobre el sistema y ante quién. Establecer que el linaje de los
+    datos, las licencias de los conjuntos de datos y la asociación entre un modelo y los datos a partir de los
+    que se construyó se registran desde el inicio y no se reconstruyen a posteriori. Registrar las decisiones
+    tomadas durante este análisis junto con su justificación, incluidas las clases de solución consideradas y
+    descartadas, y mantener la trazabilidad entre el problema u oportunidad identificados aquí y la clase de
+    solución seleccionada.
+  primaryStudies:
+  - P10
+  - P11
+  - P13
+  - P16
+changes:
+- annotation: A-01
+  text: Las prácticas base requieren niveles de trazabilidad
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes:
+  - kind: updated
+    text: – (ya cubierto por el resultado (c) y la A6, ahora (d) y A7)
+- annotation: A-02
+  text: Relevancia de los costes de entrenamiento y operación
+  redVotes: 0
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A6
+    text: Analizar la viabilidad computacional y operativa
+  - kind: added
+    target: Salida
+    text: Registro de restricciones de coste y recursos
+  - kind: added
+    target: Resultado (c)
+    text: restricciones de coste computacional y operativo de la clase de solución seleccionada
+- annotation: A-03
+  text: La definición del proceso es genérica
+  redVotes: 0
+  yellowVotes: 1
+  decision: rejected
+  changes: []

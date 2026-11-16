@@ -4,6 +4,9 @@
 import type { Translate } from '../lifecycle-diagram';
 import { phaseOf, slug, type Phase, type State, type Version } from './model';
 
+/** The interface strings the exports use. */
+export const exportKeys = ['tailor.untitled', 'tailor.phase-new', 'tailor.phase-returnsTo', 'tailor.unassigned', 'tailor.excluded', 'lc.iterative'];
+
 export interface ExportContext {
   state: State;
   /** The version of the model. */
@@ -78,7 +81,7 @@ export function csv(ctx: Omit<ExportContext, 'link'>) {
       lines.push([x.p.id, q(x.p.name), q(ph ? phaseName(state, ph, s) : ''), a.id, q(a.title), a.included ? 'yes' : 'no', q(x.included ? '' : x.rationale)].join(','));
     }
   }
-  return lines.join('\n');
+  return '\uFEFF' + lines.join('\n');
 }
 
 export function json(ctx: ExportContext) {
@@ -126,17 +129,21 @@ export function lifecyclePhases(state: State, s: Translate) {
 /** A lifecycle file in the format of content/lifecycles/<lang>/<id>.yaml. */
 export function yaml(state: State, s: Translate) {
   // Plain scalars when they are unambiguous, double-quoted (JSON) strings otherwise.
-  const q = (x: string) => (/^[\p{L}\p{N}][\p{L}\p{N} ,.()'’/&–—-]*$/u.test(x) && !/^(true|false|yes|no|on|off|null|~)$/i.test(x) ? x : JSON.stringify(x));
+  // A parser would read "2026", "1e3", "0x1f" or "2026-11-15" as a number or a date.
+  const ambiguous = (x: string) => !Number.isNaN(Number(x)) || /^\d{4}-\d\d?-\d\d?/.test(x) || /^(true|false|yes|no|on|off|null|~)$/i.test(x);
+  const q = (x: string) => (/^[\p{L}\p{N}][\p{L}\p{N} ,.()'’/&–—-]*$/u.test(x) && !ambiguous(x) ? x : JSON.stringify(x));
+  // IDs are slugs, so only the number and date cases can happen.
+  const qid = (x: string) => (/^\d/.test(x) && ambiguous(x) ? JSON.stringify(x) : x);
   const name = state.project || s('tailor.untitled');
-  let out = `id: ${slug(state.project) || 'lifecycle-model'}\nname: ${q(name)}\nstatus: draft\nprmVersion: ${state.version}\n`;
+  let out = `id: ${qid(slug(state.project) || 'lifecycle-model')}\nname: ${q(name)}\nstatus: draft\nprmVersion: ${state.version}\n`;
   if (state.description) out += `description: ${q(state.description)}\n`;
   out += 'phases:\n';
   for (const p of lifecyclePhases(state, s)) {
-    out += `  - id: ${p.id}\n    name: ${q(p.name)}\n`;
+    out += `  - id: ${qid(p.id)}\n    name: ${q(p.name)}\n`;
     if (p.description) out += `    description: ${q(p.description)}\n`;
     out += `    processes: [${p.processes.join(', ')}]\n`;
     if (p.iterative) out += '    iterative: true\n';
-    if (p.returnsTo) out += `    returnsTo: ${p.returnsTo}\n`;
+    if (p.returnsTo) out += `    returnsTo: ${qid(p.returnsTo)}\n`;
     if (p.returnNote) out += `    returnNote: ${q(p.returnNote)}\n`;
   }
   return out;

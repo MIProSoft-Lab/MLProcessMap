@@ -1,0 +1,167 @@
+id: P16
+number: 16
+origin: decomposed
+name: Proceso de optimización del modelo
+purpose: >-
+  El propósito del *Proceso de optimización del modelo* es refinar los modelos entrenados para mejorar su
+  rendimiento o su generalización. Se centra en ajustar la configuración del modelo y aplicar técnicas que
+  reduzcan el riesgo de sobreajuste, más allá de ajustar los parámetros a los datos.
+outcomes:
+- id: a
+  text: >-
+    Se exploran y ajustan los parámetros de configuración del modelo para mejorar el rendimiento en validación.
+- id: b
+  text: Se identifican y registran los valores óptimos de los hiperparámetros.
+- id: c
+  text: Se seleccionan y ajustan modelos preentrenados, cuando corresponde.
+- id: d
+  text: Se aplican estrategias de regularización y de ensamblado.
+- id: e
+  text: >-
+    Se elabora un Registro de optimización del modelo que documenta las estrategias de búsqueda y las
+    decisiones.
+inputs:
+- workProduct: model-artifact
+  name: Artefacto del modelo
+  description: El modelo entrenado que se va a mejorar.
+  serves:
+  - a
+  - c
+  - d
+- workProduct: dataset-partitions
+  name: Particiones del conjunto de datos
+  description: Los conjuntos de entrenamiento, validación y prueba.
+  serves:
+  - a
+  - b
+  - d
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: >-
+    Las métricas de datos, de modelo, de entrenamiento y de coste, las líneas base y los benchmarks que se
+    usan en la evaluación.
+  serves:
+  - a
+  - b
+- workProduct: model-optimization-record
+  name: Registro de optimización del modelo
+  description: >-
+    La estrategia de búsqueda, las configuraciones probadas, los resultados de validación y las decisiones de
+    las iteraciones anteriores.
+  serves:
+  - a
+  - b
+  optional: true
+- workProduct: architecture-requirements-specification
+  name: Especificación de requisitos de arquitectura
+  description: >-
+    Los requisitos de interfaz y los indicadores y objetivos de nivel de servicio que la arquitectura debe
+    soportar.
+  serves:
+  - a
+outputs:
+- workProduct: optimized-model-configuration
+  name: Configuración optimizada del modelo
+  description: Los hiperparámetros y la configuración seleccionados para la siguiente versión del modelo.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: model-optimization-record
+  name: Registro de optimización del modelo
+  description: >-
+    La estrategia de búsqueda, las configuraciones probadas, los resultados de validación y las decisiones.
+  serves:
+  - b
+  - e
+activities:
+- id: A1
+  title: Revisar los resultados de optimización anteriores
+  description: >-
+    Antes de empezar, analizar los Registros de optimización del modelo de las iteraciones anteriores para no
+    repetir configuraciones ya probadas y definir límites de búsqueda eficientes. Definir la mejora que se
+    persigue en la iteración actual a partir de las métricas del Marco de evaluación y de los objetivos de
+    nivel de servicio de la Especificación de requisitos de arquitectura, como el rendimiento predictivo, la
+    generalización entre conjuntos de datos, la latencia o el uso de recursos.
+- id: A2
+  title: Ajustar los hiperparámetros
+  description: >-
+    Ajustar los parámetros de configuración del entrenamiento para encontrar los valores que dan mejores
+    resultados en el conjunto de validación. Partir de los valores por defecto del framework, de las
+    recomendaciones de la literatura o de la experiencia, y buscar manualmente, por ensayo y error o con
+    métodos automatizados. Optimizar los hiperparámetros de cada versión del modelo para que las versiones se
+    comparen en su mejor configuración.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+- id: A3
+  title: Aplicar el aprendizaje por transferencia
+  description: >-
+    Reutilizar el conocimiento de un modelo preentrenado en una tarea relacionada para acelerar el
+    aprendizaje, usándolo como punto de partida que reduce el tiempo de entrenamiento incluso cuando no puede
+    transferirse directamente. Adaptar los modelos base de propósito general al sector, al caso de uso y al
+    cliente, y reentrenar o sustituir el modelo cuando el dominio o el formato de entrada difieran del
+    original.
+  primaryStudies:
+  - P4
+  - P8
+  - P10
+  - P13
+- id: A4
+  title: Aplicar la regularización
+  description: >-
+    Aplicar penalizaciones o restricciones para evitar que el modelo se ajuste al ruido de los datos,
+    ajustando el tipo y la intensidad de la regularización. Preferir los modelos más sencillos cuando sea
+    posible y no confiar solo en la regularización cuando se requieran niveles de robustez más altos.
+  primaryStudies:
+  - P6
+  - P8
+- id: A5
+  title: Combinar los modelos en ensamblados
+  description: >-
+    Combinar varios modelos entrenados, agregando modelos de tipos distintos o varias instancias de un mismo
+    tipo. Usar los ensamblados para hacer el sistema más tolerante a fallos, estimar la incertidumbre y
+    señalar las zonas de baja confianza.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+- id: A6
+  title: Documentar la optimización
+  description: >-
+    Registrar el espacio de búsqueda, los valores elegidos y las estrategias usadas en el Registro de
+    optimización del modelo para mantener la transparencia, junto con las configuraciones probadas, sus
+    resultados de validación, los criterios usados para compararlas y la comprensión de por qué determinadas
+    configuraciones dieron buenos o malos resultados. Restringir el acceso al registro cuando los
+    hiperparámetros sean confidenciales.
+  primaryStudies:
+  - P8
+  - P14
+changes:
+- annotation: A-41
+  text: Considerar la documentación de las iteraciones anteriores antes de empezar, para no repetir trabajo
+  redVotes: 3
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Registro de optimización del modelo de las iteraciones anteriores.
+  - kind: added
+    target: A1
+    text: Revisar los resultados de optimización anteriores
+- annotation: A-42
+  text: >-
+    Definir mejor qué significa mejorar un modelo (latencia, dispersión del rendimiento entre conjuntos de
+    datos, …)
+  redVotes: 1
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Marco de evaluación.
+  - kind: added
+    text: La A1 define la mejora que se persigue a partir de sus métricas

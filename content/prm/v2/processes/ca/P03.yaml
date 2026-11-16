@@ -1,0 +1,274 @@
+id: P03
+number: 3
+origin: standards-and-literature
+name: Procés de definició de requisits del sistema
+purpose: >-
+  El propòsit del *Procés de definició de requisits del sistema* és convertir les necessitats de les parts
+  interessades en un conjunt de requisits del sistema verificables que descriguin què ha de fer el sistema
+  d'aprenentatge automàtic. Defineix el comportament funcional, les necessitats de dades, les interfícies i els
+  objectius de qualitat per crear una línia de base per al disseny i les proves.
+outcomes:
+- id: a
+  text: Es defineixen uns requisits del sistema coherents i viables.
+- id: b
+  text: Es documenten els requisits de funcions, dades, rendiment i interfícies.
+- id: c
+  text: S'estableixen els objectius tècnics de cost i de rendiment.
+- id: d
+  text: >-
+    S'estableix la traçabilitat des de les necessitats de les parts interessades fins als requisits del sistema i
+    el disseny.
+inputs:
+- workProduct: stakeholder-requirements-specification
+  name: Especificació de requisits de les parts interessades
+  description: Els requisits acordats de les parts interessades i el seu context d'ús.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: technical-problem-statement
+  name: Enunciat tècnic del problema
+  description: El problema, els criteris d'èxit i el concepte operacional.
+  serves:
+  - a
+  - c
+- workProduct: cost-and-resource-constraint-record
+  name: Registre de restriccions de cost i recursos
+  description: >-
+    Els requisits computacionals estimats, els costs d'entrenament i els límits de recursos d'inferència de la
+    classe de solució escollida.
+  serves:
+  - c
+outputs:
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: >-
+    Els requisits funcionals, de rendiment i de qualitat del sistema i la seva línia de base de cost tècnic, amb
+    la seva traçabilitat.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: data-requirements-specification
+  name: Especificació de requisits de dades
+  description: >-
+    Els valors esperats, els formats, la qualitat i les metadades de les dades que necessita el sistema.
+  serves:
+  - a
+  - b
+- workProduct: architecture-requirements-specification
+  name: Especificació de requisits d'arquitectura
+  description: >-
+    Els requisits d'interfície i els indicadors i objectius de nivell de servei que l'arquitectura ha de
+    suportar.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Revisar les necessitats tècniques i els requisits de les parts interessades
+  description: >-
+    Analitzar els requisits de les parts interessades juntament amb l'enunciat tècnic del problema per trobar-ne
+    les implicacions per a les dades, els recursos i l'entorn operacional, i identificar quines expectatives no
+    es poden satisfer només amb una especificació determinista. Emprar les restriccions de cost i recursos
+    establertes per a la classe de solució escollida com a límits per als requisits que en resultin. Definir
+    l'estratègia que s'emprarà per identificar, expressar i gestionar els requisits del sistema dins el model de
+    cicle de vida escollit, acceptant que una part del conjunt de requisits només es farà visible quan existeixi
+    un model inicial. Identificar els sistemes facilitadors i les eines necessàries per registrar i mantenir els
+    requisits, ja que les plataformes de gestió d'artefactes rarament cobreixen aquesta activitat.
+- id: A2
+  title: Definir el comportament funcional
+  description: >-
+    Descriure com el sistema recull i processa les dades, entrena els models i lliura els resultats, expressant
+    el límit funcional en termes de les entrades que accepta i les respostes que produeix. Fixar aviat
+    l'especificació de sortida de cada component d'aprenentatge automàtic perquè el pipeline que l'envolta es
+    pugui dissenyar independentment del desenvolupament del model. Especificar el nivell d'autonomia del sistema,
+    indicant quines decisions continuen en mans d'un operador humà i quins llindars pot ajustar aquest operador,
+    i definir les regles deterministes de reserva que s'apliquen quan el model produeix resultats inesperats o
+    fora de rang.
+  primaryStudies:
+  - P4
+  - P8
+  - P9
+  - P18
+- id: A3
+  title: Identificar els requisits de dades i d'informació
+  description: >-
+    Especificar les fonts de dades, l'emmagatzematge, l'etiquetatge i els criteris de qualitat dels quals depèn
+    el sistema, indicant l'estat esperat de les dades mitjançant els valors admissibles de les característiques,
+    els formats acceptats i les proporcions tolerades de valors absents, amb uns límits fixats per admetre les
+    observacions plausibles del món real i rebutjar la resta. Expressar aquestes condicions com un esquema perquè
+    els processos posteriors puguin verificar les dades entrants amb aquest esquema. Estendre l'especificació a
+    les metadades, tenint en compte la propietat, els drets d'accés, la finalitat d'ús i la conservació, i
+    definir les estructures de dades i els requisits d'integració necessaris perquè les fonts es puguin combinar
+    de manera coherent.
+  primaryStudies:
+  - P3
+  - P8
+  - P10
+  - P12
+  - P13
+- id: A4
+  title: Definir els requisits de rendiment i de qualitat
+  description: >-
+    Fixar objectius mesurables de precisió, latència, robustesa i equitat, juntament amb les condicions d'entrada
+    en què s'espera que aquests objectius es compleixin, i indicar les mètriques que s'empren per avaluar-los en
+    lloc de deixar-ne l'elecció als processos posteriors. Definir el pressupost d'error acceptable i les classes
+    d'error que tenen més impacte operacional. Complementar els objectius predictius amb atributs de qualitat com
+    l'explicabilitat, l'escalabilitat i la complexitat del model, i amb restriccions de recursos que cobreixin el
+    maquinari d'inferència, el pressupost computacional i la infraestructura que requereix el sistema desplegat.
+    Derivar de les restriccions de cost i recursos una línia de base de cost tècnic per a l'entrenament i
+    l'operació, amb la qual es puguin contrastar les decisions posteriors de disseny i de verificació.
+  primaryStudies:
+  - P1
+  - P3
+  - P4
+  - P6
+  - P8
+  - P10
+  - P11
+  - P13
+- id: A5
+  title: Definir els requisits d'arquitectura
+  description: >-
+    Integrar el comportament funcional, els requisits de dades i les especificacions d'interfície en una
+    descripció coherent del que l'arquitectura ha de suportar. Identificar com el sistema interactua amb les API,
+    els usuaris i altres components, especificant els fluxos de dades que connecten els components
+    d'aprenentatge automàtic amb els mòduls de programari convencionals i el format en què s'exposen les
+    prediccions. Definir els indicadors de nivell de servei (SLI) que mesuren els aspectes tècnics del servei, com
+    la latència d'inferència o el rendiment de peticions, i els objectius de nivell de servei (SLO) que en fixen
+    els valors acceptables, juntament amb la disponibilitat, el control d'accés, el registre i l'auditabilitat que
+    s'esperen de la interfície de servei, de manera que el codi d'entrenament i el de servei es desenvolupin a
+    partir d'una especificació compartida i l'operació rebi una línia de base verificable.
+- id: A6
+  title: Analitzar i refinar els requisits
+  description: >-
+    Comprovar la coherència, la viabilitat i la verificabilitat dels requisits del sistema, resolent els
+    conflictes i els compromisos entre la qualitat predictiva i la resta d'atributs de qualitat abans que avanci
+    el desenvolupament. Considerar riscs com la deriva de dades, el canvi de distribució i la divergència entre
+    les condicions d'entrenament i les d'operació, i confirmar que l'especificació continua essent assolible en
+    aquestes condicions. Planificar un refinament controlat del conjunt de requisits a mesura que els requisits
+    de dades i de model es facin més clars durant el desenvolupament, de manera que es registrin els canvis
+    descoberts durant el tractament de les dades.
+  primaryStudies:
+  - P7
+  - P8
+  - P11
+  - P12
+- id: A7
+  title: Establir la traçabilitat
+  description: >-
+    Crear enllaços bidireccionals entre les necessitats de les parts interessades i els requisits del sistema, i
+    estendre'ls als conjunts de dades, les versions del model i els mètodes de verificació amb què es demostrarà
+    cada requisit. Registrar la justificació de les decisions sobre els requisits i obtenir un acord explícit
+    sobre la línia de base resultant. Com que el flux de treball d'aprenentatge automàtic no proporciona cap
+    descomposició jeràrquica formal dels requisits, i les eines disponibles donen poc suport a aquesta activitat,
+    establir la traçabilitat com un acord explícit del projecte recolzat en registres de procedència, en lloc de
+    suposar que la proporciona la infraestructura de desenvolupament.
+  primaryStudies:
+  - P5
+  - P8
+  - P9
+changes:
+- annotation: A-09
+  text: Entrades del procés insuficients (p. ex., el context)
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: added
+    target: Entrada
+    text: Enunciat tècnic del problema
+  - kind: added
+    target: Entrada
+    text: Registre de restriccions de cost i recursos
+- annotation: A-10
+  text: Els costs d'entrenament i d'operació com a sortida del procés
+  redVotes: 1
+  yellowVotes: 1
+  decision: partial
+  changes:
+  - kind: updated
+    target: A4
+    text: línia de base de cost tècnic
+  - kind: updated
+    target: Sortida
+    text: l'Especificació de requisits del sistema inclou la línia de base de cost
+- annotation: A-11
+  text: Al nom del procés li manca un verb actiu
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes:
+  - kind: updated
+    text: – (errada d'impressió als materials del taller)
+- annotation: A-12
+  text: Al procés li manca una perspectiva tècnica
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A1
+    text: Revisar les necessitats tècniques i els requisits de les parts interessades
+- annotation: A-13
+  text: Hi manca una sortida del procés per a l'A2
+  redVotes: 0
+  yellowVotes: 1
+  decision: rejected
+  changes: []
+- annotation: A-14
+  text: Eliminar l'A2
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: A-15
+  text: Consolidar l'A2, l'A3 i l'A5 en una sola activitat
+  redVotes: 0
+  yellowVotes: 2
+  decision: partial
+  changes:
+  - kind: updated
+    target: A5
+    text: Definir els requisits d'arquitectura
+  - kind: added
+    target: Sortida
+    text: Especificació de requisits d'arquitectura
+- annotation: A-16
+  text: >-
+    Redundància entre l'A3 del *Procés de definició de necessitats i requisits de les parts interessades* i l'A6
+    del *Procés de definició de requisits del sistema*
+  redVotes: 0
+  yellowVotes: 0
+  decision: partial
+  changes:
+  - kind: updated
+    target: A6
+    text: abast limitat als requisits del sistema
+- annotation: A-17
+  text: >-
+    Retroalimentació sobre els requisits del sistema (Director de tecnologia, CTO, a la transició a Operacions)
+  redVotes: 2
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A5
+    text: >-
+      Indicadors de nivell de servei (SLI) i objectius de nivell de servei (SLO) com a línia de base operacional
+- annotation: A-18
+  raisedElsewhere: true
+  text: Hi manquen els acords de nivell de servei
+  redVotes: 0
+  yellowVotes: 0
+  decision: partial
+  changes:
+  - kind: updated
+    text: l'A5 defineix els SLI i els SLO que l'arquitectura ha de suportar
+  - kind: added
+    target: Sortida
+    text: Especificació de requisits d'arquitectura

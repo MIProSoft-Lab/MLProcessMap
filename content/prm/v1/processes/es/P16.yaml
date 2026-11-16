@@ -1,0 +1,107 @@
+id: P16
+number: 16
+origin: decomposed
+name: Proceso de optimización del modelo
+purpose: >-
+  El propósito del *Proceso de optimización del modelo* es refinar los modelos entrenados para mejorar
+  su rendimiento o su generalización. Se centra en ajustar la configuración del modelo y aplicar técnicas
+  que reduzcan el riesgo de sobreajuste, más allá de ajustar los parámetros a los datos.
+outcomes:
+- id: a
+  text: >-
+    Se exploran y ajustan los parámetros de configuración del modelo para mejorar el rendimiento en validación.
+- id: b
+  text: Se identifican y registran los valores óptimos de los hiperparámetros.
+- id: c
+  text: Se seleccionan y ajustan modelos preentrenados, cuando corresponde.
+- id: d
+  text: Se aplican estrategias de regularización y de ensamblado.
+- id: e
+  text: >-
+    Se elabora un Registro de optimización del modelo que documenta las estrategias de búsqueda y las
+    decisiones.
+inputs:
+- workProduct: model-artifact
+  name: Artefacto del modelo
+  description: El modelo entrenado que se va a mejorar.
+  serves:
+  - a
+  - c
+  - d
+outputs:
+- workProduct: optimized-model-configuration
+  name: Configuración optimizada del modelo
+  description: Los hiperparámetros y la configuración seleccionados para la siguiente versión del modelo.
+  serves:
+  - a
+  - b
+  - c
+  - d
+- workProduct: model-optimization-record
+  name: Registro de optimización del modelo
+  description: >-
+    La estrategia de búsqueda, las configuraciones probadas, los resultados de validación y las decisiones.
+  serves:
+  - b
+  - e
+activities:
+- id: A1
+  title: Ajustar los hiperparámetros
+  description: >-
+    Ajustar los parámetros de configuración del entrenamiento para encontrar los valores que dan mejores
+    resultados. Partir de los valores por defecto del framework, de las recomendaciones de la literatura
+    o de la experiencia, y buscar manualmente, por ensayo y error o con métodos automatizados. Optimizar
+    los hiperparámetros de cada versión del modelo para que las versiones se comparen en su mejor configuración.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+- id: A2
+  title: Aplicar el aprendizaje por transferencia
+  description: >-
+    Reutilizar el conocimiento de un modelo preentrenado en una tarea relacionada para acelerar el aprendizaje,
+    usándolo como punto de partida que reduce el tiempo de entrenamiento incluso cuando no puede transferirse
+    directamente. Adaptar los modelos base de propósito general al sector, al caso de uso y al cliente,
+    y reentrenar o sustituir el modelo cuando el dominio o el formato de entrada difieran del original.
+  primaryStudies:
+  - P4
+  - P8
+  - P10
+  - P13
+- id: A3
+  title: Aplicar la regularización
+  description: >-
+    Aplicar penalizaciones o restricciones para evitar que el modelo se ajuste al ruido de los datos,
+    ajustando el tipo y la intensidad de la regularización. Preferir los modelos más sencillos cuando
+    sea posible y no confiar solo en la regularización cuando se requieran niveles de robustez más altos.
+  primaryStudies:
+  - P6
+  - P8
+- id: A4
+  title: Combinar los modelos en ensamblados
+  description: >-
+    Combinar varios modelos entrenados, agregando modelos de tipos distintos o varias instancias de un
+    mismo tipo. Usar los ensamblados para hacer el sistema más tolerante a fallos, estimar la incertidumbre
+    y señalar las zonas de baja confianza.
+  primaryStudies:
+  - P6
+  - P8
+  - P13
+- id: A5
+  title: Documentar la optimización
+  description: >-
+    Registrar el espacio de búsqueda, los valores elegidos y las estrategias usadas en el Registro de
+    optimización del modelo para mantener la transparencia, junto con las configuraciones probadas, sus
+    resultados de validación, los criterios usados para compararlas y la comprensión de por qué determinadas
+    configuraciones dieron buenos o malos resultados. Restringir el acceso al registro cuando los hiperparámetros
+    sean confidenciales.
+  primaryStudies:
+  - P8
+  - P14
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar los resultados de la implementación
+  standardProcess: Proceso de implementación
+- standard: ISO/IEC 5338
+  activity: c) Ajuste del modelo
+  standardProcess: Proceso de implementación

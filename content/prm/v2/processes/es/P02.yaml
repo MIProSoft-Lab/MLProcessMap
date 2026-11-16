@@ -1,0 +1,184 @@
+id: P02
+number: 2
+origin: standards-and-literature
+name: Proceso de definición de necesidades y requisitos de las partes interesadas
+purpose: >-
+  El propósito del *Proceso de definición de necesidades y requisitos de las partes interesadas* es recoger y
+  analizar las necesidades de las partes interesadas y transformarlas en un conjunto coherente de requisitos
+  que definen las interacciones previstas en el entorno del sistema y la visión funcional de cómo se espera
+  que el sistema se comporte en su flujo de trabajo operativo, y que sirven como línea base frente a la que se
+  validan las capacidades del sistema.
+outcomes:
+- id: a
+  text: Se identifican las partes interesadas y sus roles.
+- id: b
+  text: Se definen las necesidades de las partes interesadas, la visión funcional y el contexto de uso.
+- id: c
+  text: >-
+    Se analizan, priorizan y acuerdan los requisitos de las partes interesadas, incluidas sus características
+    de calidad.
+- id: d
+  text: >-
+    Se establece la trazabilidad entre las necesidades de las partes interesadas, los requisitos de las partes
+    interesadas y los futuros requisitos del sistema.
+inputs:
+- workProduct: technical-problem-statement
+  name: Enunciado técnico del problema
+  description: El problema, los criterios de éxito y el concepto operativo.
+  serves:
+  - b
+  - c
+- workProduct: stakeholder-list
+  name: Lista de partes interesadas
+  description: Una lista inicial de las partes con interés en el sistema.
+  serves:
+  - a
+  - d
+outputs:
+- workProduct: stakeholder-requirements-specification
+  name: Especificación de requisitos de las partes interesadas
+  description: >-
+    Las necesidades de las partes interesadas y la visión funcional, y los requisitos de las partes
+    interesadas acordados y priorizados que se derivan de ellas, con su contexto de uso y su trazabilidad.
+  serves:
+  - a
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Identificar las partes interesadas
+  description: >-
+    Identificar las partes internas y externas a lo largo del ciclo de vida y definir sus responsabilidades y
+    roles, cubriendo los roles técnicos que construyen y operan el sistema, los roles de negocio que lo
+    patrocinan y lo utilizan, y las partes externas cuyos intereses lo restringen, como los titulares de los
+    datos, los auditores y las autoridades reguladoras. Incluir los roles de apoyo que supervisan la ética, la
+    exposición legal y la validez en el dominio, e identificar las partes cuyos intereses se oponen al
+    sistema, cuyas expectativas no se satisfacen pero cuyo comportamiento debe anticiparse. Tener en cuenta
+    que los distintos roles intervienen en distintos momentos del ciclo de vida y tienen prioridades
+    diferentes sobre un mismo sistema, y evitar delimitar el conjunto de partes interesadas de forma demasiado
+    estrecha, ya que un conjunto reducido de puntos de vista es en sí mismo una fuente de sesgo.
+  primaryStudies:
+  - P3
+  - P5
+  - P6
+  - P10
+  - P11
+  - P14
+  - P16
+  - P17
+- id: A2
+  title: Definir las necesidades de las partes interesadas y la visión funcional
+  description: >-
+    Recoger las expectativas de las partes interesadas sobre las capacidades del sistema y establecer al mismo
+    tiempo las restricciones técnicas, operativas y normativas. Describir la visión funcional del sistema, es
+    decir, cómo se espera que el componente de aprendizaje automático se comporte en el flujo de trabajo
+    operativo de sus usuarios, de modo que su papel previsto se acuerde antes de derivar los requisitos
+    técnicos del sistema. Describir el contexto de uso y el entorno operativo en el que deben mantenerse esas
+    capacidades, expresar las capacidades requeridas como casos de uso y escenarios, y complementarlos con los
+    escenarios de abuso y de fallo que el sistema debe soportar. Registrar la solución que se usa actualmente
+    y el grado en que los usuarios la aceptan, de modo que exista una línea base para la validación posterior.
+    Recoger las cualidades no funcionales que importan a las partes interesadas, como la robustez, la
+    explicabilidad, los límites de recursos, la comprensibilidad y la mantenibilidad, junto con las clases de
+    error que tienen mayores consecuencias operativas, y dejar las métricas y los objetivos numéricos que las
+    expresan al *Proceso de definición de requisitos del sistema*. Recoger también las expectativas de
+    gobernanza, incluidos los principios de privacidad desde el diseño, las restricciones de consentimiento y
+    de minimización de datos, el derecho de las personas afectadas a impugnar una decisión automatizada, las
+    expectativas de usabilidad y las políticas organizativas que restringen el uso de modelos no
+    interpretables. Registrar los supuestos en los que se basa el proyecto, incluidos los que no pueden
+    verificarse, siempre que la validez del resultado dependa de ellos.
+- id: A3
+  title: Analizar y priorizar los requisitos
+  description: >-
+    Transformar las necesidades de las partes interesadas en requisitos de las partes interesadas, expresando
+    cada necesidad como un enunciado que pueda verificarse más adelante, de modo que las expectativas en bruto
+    recogidas en la A2 sigan distinguiéndose de los requisitos formalizados que resultan de su análisis.
+    Evaluar la viabilidad técnica, la coherencia y la alineación con las restricciones operativas de los
+    requisitos resultantes. Esto implica analizar compromisos (como sopesar la precisión predictiva frente a
+    la latencia, la explicabilidad o los costes de curación de datos) y resolver las discrepancias entre las
+    métricas de negocio y los indicadores técnicos de ciencia de datos. Acordar las medidas de efectividad con
+    las que las partes interesadas juzgarán si la capacidad entregada es adecuada y los objetivos de
+    cumplimiento que supervisarán las actividades posteriores de aseguramiento de la calidad. Los requisitos
+    se priorizan para entregar un producto mínimo viable funcional, de modo que el desarrollo aborde primero
+    los requisitos más críticos, y el conjunto resultante se somete a una decisión explícita de continuación
+    que evalúa el proyecto en cuanto a viabilidad, cumplimiento de las expectativas éticas y de gobernanza, y
+    factibilidad.
+  primaryStudies:
+  - P2
+  - P10
+  - P11
+  - P12
+  - P13
+  - P14
+  - P18
+- id: A4
+  title: Establecer el acuerdo y la trazabilidad
+  description: >-
+    Conciliar los distintos puntos de vista de las partes interesadas, alcanzar un consenso sobre los
+    requisitos especificados y establecer la trazabilidad entre cada requisito y la parte interesada y la
+    necesidad que lo originaron, conservando la justificación y el origen de los cambios posteriores.
+    Comunicar abiertamente las capacidades del sistema, declarar las limitaciones o sesgos conocidos y
+    documentar los acuerdos en lenguaje llano para que las partes interesadas no técnicas puedan actuar sobre
+    ellos, incluida una descripción del uso previsto del sistema y de las decisiones que tomará. Establecer un
+    vocabulario común con los expertos del dominio para que una terminología incoherente no socave el acuerdo,
+    y confirmar la comprensión mediante demostraciones en las que las partes interesadas ejerciten la
+    capacidad prevista con sus propios casos, en lugar de revisar solo los resultados notificados.
+  primaryStudies:
+  - P3
+  - P6
+  - P10
+  - P11
+  - P14
+  - P16
+changes:
+- annotation: A-04
+  text: Número excesivo de resultados del proceso
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Resultados
+    text: consolidados de ocho a cuatro
+- annotation: A-05
+  text: El Enunciado técnico del problema no debería ser una entrada
+  redVotes: 0
+  yellowVotes: 2
+  decision: rejected
+  changes: []
+- annotation: A-06
+  text: No debería incluirse la calidad de las salidas
+  redVotes: 0
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Resultado (c)
+    text: características de calidad integradas en los requisitos acordados
+- annotation: A-07
+  text: Distinción entre necesidades y requisitos de las partes interesadas
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Resultados (b) y (c)
+    text: necesidades y requisitos como resultados separados
+  - kind: updated
+    target: A3
+    text: transformar las necesidades en requisitos verificables
+- annotation: A-08
+  text: Falta la visión funcional
+  redVotes: 0
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: Propósito
+    text: incluye la visión funcional
+  - kind: updated
+    target: A2
+    text: Definir las necesidades de las partes interesadas y la visión funcional
+  - kind: updated
+    target: Salida
+    text: La Especificación de requisitos de las partes interesadas incluye la visión funcional

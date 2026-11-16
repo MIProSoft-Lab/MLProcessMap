@@ -1,0 +1,183 @@
+id: P24
+number: 24
+origin: standards-and-literature
+name: Proceso de mantenimiento
+purpose: >-
+  El propósito del *Proceso de mantenimiento* es sostener la capacidad del sistema de aprendizaje automático
+  para prestar su servicio. Analiza las desviaciones notificadas y lleva a cabo las acciones correctivas,
+  adaptativas, perfectivas y preventivas necesarias, incluido el reentrenamiento, coordinando el trabajo a
+  través de los procesos de datos, de modelo y de transición.
+outcomes:
+- id: a
+  text: Se define una estrategia de mantenimiento como anexo de la documentación de la arquitectura.
+- id: b
+  text: Las necesidades de mantenimiento se clasifican y se atribuyen a los datos, al modelo o al código.
+- id: c
+  text: Se evalúa el impacto de cada cambio antes de su implementación.
+- id: d
+  text: >-
+    Se restablece la capacidad operativa tras un fallo mediante la reversión, el respaldo o la operación
+    degradada.
+- id: e
+  text: Se implementan los cambios, incluido el reentrenamiento o el aprendizaje continuo del modelo.
+- id: f
+  text: >-
+    Se realizan pruebas de regresión de los cambios y se evalúan los modelos revisados frente al marco de
+    evaluación original.
+- id: g
+  text: Se confirma la capacidad restablecida frente a los indicadores que desencadenaron el cambio.
+- id: h
+  text: >-
+    Se establecen registros y tendencias de mantenimiento que vinculan cada acción con los elementos afectados
+    y con el linaje del modelo.
+inputs:
+- workProduct: maintenance-requests
+  name: Solicitudes de mantenimiento
+  description: Los problemas escalados desde la operación que necesitan un cambio.
+  serves:
+  - b
+  - c
+- workProduct: monitoring-record
+  name: Registro de monitorización
+  description: Las evidencias de deriva y de rendimiento.
+  serves:
+  - b
+  - g
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: El sistema cuya capacidad se sostiene.
+  serves:
+  - c
+  - d
+  - e
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: >-
+    Los desencadenantes de reentrenamiento, los puntos de control de validación y los mecanismos de reversión.
+  serves:
+  - a
+  - d
+- workProduct: disaster-recovery-plan
+  name: Plan de recuperación ante desastres
+  description: >-
+    Las estrategias de copia de seguridad, los objetivos de recuperación y los procedimientos de recuperación
+    de los componentes críticos del sistema.
+  serves:
+  - a
+  - d
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: Los criterios para volver a evaluar un modelo revisado.
+  serves:
+  - f
+  - g
+outputs:
+- workProduct: maintenance-records
+  name: Registros de mantenimiento
+  description: Las acciones, los resultados, las tendencias y el linaje del modelo.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+activities:
+- id: A1
+  title: Definir la estrategia de mantenimiento
+  description: >-
+    Establecer las prioridades, los calendarios y la autoridad de aprobación de cada tipo de acción de
+    mantenimiento, a partir de los mecanismos de reentrenamiento y de reversión definidos en la arquitectura y
+    de los procedimientos de recuperación del Plan de recuperación ante desastres. Determinar con qué
+    frecuencia debe actualizarse el modelo, teniendo en cuenta el ritmo de cambio esperado de los datos y del
+    entorno y la pérdida de calidad tolerable con el tiempo. Identificar las competencias necesarias para
+    mantener tanto el modelo como el resto del sistema y definir las medidas con las que se evalúa la eficacia
+    del mantenimiento. Siempre que sea posible, prever la obsolescencia de los elementos y las tecnologías.
+  primaryStudies:
+  - P4
+  - P11
+  literature:
+  - breckMLTestScore2017
+- id: A2
+  title: Analizar las necesidades de mantenimiento
+  description: >-
+    Revisar las solicitudes de mantenimiento, los registros de monitorización y otros informes para
+    identificar las acciones correctivas, adaptativas, perfectivas o preventivas necesarias. Determinar si
+    cada problema se origina en los datos, en el modelo o en el código, y si puede resolverse actualizando el
+    modelo o requiere reconsiderar el propio problema. Basar esta atribución en la procedencia de los datos y
+    del modelo y no solo en las versiones de la configuración, y distinguir los datos erróneos de las
+    expectativas que han dejado de ser válidas.
+  primaryStudies:
+  - P5
+  - P16
+  - P17
+- id: A3
+  title: Evaluar el impacto del cambio
+  description: >-
+    Evaluar el efecto de cada cambio propuesto en las estructuras de datos, las interfaces, la documentación y
+    el rendimiento, la seguridad física y la seguridad de la información del sistema antes de implementarlo.
+    Considerar que un cambio en cualquier entrada, configuración o selección de datos puede alterar el
+    comportamiento del modelo en su conjunto, e identificar los modelos y sistemas que dependen de sus
+    salidas, estén declarados o no. Evaluar si el cambio puede degradar un comportamiento que antes era
+    aceptable y sopesar su coste y su riesgo frente al riesgo de dejar el problema sin resolver.
+  primaryStudies:
+  - P10
+  - P16
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A4
+  title: Restablecer la capacidad operativa
+  description: >-
+    Cuando el modelo provoque un fallo, devolver el sistema a un estado operativo aceptable, ya sea
+    revirtiendo a una versión anterior del modelo de la que se sabe que funciona adecuadamente o reparando el
+    modelo en servicio. Controlar la restauración como un cambio de emergencia bajo la gestión de versiones.
+    Mantener el restablecimiento del servicio separado del análisis de la causa, reproduciendo el fallo en un
+    entorno separado para que la causa raíz pueda identificarse y abordarse mediante las actividades de
+    mantenimiento ordinarias.
+  primaryStudies:
+  - P13
+  literature:
+  - breckMLTestScore2017
+- id: A5
+  title: Implementar el cambio
+  description: >-
+    Llevar a cabo las acciones de mantenimiento seleccionadas, recurriendo a los procesos de datos y de modelo
+    cuando el cambio requiera datos nuevos, una preparación de datos revisada o un reentrenamiento, y
+    aplicando el aprendizaje continuo solo en las condiciones definidas en la estrategia. Aplicar las
+    correcciones de datos de forma coherente a todos los datos afectados, para que el modelo no se reentrene
+    con una mezcla de datos corregidos y sin corregir. Asegurar que se dispone de los datos, los recursos de
+    cómputo, la capacidad de etiquetado y el personal cualificado necesarios para producir un modelo revisado,
+    y que los datos y artefactos archivados siguen íntegros y accesibles.
+  primaryStudies:
+  - P4
+  - P8
+  - P17
+- id: A6
+  title: Verificar y publicar el cambio
+  description: >-
+    Probar los cambios para confirmar que no han introducido nuevos problemas ni degradado requisitos que
+    antes se cumplían. Volver a evaluar cualquier modelo revisado frente a los criterios con los que se aceptó
+    el modelo original, usando casos de prueba tanto anteriores como actualizados para que las versiones
+    sucesivas sigan siendo comparables, y frente a una línea base sencilla para confirmar que su complejidad
+    sigue estando justificada. Publicar el cambio mediante el proceso de transición y confirmar la capacidad
+    restablecida cuando los indicadores que desencadenaron el cambio hayan vuelto a estar dentro de sus
+    umbrales.
+  primaryStudies:
+  - P10
+  literature:
+  - breckMLTestScore2017
+- id: A7
+  title: Registrar los resultados del mantenimiento
+  description: >-
+    Documentar las acciones de mantenimiento realizadas, sus resultados y cualquier anomalía o incidente
+    encontrado, e identificar tendencias en los incidentes y las acciones que puedan servir a la operación, al
+    mantenimiento y a proyectos similares. Vincular cada registro con los elementos del sistema afectados y
+    con el linaje del modelo, incluidos los datos con los que se entrenó, la configuración usada y la
+    evaluación que superó. Mantener la trazabilidad entre las acciones de mantenimiento y los artefactos del
+    ciclo de vida, y recoger la información necesaria para evaluar la satisfacción de los usuarios con el
+    sistema y con su mantenimiento.
+  primaryStudies:
+  - P5
+  - P10

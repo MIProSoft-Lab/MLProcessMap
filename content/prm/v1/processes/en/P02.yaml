@@ -127,7 +127,7 @@ activities:
     traceability between each requirement and the stakeholder and need that originated it, retaining the
     rationale and the origin of subsequent changes. Communicate system capabilities openly, declare known
     limitations or biases, and document agreements in plain language so that non-technical stakeholders
-    can act on, including a description of the intended use of the system and of the decisions it will
+    can act on them, including a description of the intended use of the system and of the decisions it will
     make. Establish a shared vocabulary with domain experts so that agreement is not undermined by inconsistent
     terminology, and confirm understanding through demonstrations in which stakeholders exercise the intended
     capability against their own cases rather than reviewing reported results alone.

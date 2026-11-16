@@ -60,6 +60,18 @@
   margin: 16px 0 6px;
 }
 
+/* The offer to continue with the last model edited in this browser. */
+.tailor-page .restore:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+
+.tailor-page .restore span {
+  flex: 1 1 260px;
+}
+
 .tailor-page .exports {
   display: flex;
   flex-wrap: wrap;
@@ -314,6 +326,9 @@
 
 .tailor-page .phase-list .pc-add {
   justify-self: start;
+  /* As wide as its label, not as its longest option. */
+  width: 12rem;
+  max-width: 100%;
   padding: 3px 8px;
   font-size: 0.85rem;
 }
@@ -461,4 +476,159 @@
 
 .tailor-page #preview .lc-diagram {
   margin-top: 8px;
+}
+
+/* On a narrow screen the summary and the exports come after the whole list, so
+   a bar at the bottom shows the count and leads to them. */
+.tailor-page .mobile-bar {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .tailor-page .mobile-bar:not([hidden]) {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-top: 1px solid var(--ink);
+    color: var(--text);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .tailor-page .mobile-bar-go {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .tailor-page #side {
+    scroll-margin-top: 12px;
+  }
+}
+
+/* The offer to take back an action that replaced work, floating at the bottom
+   so it is in view wherever the action was taken. */
+.tailor-page .undo:not([hidden]) {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 6;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  padding: 8px 8px 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: var(--lift);
+  font-size: 0.9rem;
+}
+
+.tailor-page .undo span {
+  min-width: 0;
+}
+
+.tailor-page .undo button {
+  flex: none;
+}
+
+.tailor-page #undo-yes {
+  background: var(--ink-fill);
+  border-color: var(--ink-fill);
+  color: var(--surface);
+  font-weight: 500;
+}
+
+.tailor-page #undo-close {
+  padding: 6px 9px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+/* Above the bar at the bottom of a narrow screen. */
+@media (max-width: 959px) {
+  .tailor-page .undo:not([hidden]) {
+    bottom: 60px;
+  }
+}
+
+/* The "Start from" menu, a button as tall as the fields beside it. */
+.tailor-page .start-menu {
+  align-self: end;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.tailor-page .start-menu summary {
+  height: 2.5rem;
+  padding: 0 14px;
+  background: var(--surface);
+}
+
+.tailor-page .start-menu ul {
+  min-width: 16rem;
+  max-width: calc(100vw - 32px);
+}
+
+.tailor-page .start-menu li button {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-size: inherit;
+}
+
+.tailor-page .start-menu li button:hover,
+.tailor-page .start-menu li button:focus-visible {
+  background: var(--surface-2);
+  box-shadow: none;
+}
+
+.tailor-page .start-menu .menu-group {
+  margin-top: 4px;
+  padding: 6px 12px 2px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tailor-page .start-menu .menu-foot {
+  margin-top: 4px;
+  padding: 6px 12px 4px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* On a narrow screen the menu opens from the left edge of its button. */
+@media (max-width: 700px) {
+  .tailor-page .start-menu ul {
+    right: auto;
+    left: 0;
+  }
+}
+
+.tailor-page .next-step {
+  margin: 16px 0 0;
+}
+
+.tailor-page .side .count {
+  font-weight: 400;
+  color: var(--muted);
 }

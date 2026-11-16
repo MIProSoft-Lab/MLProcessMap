@@ -1,0 +1,174 @@
+id: P21
+number: 21
+origin: standards-and-literature
+name: Procés de validació del sistema
+purpose: >-
+  El propòsit del *Procés de validació del sistema* és proporcionar evidències objectives que el sistema
+  d'aprenentatge automàtic desplegat, quan és en ús, compleix els seus objectius de negoci i les necessitats de
+  les parts interessades i assoleix l'ús previst en el seu entorn operacional previst. Es duu a terme abans de
+  l'ús operacional complet, amb la participació de les parts interessades, que en confirmen el resultat.
+outcomes:
+- id: a
+  text: >-
+    Es defineix una estratègia de validació, amb el seu abast, els criteris d'acceptació, l'entorn i les parts
+    interessades que hi participen.
+- id: b
+  text: >-
+    El sistema desplegat es valida en condicions d'operació i s'avalua la validesa de les seves prediccions amb
+    dades reals.
+- id: c
+  text: Es confirma la disponibilitat dels serveis que requereixen les parts interessades.
+- id: d
+  text: S'avalua l'assoliment dels objectius de negoci i dels criteris d'èxit.
+- id: e
+  text: Es confirma l'adequació a l'ús previst amb els usuaris i les altres parts interessades.
+- id: f
+  text: >-
+    Es produeix un Informe de validació del sistema que documenta els resultats i les anomalies de la validació.
+- id: g
+  text: S'obté l'acord de les parts interessades que el sistema satisfà les seves necessitats.
+- id: h
+  text: >-
+    S'estableix la traçabilitat entre els resultats de la validació i els requisits de les parts interessades.
+inputs:
+- workProduct: deployment-artifacts
+  name: Artefactes de desplegament
+  description: El model empaquetat, l'entrada al registre i la instància en funcionament.
+  serves:
+  - b
+  - c
+  - e
+- workProduct: stakeholder-requirements-specification
+  name: Especificació de requisits de les parts interessades
+  description: >-
+    Els requisits de les parts interessades acordats i prioritzats, amb el seu context d'ús i la seva
+    traçabilitat.
+  serves:
+  - a
+  - c
+  - e
+  - h
+- workProduct: technical-problem-statement
+  name: Enunciat tècnic del problema
+  description: >-
+    El problema expressat en termes de dades, amb els criteris d'èxit, els riscs inicials i el concepte
+    operacional.
+  serves:
+  - a
+  - d
+- workProduct: system-verification-report
+  name: Informe de verificació del sistema
+  description: Els resultats de la verificació i les no conformitats trobades.
+  serves:
+  - a
+- workProduct: reporting-templates
+  name: Plantilles d'informe
+  description: Els formats normalitzats per informar de les mètriques.
+  serves:
+  - f
+outputs:
+- workProduct: system-validation-report
+  name: Informe de validació del sistema
+  description: >-
+    L'estratègia de validació, els resultats obtinguts en condicions d'operació i respecte dels objectius de
+    negoci, l'avaluació de l'adequació a l'ús, les anomalies trobades i la decisió d'acceptació.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+activities:
+- id: A1
+  title: Planificar la validació
+  description: >-
+    Definir l'estratègia i l'abast de la validació a partir de l'Especificació de requisits de les parts
+    interessades i dels criteris d'èxit de l'Enunciat tècnic del problema, acordant amb les parts interessades
+    els criteris d'acceptació, la durada del període de validació i les restriccions que limiten el que es pot
+    validar. Fer la validació a l'entorn operacional, o en un de representatiu, amb els usuaris previstos o amb
+    substituts acceptables, i derivar els escenaris de validació de l'ús previst i del context d'ús, implicant-hi
+    les parts interessades quan calgui per fer-los representatius. Tenir en compte les no conformitats de què ha
+    informat la verificació, i planificar que la validació es repeteixi quan el model o les seves condicions
+    d'operació canviïn substancialment.
+- id: A2
+  title: Validar en condicions d'operació
+  description: >-
+    Observar el sistema desplegat durant el període de validació definit mentre funciona en condicions reals,
+    abans de l'ús operacional complet, per exemple en una prova pilot, en paral·lel a la solució que s'empra
+    actualment o amb un grup limitat d'usuaris. Avaluar la validesa de les prediccions amb les entrades actuals,
+    reconeixent que la qualitat mesurada amb dades anteriors només és una estimació de la qualitat amb dades
+    reals, i confirmar que els serveis que requereixen les parts interessades estan disponibles. Comparar els
+    resultats amb la solució que s'empra actualment, si n'hi ha.
+- id: A3
+  title: Validar els objectius de negoci
+  description: >-
+    Avaluar si el sistema assoleix els objectius de negoci i els criteris d'èxit de l'Enunciat tècnic del
+    problema, emprant les mesures d'efectivitat acordades amb les parts interessades i no només les mètriques del
+    model. Avaluar l'efecte del sistema sobre el procés de negoci al qual dona suport, inclòs l'indicador
+    econòmic definit per justificar la inversió, i, quan el projecte sigui una prova de concepte, el valor i els
+    riscs de l'enfocament d'aprenentatge automàtic per a l'organització.
+- id: A4
+  title: Confirmar l'adequació a l'ús
+  description: >-
+    Fer que els usuaris i les altres parts interessades posin a prova el sistema amb els seus propis casos,
+    confirmant que poden entendre les seves sortides i explicacions i actuar a partir d'aquestes, que el nivell
+    previst de supervisió humana és factible i que la documentació en dona suport a l'ús. Confirmar que les
+    preocupacions de les parts interessades registrades a l'Especificació de requisits de les parts interessades,
+    com la seguretat física, la seguretat de la informació, l'equitat envers els grups afectats i l'alineació amb
+    els valors ètics, es tenen en compte quan el sistema és en ús.
+- id: A5
+  title: Documentar els resultats i obtenir l'acceptació
+  description: >-
+    Registrar a l'Informe de validació del sistema la validació feta, els seus resultats, les anomalies trobades i
+    la distància entre les expectatives de les parts interessades i el rendiment del sistema, emprant les
+    Plantilles d'informe perquè les validacions successives continuïn essent comparables. Descriure cada anomalia
+    amb prou informació perquè el procés en què es va originar la pugui tractar, i fer el seguiment de la seva
+    resolució o de la seva acceptació com a limitació coneguda. Obtenir l'acord de les parts interessades que el
+    sistema satisfà les seves necessitats, mantenir la traçabilitat entre els resultats de la validació i els
+    requisits de les parts interessades, i posar el rendiment observat durant la validació a disposició com a
+    referència per a la validació contínua.
+changes:
+- annotation: A-45
+  text: Integrar la validació de vulnerabilitats a la validació del sistema
+  redVotes: 1
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Verificar la seguretat al *Procés de verificació del sistema*.
+  - kind: updated
+    text: l'A4 inclou les preocupacions de seguretat de les parts interessades
+- annotation: A-46
+  text: Validació tècnica de la qualitat del codi
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: A-47
+  text: Validar el percentatge de cobertura de les proves
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: –
+  text: >-
+    Reorientació de la Verificació del sistema i la Validació del sistema, arran d'una discussió informal durant
+    el taller
+  redVotes: null
+  yellowVotes: null
+  decision: –
+  changes:
+  - kind: updated
+    text: Propòsit, resultats, entrades, A1, A2, A5.
+  - kind: added
+    target: A3
+    text: Validar els objectius de negoci.
+  - kind: added
+    target: A4
+    text: Confirmar l'adequació a l'ús.
+  - kind: removed
+    text: Les proves funcionals, de dependències, de fallades i de reversió passen a la Verificació del sistema

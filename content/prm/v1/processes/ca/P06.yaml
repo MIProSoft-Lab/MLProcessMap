@@ -1,0 +1,109 @@
+id: P06
+number: 6
+origin: standards-only
+name: Procés d'anàlisi del sistema
+purpose: >-
+  El propòsit del *Procés d'anàlisi del sistema* és transformar els requisits del sistema en una comprensió
+  analítica del sistema que doni suport a les decisions d'arquitectura i de disseny. Identifica com el
+  sistema complirà les seves funcions i característiques de qualitat analitzant el context operacional,
+  les restriccions, les interaccions i les dependències de dades pròpies de l'aprenentatge automàtic.
+outcomes:
+- id: a
+  text: S'identifiquen i es documenten els elements del sistema, les interaccions i les restriccions.
+- id: b
+  text: Es produeixen models analítics, diagrames de flux de dades i avaluacions de riscs.
+- id: c
+  text: >-
+    S'estableixen les relacions entre els requisits, les conclusions analítiques i les decisions arquitectòniques.
+inputs:
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: Els comportaments i les restriccions del sistema definits.
+  serves:
+  - a
+  - c
+outputs:
+- workProduct: system-analysis-report
+  name: Informe d'anàlisi del sistema
+  description: >-
+    Els models analítics, els diagrames de flux de dades i les avaluacions de riscs que donen suport a
+    les decisions de disseny.
+  serves:
+  - a
+  - b
+  - c
+activities:
+- id: A1
+  title: Revisar els requisits i l'entorn operacional
+  description: >-
+    Identificar els aspectes funcionals i no funcionals que condicionen les decisions arquitectòniques,
+    i formular com una pregunta explícita el problema que ha de resoldre cada anàlisi, de manera que els
+    seus objectius i la utilitat esperada del resultat quedin fixats abans d'aplicar cap mètode. Aquesta
+    avaluació comprova si les expectatives contraposades de les parts interessades, els límits de disponibilitat
+    de dades i els límits de desplegament s'han identificat i resolt aviat dins el cicle de vida. Seleccionar
+    quines característiques mereixen una anàlisi sospesant la gravetat del risc associat davant la seva
+    probabilitat, en lloc d'analitzar totes les característiques de manera uniforme.
+  primaryStudies:
+  - P8
+  - P10
+  - P13
+  literature:
+  - siebert2022
+  - nahar2022
+- id: A2
+  title: Descompondre el sistema en elements lògics
+  description: >-
+    Dividir el sistema en elements lògics, distingint entre els components de programari tradicionals
+    i els elements d'aprenentatge automàtic. Aïllant els mòduls d'aprenentatge automàtic de la lògica
+    determinista de l'aplicació, els equips d'enginyeria poden analitzar els límits i les dependències
+    de cada subsistema, tenint en compte l'entrellaçament i l'erosió dels límits que impedeixen analitzar
+    els components d'aprenentatge automàtic completament aïllats. Dirigir l'esforç cap als punts de sensibilitat
+    i ajustar la profunditat de cada anàlisi a la criticitat de la decisió que sustenta i a la complexitat
+    de l'element afectat.
+  primaryStudies:
+  - P4
+  - P8
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+  - kazman1998
+- id: A3
+  title: Modelar la dinàmica i les interaccions del sistema
+  description: >-
+    Representar com interactuen les dades, el control i els mecanismes de retroalimentació a través del
+    sistema, incloses les interaccions entre models i els desencadenants de reentrenament. El modelatge
+    del comportament examina com les sortides de predicció flueixen cap als fluxos de treball de l'aplicació
+    i com operen al llarg del temps els bucles de retroalimentació continus, inclosos aquells pels quals
+    un sistema desplegat condiciona les dades amb què s'entrenarà més endavant.
+  primaryStudies:
+  - P13
+- id: A4
+  title: Fer l'anàlisi de compromisos i d'impacte
+  description: >-
+    Avaluar els enfocaments alternatius pel que fa al rendiment predictiu, l'explicabilitat i les restriccions
+    de recursos. Aquesta anàlisi sospesa qualitats del sistema que competeixen entre si, com equilibrar
+    la precisió del model amb els requisits d'eficiència computacional, de latència i d'interpretabilitat,
+    i identifica els elements que afecten diverses qualitats alhora perquè es faci evident el cost d'afavorir-ne
+    una. Fixar i justificar el criteri amb què es mesura cada qualitat abans de fer la comparació, ja
+    que per a propietats discutides com l'equitat l'elecció de la definició determina el resultat. Revisar
+    la validesa dels resultats amb els experts pertinents, registrar-ne les conclusions i les recomanacions,
+    i mantenir la traçabilitat entre cada resultat i el requisit del qual prové.
+  primaryStudies:
+  - P3
+  - P9
+  - P16
+  literature:
+  - kazman1998
+  - siebert2022
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar l'anàlisi del sistema
+  prmActivity: A1
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Dur a terme l'anàlisi del sistema
+  prmActivity: A2
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar l'anàlisi del sistema
+  prmActivity: A3
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar l'anàlisi del sistema
+  prmActivity: A4

@@ -1,0 +1,178 @@
+id: P21
+number: 21
+origin: standards-and-literature
+name: Proceso de validación del sistema
+purpose: >-
+  El propósito del *Proceso de validación del sistema* es proporcionar evidencias objetivas de que el sistema
+  de aprendizaje automático desplegado, cuando está en uso, cumple sus objetivos de negocio y las necesidades
+  de las partes interesadas, y consigue su uso previsto en el entorno operativo previsto. Se realiza antes de
+  la plena puesta en operación, con la participación de las partes interesadas, que confirman su resultado.
+outcomes:
+- id: a
+  text: >-
+    Se define una estrategia de validación, con su alcance, sus criterios de aceptación, su entorno y las
+    partes interesadas que participan.
+- id: b
+  text: >-
+    Se valida el sistema desplegado en condiciones de operación y se evalúa la validez de sus predicciones
+    sobre datos reales.
+- id: c
+  text: Se confirma la disponibilidad de los servicios que requieren las partes interesadas.
+- id: d
+  text: Se evalúa el logro de los objetivos de negocio y de los criterios de éxito.
+- id: e
+  text: Se confirma la adecuación al uso previsto con los usuarios y las demás partes interesadas.
+- id: f
+  text: >-
+    Se elabora un Informe de validación del sistema que documenta los resultados de la validación y las
+    anomalías.
+- id: g
+  text: Se obtiene el acuerdo de las partes interesadas de que el sistema satisface sus necesidades.
+- id: h
+  text: >-
+    Se establece la trazabilidad entre los resultados de la validación y los requisitos de las partes
+    interesadas.
+inputs:
+- workProduct: deployment-artifacts
+  name: Artefactos de despliegue
+  description: El modelo empaquetado, la entrada en el registro y la instancia en producción.
+  serves:
+  - b
+  - c
+  - e
+- workProduct: stakeholder-requirements-specification
+  name: Especificación de requisitos de las partes interesadas
+  description: >-
+    Los requisitos de las partes interesadas acordados y priorizados, con su contexto de uso y su trazabilidad.
+  serves:
+  - a
+  - c
+  - e
+  - h
+- workProduct: technical-problem-statement
+  name: Enunciado técnico del problema
+  description: >-
+    El problema expresado en términos de datos, con sus criterios de éxito, los riesgos iniciales y el
+    concepto operativo.
+  serves:
+  - a
+  - d
+- workProduct: system-verification-report
+  name: Informe de verificación del sistema
+  description: Los resultados de la verificación y las no conformidades encontradas.
+  serves:
+  - a
+- workProduct: reporting-templates
+  name: Plantillas de informe
+  description: Los formatos normalizados para informar de las métricas.
+  serves:
+  - f
+outputs:
+- workProduct: system-validation-report
+  name: Informe de validación del sistema
+  description: >-
+    La estrategia de validación, los resultados obtenidos en condiciones de operación y frente a los objetivos
+    de negocio, la evaluación de la adecuación al uso, las anomalías encontradas y la decisión de aceptación.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+activities:
+- id: A1
+  title: Planificar la validación
+  description: >-
+    Definir la estrategia y el alcance de la validación a partir de la Especificación de requisitos de las
+    partes interesadas y de los criterios de éxito del Enunciado técnico del problema, acordando con las
+    partes interesadas los criterios de aceptación, la duración del periodo de validación y las restricciones
+    que limitan lo que puede validarse. Realizar la validación en el entorno operativo, o en uno
+    representativo de él, con los usuarios previstos o sustitutos aceptables, y derivar los escenarios de
+    validación del uso previsto y del contexto de uso, implicando a las partes interesadas cuando sea
+    necesario para que sean representativos. Tener en cuenta las no conformidades notificadas por la
+    verificación y prever que la validación se repita cuando el modelo o sus condiciones de operación cambien
+    sustancialmente.
+- id: A2
+  title: Validar en condiciones de operación
+  description: >-
+    Observar el sistema desplegado durante el periodo de validación definido mientras funciona en condiciones
+    reales, antes de su plena puesta en operación, por ejemplo en un piloto, en paralelo con la solución que
+    se usa actualmente o con un grupo limitado de usuarios. Evaluar la validez de las predicciones sobre las
+    entradas actuales, reconociendo que la calidad medida sobre datos anteriores solo es una estimación de la
+    calidad sobre los datos reales, y confirmar que están disponibles los servicios que requieren las partes
+    interesadas. Comparar los resultados con la solución que se usa actualmente, si existe.
+- id: A3
+  title: Validar los objetivos de negocio
+  description: >-
+    Evaluar si el sistema alcanza los objetivos de negocio y los criterios de éxito del Enunciado técnico del
+    problema, usando las medidas de efectividad acordadas con las partes interesadas y no solo métricas del
+    modelo. Evaluar el efecto del sistema en el proceso de negocio al que da soporte, incluido el indicador
+    económico definido para justificar la inversión y, cuando el proyecto sea una prueba de concepto, el valor
+    y los riesgos del enfoque de aprendizaje automático para la organización.
+- id: A4
+  title: Confirmar la adecuación al uso
+  description: >-
+    Hacer que los usuarios y las demás partes interesadas utilicen el sistema con sus propios casos,
+    confirmando que pueden entender sus salidas y explicaciones y actuar a partir de ellas, que el nivel
+    previsto de supervisión humana es viable y que la documentación da soporte a su uso. Confirmar que las
+    preocupaciones de las partes interesadas registradas en la Especificación de requisitos de las partes
+    interesadas, como la seguridad física, la seguridad de la información, la equidad hacia los grupos
+    afectados y la alineación con los valores éticos, se atienden cuando el sistema está en uso.
+- id: A5
+  title: Documentar los resultados y obtener la aceptación
+  description: >-
+    Registrar en el Informe de validación del sistema la validación realizada, sus resultados, las anomalías
+    encontradas y la diferencia entre las expectativas de las partes interesadas y el rendimiento del sistema,
+    usando las Plantillas de informe para que las validaciones sucesivas sigan siendo comparables. Describir
+    cada anomalía con información suficiente para que el proceso en el que se originó pueda abordarla, y hacer
+    el seguimiento de su resolución o de su aceptación como limitación conocida. Obtener el acuerdo de las
+    partes interesadas de que el sistema satisface sus necesidades, mantener la trazabilidad entre los
+    resultados de la validación y los requisitos de las partes interesadas, y poner el rendimiento observado
+    durante la validación a disposición de la validación continua como referencia.
+changes:
+- annotation: A-45
+  text: Integrar la validación de vulnerabilidades en la validación del sistema
+  redVotes: 1
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Verificar la seguridad en el *Proceso de verificación del sistema*.
+  - kind: updated
+    text: La A4 incluye las preocupaciones de seguridad de las partes interesadas
+- annotation: A-46
+  text: Validación técnica de la calidad del código
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: A-47
+  text: Validar el porcentaje de cobertura de las pruebas
+  redVotes: 0
+  yellowVotes: 0
+  decision: rejected
+  changes: []
+- annotation: –
+  text: >-
+    Reenfoque de la verificación y la validación del sistema a partir de una discusión informal durante el
+    taller
+  redVotes: null
+  yellowVotes: null
+  decision: –
+  changes:
+  - kind: updated
+    text: Propósito, resultados, entradas, A1, A2, A5.
+  - kind: added
+    target: A3
+    text: Validar los objetivos de negocio.
+  - kind: added
+    target: A4
+    text: Confirmar la adecuación al uso.
+  - kind: removed
+    text: >-
+      Las pruebas funcionales, de dependencias, de fallos y de reversión se trasladan a la verificación del
+      sistema

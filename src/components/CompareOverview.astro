@@ -25,7 +25,9 @@ const rows = ids.map((id) => {
 });
 ---
 
-<h1>{t('compare.title')}</h1>
+<h1>
+  {t('compare.title')} <span class="muted">· {from} → {to}</span>
+</h1>
 <p class="muted prose">{t('compare.intro')}</p>
 
 {
@@ -39,6 +41,13 @@ const rows = ids.map((id) => {
     </nav>
   )
 }
+
+<p class="legend counts-legend">
+  <span>{t('compare.legend')}</span>
+  <span><span class="badge add">+</span> {t('compare.legend-added')}</span>
+  <span><span class="badge del">−</span> {t('compare.legend-removed')}</span>
+  <span><span class="badge">~</span> {t('compare.changedFields')}</span>
+</p>
 
 <ul class="overview">
   {
@@ -68,6 +77,10 @@ const rows = ids.map((id) => {
 <style>
   .pair-nav {
     margin: 8px 0 16px;
+  }
+
+  .counts-legend {
+    margin: 0 0 12px;
   }
 
   .overview {

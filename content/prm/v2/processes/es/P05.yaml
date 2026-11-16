@@ -1,0 +1,136 @@
+id: P05
+number: 5
+origin: standards-only
+name: Proceso de definición del diseño
+purpose: >-
+  El propósito del *Proceso de definición del diseño* es convertir los requisitos y el análisis del sistema en
+  descripciones detalladas de la arquitectura, los componentes y las interfaces del sistema. Especifica las
+  estructuras de software, de datos y de modelos que guían la implementación y la integración.
+outcomes:
+- id: a
+  text: Se acuerdan los flujos de datos, las interfaces y las restricciones de diseño.
+- id: b
+  text: >-
+    Se especifican las decisiones de diseño para el entrenamiento, el despliegue y la monitorización del
+    modelo.
+- id: c
+  text: Se definen características de diseño que abordan la calidad y la interpretabilidad.
+- id: d
+  text: Se establece la trazabilidad entre los elementos de diseño, los requisitos y la verificación.
+inputs:
+- workProduct: system-analysis-report
+  name: Informe de análisis del sistema
+  description: Los resultados de los análisis y compromisos que fundamentan las decisiones de diseño.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: Los requisitos funcionales, de rendimiento, de calidad y de interfaz del sistema.
+  serves:
+  - a
+  - c
+  - d
+outputs:
+- workProduct: design-baseline
+  name: Línea base del diseño
+  description: >-
+    El diseño acordado de los componentes, las interfaces y las estructuras de gestión de datos y modelos, con
+    su justificación y su trazabilidad.
+  serves:
+  - a
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Desarrollar los diseños de componentes e interfaces
+  description: >-
+    Definir las responsabilidades operativas, los esquemas de datos y los protocolos de comunicación para
+    establecer límites claros entre los componentes de aprendizaje automático y los módulos de software
+    tradicionales, refinando las interfaces que la arquitectura solo definió en la medida en que lo requería
+    su intención y añadiendo las que no abordó. Seleccionar y priorizar los principios y características de
+    diseño con los que se construye cada elemento, como el encapsulamiento, la separación entre interfaz e
+    implementación, el mínimo privilegio, la capacidad de prueba y la portabilidad. Fijar explícitamente las
+    entradas y salidas de cada módulo de aprendizaje automático, reconociendo que la especificación de salida
+    es la más estable de las dos y, por tanto, aquella con la que pueden diseñarse los módulos que lo rodean.
+    Tratar cada valor que cruza un límite como un compromiso de diseño, confirmando que está disponible en el
+    momento del servicio, que su uso está permitido y que su efecto en el tamaño del modelo y en la latencia
+    de predicción es aceptable. Determinar las tecnologías que requiere cada elemento y cómo se obtendrá, ya
+    sea construyéndolo de nuevo, adaptando un componente existente o adquiriéndolo, lo que para los elementos
+    de aprendizaje automático es la decisión de entrenar desde cero, adaptar un modelo preentrenado mediante
+    aprendizaje por transferencia o consumir una capacidad como servicio, evaluada según la adecuación al
+    propósito previsto, la distancia entre el contexto para el que se construyó el candidato y aquel en el que
+    operará, las licencias tanto del modelo como de los datos en los que se basa y la sostenibilidad a lo
+    largo de la vida del sistema. Tener en cuenta que la reutilización transfiere tanto defectos como
+    capacidades, y evaluar la plataforma de soporte con el mismo criterio, sopesando los servicios gestionados
+    frente a sistemas desplegables bajo el control de la propia organización cuando la normativa o la
+    protección de datos lo exijan.
+  primaryStudies:
+  - P8
+  - P9
+  - P16
+  - P17
+  - P18
+  literature:
+  - washizaki2022
+  - serban2022
+- id: A2
+  title: Definir los diseños de gestión de datos y modelos
+  description: >-
+    Especificar las estructuras de almacenamiento, los mecanismos de versionado y los esquemas de metadatos
+    para gestionar conjuntos de datos, modelos, código y registros. Elegir el tipo de almacenamiento adecuado
+    para cada clase de artefacto, decidir si el versionado se delega en un sistema de control de versiones que
+    cubre los artefactos de un proyecto o se realiza mediante instantáneas independientes por artefacto, y
+    decidir si la captura es intrusiva, mediante instrumentación explícita, o automática, ya que esa elección
+    determina si el registro sobrevive a la presión de las entregas. Especificar los metadatos de cada
+    artefacto para que un modelo remita a la versión de los datos y del código que lo produjo y un conjunto de
+    datos remita a su origen y a su código de extracción, y diseñar el mecanismo de captura para que su
+    sobrecarga no lo convierta en lo primero que se abandona. Diseñar deliberadamente la estructura de la base
+    de datos en lugar de dejar que crezca en torno al algoritmo elegido, ya que un esquema configurado por el
+    método y no por la aplicación se convierte en un obstáculo para los cambios posteriores.
+  primaryStudies:
+  - P2
+  - P4
+  - P9
+  - P12
+  literature:
+  - washizaki2022
+- id: A3
+  title: Abordar los atributos de calidad
+  description: >-
+    Incorporar mecanismos arquitectónicos directamente en las especificaciones del sistema para la seguridad y
+    la observabilidad. Son ejemplos de estos mecanismos las herramientas de interpretabilidad, las rutinas de
+    detección de sesgos, las comprobaciones de robustez y los procedimientos de respaldo. Preferir los
+    mecanismos integrados en el diseño a los aplicados a posteriori, ya sea seleccionando un modelo
+    intrínsecamente interpretable porque satisface restricciones del dominio como la monotonía, la aditividad
+    o la causalidad, o incorporando mecanismos de preservación de la privacidad en la tecnología en lugar de
+    confiar en políticas y avisos. Determinar si se requieren explicaciones del modelo en su conjunto o de
+    decisiones individuales, ya que ambas requieren métodos distintos. Incluir las medidas de seguridad
+    propias del tiempo de diseño, como bibliotecas aprobadas, interfaces protegidas, análisis estático y un
+    plan de respuesta a incidentes establecido antes de la puesta en producción. Asignar estos atributos de
+    forma deliberada, ya que, según se informa, las cualidades que el aprendizaje automático hace más
+    relevantes acaban cediendo en la práctica ante impulsores convencionales como la escalabilidad y la
+    interoperabilidad.
+  primaryStudies:
+  - P3
+  - P6
+  - P8
+  literature:
+  - serban2022
+- id: A4
+  title: Revisar el diseño y establecer su línea base
+  description: >-
+    Evaluar los diseños frente a los requisitos del sistema y las restricciones de viabilidad antes de la
+    implementación, considerando más de un enfoque de diseño y volviendo a la arquitectura o a los requisitos
+    cuando las características de diseño resulten irrealizables. Evaluar la idoneidad a lo largo de toda la
+    vida del sistema, cubriendo la facilidad de implementación, integración, verificación, mantenimiento y
+    retirada final, y tratar la deuda técnica acumulada como evidencia en contra, incluida la configuración
+    que ha crecido más que el código que gobierna. Registrar los artefactos de diseño junto con la
+    justificación de las alternativas elegidas y descartadas, mantener la trazabilidad entre los elementos de
+    diseño, los requisitos del sistema, las entidades arquitectónicas y los métodos de verificación que los
+    demostrarán, y establecer la línea base del conjunto acordado.
+  primaryStudies:
+  - P7
+  - P18

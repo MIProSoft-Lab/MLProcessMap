@@ -1,0 +1,120 @@
+id: P19
+number: 19
+origin: standards-only
+name: Procés de verificació del sistema
+purpose: >-
+  El propòsit del *Procés de verificació del sistema* és confirmar que el sistema complet amb aprenentatge
+  automàtic compleix tots els requisits i la intenció del disseny. Comprova la correcció de la implementació
+  i les interaccions entre el component d'aprenentatge automàtic i el sistema de programari més ampli.
+outcomes:
+- id: a
+  text: Es verifica el funcionament correcte dels fluxos de treball funcionals.
+- id: b
+  text: Es proven les interfícies entre el component d'aprenentatge automàtic i els mòduls del sistema.
+- id: c
+  text: S'avalua el rendiment en execució respecte dels llindars operacionals.
+- id: d
+  text: Es verifiquen els mecanismes de tolerància a fallades i de reserva.
+- id: e
+  text: S'estableix la preparació operacional del monitoratge i del versionat.
+- id: f
+  text: >-
+    Les activitats i els resultats de la verificació es documenten a l'Informe de verificació del sistema.
+- id: g
+  text: Les no conformitats es registren per a l'acció correctiva.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrat
+  description: L'aplicació completa amb el model incorporat.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+- workProduct: system-requirements-specification
+  name: Especificació de requisits del sistema
+  description: Els requisits respecte dels quals es verifica el sistema.
+  serves:
+  - a
+  - b
+  - c
+outputs:
+- workProduct: system-verification-report
+  name: Informe de verificació del sistema
+  description: >-
+    Els resultats de la verificació funcional, de rendiment, de tolerància a fallades i de la preparació
+    operacional, i les no conformitats trobades.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+activities:
+- id: A1
+  title: Verificar els fluxos de treball funcionals
+  description: >-
+    Provar els fluxos de treball d'extrem a extrem per confirmar que les prediccions es processen i s'interpreten
+    correctament, provant les interfícies entre el model i les API, les bases de dades i els mòduls amb
+    què intercanvia dades, i comprovant el compliment de cada requisit del sistema. Executar una prova
+    automatitzada que recorri tot el pipeline, confirmar que l'entrenament i el servei calculen els mateixos
+    valors de les característiques i que el preprocessament i el postprocessament lliuren les dades en
+    la forma esperada, fer proves unitàries del codi d'especificació del model i de preparació de dades,
+    i revisar el codi escrit per al sistema d'intel·ligència artificial.
+  literature:
+  - breckMLTestScore2017
+  - sensLargeScaleStudyModel2025
+- id: A2
+  title: Verificar el rendiment
+  description: >-
+    Avaluar si el sistema compleix restriccions com la latència i el rendiment en condicions d'estrès,
+    amb el maquinari en què s'executarà, comprovant si hi ha regressions en la latència de servei, el
+    rendiment i l'ús de memòria.
+  primaryStudies:
+  - P8
+  - P13
+  literature:
+  - breckMLTestScore2017
+- id: A3
+  title: Verificar la tolerància a fallades
+  description: >-
+    Simular fallades per confirmar que els procediments de reserva s'activen correctament, tenint en compte
+    les dades d'entrada absents o corrompudes, la inferència no disponible i els pics de latència. Verificar
+    també la capacitat del sistema de revertir a una versió anterior del model.
+  primaryStudies:
+  - P3
+  - P6
+  literature:
+  - polletiHierarchicalFallbackArchitecture2025
+  - breckMLTestScore2017
+- id: A4
+  title: Verificar la preparació operacional
+  description: >-
+    Comprovar que el monitoratge, les alertes i el control de versions estan configurats correctament.
+    Confirmar que la telemetria, els taulers de control, el control d'accés, el registre i l'auditabilitat
+    estan implantats, i que cada model desplegat es pot identificar juntament amb les dades emprades per
+    construir-lo i provar-lo.
+  literature:
+  - ISO5338
+- id: A5
+  title: Documentar els resultats de la verificació
+  description: >-
+    Registrar els resultats de les proves, els registres de monitoratge i les no conformitats a l'Informe
+    de verificació del sistema per donar suport al manteniment i a l'acció correctiva, fent el seguiment
+    de la resolució de les incidències, obtenint l'acord de les parts interessades que s'han complert
+    els criteris de verificació i mantenint la traçabilitat amb els requisits.
+  literature:
+  - ISO12207
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Dur a terme la verificació
+  standardProcess: Procés de verificació
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar els resultats de la verificació
+  standardProcess: Procés de verificació
+- standard: ISO/IEC 5338
+  activity: Verificació mitjançant revisió
+  standardProcess: Particularitats del procés de verificació

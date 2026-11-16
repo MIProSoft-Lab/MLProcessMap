@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Orcid from '../../components/Orcid.astro';
+import PersonPage from '../../components/PersonPage.astro';
 import { site, pick, versions, defaultVersion, processIds } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { edition, otherEditionUrl } from '../../lib/edition';
@@ -45,9 +47,62 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
     <h1>{pick(site.title, locale)}</h1>
     <p class="lead prose" set:html={prose(pick(site.intro, locale), locale)} />
     <p class="actions">
-      <a class="button primary" href={href(locale, defaultVersion)}>{t('home.explore')} →</a>
-      <a class="button" href={href(locale, 'tailor')}>{t('nav.tailor')}</a>
+      <a class="button primary" href={href(locale, defaultVersion)}>{t('home.cta-map')} →</a>
+      <a class="button" href={href(locale, 'tailor')}>{t('home.cta-tailor')} →</a>
     </p>
+  </section>
+
+  <section class="block" aria-labelledby="overview">
+    <h2 id="overview">{t('home.overview')}</h2>
+    <ol class="sheets">
+      {
+        cards.map(([title, text, url], i) => (
+          <li>
+            <a class="sheet" href={url}>
+              <span class="sheet-head">
+                <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+                <strong>{t(title)}</strong>
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </span>
+              <span class="sheet-body muted">{t(text)}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="block" aria-labelledby="versions">
+    <h2 id="versions">{t('home.versions')}</h2>
+    <div class="table-wrap">
+      <table class="revisions">
+        <tbody>
+          {
+            [...versions].reverse().map((v) => (
+              <tr>
+                <td class="rev">
+                  <a class="mono" href={href(locale, v.id)}>
+                    {v.id}
+                  </a>
+                </td>
+                <td>
+                  <a href={href(locale, v.id)}>{pick(v.title, locale)}</a>
+                  <div class="muted small">{pick(v.description, locale)}</div>
+                </td>
+                <td class="mono small nowrap">
+                  {processIds(v.id).length} {t('home.processes')}
+                </td>
+                <td>
+                  <span class="badge">{t(`home.${v.status}`)}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
   </section>
 
   {
@@ -58,18 +113,29 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
         <dl class="titleblock">
           <div>
             <dt class="label">{t('home.author')}</dt>
-            <dd>{site.author}</dd>
+            <dd>
+              {site.author}
+              {site.orcid && <Orcid id={site.orcid} label={t('home.orcid', { name: site.author })} />}
+            </dd>
           </div>
           {thesis.supervisors.length > 0 && (
             <div>
               <dt class="label">{t(thesis.supervisors.length > 1 ? 'home.supervisors' : 'home.supervisor')}</dt>
-              <dd>{thesis.supervisors.join(', ')}</dd>
+              <dd>
+                {thesis.supervisors.map((supervisor, index) => (
+                  <>
+                    {index > 0 && ', '}
+                    {supervisor.name}
+                    {supervisor.orcid && <Orcid id={supervisor.orcid} label={t('home.orcid', { name: supervisor.name })} />}
+                  </>
+                ))}
+              </dd>
             </div>
           )}
           {site.institution && (
             <div>
               <dt class="label">{t('footer.institution')}</dt>
-              <dd>{site.institution}</dd>
+              <dd>{site.institutionUrl ? <a href={pick(site.institutionUrl, locale)}>{site.institution}</a> : site.institution}</dd>
             </div>
           )}
           <div>
@@ -150,7 +216,11 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
               <ul class="people">
                 {people.map((p) => (
                   <li>
-                    {p.url ? <a href={p.url}>{p.name}</a> : <strong>{p.name}</strong>}
+                    <span>
+                      <strong>{p.name}</strong>
+                      {p.orcid && <Orcid id={p.orcid} label={t('home.orcid', { name: p.name })} />}
+                      {p.url && <PersonPage href={pick(p.url, locale)} label={t('home.personPage', { name: p.name })} />}
+                    </span>
                     <span class="muted small">{pick(p.role, locale)}</span>
                   </li>
                 ))}
@@ -161,59 +231,6 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
       </section>
     )
   }
-
-  <section class="block" aria-labelledby="overview">
-    <h2 id="overview">{t('home.overview')}</h2>
-    <ol class="sheets">
-      {
-        cards.map(([title, text, url], i) => (
-          <li>
-            <a class="sheet" href={url}>
-              <span class="sheet-head">
-                <span class="mono">{String(i + 1).padStart(2, '0')}</span>
-                <strong>{t(title)}</strong>
-                <span class="arrow" aria-hidden="true">
-                  →
-                </span>
-              </span>
-              <span class="sheet-body muted">{t(text)}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-
-  <section class="block" aria-labelledby="versions">
-    <h2 id="versions">{t('home.versions')}</h2>
-    <div class="table-wrap">
-      <table class="revisions">
-        <tbody>
-          {
-            [...versions].reverse().map((v) => (
-              <tr>
-                <td class="rev">
-                  <a class="mono" href={href(locale, v.id)}>
-                    {v.id}
-                  </a>
-                </td>
-                <td>
-                  <a href={href(locale, v.id)}>{pick(v.title, locale)}</a>
-                  <div class="muted small">{pick(v.description, locale)}</div>
-                </td>
-                <td class="mono small nowrap">
-                  {processIds(v.id).length} {t('home.processes')}
-                </td>
-                <td>
-                  <span class="badge">{t(`home.${v.status}`)}</span>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-  </section>
 </Layout>
 
 <script>
@@ -231,8 +248,17 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
 </script>
 
 <style>
+  /* One spacing scale for the page: between sections, between the parts of a
+     section, and from a heading to its content. */
+  .hero,
+  .block {
+    --section-gap: 56px;
+    --part-gap: 32px;
+    --heading-gap: 16px;
+  }
+
   .hero {
-    padding: 8px 0 16px;
+    padding-top: 8px;
     max-width: 860px;
   }
 
@@ -245,20 +271,36 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
   .lead {
     font-size: 1.1rem;
     color: var(--muted);
+    margin-bottom: 0;
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
+    margin: 24px 0 0;
+  }
+
+  .actions .button {
+    font-size: 1rem;
+    padding: 9px 18px;
+    text-decoration: none;
   }
 
   .block {
-    margin-top: 48px;
+    margin-top: var(--section-gap);
+  }
+
+  .block > h2 {
+    margin: 0 0 var(--heading-gap);
+  }
+
+  .block > h2 + p {
+    margin-top: 0;
   }
 
   .sub {
-    margin: 32px 0 12px;
+    margin: var(--part-gap) 0 var(--heading-gap);
     font-size: 1.05rem;
   }
 
@@ -266,7 +308,7 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
   .titleblock {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-    margin: 20px 0;
+    margin: var(--part-gap) 0 0;
     border: 1px solid var(--ink);
     background: var(--surface);
   }
@@ -312,7 +354,7 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
   }
 
   .cite {
-    margin-top: 24px;
+    margin-top: var(--part-gap);
     padding: 12px 16px;
     border: 1px dashed var(--ink);
     background: var(--surface);
@@ -371,15 +413,28 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
     color: var(--surface);
   }
 
+  /* The labels of the group column and the people column line up at the top. */
+  .group h3.label {
+    margin: var(--part-gap) 0 8px;
+  }
+
+  .group > div > h3.label:first-child {
+    margin-top: 0;
+  }
+
   .lines {
-    margin: 6px 0 16px;
+    margin: 0;
     padding-left: 1.2em;
+  }
+
+  .lines + p {
+    margin-top: var(--heading-gap);
   }
 
   .people {
     list-style: none;
     padding: 0;
-    margin: 6px 0 0;
+    margin: 0;
     border-top: 1px solid var(--ink);
   }
 
@@ -451,5 +506,44 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
 
   .nowrap {
     white-space: nowrap;
+  }
+
+  /* On a narrow screen a version is a block: its name and description, then the count and the status. */
+  @media (max-width: 600px) {
+    .revisions,
+    .revisions tbody {
+      display: block;
+    }
+
+    .revisions tr {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 6px 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .revisions tr:last-child {
+      border-bottom: 0;
+    }
+
+    .revisions td {
+      padding: 0;
+      border: 0;
+    }
+
+    .revisions .rev {
+      width: auto;
+      align-self: start;
+    }
+
+    .revisions td:nth-child(2) {
+      grid-column: 2 / -1;
+    }
+
+    .revisions td:nth-child(3) {
+      grid-column: 2;
+    }
   }
 </style>

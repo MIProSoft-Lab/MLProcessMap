@@ -1,0 +1,198 @@
+id: P04
+number: 4
+origin: standards-only
+name: Proceso de definición de la arquitectura del sistema
+purpose: >-
+  El propósito del *Proceso de definición de la arquitectura del sistema* es crear el marco estructural
+  del sistema definiendo sus componentes y cómo interactúan. Especifica cómo se mueven los datos, los
+  modelos y el código a lo largo del ciclo de vida para dar soporte a la integración, la verificación
+  y la operación.
+outcomes:
+- id: a
+  text: Se define una estructura arquitectónica con sus componentes e interacciones.
+- id: b
+  text: Se elaboran diagramas de flujo de datos y de modelos que conectan todas las etapas.
+- id: c
+  text: Se documentan las restricciones técnicas y los atributos de calidad.
+- id: d
+  text: Las decisiones de diseño se documentan y son trazables.
+- id: e
+  text: Se definen los mecanismos de reentrenamiento y de monitorización.
+inputs:
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: Los requisitos funcionales, de rendimiento, de calidad y de interfaz del sistema.
+  serves:
+  - a
+  - c
+  - d
+  - e
+- workProduct: data-requirements-specification
+  name: Especificación de requisitos de datos
+  description: Los requisitos sobre los datos que necesita el sistema.
+  serves:
+  - b
+  - c
+outputs:
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: >-
+    La descripción de la arquitectura, con diagramas de flujo de datos y de modelos y registros de decisiones.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Definir los objetivos y las restricciones de la arquitectura
+  description: >-
+    Establecer de qué se compone el sistema, separando la aplicación de usuario, el sistema de aprendizaje
+    automático y la infraestructura de soporte, y distinguiendo el pipeline de datos del pipeline del
+    modelo. Tener en cuenta los límites de esta descomposición, ya que los componentes de aprendizaje
+    automático interactúan de formas no evidentes y mejorar uno puede degradar la calidad global. Fijar
+    las propiedades que debe garantizar la estructura, vinculando las tácticas arquitectónicas con los
+    requisitos de calidad que satisfacen y tratando la estabilidad ante distribuciones de datos cambiantes
+    como un objetivo arquitectónico. Considerar la monitorización y el mantenimiento desde el principio,
+    elegir el hardware de inferencia en función de los requisitos ya definidos y tratar las diferencias
+    entre los entornos de entrenamiento y de despliegue como una restricción, ya que pueden cambiar el
+    comportamiento del modelo.
+  primaryStudies:
+  - P4
+  - P11
+  - P13
+  - P16
+  - P18
+  literature:
+  - serban2022
+  - gamaSurveyConceptDrift2014
+- id: A2
+  title: Diseñar el pipeline de datos y del modelo
+  description: >-
+    Estructurar el pipeline como módulos conectados de preparación, entrenamiento, evaluación, validación
+    y servicio, incluido el camino de retorno por el que los datos de servicio se registran y se reincorporan
+    como datos de entrenamiento. Compartir la lógica de preparación entre entrenamiento y servicio en
+    lugar de reimplementarla en cada lado, y hacer que la validación de datos forme parte de la estructura,
+    ya que un defecto en la generación de características puede alterar la producción sin que cambie ningún
+    código ni ningún dato. Integrar las etapas de datos y de modelo para evitar el desajuste entre entrenamiento
+    y servicio, así como la acumulación de código de unión y de dependencias no documentadas. Construir
+    el pipeline y su infraestructura a partir de un conjunto de datos inicial más pequeño, de modo que
+    la estructura que lo rodea exista antes de que termine la recopilación de datos.
+  primaryStudies:
+  - P1
+  - P17
+  - P18
+  literature:
+  - baylorTFXTensorFlowBasedProductionScale2017
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Definir la arquitectura de entrenamiento y experimentación
+  description: >-
+    Tratar la gestión de experimentos como un elemento de primer orden del sistema, que abarca datos,
+    modelos, metadatos y software, donde los metadatos cubren parámetros, métricas de calidad, experimentos,
+    pipelines y registros de ejecución, y el software se extiende a configuraciones, dependencias del
+    entorno y contenedores. Versionar conjuntamente los datos de entrenamiento, la configuración de los
+    experimentos y el código del modelo para que los resultados sean reproducibles y cada modelo sea trazable
+    hasta los registros del conjunto de datos a partir de los que se construyó. Decidir si la arquitectura
+    proporciona solo el linaje o la procedencia completa, ya que saber qué entradas produjeron una salida
+    es menos que saber qué transformaciones la produjeron.
+  primaryStudies:
+  - P9
+  - P10
+  - P18
+- id: A4
+  title: Definir el marco de despliegue y operación
+  description: >-
+    Seleccionar la disposición con la que el sistema en su conjunto tolera una salida incorrecta del modelo,
+    ya sea un monitor que actúa sobre esa salida, un agregador que combina varios modelos independientes
+    o un conmutador que transfiere el control a una alternativa, y definir el valor sustitutivo, ya sea
+    una salida segura fija o la última salida correcta conocida. Especificar cómo se reemplaza un modelo
+    en servicio, ya sea llevando el sistema a un estado seguro o ejecutando canales activo y de respaldo.
+    Proporcionar un módulo que haga seguimiento del uso y del rendimiento y dé soporte a estrategias como
+    las pruebas A/B, usar contenedores y orquestación para que la disposición sea portable entre entornos
+    y decidir entre servicios gestionados y sistemas de código abierto bajo el control de la propia organización.
+  primaryStudies:
+  - P1
+  - P8
+  - P9
+  - P13
+  - P16
+- id: A5
+  title: Definir la capa de monitorización y observabilidad
+  description: >-
+    Especificar qué se observa en las entradas del modelo, en el entorno operativo, dentro del modelo
+    y en sus salidas, y tratar la detección de cambios en la distribución como una cuestión arquitectónica.
+    Comparar las estadísticas de los datos de servicio con las de los datos de entrenamiento para detectar
+    el desajuste antes de que llegue al modelo. Registrar lo suficiente para reconstruir el comportamiento
+    del modelo tras un incidente, con las entradas registradas de forma continua, protegidas frente a
+    alteraciones y conservadas durante un periodo definido. Dotar a la capa de una función de decisión
+    que compare el rendimiento observado o previsto con los criterios de éxito de la Especificación de
+    requisitos de datos.
+  primaryStudies:
+  - P8
+  - P13
+  - P17
+  literature:
+  - gamaSurveyConceptDrift2014
+  - baylorTFXTensorFlowBasedProductionScale2017
+- id: A6
+  title: Definir los mecanismos de reentrenamiento
+  description: >-
+    Definir cómo se actualiza el modelo en servicio en respuesta a lo que observa la capa de monitorización,
+    prefiriendo el ajuste fino al entrenamiento desde cero, exigiendo que toda actualización supere una
+    nueva evaluación antes del despliegue y comparando cada modelo actualizado con sus predecesores para
+    que su evolución sea visible. Especificar cómo se aplican las actualizaciones de forma segura, supervisando
+    la diversidad de la flota cuando se despliegan de forma incremental, y tratar el reentrenamiento como
+    una responsabilidad permanente del pipeline del modelo junto con la auditoría, el versionado y la
+    monitorización.
+  primaryStudies:
+  - P1
+  - P8
+  - P13
+  - P16
+  literature:
+  - serban2022
+- id: A7
+  title: Documentar la arquitectura
+  description: >-
+    Asignar los requisitos del sistema a las entidades arquitectónicas que los satisfacen y mantener la
+    trazabilidad entre esas entidades, los requisitos, las definiciones de interfaz y los métodos de verificación.
+    Tratar la configuración como parte del registro de la arquitectura, ya que tiende a crecer mucho,
+    a estar mal documentada y puede superar al código que entrena el modelo. Recoger las decisiones arquitectónicas
+    de una forma que los evaluadores puedan inspeccionar y que pueda trazarse hasta el código fuente,
+    y no solo en prosa.
+  primaryStudies:
+  - P9
+  - P11
+  - P18
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la definición de la arquitectura del sistema
+  prmActivity: A1
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Conceptualizar la arquitectura del sistema
+  prmActivity: A1
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar la arquitectura del sistema
+  prmActivity: A2
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar la arquitectura del sistema
+  prmActivity: A3
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar la arquitectura del sistema
+  prmActivity: A4
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar la arquitectura del sistema
+  prmActivity: A5
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Elaborar la arquitectura del sistema
+  prmActivity: A6
+- standard: ISO/IEC/IEEE 12207
+  activity: d) Evaluar la arquitectura del sistema
+  prmActivity: A7
+- standard: ISO/IEC/IEEE 12207
+  activity: e) Gestionar los resultados de la definición de la arquitectura del sistema
+  prmActivity: A7

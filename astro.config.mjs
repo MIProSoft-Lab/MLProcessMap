@@ -19,7 +19,7 @@ export default defineConfig({
             // Leave out the redirects, the admin panel and the error page.
             filter: (page) => {
               const path = new URL(page).pathname.slice((process.env.BASE_PATH ?? '').replace(/\/$/, '').length);
-              return path !== '/' && !/^\/(\w+\/latest|admin|404)(\/|$)/.test(path);
+              return path !== '/' && !/^\/(\w+\/latest|admin|404|\w+\/404)(\/|$)/.test(path);
             },
           }),
         ]),

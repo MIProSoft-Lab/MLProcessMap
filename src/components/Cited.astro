@@ -15,7 +15,7 @@ const t = useTranslations(locale);
     <div class="cited small">
       <span class="muted">{t('refs.citedBy')}:</span>
       {items.map((c) => (
-        <a class="chip" href={`${href(locale, c.version, 'processes', c.process)}#activity-${c.activity}`}>
+        <a class="chip" data-cite={`${c.process}.${c.activity}`.toLowerCase()} href={`${href(locale, c.version, 'processes', c.process)}#activity-${c.activity}`}>
           {c.process}·{c.activity}
           {c.version && <span class="num">{c.version}</span>}
         </a>

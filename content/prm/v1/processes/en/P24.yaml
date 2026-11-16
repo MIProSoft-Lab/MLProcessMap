@@ -146,7 +146,7 @@ activities:
 - id: A6
   title: Verify and release the change
   description: >-
-    Test the changes to confirm that it has not introduced new issues or degraded previously satisfied
+    Test the changes to confirm that they have not introduced new issues or degraded previously satisfied
     requirements. Reassess any revised model against the criteria with which the original model was accepted,
     using both earlier and updated test cases so that successive versions remain comparable, and against
     a simple baseline to confirm that its complexity remains justified. Release the change through the

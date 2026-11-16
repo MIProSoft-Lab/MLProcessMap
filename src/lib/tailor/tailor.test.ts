@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { parse } from 'yaml';
+import { lifecycleSchema } from '../content/schemas';
 import { format } from '../text';
 import { csv, json, lifecyclePhases, markdown, yaml } from './export';
 import { fromObject, parseCsv, readModel } from './import';
@@ -98,6 +100,13 @@ describe('the model in the URL hash', () => {
     expect([...fromHash(data, 'v=v1&p=P01,P03,P99').selected]).toEqual(['P01']);
     expect(fromHash(data, 'v=v9').version).toBe('v2');
   });
+
+  it('ignores a rationale in the link that is not an object of texts', () => {
+    for (const r of ['null', '[]', '"text"', '42', '{broken']) {
+      expect(fromHash(data, `r=${encodeURIComponent(r)}`).rationale).toEqual({});
+    }
+    expect(fromHash(data, `r=${encodeURIComponent('{"P02":"not needed","P03":5}')}`).rationale).toEqual({ P02: 'not needed' });
+  });
 });
 
 describe('the phases', () => {
@@ -146,6 +155,10 @@ describe('exports', () => {
     expect(md).toContain('- P02 Process P02: Reused, "as is"');
   });
 
+  it('start the CSV with a byte order mark, for Excel', () => {
+    expect(csv(ctx()).startsWith('\uFEFFprocess_id,')).toBe(true);
+  });
+
   it('quote CSV fields', () => {
     expect(csv(ctx()).split('\n')[3]).toBe('P02,"Process P02","",A1,"First of P02",no,"Reused, ""as is"""');
   });
@@ -154,6 +167,20 @@ describe('exports', () => {
     const out = yaml({ ...model(), project: 'yes' }, s);
     expect(out).toContain('id: yes\nname: "yes"\n');
     expect(out).toContain('    returnsTo: build\n    returnNote: on drift\n');
+  });
+
+  it('write lifecycle YAML the site accepts when names look like numbers or dates', () => {
+    const names = ['2026', '42', '1e3', '0x1F', '1.5', '2026-11-15'];
+    for (const project of names) {
+      const state = model();
+      state.phases[0].name = project;
+      const file = lifecycleSchema.parse(parse(yaml({ ...state, project, description: project }, s)));
+      expect(file.name).toBe(project);
+      expect(file.description).toBe(project);
+      expect(file.phases[0].name).toBe(project);
+      expect(file.phases[1].returnsTo).toBe(file.phases[0].id);
+    }
+    expect(yaml({ ...model(), project: '3D vision' }, s)).toContain('id: 3d-vision\nname: 3D vision\n');
   });
 });
 
@@ -182,7 +209,7 @@ describe('importing an export', () => {
   });
 
   it('reads the CSV export, with the version from the file name', async () => {
-    const text = '﻿' + csv({ state: model(), version: v2, s });
+    const text = csv({ state: model(), version: v2, s });
     const m = await readModel(text, 'fraud-detection-v2.csv', options);
     expect(essentials(m)).toEqual({ ...expected, phases: [['Build', ['P01']], ['Phase 2', ['P03']]] });
     expect(m.csv).toBe(true);

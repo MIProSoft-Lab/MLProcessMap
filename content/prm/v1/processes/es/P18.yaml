@@ -1,0 +1,114 @@
+id: P18
+number: 18
+origin: standards-and-literature
+name: Proceso de integración
+purpose: >-
+  El propósito del *Proceso de integración* es incorporar el modelo entrenado al sistema software para
+  que pueda proporcionar predicciones en el momento de la inferencia. Conecta el modelo con el código
+  fuente y las aplicaciones de negocio, adaptando las interfaces e implementando las salvaguardas necesarias.
+outcomes:
+- id: a
+  text: >-
+    Se integra el modelo entrenado mediante interfaces compatibles para los datos de entrada y de salida.
+- id: b
+  text: Se actualiza el código fuente para incorporar el modelo a los flujos de trabajo del sistema.
+- id: c
+  text: Se implementan salvaguardas y mecanismos de respaldo para gestionar los fallos.
+- id: d
+  text: >-
+    Se elabora un Registro de integración que documenta los pasos de integración, los cambios en el código
+    y las interfaces.
+- id: e
+  text: Se establece la trazabilidad entre el modelo y los componentes del sistema.
+inputs:
+- workProduct: model-artifact
+  name: Artefacto del modelo
+  description: El modelo aprobado para su uso.
+  serves:
+  - a
+- workProduct: system-codebase
+  name: Código fuente del sistema
+  description: El código fuente existente del sistema software.
+  serves:
+  - a
+  - b
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: La estructura del sistema, incluida la disposición para tolerar salidas incorrectas.
+  serves:
+  - a
+  - c
+  - e
+- workProduct: design-baseline
+  name: Línea base del diseño
+  description: El diseño de los componentes y las interfaces mediante los que se conecta el modelo.
+  serves:
+  - a
+  - b
+  - e
+outputs:
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: El software con el modelo incorporado, incluidas las interfaces adaptadas y las salvaguardas.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: integration-record
+  name: Registro de integración
+  description: >-
+    Los cambios en el código, las interfaces, las salvaguardas y los vínculos de trazabilidad entre el
+    modelo y los componentes del sistema.
+  serves:
+  - d
+  - e
+activities:
+- id: A1
+  title: Integrar el modelo en la aplicación
+  description: >-
+    Conectar el artefacto del modelo al código fuente, creando interfaces para los datos y actualizando
+    los módulos, vinculando las entradas del sistema con el modelo y sus salidas con los componentes que
+    las usan, e implementando el preprocesamiento y el posprocesamiento que requieren en un único lugar
+    en lugar de dispersarlos por el código. Encapsular el modelo y sus paquetes tras interfaces comunes,
+    usar frameworks y preprocesamiento compartidos para que el servicio coincida con el entrenamiento
+    y restringir el acceso a las predicciones para que todos los consumidores sean conocidos y estén protegidos
+    frente a actualizaciones incompatibles del modelo.
+  primaryStudies:
+  - P4
+  - P10
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A2
+  title: Implementar las salvaguardas
+  description: >-
+    Añadir capas de protección, como comprobaciones basadas en reglas o rutinas de respaldo, para tratar
+    las predicciones poco fiables, implementando la disposición elegida en la arquitectura. Detectar las
+    salidas incorrectas monitorizando las entradas y los componentes que las proporcionan, comparando
+    las salidas con valores razonables o usando una medida de confianza, y sustituirlas mediante el mecanismo
+    descrito en la Documentación de la arquitectura del sistema.
+  primaryStudies:
+  - P8
+  - P13
+- id: A3
+  title: Documentar la integración
+  description: >-
+    Registrar los cambios en el código, los flujos de datos, las interacciones y los vínculos de trazabilidad
+    en el Registro de integración para dar soporte al mantenimiento y la reproducibilidad, incluidas las
+    anomalías encontradas y sus causas. Mantener la trazabilidad bidireccional entre los elementos integrados
+    y las definiciones de arquitectura, diseño, requisitos e interfaces, identificando el modelo por su
+    versión y por los datos usados para construirlo y probarlo, enumerar los componentes que consumen
+    sus predicciones, describir cómo se conectan los modelos que interactúan y proporcionar a la gestión
+    de la configuración los artefactos seleccionados para las líneas base.
+  literature:
+  - ISO12207
+  - ISO5338
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: a) Preparar la integración
+  prmActivity: A1
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Llevar a cabo la integración
+  prmActivity: A2
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar los resultados de la integración
+  prmActivity: A3

@@ -1,0 +1,121 @@
+id: P19
+number: 19
+origin: standards-only
+name: Proceso de verificación del sistema
+purpose: >-
+  El propósito del *Proceso de verificación del sistema* es confirmar que el sistema completo con ML cumple
+  todos los requisitos y la intención del diseño. Comprueba la corrección de la implementación y las interacciones
+  entre el componente de ML y el sistema software más amplio.
+outcomes:
+- id: a
+  text: Se verifica el funcionamiento correcto de los flujos de trabajo funcionales.
+- id: b
+  text: Se prueban las interfaces entre el componente de ML y los módulos del sistema.
+- id: c
+  text: Se evalúa el rendimiento en ejecución frente a los umbrales operativos.
+- id: d
+  text: Se verifican los mecanismos de tolerancia a fallos y de respaldo.
+- id: e
+  text: Se establece la preparación operativa de la monitorización y del versionado.
+- id: f
+  text: >-
+    Se documentan las actividades y los resultados de la verificación en el Informe de verificación del
+    sistema.
+- id: g
+  text: Se registran las no conformidades para su corrección.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: La aplicación completa con el modelo incorporado.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+- workProduct: system-requirements-specification
+  name: Especificación de requisitos del sistema
+  description: Los requisitos frente a los que se verifica el sistema.
+  serves:
+  - a
+  - b
+  - c
+outputs:
+- workProduct: system-verification-report
+  name: Informe de verificación del sistema
+  description: >-
+    Los resultados de la verificación funcional, de rendimiento, de tolerancia a fallos y de la preparación
+    operativa, y las no conformidades encontradas.
+  serves:
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+activities:
+- id: A1
+  title: Verificar los flujos de trabajo funcionales
+  description: >-
+    Probar los flujos de trabajo de extremo a extremo para confirmar que las predicciones se procesan
+    e interpretan correctamente, probando las interfaces entre el modelo y las API, las bases de datos
+    y los módulos con los que intercambia datos, y comprobando el cumplimiento de cada requisito del sistema.
+    Ejecutar una prueba automatizada que recorra todo el pipeline, confirmar que el entrenamiento y el
+    servicio calculan los mismos valores de las características y que el preprocesamiento y el posprocesamiento
+    entregan los datos en la forma esperada, hacer pruebas unitarias del código de especificación del
+    modelo y de preparación de datos, y revisar el código escrito para el sistema de inteligencia artificial.
+  literature:
+  - breckMLTestScore2017
+  - sensLargeScaleStudyModel2025
+- id: A2
+  title: Verificar el rendimiento
+  description: >-
+    Evaluar si el sistema cumple restricciones como la latencia y el rendimiento en condiciones de estrés,
+    en el hardware en el que se ejecutará, comprobando si hay regresiones en la latencia de servicio,
+    el rendimiento y el uso de memoria.
+  primaryStudies:
+  - P8
+  - P13
+  literature:
+  - breckMLTestScore2017
+- id: A3
+  title: Verificar la tolerancia a fallos
+  description: >-
+    Simular fallos para confirmar que los procedimientos de respaldo se activan correctamente, cubriendo
+    los datos de entrada ausentes o corruptos, la inferencia no disponible y los picos de latencia. Verificar
+    también la capacidad del sistema de revertir a una versión anterior del modelo.
+  primaryStudies:
+  - P3
+  - P6
+  literature:
+  - polletiHierarchicalFallbackArchitecture2025
+  - breckMLTestScore2017
+- id: A4
+  title: Verificar la preparación operativa
+  description: >-
+    Comprobar que la monitorización, las alertas y el control de versiones están configurados correctamente.
+    Confirmar que la telemetría, los paneles de control, el control de acceso, el registro y la auditabilidad
+    están implantados, y que cada modelo desplegado puede identificarse junto con los datos usados para
+    construirlo y probarlo.
+  literature:
+  - ISO5338
+- id: A5
+  title: Documentar los resultados de la verificación
+  description: >-
+    Registrar los resultados de las pruebas, los registros de monitorización y las no conformidades en
+    el Informe de verificación del sistema para dar soporte al mantenimiento y a la corrección, haciendo
+    el seguimiento de la resolución de los incidentes, obteniendo el acuerdo de las partes interesadas
+    de que se han cumplido los criterios de verificación y manteniendo la trazabilidad con los requisitos.
+  literature:
+  - ISO12207
+standards:
+- standard: ISO/IEC/IEEE 12207
+  activity: b) Llevar a cabo la verificación
+  standardProcess: Proceso de verificación
+- standard: ISO/IEC/IEEE 12207
+  activity: c) Gestionar los resultados de la verificación
+  standardProcess: Proceso de verificación
+- standard: ISO/IEC 5338
+  activity: Verificación mediante revisión
+  standardProcess: Particularidades del proceso de verificación

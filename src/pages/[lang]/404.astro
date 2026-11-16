@@ -1,0 +1,16 @@
+---
+// The "page not found" page in each language, which /404.html shows for an
+// address in that language. It is not meant to be visited or indexed.
+import Layout from '../../layouts/Layout.astro';
+import NotFound from '../../components/NotFound.astro';
+import { localePaths } from '../../lib/paths';
+import { useTranslations, type Locale } from '../../i18n/ui';
+
+export const getStaticPaths = localePaths;
+const locale = Astro.props.locale as Locale;
+const t = useTranslations(locale);
+---
+
+<Layout locale={locale} title={t('notFound.title')} description={t('notFound.text')} indexable={false}>
+  <NotFound locale={locale} />
+</Layout>

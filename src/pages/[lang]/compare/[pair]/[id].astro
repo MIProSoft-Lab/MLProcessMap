@@ -39,6 +39,12 @@ const sections: Section[] = [
 ];
 const changelog = (b?.data.changes ?? []).flatMap((c) => c.changes);
 
+// What the page leaves out until "Show unchanged sections" is ticked: whole
+// sections without a change, and the unchanged entries of the other sections.
+const allSame = (s: Section) => s.pairs.every((p) => p.status === 'same');
+const unchangedSections = [...(d.purpose === 'same' ? [t('process.purpose')] : []), ...sections.filter(allSame).map((s) => t(`process.${s.key}`))];
+const unchangedItems = sections.filter((s) => !allSame(s)).reduce((n, s) => n + s.pairs.filter((p) => p.status === 'same').length, 0);
+
 // Version pickers: any older version against any newer one. The pages exist
 // for every such pair, so choosing one only needs to go to its address.
 const order = versions.map((v) => v.id);
@@ -46,8 +52,8 @@ const pairHref = href(locale, 'compare', 'FROM-vs-TO', id);
 const home = b ? to : from;
 ---
 
-<Layout locale={locale} title={`${name} · ${from} → ${to}`} section="processes" translated={translated}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
+<Layout locale={locale} title={`${name} · ${from} → ${to}`} description={t('compare.description', { name, from, to })} section="processes" translated={translated}>
+  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, home)}>ML-PRM / {home}</a> / <a href={href(locale, home, 'processes', id)}>{id}</a> / {t('compare.title')}
   </nav>
   <h1><span class="pid">{id}</span> {name}</h1>
@@ -89,7 +95,19 @@ const home = b ? to : from;
     <span><del>{t('change.removed')}</del></span>
   </p>
 
-  <label class="show-same no-print small"><input type="checkbox" id="show-same" /> {t('compare.showUnchanged')}</label>
+  {
+    (unchangedSections.length > 0 || unchangedItems > 0) && (
+      <p class="unchanged no-print small">
+        <label class="show-same">
+          <input type="checkbox" id="show-same" /> {t('compare.showUnchanged')}
+        </label>
+        <span class="muted">
+          {unchangedSections.length > 0 && t('compare.unchangedSections', { list: unchangedSections.join(', ') })}{' '}
+          {unchangedItems > 0 && t('compare.unchangedItems', { n: unchangedItems })}
+        </span>
+      </p>
+    )
+  }
 
   <section class:list={['diff-section', { same: d.purpose === 'same' }]}>
     <h2>{t('process.purpose')}</h2>
@@ -131,9 +149,10 @@ const home = b ? to : from;
     location.href = pick.dataset.pattern!.replace('FROM-vs-TO', `${from.value}-vs-${to.value}`);
   });
 
-  const box = document.querySelector<HTMLInputElement>('#show-same')!;
-  const apply = () => document.body.classList.toggle('show-same', box.checked);
-  box.addEventListener('change', apply);
+  // The box is left out when the two versions have nothing in common to show.
+  const box = document.querySelector<HTMLInputElement>('#show-same');
+  const apply = () => document.body.classList.toggle('show-same', !!box?.checked);
+  box?.addEventListener('change', apply);
   apply();
 </script>
 
@@ -149,12 +168,18 @@ const home = b ? to : from;
     gap: 12px;
   }
 
+  .unchanged {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    align-items: center;
+    margin: 8px 0;
+  }
+
   .show-same {
     display: inline-flex;
     gap: 6px;
     align-items: center;
-    margin: 8px 0;
-    color: var(--muted);
   }
 
   :global(body:not(.show-same)) .same {
@@ -223,5 +248,13 @@ const home = b ? to : from;
   .pick .all {
     margin-left: auto;
     padding-bottom: 8px;
+  }
+
+  /* On a narrow screen the label goes above the text, which takes the full width. */
+  @media (max-width: 560px) {
+    .pairs li {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
   }
 </style>

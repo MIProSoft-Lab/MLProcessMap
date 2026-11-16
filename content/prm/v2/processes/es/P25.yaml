@@ -1,0 +1,172 @@
+id: P25
+number: 25
+origin: standards-only
+name: Proceso de retirada
+purpose: >-
+  El propósito del *Proceso de retirada* es definir las actividades que se llevan a cabo cuando un sistema de
+  aprendizaje automático, o cualquiera de sus componentes, llega al final de su vida. Gestiona la eliminación
+  ordenada de producción de los componentes retirados, garantizando la trazabilidad, el cumplimiento normativo
+  y la preservación del conocimiento.
+outcomes:
+- id: a
+  text: Se identifican y documentan los desencadenantes y el alcance de la puesta fuera de servicio.
+- id: b
+  text: Se desactivan de forma segura los componentes, los servicios de predicción y la infraestructura.
+- id: c
+  text: Se archivan o eliminan de forma segura los componentes y artefactos según la política establecida.
+- id: d
+  text: Se conservan los metadatos de procedencia y los registros para garantizar la auditabilidad.
+- id: e
+  text: Se conservan la documentación y los artefactos para la reproducibilidad futura.
+- id: f
+  text: Se liberan los recursos y se da por concluida la titularidad técnica.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: Los componentes operativos que se van a poner fuera de servicio.
+  serves:
+  - a
+  - b
+  - f
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: La estructura de despliegue y de datos para planificar la retirada.
+  serves:
+  - a
+  - b
+  - c
+- workProduct: evaluation-framework
+  name: Marco de evaluación
+  description: >-
+    Las métricas de datos, de modelo, de entrenamiento y de coste, las líneas base y los benchmarks que se
+    usan en la evaluación.
+  serves:
+  - a
+- workProduct: monitoring-record
+  name: Registro de monitorización
+  description: Los indicadores supervisados, las observaciones, los incidentes y las responsabilidades.
+  serves:
+  - a
+outputs:
+- workProduct: decommissioning-record
+  name: Registro de puesta fuera de servicio
+  description: Los desencadenantes, el alcance, el destino de cada activo y las acciones realizadas.
+  serves:
+  - a
+  - b
+  - f
+- workProduct: archived-assets
+  name: Activos archivados
+  description: >-
+    Los datos, los artefactos del modelo, el linaje y los registros que se conservan como referencia o para
+    auditoría.
+  serves:
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Identificar los desencadenantes de la puesta fuera de servicio
+  description: >-
+    Determinar los motivos para retirar cada componente o modelo, o el sistema en su conjunto, ya se deban a
+    una sustitución, a una pérdida de adecuación al propósito, a un cambio en el problema o en el entorno o al
+    fin de la necesidad a la que servía. Fundamentar la decisión en las métricas definidas en el Marco de
+    evaluación y en los resultados observados durante la operación, tal como constan en el Registro de
+    monitorización. Establecer el alcance de la retirada, incluido cada elemento que solo existe para dar
+    soporte al componente retirado, e identificar si la retirada afecta a una única versión del modelo, a un
+    conjunto de componentes o al sistema en su conjunto. Asignar las responsabilidades de la puesta fuera de
+    servicio y de la conservación o destrucción de los datos y de la propiedad intelectual, e identificar las
+    partes interesadas a las que hay que informar.
+  primaryStudies:
+  - P1
+  - P14
+  - P16
+- id: A2
+  title: Planificar la puesta fuera de servicio
+  description: >-
+    Definir la secuencia de acciones necesaria para retirar el componente del uso, según la forma en que se
+    desplegó y las dependencias registradas en la documentación de arquitectura y de despliegue. Identificar
+    cada sistema y parte interesada que depende de las salidas del componente, incluidos aquellos cuya
+    dependencia no está declarada formalmente, y notificarles con tiempo suficiente para adaptarse. Cuando
+    solo se retire o sustituya una parte del sistema, evaluar las implicaciones para los componentes que
+    siguen en operación, incluidos el alcance del cambio, su coste y sus riesgos, y tramitar el cambio
+    mediante la gestión de la configuración.
+  primaryStudies:
+  - P8
+  - P9
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Gestionar los datos y los artefactos
+  description: >-
+    Decidir el destino de cada conjunto de datos, modelo y artefacto asociado, eligiendo entre la
+    reutilización, el archivo o la destrucción según los requisitos de conservación, las obligaciones legales
+    y las políticas organizativas aplicables. Completar el archivo antes de liberar la infraestructura que
+    contiene los activos y preservar su integridad y sus metadatos en el almacenamiento. Cuando los datos
+    deban destruirse, extender la destrucción a todas las copias, incluidas las copias de seguridad y los
+    datos en poder de terceros, y evaluar los modelos entrenados con esos datos para que su efecto se trate de
+    forma coherente.
+  primaryStudies:
+  - P3
+  - P9
+  - P10
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Preservar el conocimiento
+  description: >-
+    Conservar la información necesaria para entender, reproducir o reutilizar el modelo retirado, incluidos su
+    documentación, sus resultados de evaluación y el linaje de los datos y de la configuración, aunque no
+    puedan conservarse los datos subyacentes. Registrar el conocimiento operativo y la experiencia del
+    proyecto de las personas implicadas, para que pueda servir a sistemas similares en el futuro. Considerar
+    si el modelo retirado o sus componentes pueden servir de base para un sucesor y si la propiedad
+    intelectual que representa requiere protección.
+  primaryStudies:
+  - P4
+  - P14
+  - P16
+- id: A5
+  title: Documentar la puesta fuera de servicio
+  description: >-
+    Registrar en el Registro de puesta fuera de servicio los desencadenantes, el alcance y las acciones
+    realizadas, el destino de cada activo con el requisito que lo justificó, las partes interesadas y los
+    sistemas dependientes a los que se notificó, y la liberación de los recursos y de la titularidad.
+    Confirmar que se han atendido las cuestiones de seguridad física, seguridad de la información y privacidad
+    asociadas a la retirada, y mantener el registro disponible mientras el modelo retirado o sus datos puedan
+    estar sujetos a auditoría o investigación.
+  primaryStudies:
+  - P3
+changes:
+- annotation: A-50
+  text: >-
+    Falta un proceso entre el *Proceso de definición de métricas de verificación y benchmarks* y el *Proceso
+    de retirada* relativo a las métricas de esperanza de vida del modelo
+  redVotes: 1
+  yellowVotes: 2
+  decision: partial
+  changes:
+  - kind: added
+    target: Entrada
+    text: Marco de evaluación.
+  - kind: updated
+    text: La A1 fundamenta la decisión en métricas
+- annotation: A-51
+  text: Diferenciar la justificación para retirar componentes concretos
+  redVotes: 0
+  yellowVotes: 0
+  decision: adopted
+  changes:
+  - kind: updated
+    text: El propósito y los resultados (b, c) se refieren a los componentes.
+  - kind: updated
+    text: A1
+- annotation: A-52
+  text: >-
+    Abordar las implicaciones de la sustitución parcial de componentes (alcance, gestión del cambio, coste,
+    riesgos, …)
+  redVotes: 1
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    text: La A2 evalúa las implicaciones de la retirada o sustitución parcial

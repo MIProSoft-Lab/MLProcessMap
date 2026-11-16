@@ -1,7 +1,8 @@
 ---
 // Modal with the details of a process, filled by src/lib/process-modal.ts.
 // Include it once on a page and create it from the page's script.
-import { useTranslations, href, type Locale, type UiKey } from '../i18n/ui';
+import { useTranslations, href, type Locale } from '../i18n/ui';
+import { modalKeys } from '../lib/process-modal';
 
 interface Props {
   locale: Locale;
@@ -9,23 +10,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const keys: UiKey[] = [
-  'modal.loading',
-  'modal.loadError',
-  'process.purpose',
-  'process.outcomes',
-  'process.inputs',
-  'process.outputs',
-  'process.activities',
-  'process.producedBy',
-  'process.usedBy',
-  'process.external',
-  'process.notUsed',
-  'origin.standards-and-literature',
-  'origin.standards-only',
-  'origin.decomposed',
-];
-const strings = JSON.stringify(Object.fromEntries(keys.map((k) => [k, t(k)])));
+const strings = JSON.stringify(Object.fromEntries(modalKeys.map((k) => [k, t(k)])));
 ---
 
 <dialog id="process-modal" class="process-modal" aria-labelledby="pm-title" data-base={href(locale)} data-strings={strings}>

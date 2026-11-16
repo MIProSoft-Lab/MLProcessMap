@@ -1,0 +1,160 @@
+id: P09
+number: 9
+origin: decomposed
+name: Procés de recollida de dades
+purpose: >-
+  El propòsit del *Procés de recollida de dades* és extreure les dades en brut de les fonts internes i externes
+  identificades i reunir-les en una àrea d'emmagatzematge comuna. Crea un o més conjunts de dades en brut a punt
+  per a l'exploració i la neteja.
+outcomes:
+- id: a
+  text: Les dades s'extreuen de les fonts i s'emmagatzemen en una àrea de preparació.
+- id: b
+  text: Les dades en brut van acompanyades de metadades i documentació.
+- id: c
+  text: Hi ha disponibles els registres d'extracció i la informació de monitoratge.
+- id: d
+  text: Es produeix un Registre de recollida de dades que documenta les decisions i els paràmetres.
+inputs:
+- workProduct: data-catalog
+  name: Catàleg de dades
+  description: >-
+    L'inventari de fonts internes i externes, amb la seva vinculació als requisits de dades, l'estat de la seva
+    documentació, les avaluacions de qualitat i les revisions legals i ètiques.
+  serves:
+  - a
+  - b
+outputs:
+- workProduct: raw-dataset
+  name: Conjunt de dades en brut
+  description: Les dades extretes emmagatzemades en una àrea de preparació.
+  serves:
+  - a
+- workProduct: data-collection-record
+  name: Registre de recollida de dades
+  description: >-
+    El mapatge de dades, els identificadors únics, les metadades, els registres d'extracció i la informació de
+    monitoratge, amb les decisions i els paràmetres de la recollida.
+  serves:
+  - b
+  - c
+  - d
+activities:
+- id: A1
+  title: Establir les connexions, obtenir les dades i identificar els identificadors únics
+  description: >-
+    Connectar-se a les fonts per obtenir-ne les dades, tenint en compte la diferent qualitat i fiabilitat dels
+    sistemes implicats i les característiques d'emmagatzematge, de processament i d'exposició pròpies de cada
+    tipus de dada, i confirmar que l'extracció no degrada el rendiment ni el temps de resposta dels sistemes font
+    que encara serveixen trànsit de producció. Identificar des del principi les claus primàries o els atributs que
+    identifiquen de manera única els registres de cada font, perquè les dades recollides es puguin unir, conciliar
+    entre fonts i traçar fins al seu origen més endavant.
+- id: A2
+  title: Seleccionar l'estratègia d'extracció
+  description: >-
+    Escollir entre l'extracció completa o incremental i entre els modes per lots o en temps real, de manera que
+    l'actualitat definida per a l'adquisició determini quant d'historial s'obté i amb quina freqüència es repeteix
+    l'extracció. Distingir l'extracció completa de l'extracció parcial amb notificació d'actualització i sense, i
+    etiquetar el tipus de càrrega corresponent com a càrrega inicial, càrrega incremental o actualització
+    completa. Registrar l'estratègia i la freqüència per a cada font i no per a tot el projecte.
+  primaryStudies:
+  - P14
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+  - seenivasanETLWorldUnstructured2021
+- id: A3
+  title: Crear el mapatge de dades i la documentació
+  description: >-
+    Especificar quins camps de dades s'obtenen i registrar les metadades de la font, indicant els criteris de
+    selecció, quins atributs són necessaris per a l'objectiu establert, quins s'han marcat com a irrellevants,
+    quants en pot gestionar la tècnica d'extracció escollida i quant d'historial s'obté, fins i tot quan n'hi ha
+    més de disponible. Establir un mapa de dades que expressi la relació entre l'origen i la destinació,
+    registrant per a cada font la seva estratègia d'actualització, la freqüència de càrrega i el volum esperat, i
+    per a cada columna la columna de destinació, el tipus, les restriccions i qualsevol transformació aplicada.
+    Registrar-hi també els drets d'accés, la propietat, els responsables del tractament, els tercers, la finalitat
+    d'ús i la conservació associats a cada font.
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+- id: A4
+  title: Tractar les fonts no estructurades
+  description: >-
+    Aplicar eines d'anàlisi sintàctica, OCR o extracció web per capturar text o imatges, decidint com es
+    codifiquen o s'agrupen les entrades de text lliure i com es tracten les entrades multimodals, i tenint en
+    compte la informació que només existeix fora dels sistemes que l'equip pot consultar. Adequar la tècnica a la
+    forma de la font, emprant el reconeixement òptic de caràcters per a pàgines escanejades i imatges, l'anàlisi
+    de documents per a formats portables i de processadors de text, el processament del llenguatge per al text, la
+    conversió de veu a text i l'extracció de característiques per a l'àudio, i l'extracció de fotogrames per al
+    vídeo, i accedir a les fonts web mitjançant una interfície programàtica o amb extracció web quan no n'hi hagi
+    cap. Tenir en compte l'efecte sobre la destinació, ja que aquest material augmenta el cost d'emmagatzematge,
+    amenaça la integritat i pot deixar una estructura indexada a la qual no s'ajusten les consultes posteriors.
+  literature:
+  - seenivasanETLWorldUnstructured2021
+- id: A5
+  title: Gestionar la volatilitat i els protocols d'accés de les fonts externes
+  description: >-
+    Per a les fonts que no controla l'organització, definir com es detecten i es gestionen els canvis en la seva
+    estructura, el seu format o la seva disponibilitat, de manera que un canvi silenciós en una font no corrompi
+    les dades recollides ni trenqui el pipeline. Respectar els protocols d'accés que imposa cada font, inclosos
+    l'autenticació, els límits de freqüència, les condicions del servei i les restriccions a l'obtenció
+    automatitzada, i confirmar que les condicions de llicència i legals revisades quan es va identificar la font
+    encara es mantenen en el moment de la recollida. Registrar la data d'obtenció o la versió de les dades
+    recollides externament, perquè es puguin traçar els canvis posteriors a la font.
+- id: A6
+  title: Registrar i monitorar l'extracció
+  description: >-
+    Fer el seguiment dels registres extrets i dels errors per detectar anomalies, validant les dades que arriben
+    amb l'esquema acordat. Conciliar els registres obtinguts amb la font, verificar els tipus de dades i verificar
+    l'extracció comparant el nombre de registres entre l'origen i la destinació, i consultar els registres que són
+    presents en un i absents en l'altre.
+  primaryStudies:
+  - P5
+  - P13
+  - P17
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+- id: A7
+  title: Mantenir el registre de recollida de dades
+  description: >-
+    Documentar totes les decisions, estratègies i paràmetres emprats durant l'extracció, registrant on i amb quin
+    mètode s'ha adquirit cada conjunt de dades, els problemes trobats i les solucions adoptades, i la importància
+    relativa dels atributs seleccionats, perquè la cadena que va des de l'entrada en brut fins al model construït a
+    partir d'aquesta es pugui consultar després. Emmagatzemar el resultat de manera que quedi establerta la
+    traçabilitat de l'adquisició, i posar les dades recollides a disposició d'altres projectes perquè les puguin
+    reutilitzar mitjançant repositoris que les emmagatzemin i registres que deixin constància d'on s'han emprat.
+  primaryStudies:
+  - P3
+  - P14
+  literature:
+  - khanOverviewETLTechniques2024
+  - yuliantoExtractTransformLoad2019
+changes:
+- annotation: A-27
+  text: Identificar la clau primària des del principi
+  redVotes: 4
+  yellowVotes: 1
+  decision: adopted
+  changes:
+  - kind: updated
+    target: A1
+    text: identificar els identificadors únics necessaris per vincular els registres
+  - kind: updated
+    target: Sortida
+    text: el Registre de recollida de dades inclou els identificadors
+- annotation: A-28
+  text: 'Extracció web de dades externes: volatilitat, legalitat i protocols d''accés'
+  redVotes: 1
+  yellowVotes: 2
+  decision: adopted
+  changes:
+  - kind: added
+    target: A5
+    text: Gestionar la volatilitat i els protocols d'accés de les fonts externes
+- annotation: A-29
+  text: La documentació també es pot emprar com a entrada per crear agents
+  redVotes: 0
+  yellowVotes: 3
+  decision: rejected
+  changes: []

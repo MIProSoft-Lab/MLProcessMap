@@ -1,0 +1,37 @@
+---
+// An icon linking to a person's own page, shown after their name next to the ORCID iD.
+interface Props {
+  href: string;
+  label: string;
+}
+const { href, label } = Astro.props;
+---
+
+<a class="person-page" href={href} aria-label={label} title={href}>
+  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+    <circle class="disc" cx="12" cy="12" r="12"></circle>
+    <circle class="figure" cx="12" cy="9.2" r="3.4"></circle>
+    <path class="figure" d="M5.6 19.2c0-3.4 2.9-5.4 6.4-5.4s6.4 2 6.4 5.4a11 11 0 0 1-12.8 0Z"></path>
+  </svg>
+</a>
+
+<style>
+  .person-page {
+    display: inline-flex;
+    margin-left: 6px;
+    vertical-align: -2px;
+    text-decoration: none;
+  }
+
+  .disc {
+    fill: var(--ink-fill);
+  }
+
+  .figure {
+    fill: var(--surface);
+  }
+
+  .person-page:hover .disc {
+    fill: var(--accent);
+  }
+</style>

@@ -21,8 +21,15 @@ export function blocks(s: string) {
 
 /** An interface string with its {name} placeholders filled in. */
 export function format(s: string, vars: Record<string, string | number> = {}) {
-  for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, String(v));
-  return s;
+  return s.replace(/\{(\w+)\}/g, (placeholder, k) => (Object.hasOwn(vars, k) ? String(vars[k]) : placeholder));
+}
+
+/** Lowercase and without accents, so a search for "gestion" finds "gestión". */
+export function searchKey(s: string) {
+  return s
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase();
 }
 
 export function plain(s: string) {

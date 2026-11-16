@@ -15,10 +15,11 @@ nav:
   version: PRM version
   latest: Latest
   skip: Skip to content
+  main: Main
+  breadcrumb: Breadcrumb
   theme-dark: Switch to dark theme
   theme-light: Switch to light theme
 home:
-  explore: Explore the processes
   versions: Versions
   current: current
   superseded: superseded
@@ -31,11 +32,15 @@ home:
   card-compare: See what changed between versions of the PRM and why.
   card-references: See the primary studies of the systematic literature review and the specialized literature that the processes cite.
   overview: What you will find here
+  cta-map: Explore the process map
+  cta-tailor: Build a lifecycle model
   thesisHeading: Part of a doctoral thesis
   thesisText: "This site publishes the Process Reference Model developed in the doctoral thesis *{title}*. The thesis studies how ML development is described in academia and industry, compares it with the international lifecycle standards, and proposes a process reference model evaluated with practitioners."
   author: Author
   supervisor: Supervisor
   supervisors: Supervisors
+  orcid: "ORCID iD of {name}"
+  personPage: "Personal page of {name}"
   year: Year
   originHeading: How the PRM was built
   cite: How to cite
@@ -56,6 +61,9 @@ origin:
 map:
   title: Process map
   search: Search processes, outcomes and activities
+  matches: "{n} of {total} processes match"
+  inOutcome: "Outcome {id}"
+  legendHelp: What the colours mean
   noResults: No process matches your search.
   legend: Origin
   activities: activities
@@ -77,6 +85,7 @@ process:
   literature: Specialized literature
   changes: Changes in this version
   changesFrom: "Changes from {version}, the previous version of the PRM."
+  contents: Contents
   annotation: Annotation
   votes: Votes
   previous: Previous process
@@ -99,11 +108,13 @@ wp:
   type-record: Record
   producers: Produced by
   consumers: Used by
-  filter: Filter work products
+  filter: Filter by work product or process
+  noResults: No work product matches your filter.
   all: All
 compare:
   title: Compare versions
   intro: Changes in the text of each process between two versions of the PRM.
+  description: "Changes in the text of the {name} between PRM {from} and {to}: outcomes, inputs, outputs and activities added, removed or reworded."
   from: From
   to: To
   unchanged: unchanged
@@ -112,6 +123,11 @@ compare:
   removed: Removed in {version}
   showUnchanged: Show unchanged sections
   allChanges: "All processes compared, {from} → {to}"
+  legend: "In outcomes, inputs, outputs and activities:"
+  legend-added: added
+  legend-removed: removed
+  unchangedSections: "Unchanged sections: {list}."
+  unchangedItems: "Unchanged items in the other sections: {n}."
 lc:
   title: Lifecycle models
   intro: The PRM defines the processes of an ML project and leaves their order and repetition to a lifecycle model. These templates arrange the processes of a PRM version into phases.
@@ -147,6 +163,11 @@ tailor:
   start: Start from
   start-all: All processes
   start-none: No processes
+  start-note: "Replaces the model you are editing."
+  next-phases: "Next: arrange into phases"
+  share: Share
+  shareNote: "The link holds the whole model, so anyone who opens it sees it as it is now."
+  yamlDisabled: "Add a phase to export the lifecycle model as YAML."
   selected: "{n} of {total} processes, {a} activities in the model"
   missingInputs: Inputs without a producer in the model
   missingInputsNote: These inputs of the processes in the model are produced by processes you have left out. Make sure your project gets them from somewhere else.
@@ -178,6 +199,15 @@ tailor:
   phase-noReturn: No loop
   phase-returnNote: When it returns
   phase-drop: Drag processes here
+  phase-drop-touch: Add processes with the menu below
+  bar-selected: "{n} of {total} processes"
+  bar-missing: "Inputs without a producer: {m}"
+  undo: Undo
+  undo-replaced: "The model was replaced with {name}."
+  undo-all: "All processes selected."
+  undo-none: "All processes removed from the model."
+  undo-phase: "Phase {name} removed."
+  undo-version: "PRM version changed to {v}."
   phase-addProcess: + Add process
   phase-unassign: Remove {id} from the phase
   phase-none: No phase
@@ -191,8 +221,11 @@ tailor:
   yamlNote: The YAML file uses the format of the lifecycle templates, so an admin can publish your model on this site.
   untitled: Untitled lifecycle model
   import: Import
-  import-note: Open a lifecycle model exported from this page as JSON, YAML or CSV. It replaces the model you are editing, so copy its link first if you want to keep it.
+  import-note: "Open a lifecycle model exported from this page as JSON, YAML or CSV. It replaces the model you are editing, and you can undo that right after."
   import-open: Open a file
+  restore-text: "This browser has kept the last model you edited here:"
+  restore-yes: Continue with it
+  restore-no: Discard it
   import-done: "Opened {file}."
   import-csv: A CSV file keeps only the processes, activities and phase names, so check the PRM version, the order of the phases and the loops.
   import-skipped: "PRM {v} has no {ids}, so they were left out."
@@ -215,6 +248,9 @@ refs:
   literature: Specialized literature
   citedBy: Cited by
   acronyms: Acronyms
+  filter: "Filter by title, author, venue, study or process (e.g. P03)"
+  matches: "{n} of {total} references match"
+  noResults: No reference matches your filter.
 i18n:
   untranslated: This content has not been translated into {language} yet. It is shown in English.
 footer:
@@ -224,8 +260,11 @@ footer:
   licence: Licence
   links: Links
   license: Content under CC BY 4.0 · Code under MIT
+  feedback: Send feedback
+  version: "v{v}"
 notFound:
   title: Page not found
+  text: "The address may be mistyped, or the page may have been moved or removed."
   back: Back to the home page
 edition:
   thesis: Thesis edition

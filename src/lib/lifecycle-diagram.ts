@@ -4,6 +4,7 @@
 // for narrow ones, and the stylesheet shows the one that fits. Used by
 // LifecycleDiagram.astro at build time and by the tailoring page in the browser,
 // so it must not import anything that only runs on the server.
+import type { Translate } from './client-strings';
 import { escapeHtml as esc } from './text';
 
 export interface DiagramProcess {
@@ -32,7 +33,21 @@ export interface DiagramInput {
   procHref: (id: string) => string;
 }
 
-export type Translate = (key: string, vars?: Record<string, string | number>) => string;
+export type { Translate };
+
+/** The interface strings the drawing uses, for a page that draws it in the browser. */
+export const diagramKeys = [
+  'lc.diagram',
+  'lc.diagramDesc',
+  'lc.legendRepeated',
+  'lc.legendLoop',
+  'lc.tipProcesses',
+  'lc.tipReturns',
+  'lc.tipReceives',
+  'origin.standards-and-literature',
+  'origin.standards-only',
+  'origin.decomposed',
+];
 
 export interface Loop {
   from: number;

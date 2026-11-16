@@ -33,13 +33,13 @@ const strings = JSON.stringify(Object.fromEntries(keys.map((k) => [k, t(k)])));
 
 <script>
   import { load } from '../lib/process-modal';
-  import { escapeHtml as esc, format } from '../lib/text';
+  import { translator } from '../lib/client-strings';
+  import { escapeHtml as esc } from '../lib/text';
 
   const card = document.getElementById('process-hover')!;
   const body = card.querySelector<HTMLElement>('.ph-body')!;
   const base = card.dataset.base!;
-  const strings = JSON.parse(card.dataset.strings!) as Record<string, string>;
-  const s = (k: string, vars: Record<string, string | number> = {}) => format(strings[k] ?? k, vars);
+  const s = translator(JSON.parse(card.dataset.strings!));
 
   const selector = 'a[href*="/processes/"], [data-process][data-version], [data-hover-process][data-hover-version]';
   const processHref = /\/([^/]+)\/processes\/(P\d+)\/?(?:[?#].*)?$/;

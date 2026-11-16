@@ -1,8 +1,9 @@
 ---
 import '../styles/global.css';
 import { site, pick, versions, defaultVersion, contentFiles } from '../lib/content';
-import { validate, formatIssues, errors } from '../lib/validation';
+import { validateOnce, formatIssues, errors } from '../lib/validation';
 import { edition, otherEditionUrl } from '../lib/edition';
+import pkg from '../../package.json';
 import ProcessHover from '../components/ProcessHover.astro';
 import AcronymHover from '../components/AcronymHover.astro';
 import { useTranslations, languageNames, languageIn, locales, defaultLocale, href, type Locale } from '../i18n/ui';
@@ -27,15 +28,21 @@ const { locale, title, description, section, version, versionLinks, translated =
 const t = useTranslations(locale);
 const siteTitle = pick(site.title, locale);
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
+// Search results and link previews show about 160 characters; cut longer text at a word.
+const fullDescription = (description ?? pick(site.intro, locale)).replace(/\s+/g, ' ').trim();
+const metaDescription = fullDescription.length <= 200 ? fullDescription : `${fullDescription.slice(0, 197).replace(/\s+\S*$/, '')}…`;
+// Region for each language, as Open Graph expects (en_GB, es_ES, ca_ES).
+const ogLocale = (l: Locale) => ({ en: 'en_GB', es: 'es_ES', ca: 'ca_ES' })[l] ?? l;
 
-// Fail the build on content errors, once per build. Warnings are left to
-// npm run check:content.
-const issues = errors((globalThis as any).__prmValidation ??= validate(contentFiles));
+// Fail the build on content errors, checked once per set of content files.
+// Warnings are left to npm run check:content.
+const issues = errors(validateOnce(contentFiles));
 if (issues.length) throw new Error(`Content errors (run npm run check:content to list them again):\n\n${formatIssues(issues)}`);
 
 // Same page in the other languages.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const rest = Astro.url.pathname.slice(base.length).split('/').slice(2).join('/');
+// A page without a fixed address, such as the error page, offers the home page in the other languages.
+const rest = indexable ? Astro.url.pathname.slice(base.length).split('/').slice(2).join('/') : '';
 const languageLinks = locales.map((l) => ({ locale: l, href: `${base}/${l}/${rest}` }));
 
 const absolute = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
@@ -54,6 +61,8 @@ const nav = [
 ] as const;
 const repo = import.meta.env.PUBLIC_REPO ? `https://github.com/${import.meta.env.PUBLIC_REPO}` : undefined;
 const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
+// Comments go to the issues of the repository, or by email without one.
+const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email}` : undefined;
 ---
 
 <!doctype html>
@@ -62,10 +71,19 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    <meta name="description" content={description ?? pick(site.intro, locale)} />
+    <meta name="description" content={metaDescription} />
+    {/* Title card when a link is shared in chat or on social media. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={title ?? siteTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:locale" content={ogLocale(locale)} />
+    {locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={ogLocale(l)} />)}
+    {indexable && Astro.site && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     {/* Searches lead to the live edition; the thesis edition is reached from the thesis. */}
-    {edition === 'thesis' && <meta name="robots" content="noindex" />}
+    {(edition === 'thesis' || !indexable) && <meta name="robots" content="noindex" />}
     {
       indexable && (
         <>
@@ -83,6 +101,7 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
       } catch {}
     </script>
+    <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">{t('nav.skip')}</a>
@@ -155,7 +174,7 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
           </details>
         </div>
       </div>
-      <nav class="main-nav" aria-label="Main">
+      <nav class="main-nav" aria-label={t('nav.main')}>
         <div class="container">
           <ul>
             {
@@ -204,17 +223,25 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
           </div>
           <div>
             <span class="label">{t('footer.links')}</span>
-            {repo && <a href={repo}>{t('footer.source')}</a>}
-            {repo && ' · '}
-            <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
-            {edition === 'live' && otherEdition && (
-              <>
-                {' · '}
-                <a href={otherEdition}>{t('edition.thesisLink')}</a>
-              </>
-            )}
+            {[
+              repo && <a href={repo}>{t('footer.source')}</a>,
+              feedback && <a href={feedback}>{t('footer.feedback')}</a>,
+              edition === 'live' && otherEdition && <a href={otherEdition}>{t('edition.thesisLink')}</a>,
+            ]
+              .filter(Boolean)
+              .map((link, i) => (
+                <>
+                  {i > 0 && ' · '}
+                  {link}
+                </>
+              ))}
           </div>
         </div>
+        <p class="footer-meta">
+          {repo ? <a href={`${repo}/releases`}>{siteTitle} {t('footer.version', { v: pkg.version })}</a> : <span>{siteTitle} {t('footer.version', { v: pkg.version })}</span>}
+          {' · '}
+          <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
+        </p>
       </div>
     </footer>
     <script is:inline>
@@ -240,6 +267,32 @@ const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
         system.addEventListener('change', sync);
         sync();
       })();
+      // On a narrow screen the main menu scrolls sideways: bring the current
+      // section into view and fade the side that has more items.
+      (() => {
+        const list = document.querySelector('.main-nav ul');
+        const current = list.querySelector('[aria-current="page"]');
+        if (current) {
+          const item = current.getBoundingClientRect();
+          const box = list.getBoundingClientRect();
+          list.scrollLeft += item.left - box.left - (box.width - item.width) / 2;
+        }
+        const sync = () => {
+          const max = list.scrollWidth - list.clientWidth;
+          list.dataset.fade = max <= 1 ? '' : (list.scrollLeft > 1 ? 's' : '') + (list.scrollLeft < max - 1 ? 'e' : '');
+        };
+        list.addEventListener('scroll', sync, { passive: true });
+        addEventListener('resize', sync);
+        sync();
+      })();
+      // Remember a language chosen in the menu, so the root address opens in it next time.
+      document.querySelectorAll('.site-header a[hreflang]').forEach((a) =>
+        a.addEventListener('click', () => {
+          try {
+            localStorage.setItem('lang', a.hreflang);
+          } catch {}
+        }),
+      );
       // Close the header menus on a click outside them or on Escape.
       (() => {
         const menus = [...document.querySelectorAll('.site-header details.menu')];

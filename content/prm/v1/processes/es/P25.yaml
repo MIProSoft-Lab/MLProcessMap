@@ -1,0 +1,137 @@
+id: P25
+number: 25
+origin: standards-only
+name: Proceso de retirada
+purpose: >-
+  El propósito del *Proceso de retirada* es definir las actividades que se llevan a cabo cuando un sistema
+  o un modelo de aprendizaje automático llega al final de su vida. Gestiona la eliminación ordenada de
+  producción de los modelos y los artefactos, garantizando la trazabilidad, el cumplimiento normativo
+  y la preservación del conocimiento.
+outcomes:
+- id: a
+  text: Se identifican y documentan los desencadenantes y el alcance de la puesta fuera de servicio.
+- id: b
+  text: Se desactivan de forma segura los servicios de predicción y la infraestructura.
+- id: c
+  text: Se archivan o eliminan de forma segura los artefactos del modelo según la política establecida.
+- id: d
+  text: Se conservan los metadatos de procedencia y los registros para garantizar la auditabilidad.
+- id: e
+  text: Se conservan la documentación y los artefactos para la reproducibilidad futura.
+- id: f
+  text: Se liberan los recursos y se da por concluida la titularidad técnica.
+inputs:
+- workProduct: integrated-system
+  name: Sistema integrado
+  description: Los componentes operativos que se van a poner fuera de servicio.
+  serves:
+  - a
+  - b
+  - f
+- workProduct: system-architecture-documentation
+  name: Documentación de la arquitectura del sistema
+  description: La estructura de despliegue y de datos para planificar la retirada.
+  serves:
+  - a
+  - b
+  - c
+outputs:
+- workProduct: decommissioning-record
+  name: Registro de puesta fuera de servicio
+  description: Los desencadenantes, el alcance, el destino de cada activo y las acciones realizadas.
+  serves:
+  - a
+  - b
+  - f
+- workProduct: archived-assets
+  name: Activos archivados
+  description: >-
+    Los datos, los artefactos del modelo, el linaje y los registros que se conservan como referencia o
+    para auditoría.
+  serves:
+  - c
+  - d
+  - e
+activities:
+- id: A1
+  title: Identificar los desencadenantes de la puesta fuera de servicio
+  description: >-
+    Determinar los motivos para retirar el modelo o el sistema, ya se deban a una sustitución, a una pérdida
+    de adecuación al propósito, a un cambio en el problema o en el entorno o al fin de la necesidad a
+    la que servía. Establecer el alcance de la retirada, incluido cada elemento que solo existe para dar
+    soporte al modelo retirado, e identificar si la retirada afecta a una única versión del modelo o al
+    sistema en su conjunto. Asignar las responsabilidades de la puesta fuera de servicio y de la conservación
+    o destrucción de los datos y de la propiedad intelectual, e identificar las partes interesadas a las
+    que hay que informar.
+  primaryStudies:
+  - P1
+  - P14
+  - P16
+- id: A2
+  title: Planificar la puesta fuera de servicio
+  description: >-
+    Definir la secuencia de acciones necesaria para retirar el modelo del uso, según la forma en que se
+    desplegó y las dependencias registradas en la documentación de arquitectura y de despliegue. Identificar
+    cada sistema y parte interesada que depende de las salidas del modelo, incluidos aquellos cuya dependencia
+    no está declarada formalmente, y notificarles con tiempo suficiente para adaptarse.
+  primaryStudies:
+  - P8
+  - P9
+  literature:
+  - sculleyHiddenTechnicalDebt2015
+- id: A3
+  title: Gestionar los datos y los artefactos
+  description: >-
+    Decidir el destino de cada conjunto de datos, modelo y artefacto asociado, eligiendo entre la reutilización,
+    el archivo o la destrucción según los requisitos de conservación, las obligaciones legales y las políticas
+    organizativas aplicables. Completar el archivo antes de liberar la infraestructura que contiene los
+    activos y preservar su integridad y sus metadatos en el almacenamiento. Cuando los datos deban destruirse,
+    extender la destrucción a todas las copias, incluidas las copias de seguridad y los datos en poder
+    de terceros, y evaluar los modelos entrenados con esos datos para que su efecto se trate de forma
+    coherente.
+  primaryStudies:
+  - P3
+  - P9
+  - P10
+  literature:
+  - breckMLTestScore2017
+- id: A4
+  title: Preservar el conocimiento
+  description: >-
+    Conservar la información necesaria para entender, reproducir o reutilizar el modelo retirado, incluidos
+    su documentación, sus resultados de evaluación y el linaje de los datos y de la configuración, aunque
+    no puedan conservarse los datos subyacentes. Registrar el conocimiento operativo y la experiencia
+    del proyecto de las personas implicadas, para que pueda servir a sistemas similares en el futuro.
+    Considerar si el modelo retirado o sus componentes pueden servir de base para un sucesor y si la propiedad
+    intelectual que representa requiere protección.
+  primaryStudies:
+  - P4
+  - P14
+  - P16
+- id: A5
+  title: Documentar la puesta fuera de servicio
+  description: >-
+    Registrar en el Registro de puesta fuera de servicio los desencadenantes, el alcance y las acciones
+    realizadas, el destino de cada activo con el requisito que lo justificó, las partes interesadas y
+    los sistemas dependientes a los que se notificó, y la liberación de los recursos y de la titularidad.
+    Confirmar que se han atendido las cuestiones de seguridad física, seguridad de la información y privacidad
+    asociadas a la retirada, y mantener el registro disponible mientras el modelo retirado o sus datos
+    puedan estar sujetos a auditoría o investigación.
+  primaryStudies:
+  - P3
+standards:
+- standard: ''
+  activity: a) Preparar la retirada
+  prmActivity: A1
+- standard: ''
+  activity: a) Preparar la retirada
+  prmActivity: A2
+- standard: ''
+  activity: b) Llevar a cabo la retirada
+  prmActivity: A3
+- standard: ''
+  activity: b) Llevar a cabo la retirada
+  prmActivity: A4
+- standard: ''
+  activity: c) Finalizar la retirada
+  prmActivity: A5

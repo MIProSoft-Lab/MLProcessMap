@@ -1,7 +1,26 @@
 // Client side of the process modal (src/components/ProcessModal.astro).
 // Pages create one with createProcessModal() and call open() with a process.
 // The tailoring page passes hooks to show the include and activity checkboxes.
+import { translator } from './client-strings';
 import { escapeHtml as esc } from './text';
+
+/** The interface strings the modal uses, which ProcessModal.astro hands it. */
+export const modalKeys = [
+  'modal.loading',
+  'modal.loadError',
+  'process.purpose',
+  'process.outcomes',
+  'process.inputs',
+  'process.outputs',
+  'process.activities',
+  'process.producedBy',
+  'process.usedBy',
+  'process.external',
+  'process.notUsed',
+  'origin.standards-and-literature',
+  'origin.standards-only',
+  'origin.decomposed',
+];
 
 export interface Details {
   id: string;
@@ -49,8 +68,7 @@ export function createProcessModal(options: ModalOptions = {}) {
   const include = dialog.querySelector<HTMLInputElement>('.pm-include input')!;
   const goTo = dialog.querySelector<HTMLAnchorElement>('.pm-goto')!;
   const base = dialog.dataset.base!;
-  const strings = JSON.parse(dialog.dataset.strings!) as Record<string, string>;
-  const s = (k: string) => strings[k] ?? k;
+  const s = translator(JSON.parse(dialog.dataset.strings!));
   const { tailor } = options;
 
   dialog.querySelector<HTMLElement>('.pm-include')!.hidden = !tailor;
