@@ -130,7 +130,11 @@ compare:
   to: A
   unchanged: sense canvis
   changedFields: amb canvis
+  annotation: anotació del taller
   annotations: anotacions del taller
+  legend: "En resultats, entrades, sortides i activitats:"
+  legend-added: afegits
+  legend-removed: eliminats
   added: Nou a la {version}
   removed: Eliminat a la {version}
   showUnchanged: Mostra les seccions sense canvis

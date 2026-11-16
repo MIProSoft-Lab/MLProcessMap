@@ -133,7 +133,11 @@ compare:
   to: To
   unchanged: unchanged
   changedFields: changed
+  annotation: workshop annotation
   annotations: workshop annotations
+  legend: "In outcomes, inputs, outputs and activities:"
+  legend-added: added
+  legend-removed: removed
   added: New in {version}
   removed: Removed in {version}
   showUnchanged: Show unchanged sections

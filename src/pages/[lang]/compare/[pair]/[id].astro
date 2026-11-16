@@ -49,7 +49,7 @@ const changes = b?.data.changes ?? [];
     {a && <a href={href(locale, from, 'processes', id)}>{from}</a>}
     {a && b && ' · '}
     {b && <a href={href(locale, to, 'processes', id)}>{to}</a>}
-    {changes.length > 0 && <> · <a href={`${href(locale, to, 'processes', id)}#changes`}>{changes.length} {t('compare.annotations')}</a></>}
+    {changes.length > 0 && <> · <a href={`${href(locale, to, 'processes', id)}#changes`}>{changes.length} {t(changes.length === 1 ? 'compare.annotation' : 'compare.annotations')}</a></>}
   </p>
   <p class="legend small">
     <span><ins>{t('change.added')}</ins></span>

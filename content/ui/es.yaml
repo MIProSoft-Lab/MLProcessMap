@@ -130,7 +130,11 @@ compare:
   to: A
   unchanged: sin cambios
   changedFields: con cambios
+  annotation: anotación del taller
   annotations: anotaciones del taller
+  legend: "En resultados, entradas, salidas y actividades:"
+  legend-added: añadidos
+  legend-removed: eliminados
   added: Nuevo en la {version}
   removed: Eliminado en la {version}
   showUnchanged: Mostrar las secciones sin cambios
