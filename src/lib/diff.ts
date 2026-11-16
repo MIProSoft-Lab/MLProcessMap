@@ -2,14 +2,21 @@ import { diffWords } from 'diff';
 import type { Process } from './content';
 import { escapeHtml, plain } from './text';
 
-/** Word diff as HTML with <ins> and <del>. */
+/**
+ * Word diff as HTML with <ins> and <del>. A word replaced by another gets a
+ * space between the two, so they do not read as one word.
+ */
 export function wordDiff(a: string, b: string) {
+  const wordEnd = /[\p{L}\p{N}]$/u;
+  const wordStart = /^[\p{L}\p{N}]/u;
   return diffWords(plain(a), plain(b))
-    .map((part) => {
+    .map((part, i, parts) => {
       const text = escapeHtml(part.value);
-      if (part.added) return `<ins>${text}</ins>`;
-      if (part.removed) return `<del>${text}</del>`;
-      return text;
+      if (!part.added && !part.removed) return text;
+      const prev = parts[i - 1];
+      const replaces = prev && (prev.added || prev.removed) && prev.added !== part.added;
+      const gap = replaces && wordEnd.test(prev.value) && wordStart.test(part.value) ? ' ' : '';
+      return part.added ? `${gap}<ins>${text}</ins>` : `${gap}<del>${text}</del>`;
     })
     .join('');
 }

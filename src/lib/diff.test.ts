@@ -71,6 +71,11 @@ describe('wordDiff', () => {
     expect(wordDiff('Train the model', 'Train the model')).toBe('Train the model');
   });
 
+  it('separates a replaced word from the one that replaces it', () => {
+    expect(wordDiff('the identified sources', 'the inventory of sources')).toBe('the <del>identified</del> <ins>inventory of</ins> sources');
+    expect(wordDiff('data. Then', 'data, then')).not.toContain('</del> <ins>,');
+  });
+
   it('escapes the text and drops the emphasis marks', () => {
     expect(wordDiff('a < b', 'a < *b*')).toBe('a &lt; b');
   });
