@@ -174,8 +174,10 @@ export const siteSchema = z.object({
     .array(
       z.object({
         name: z.string(),
+        orcid: orcid.optional(),
         role: localized,
-        url: z.string().optional(),
+        // The person's page, per language, linked from an icon after their name.
+        url: localized.optional(),
       }),
     )
     .default([]),

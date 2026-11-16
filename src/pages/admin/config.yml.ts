@@ -310,8 +310,9 @@ export const GET: APIRoute = () => {
                 summary: '{{fields.name}}',
                 fields: [
                   { name: 'name', label: 'Name', widget: 'string' },
+                  { name: 'orcid', label: 'ORCID iD', widget: 'string', required: false, hint: 'As 0000-0000-0000-0000.' },
                   localizedText('role', 'Role'),
-                  { name: 'url', label: 'Link', widget: 'string', required: false },
+                  { ...localizedText('url', 'Personal page'), required: false },
                 ],
               },
               {

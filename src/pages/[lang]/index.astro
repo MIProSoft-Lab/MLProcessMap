@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Orcid from '../../components/Orcid.astro';
+import PersonPage from '../../components/PersonPage.astro';
 import { site, pick, versions, defaultVersion, processIds } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { edition, otherEditionUrl } from '../../lib/edition';
@@ -45,6 +46,63 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
     <p class="breadcrumbs">ML-PRM · {t('footer.thesis')} · {site.institution}</p>
     <h1>{pick(site.title, locale)}</h1>
     <p class="lead prose" set:html={prose(pick(site.intro, locale), locale)} />
+    <p class="actions">
+      <a class="button primary" href={href(locale, defaultVersion)}>{t('home.cta-map')} →</a>
+      <a class="button" href={href(locale, 'tailor')}>{t('home.cta-tailor')} →</a>
+    </p>
+  </section>
+
+  <section class="block" aria-labelledby="overview">
+    <h2 id="overview">{t('home.overview')}</h2>
+    <ol class="sheets">
+      {
+        cards.map(([title, text, url], i) => (
+          <li>
+            <a class="sheet" href={url}>
+              <span class="sheet-head">
+                <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+                <strong>{t(title)}</strong>
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </span>
+              <span class="sheet-body muted">{t(text)}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="block" aria-labelledby="versions">
+    <h2 id="versions">{t('home.versions')}</h2>
+    <div class="table-wrap">
+      <table class="revisions">
+        <tbody>
+          {
+            [...versions].reverse().map((v) => (
+              <tr>
+                <td class="rev">
+                  <a class="mono" href={href(locale, v.id)}>
+                    {v.id}
+                  </a>
+                </td>
+                <td>
+                  <a href={href(locale, v.id)}>{pick(v.title, locale)}</a>
+                  <div class="muted small">{pick(v.description, locale)}</div>
+                </td>
+                <td class="mono small nowrap">
+                  {processIds(v.id).length} {t('home.processes')}
+                </td>
+                <td>
+                  <span class="badge">{t(`home.${v.status}`)}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
   </section>
 
   {
@@ -158,7 +216,11 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
               <ul class="people">
                 {people.map((p) => (
                   <li>
-                    {p.url ? <a href={p.url}>{p.name}</a> : <strong>{p.name}</strong>}
+                    <span>
+                      <strong>{p.name}</strong>
+                      {p.orcid && <Orcid id={p.orcid} label={t('home.orcid', { name: p.name })} />}
+                      {p.url && <PersonPage href={pick(p.url, locale)} label={t('home.personPage', { name: p.name })} />}
+                    </span>
                     <span class="muted small">{pick(p.role, locale)}</span>
                   </li>
                 ))}
@@ -169,59 +231,6 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
       </section>
     )
   }
-
-  <section class="block" aria-labelledby="overview">
-    <h2 id="overview">{t('home.overview')}</h2>
-    <ol class="sheets">
-      {
-        cards.map(([title, text, url], i) => (
-          <li>
-            <a class="sheet" href={url}>
-              <span class="sheet-head">
-                <span class="mono">{String(i + 1).padStart(2, '0')}</span>
-                <strong>{t(title)}</strong>
-                <span class="arrow" aria-hidden="true">
-                  →
-                </span>
-              </span>
-              <span class="sheet-body muted">{t(text)}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-
-  <section class="block" aria-labelledby="versions">
-    <h2 id="versions">{t('home.versions')}</h2>
-    <div class="table-wrap">
-      <table class="revisions">
-        <tbody>
-          {
-            [...versions].reverse().map((v) => (
-              <tr>
-                <td class="rev">
-                  <a class="mono" href={href(locale, v.id)}>
-                    {v.id}
-                  </a>
-                </td>
-                <td>
-                  <a href={href(locale, v.id)}>{pick(v.title, locale)}</a>
-                  <div class="muted small">{pick(v.description, locale)}</div>
-                </td>
-                <td class="mono small nowrap">
-                  {processIds(v.id).length} {t('home.processes')}
-                </td>
-                <td>
-                  <span class="badge">{t(`home.${v.status}`)}</span>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-  </section>
 </Layout>
 
 <script>
@@ -263,6 +272,19 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
     font-size: 1.1rem;
     color: var(--muted);
     margin-bottom: 0;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 0;
+  }
+
+  .actions .button {
+    font-size: 1rem;
+    padding: 9px 18px;
+    text-decoration: none;
   }
 
   .block {

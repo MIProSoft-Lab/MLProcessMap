@@ -73,31 +73,61 @@ group:
 # The people involved in the project, in the order they are shown.
 people:
   - name: Antonio Crespí Tobeña
+    orcid: 0009-0000-0046-8330
+    url:
+      en: https://www.uib.eu/personal/ABjI5Nzc2NA/
+      es: https://www.uib.es/personal/ABjI5Nzc2NA/
+      ca: https://www.uib.cat/personal/ABjI5Nzc2NA/
     role:
       en: PhD candidate, author of the thesis
       es: Doctorando, autor de la tesis
       ca: Doctorand, autor de la tesi
   - name: Antoni Lluís Mesquida Calafat
+    orcid: 0000-0002-1191-6220
+    url:
+      en: https://www.uib.eu/personal/ABjE5Njk0MQ/
+      es: https://www.uib.es/personal/ABjE5Njk0MQ/
+      ca: https://www.uib.cat/personal/ABjE5Njk0MQ/
     role:
       en: Thesis supervisor, senior lecturer, and principal investigator of MIProSoft
       es: Director de la tesis, profesor tituar de universidad e investigador principal de MIProSoft
       ca: Director de la tesi, professor titular d'universitat i investigador principal de MIProSoft
   - name: Antonia Mas Pichaco
+    orcid: 0000-0003-4188-8088
+    url:
+      en: https://www.uib.eu/personal/ABDM1ODE/
+      es: https://www.uib.es/personal/ABDM1ODE/
+      ca: https://www.uib.cat/personal/ABDM1ODE/
     role:
       en: Full Professor
       es: Catedrática de Universidad
       ca: Catedràtica d'universitat
   - name: Maria Monserrat Barceló
+    orcid: 0000-0002-7485-4709
+    url:
+      en: https://www.uib.eu/personal/ABjMyNjYzMg/
+      es: https://www.uib.es/personal/ABjMyNjYzMg/
+      ca: https://www.uib.cat/personal/ABjMyNjYzMg/
     role:
       en: Assistant Professor
       es: Profesora Ayudante Doctora
       ca: Professora ajudant doctora
   - name: Antoni Bennasar Garau
+    orcid: 0009-0006-1673-9880
+    url:
+      en: https://www.uib.eu/personal/ABjM2MDM5Mg/
+      es: https://www.uib.es/personal/ABjM2MDM5Mg/
+      ca: https://www.uib.cat/personal/ABjM2MDM5Mg/
     role:
       en: PhD researcher
       es: Personal investigador en formación
       ca: Personal investigador en formació
   - name: José David Pérez Cañellas
+    orcid: 0009-0000-2218-2800
+    url:
+      en: https://www.uib.eu/personal/ABjM5ODE5NQ/
+      es: https://www.uib.es/personal/ABjM5ODE5NQ/
+      ca: https://www.uib.cat/personal/ABjM5ODE5NQ/
     role:
       en: PhD researcher
       es: Personal investigador en formación

@@ -32,12 +32,15 @@ home:
   card-compare: See what changed between versions of the PRM and why.
   card-references: See the primary studies of the systematic literature review and the specialized literature that the processes cite.
   overview: What you will find here
+  cta-map: Explore the process map
+  cta-tailor: Build a lifecycle model
   thesisHeading: Part of a doctoral thesis
   thesisText: "This site publishes the Process Reference Model developed in the doctoral thesis *{title}*. The thesis studies how ML development is described in academia and industry, compares it with the international lifecycle standards, and proposes a process reference model evaluated with practitioners."
   author: Author
   supervisor: Supervisor
   supervisors: Supervisors
   orcid: "ORCID iD of {name}"
+  personPage: "Personal page of {name}"
   year: Year
   originHeading: How the PRM was built
   cite: How to cite
