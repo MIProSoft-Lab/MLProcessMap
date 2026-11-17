@@ -30,7 +30,11 @@ export interface Pair<T> {
 }
 
 function words(s: string) {
-  return new Set(plain(s).toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []);
+  return new Set(
+    plain(s)
+      .toLowerCase()
+      .match(/[\p{L}\p{N}]+/gu) ?? [],
+  );
 }
 
 function similarity(a: string, b: string) {
@@ -111,9 +115,27 @@ export function diffProcess(a: Process, b: Process): ProcessDiff {
   const d = {
     name: a.name === b.name ? 'same' : 'changed',
     purpose: a.purpose === b.purpose ? 'same' : 'changed',
-    outcomes: align(a.outcomes, b.outcomes, (o) => o.text, (o) => o.text, (x, y) => x.text === y.text),
-    inputs: align(a.inputs, b.inputs, (o) => o.workProduct, (o) => o.name, ioSame),
-    outputs: align(a.outputs, b.outputs, (o) => o.workProduct, (o) => o.name, ioSame),
+    outcomes: align(
+      a.outcomes,
+      b.outcomes,
+      (o) => o.text,
+      (o) => o.text,
+      (x, y) => x.text === y.text,
+    ),
+    inputs: align(
+      a.inputs,
+      b.inputs,
+      (o) => o.workProduct,
+      (o) => o.name,
+      ioSame,
+    ),
+    outputs: align(
+      a.outputs,
+      b.outputs,
+      (o) => o.workProduct,
+      (o) => o.name,
+      ioSame,
+    ),
     activities: align(
       a.activities,
       b.activities,

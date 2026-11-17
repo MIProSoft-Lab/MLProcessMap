@@ -18,7 +18,13 @@ const included = new Set(l.phases.flatMap((p) => p.processes));
 const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
 ---
 
-<Layout locale={locale} title={l.name} description={l.description ? plain(l.description) : t('lc.intro')} section="lifecycles" translated={translated}>
+<Layout
+  locale={locale}
+  title={l.name}
+  description={l.description ? plain(l.description) : t('lc.intro')}
+  section="lifecycles"
+  translated={translated}
+>
   <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, 'lifecycles')}>{t('lc.title')}</a> / {l.name}
   </nav>
@@ -26,7 +32,13 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
   <div class="meta">
     {l.status === 'draft' && <span class="badge">{t('lc.draft')}</span>}
     <a class="badge" href={href(locale, l.prmVersion)}>{t('lc.basedOn', { version: l.prmVersion })}</a>
-    {l.source && <span class="small muted">{t('lc.source')}: {l.source}</span>}
+    {
+      l.source && (
+        <span class="small muted">
+          {t('lc.source')}: {l.source}
+        </span>
+      )
+    }
   </div>
   {l.description && <p class="prose" set:html={prose(l.description, locale)} />}
 
@@ -41,7 +53,13 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
         <h2>{t('lc.notCovered')}</h2>
         <div class="chips">
           {missing.map((pid) => (
-            <a class="chip" href={href(locale, l.prmVersion, 'processes', pid)} data-process={pid} data-version={l.prmVersion} data-name={getProcess(l.prmVersion, pid, locale).data.name}>
+            <a
+              class="chip"
+              href={href(locale, l.prmVersion, 'processes', pid)}
+              data-process={pid}
+              data-version={l.prmVersion}
+              data-name={getProcess(l.prmVersion, pid, locale).data.name}
+            >
               <span class="num">{pid}</span>
               {getProcess(l.prmVersion, pid, locale).data.name}
             </a>
@@ -51,7 +69,9 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
     )
   }
 
-  <p class="no-print"><a class="button primary" href={`${href(locale, 'tailor')}#v=${l.prmVersion}&lc=${l.id}`}>{t('lc.useInTailor')} →</a></p>
+  <p class="no-print">
+    <a class="button primary" href={`${href(locale, 'tailor')}#v=${l.prmVersion}&lc=${l.id}`}>{t('lc.useInTailor')} →</a>
+  </p>
   <ProcessModal locale={locale} />
 </Layout>
 

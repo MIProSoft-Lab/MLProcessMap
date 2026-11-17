@@ -210,7 +210,11 @@ export function diagramSvgs(input: DiagramInput, t: Translate): string {
       .join('');
   const snippet = (text: string, max = 190) => (text.length <= max ? text : `${text.slice(0, text.lastIndexOf(' ', max))}…`);
   const tipTag = (proc: DiagramProcess) =>
-    attr({ 'data-tip-title': `${proc.id} · ${proc.name}`, 'data-tip-meta': t(`origin.${proc.origin}`), 'data-tip-body': snippet(proc.purpose) });
+    attr({
+      'data-tip-title': `${proc.id} · ${proc.name}`,
+      'data-tip-meta': t(`origin.${proc.origin}`),
+      'data-tip-body': snippet(proc.purpose),
+    });
   const tipPhase = (i: number) => {
     const ph = phases[i];
     const lines = [
@@ -222,7 +226,11 @@ export function diagramSvgs(input: DiagramInput, t: Translate): string {
     return attr({ 'data-tip-title': `${ph.n} · ${ph.name}`, 'data-tip-body': [ph.description, ...lines].filter(Boolean).join('\n') });
   };
   const tipLoop = (loop: Loop) =>
-    attr({ 'data-tip-title': `${loop.label} · ${phases[loop.from].name} → ${phases[loop.to].name}`, 'data-tip-meta': t('lc.legendLoop'), 'data-tip-body': loop.note ?? '' });
+    attr({
+      'data-tip-title': `${loop.label} · ${phases[loop.from].name} → ${phases[loop.to].name}`,
+      'data-tip-meta': t('lc.legendLoop'),
+      'data-tip-body': loop.note ?? '',
+    });
   const tipRepeat = (i: number) => attr({ 'data-tip-title': `↻ ${phases[i].name}`, 'data-tip-body': t('lc.legendRepeated') });
 
   const desc = t('lc.diagramDesc', { phases: phases.map((p) => p.name).join(', ') });
@@ -260,7 +268,9 @@ export function diagramSvgs(input: DiagramInput, t: Translate): string {
         const name = b.name.map((line, k) => `<text class="name" x="${b.x + 8}" y="${b.y + 44 + k * 17}">${esc(line)}</text>`).join('');
         const tags = b.tags
           .map(
-            (tag) => `<a href="${esc(input.procHref(tag.id))}" class="tag origin-${esc(tag.origin)}" data-process="${esc(tag.id)}" data-version="${esc(input.version)}"${attr({ 'data-name': tag.name, 'aria-label': `${tag.id} ${tag.name}` })}${tipTag(tag)}>
+            (
+              tag,
+            ) => `<a href="${esc(input.procHref(tag.id))}" class="tag origin-${esc(tag.origin)}" data-process="${esc(tag.id)}" data-version="${esc(input.version)}"${attr({ 'data-name': tag.name, 'aria-label': `${tag.id} ${tag.name}` })}${tipTag(tag)}>
               <rect x="${tag.x}" y="${tag.y}" width="${TAG_W}" height="${TAG_H}"/>
               <text x="${tag.x + TAG_W / 2}" y="${tag.y + 13}" text-anchor="middle">${esc(tag.id)}</text>
             </a>`,

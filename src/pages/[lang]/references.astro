@@ -48,49 +48,63 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
   <nav class="jump small" aria-label={t('process.contents')}>
     <a href="#studies">{t('refs.studies')} <span class="num" data-count="studies">{studies.length}</span></a>
     <a href="#literature">{t('refs.literature')} <span class="num" data-count="literature">{literature.length}</span></a>
-    {acronyms.length > 0 && <a href="#acronyms">{t('refs.acronyms')} <span class="num" data-count="acronyms">{acronyms.length}</span></a>}
+    {
+      acronyms.length > 0 && (
+        <a href="#acronyms">
+          {t('refs.acronyms')}{' '}
+          <span class="num" data-count="acronyms">
+            {acronyms.length}
+          </span>
+        </a>
+      )
+    }
   </nav>
   <p id="empty" class="muted" hidden>{t('refs.noResults')}</p>
 
   <section data-group="studies">
-  <h2 id="studies">{t('refs.studies')}</h2>
-  <ol class="refs">
-    {
-      studies.map((s) => {
-        const ref = s.reference ? referenceByKey.get(s.reference) : undefined;
-        const url = ref && referenceUrl(ref);
-        return (
-          <li id={s.id} data-ref data-text={words(ref, [s.title, s.year ? String(s.year) : ''])} data-ids={ids(s.id, [s.id])}>
-            <span class="study-id">{s.id}</span>
-            <div>
-              {url ? <a href={url}>{s.title}</a> : <span>{s.title}</span>} <span class="muted">({s.year})</span>
-              {ref && <div class="small muted" set:html={inline(fullCite(ref, { title: false }))} />}
-              <Cited locale={locale} items={citedBy.get(s.id)} />
-            </div>
-          </li>
-        );
-      })
-    }
-  </ol>
+    <h2 id="studies">{t('refs.studies')}</h2>
+    <ol class="refs">
+      {
+        studies.map((s) => {
+          const ref = s.reference ? referenceByKey.get(s.reference) : undefined;
+          const url = ref && referenceUrl(ref);
+          return (
+            <li id={s.id} data-ref data-text={words(ref, [s.title, s.year ? String(s.year) : ''])} data-ids={ids(s.id, [s.id])}>
+              <span class="study-id">{s.id}</span>
+              <div>
+                {url ? <a href={url}>{s.title}</a> : <span>{s.title}</span>} <span class="muted">({s.year})</span>
+                {ref && <div class="small muted" set:html={inline(fullCite(ref, { title: false }))} />}
+                <Cited locale={locale} items={citedBy.get(s.id)} />
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
   </section>
 
   <section data-group="literature">
-  <h2 id="literature">{t('refs.literature')}</h2>
-  <ol class="refs literature">
-    {
-      literature.map((r) => {
-        const url = referenceUrl(r);
-        return (
-          <li id={r.key} data-ref data-text={words(r)} data-ids={ids(r.key)}>
-            <div>
-              <span set:html={inline(fullCite(r))} /> {url && <a class="small" href={url}>↗</a>}
-              <Cited locale={locale} items={citedBy.get(r.key)} />
-            </div>
-          </li>
-        );
-      })
-    }
-  </ol>
+    <h2 id="literature">{t('refs.literature')}</h2>
+    <ol class="refs literature">
+      {
+        literature.map((r) => {
+          const url = referenceUrl(r);
+          return (
+            <li id={r.key} data-ref data-text={words(r)} data-ids={ids(r.key)}>
+              <div>
+                <span set:html={inline(fullCite(r))} />{' '}
+                {url && (
+                  <a class="small" href={url}>
+                    ↗
+                  </a>
+                )}
+                <Cited locale={locale} items={citedBy.get(r.key)} />
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
   </section>
 
   {
@@ -127,7 +141,11 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
   const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')].map((section) => ({
     section,
     name: section.dataset.group!,
-    items: [...section.querySelectorAll<HTMLElement>('[data-text]')].map((el) => ({ el, text: el.dataset.text!, ids: new Set((el.dataset.ids ?? '').split(' ')) })),
+    items: [...section.querySelectorAll<HTMLElement>('[data-text]')].map((el) => ({
+      el,
+      text: el.dataset.text!,
+      ids: new Set((el.dataset.ids ?? '').split(' ')),
+    })),
   }));
   const references = groups.flatMap((g) => (g.name === 'acronyms' ? [] : g.items));
   const id = /^p\d+(\.a\d+)?$/;
@@ -155,7 +173,10 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
     const cited = words.filter((w) => id.test(w));
     document.querySelectorAll<HTMLElement>('[data-cite]').forEach((chip) => {
       const c = chip.dataset.cite!;
-      chip.classList.toggle('hit', cited.some((w) => c === w || c.startsWith(`${w}.`)));
+      chip.classList.toggle(
+        'hit',
+        cited.some((w) => c === w || c.startsWith(`${w}.`)),
+      );
     });
     count.textContent = words.length ? format(count.dataset.text!, { n: shown, total: references.length }) : '';
     empty.hidden = groups.some((g) => !g.section.hidden);

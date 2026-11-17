@@ -19,7 +19,8 @@ if (issues.length === 0) {
   const warningCount = warnings(issues).length;
   const affectedFiles = new Set(issues.map((issue) => issue.file)).size;
   const counts = `${plural(errorCount, 'error')} and ${plural(warningCount, 'warning')} in ${plural(affectedFiles, 'file')}`;
-  const verdict = errorCount > 0 ? colors.error(colors.bold(`Failed: ${counts}.`)) : colors.warning(colors.bold(`Passed with warnings: ${counts}.`));
+  const verdict =
+    errorCount > 0 ? colors.error(colors.bold(`Failed: ${counts}.`)) : colors.warning(colors.bold(`Passed with warnings: ${counts}.`));
   console.error(`${formatIssues(issues, { colors, ruleDescriptions })}\n\n${verdict} ${colors.dim(`(${checked})`)}`);
   if (errorCount > 0) process.exitCode = 1;
 }

@@ -46,7 +46,6 @@ export interface ModalOptions {
   findOpener?(id: string): HTMLElement | null;
 }
 
-
 // One request per version and page load, shared by every modal on the page.
 const cache = new Map<string, Promise<Details[]>>();
 
@@ -77,7 +76,9 @@ export function createProcessModal(options: ModalOptions = {}) {
   let opener: HTMLElement | null = null;
 
   const chips = (ids: string[], empty: string) =>
-    ids.length ? ids.map((id) => `<span class="chip"><span class="num">${id}</span></span>`).join(' ') : `<span class="muted">${empty}</span>`;
+    ids.length
+      ? ids.map((id) => `<span class="chip"><span class="num">${id}</span></span>`).join(' ')
+      : `<span class="muted">${empty}</span>`;
   const letters = (xs: string[]) => xs.map((x) => `<span class="pm-letter">${x}</span>`).join('');
 
   function render(d: Details) {
@@ -101,13 +102,19 @@ export function createProcessModal(options: ModalOptions = {}) {
         <div>
           <h3 class="label">${s('process.inputs')}</h3>
           <ul>${d.inputs
-            .map((i) => `<li><strong>${esc(i.name)}</strong> ${letters(i.serves)}<div class="small">${s('process.producedBy')}: ${chips(i.producers, s('process.external'))}</div></li>`)
+            .map(
+              (i) =>
+                `<li><strong>${esc(i.name)}</strong> ${letters(i.serves)}<div class="small">${s('process.producedBy')}: ${chips(i.producers, s('process.external'))}</div></li>`,
+            )
             .join('')}</ul>
         </div>
         <div>
           <h3 class="label">${s('process.outputs')}</h3>
           <ul>${d.outputs
-            .map((o) => `<li><strong>${esc(o.name)}</strong> ${letters(o.serves)}<div class="small">${s('process.usedBy')}: ${chips(o.consumers, s('process.notUsed'))}</div></li>`)
+            .map(
+              (o) =>
+                `<li><strong>${esc(o.name)}</strong> ${letters(o.serves)}<div class="small">${s('process.usedBy')}: ${chips(o.consumers, s('process.notUsed'))}</div></li>`,
+            )
             .join('')}</ul>
         </div>
       </div>

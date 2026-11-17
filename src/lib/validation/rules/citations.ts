@@ -26,7 +26,11 @@ export const citations: Rule = {
       for (const activity of process.activities) {
         for (const studyId of activity.primaryStudies ?? []) {
           if (!knownStudyIds.has(studyId)) {
-            report(file, `Activity ${activity.id} cites study ${studyId}, which is not in ${studiesFile}.`, `Add the study to ${studiesFile}, or correct the ID.`);
+            report(
+              file,
+              `Activity ${activity.id} cites study ${studyId}, which is not in ${studiesFile}.`,
+              `Add the study to ${studiesFile}, or correct the ID.`,
+            );
           }
         }
 

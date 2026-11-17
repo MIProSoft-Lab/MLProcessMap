@@ -34,6 +34,7 @@ jobs:
           cache: npm
       - run: npm ci
       # --if-present: a branch from before these scripts existed still builds.
+      - run: npm run format:check --if-present
       - run: npm run check:content --if-present
       # Type check, on branches that have the checker installed.
       - run: if [ -d node_modules/@astrojs/check ]; then npm run check; fi
@@ -68,15 +69,17 @@ jobs:
           cache-dependency-path: '*/package-lock.json'
       - id: pages
         uses: actions/configure-pages@v5
-      # The content is checked before each build, and the build fails on it
-      # too, so a bad edit from the admin panel never reaches the published
-      # site. check:content lists every problem at once. The type check and the
-      # tests run here as well, since fixes are pushed without a pull request.
+      # The formatting and the content are checked before each build, and the
+      # build fails on the content too, so a bad edit from the admin panel
+      # never reaches the published site. check:content lists every problem at
+      # once. The type check and the tests run here as well, since fixes are
+      # pushed without a pull request.
       # A failure in either edition stops the deploy of both.
       - name: Build the live edition
         working-directory: live
         run: |
           npm ci
+          npm run format:check --if-present
           npm run check:content --if-present
           if [ -d node_modules/@astrojs/check ]; then npm run check; fi
           npm test --if-present

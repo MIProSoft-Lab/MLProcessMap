@@ -111,7 +111,9 @@ describe('rules', () => {
       f['/content/versions.yaml'].versions[0].id = 'latest';
       f['/content/versions.yaml'].default = 'latest';
     });
-    expect(summary(issues)).toContain('versions: /content/versions.yaml: A version is called "latest", which is reserved for links to the default version.');
+    expect(summary(issues)).toContain(
+      'versions: /content/versions.yaml: A version is called "latest", which is reserved for links to the default version.',
+    );
   });
 
   it('versions: the topology places every process once', () => {
@@ -254,7 +256,9 @@ describe('rules', () => {
   });
 
   it('lifecycles: the PRM version exists', () => {
-    expect(summary(check((f) => (f[lifecycle].prmVersion = 'v9')))).toEqual([`lifecycles: ${lifecycle}: The lifecycle uses PRM version v9, which does not exist.`]);
+    expect(summary(check((f) => (f[lifecycle].prmVersion = 'v9')))).toEqual([
+      `lifecycles: ${lifecycle}: The lifecycle uses PRM version v9, which does not exist.`,
+    ]);
   });
 
   it('lifecycles: phases list processes of the version and return to existing phases', () => {

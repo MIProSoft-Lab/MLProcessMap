@@ -30,7 +30,11 @@ const surname = surnames.join(' ');
 const citation = thesis && `${surname}, ${given[0]}. (${thesis.year}). *${thesis.title}* [Doctoral thesis, ${site.institution}].`;
 const bibtex =
   thesis &&
-  `@phdthesis{${surname.split(' ')[0].normalize('NFD').replace(/[^a-zA-Z]/g, '').toLowerCase()}${thesis.year}prm,
+  `@phdthesis{${surname
+    .split(' ')[0]
+    .normalize('NFD')
+    .replace(/[^a-zA-Z]/g, '')
+    .toLowerCase()}${thesis.year}prm,
   author = {${surname}, ${given}},
   title  = {${thesis.title}},
   school = {${site.institution}},
@@ -143,13 +147,11 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
             <dd class="mono">{thesis.year}</dd>
           </div>
         </dl>
-        {
-          thesisEdition && (
-            <p>
-              <a href={thesisEdition}>{t('edition.thesisLink')} →</a>
-            </p>
-          )
-        }
+        {thesisEdition && (
+          <p>
+            <a href={thesisEdition}>{t('edition.thesisLink')} →</a>
+          </p>
+        )}
 
         {timeline.length > 0 && (
           <>

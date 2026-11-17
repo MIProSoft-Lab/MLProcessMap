@@ -28,7 +28,11 @@ export const GET: APIRoute = ({ params, props }) => {
       id: io.workProduct,
       name: io.name,
       serves: io.serves,
-      consumers: wps.get(io.workProduct)?.consumers.map((l) => l.process).filter((c) => c !== p.id) ?? [],
+      consumers:
+        wps
+          .get(io.workProduct)
+          ?.consumers.map((l) => l.process)
+          .filter((c) => c !== p.id) ?? [],
     })),
     activities: p.activities.map((a) => ({ id: a.id, title: prose(a.title, locale), description: prose(a.description, locale) })),
   }));

@@ -57,7 +57,11 @@ export const workProductFlow: Rule = {
 
       for (const { id: workProductId } of content.workProductMeta(version.id)) {
         if (!usedWorkProductIds.has(workProductId)) {
-          report(workProductsFile, `"${workProductId}" is not an input or output of any process of ${version.id}.`, 'Remove it, or use it in a process.');
+          report(
+            workProductsFile,
+            `"${workProductId}" is not an input or output of any process of ${version.id}.`,
+            'Remove it, or use it in a process.',
+          );
         }
       }
     }

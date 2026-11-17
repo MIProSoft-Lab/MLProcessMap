@@ -21,7 +21,10 @@ const ui = Object.fromEntries(locales.map((l) => [l, read(l)])) as Record<Locale
 const en = ui[defaultLocale];
 
 /** Name of each language in that language, for the language menu. */
-export const languageNames = Object.fromEntries(locales.map((l) => [l, ui[l]['language.name'] ?? l.toUpperCase()])) as Record<Locale, string>;
+export const languageNames = Object.fromEntries(locales.map((l) => [l, ui[l]['language.name'] ?? l.toUpperCase()])) as Record<
+  Locale,
+  string
+>;
 
 /** Name of a language as it appears inside a sentence of a locale. */
 export function languageIn(locale: Locale, of: Locale) {

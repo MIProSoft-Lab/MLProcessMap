@@ -88,7 +88,9 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
       indexable && (
         <>
           <link rel="canonical" href={canonical} />
-          {languageLinks.map((l) => <link rel="alternate" hreflang={l.locale} href={absolute(l.href)} />)}
+          {languageLinks.map((l) => (
+            <link rel="alternate" hreflang={l.locale} href={absolute(l.href)} />
+          ))}
           <link rel="alternate" hreflang="x-default" href={absolute(defaultLanguageLink)} />
         </>
       )
@@ -153,9 +155,26 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
               </details>
             )
           }
-          <button type="button" class="theme-toggle" id="theme-toggle" data-label-dark={t('nav.theme-dark')} data-label-light={t('nav.theme-light')} aria-label={t('nav.theme-dark')} title={t('nav.theme-dark')}>
-            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" /></svg>
-            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor" /><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" /></svg>
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-toggle"
+            data-label-dark={t('nav.theme-dark')}
+            data-label-light={t('nav.theme-light')}
+            aria-label={t('nav.theme-dark')}
+            title={t('nav.theme-dark')}
+          >
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+            </svg>
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.5" fill="currentColor"></circle>
+              <path
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path>
+            </svg>
           </button>
           <details class="menu">
             <summary aria-label={`${t('nav.language')}: ${languageNames[locale]}`}>{locale.toUpperCase()}</summary>
@@ -202,12 +221,14 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
           <div>
             <span class="label">{t('footer.thesis')}</span>
             {site.author}
-            {site.email && (
-              <>
-                <br />
-                <a href={`mailto:${site.email}`}>{site.email}</a>
-              </>
-            )}
+            {
+              site.email && (
+                <>
+                  <br />
+                  <a href={`mailto:${site.email}`}>{site.email}</a>
+                </>
+              )
+            }
           </div>
           {
             site.institution && (
@@ -223,22 +244,34 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
           </div>
           <div>
             <span class="label">{t('footer.links')}</span>
-            {[
-              repo && <a href={repo}>{t('footer.source')}</a>,
-              feedback && <a href={feedback}>{t('footer.feedback')}</a>,
-              edition === 'live' && otherEdition && <a href={otherEdition}>{t('edition.thesisLink')}</a>,
-            ]
-              .filter(Boolean)
-              .map((link, i) => (
-                <>
-                  {i > 0 && ' · '}
-                  {link}
-                </>
-              ))}
+            {
+              [
+                repo && <a href={repo}>{t('footer.source')}</a>,
+                feedback && <a href={feedback}>{t('footer.feedback')}</a>,
+                edition === 'live' && otherEdition && <a href={otherEdition}>{t('edition.thesisLink')}</a>,
+              ]
+                .filter(Boolean)
+                .map((link, i) => (
+                  <>
+                    {i > 0 && ' · '}
+                    {link}
+                  </>
+                ))
+            }
           </div>
         </div>
         <p class="footer-meta">
-          {repo ? <a href={`${repo}/releases`}>{siteTitle} {t('footer.version', { v: pkg.version })}</a> : <span>{siteTitle} {t('footer.version', { v: pkg.version })}</span>}
+          {
+            repo ? (
+              <a href={`${repo}/releases`}>
+                {siteTitle} {t('footer.version', { v: pkg.version })}
+              </a>
+            ) : (
+              <span>
+                {siteTitle} {t('footer.version', { v: pkg.version })}
+              </span>
+            )
+          }
           {' · '}
           <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
         </p>

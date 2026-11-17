@@ -186,7 +186,13 @@ describe('exports', () => {
 
 describe('importing an export', () => {
   const options = { versions: data.versions, fallback: v1, untitled: s('tailor.untitled') };
-  const essentials = (m: { version: string; selected: string[]; excluded: string[]; rationale: Record<string, string>; phases: { name: string; processes: string[] }[] }) => ({
+  const essentials = (m: {
+    version: string;
+    selected: string[];
+    excluded: string[];
+    rationale: Record<string, string>;
+    phases: { name: string; processes: string[] }[];
+  }) => ({
     version: m.version,
     selected: [...m.selected].sort(),
     excluded: m.excluded,
@@ -197,21 +203,41 @@ describe('importing an export', () => {
 
   it('reads the JSON export', async () => {
     const m = await readModel(json({ state: model(), version: v2, s, link: '' }), 'model.json', options);
-    expect(essentials(m)).toEqual({ ...expected, phases: [['Build', ['P01']], ['Phase 2', ['P03']]] });
+    expect(essentials(m)).toEqual({
+      ...expected,
+      phases: [
+        ['Build', ['P01']],
+        ['Phase 2', ['P03']],
+      ],
+    });
     expect(m.phases[1]).toMatchObject({ returnsTo: 'build', returnNote: 'on drift' });
     expect(m.project).toBe('Fraud detection');
   });
 
   it('reads the YAML lifecycle file', async () => {
     const m = await readModel(yaml(model(), s), 'model.yaml', options);
-    expect(essentials(m)).toEqual({ ...expected, excluded: [], rationale: {}, phases: [['Build', ['P01']], ['Phase 2', ['P03']]] });
+    expect(essentials(m)).toEqual({
+      ...expected,
+      excluded: [],
+      rationale: {},
+      phases: [
+        ['Build', ['P01']],
+        ['Phase 2', ['P03']],
+      ],
+    });
     expect(m.phases[0].iterative).toBe(true);
   });
 
   it('reads the CSV export, with the version from the file name', async () => {
     const text = csv({ state: model(), version: v2, s });
     const m = await readModel(text, 'fraud-detection-v2.csv', options);
-    expect(essentials(m)).toEqual({ ...expected, phases: [['Build', ['P01']], ['Phase 2', ['P03']]] });
+    expect(essentials(m)).toEqual({
+      ...expected,
+      phases: [
+        ['Build', ['P01']],
+        ['Phase 2', ['P03']],
+      ],
+    });
     expect(m.csv).toBe(true);
     expect((await readModel(text, 'renamed.csv', options)).version).toBe('v1');
   });

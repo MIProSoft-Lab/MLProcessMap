@@ -71,7 +71,9 @@ const strings = JSON.stringify(Object.fromEntries(keys.map((k) => [k, t(k)])));
   }
 
   const list = (label: string, ids: string[]) =>
-    ids.length ? `<p class="ph-links"><span class="label">${label}</span> ${ids.map((id) => `<span class="chip"><span class="num">${id}</span></span>`).join(' ')}</p>` : '';
+    ids.length
+      ? `<p class="ph-links"><span class="label">${label}</span> ${ids.map((id) => `<span class="chip"><span class="num">${id}</span></span>`).join(' ')}</p>`
+      : '';
 
   async function show(link: HTMLElement, version: string, id: string) {
     current = link;

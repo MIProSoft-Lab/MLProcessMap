@@ -4,14 +4,19 @@ import { lifecycleFiles } from '../walk';
 
 export const lifecycles: Rule = {
   id: 'lifecycles',
-  description: 'A lifecycle uses a PRM version that exists, its phases list processes of that version, and phases return to phases that exist.',
+  description:
+    'A lifecycle uses a PRM version that exists, its phases list processes of that version, and phases return to phases that exist.',
   severity: 'error',
   check({ content, report }) {
     const versionIds = content.versions.map((version) => version.id);
     for (const { file, lifecycle } of lifecycleFiles(content)) {
       const version = lifecycle.prmVersion;
       if (!versionIds.includes(version)) {
-        report(file, `The lifecycle uses PRM version ${version}, which does not exist.`, `Set prmVersion to one of: ${versionIds.join(', ')}.`);
+        report(
+          file,
+          `The lifecycle uses PRM version ${version}, which does not exist.`,
+          `Set prmVersion to one of: ${versionIds.join(', ')}.`,
+        );
         continue;
       }
 
@@ -21,7 +26,11 @@ export const lifecycles: Rule = {
       for (const phase of lifecycle.phases) {
         for (const processId of phase.processes) {
           if (!processIdsOfVersion.has(processId)) {
-            report(file, `Phase "${phase.id}" lists ${processId}, which is not a process of ${version}.`, `Remove it, or correct the process ID.`);
+            report(
+              file,
+              `Phase "${phase.id}" lists ${processId}, which is not a process of ${version}.`,
+              `Remove it, or correct the process ID.`,
+            );
           }
         }
 
@@ -59,7 +68,9 @@ export const lifecycleDataflow: Rule = {
 
       const processIdsOfVersion = new Set(content.processIds(version));
       const phaseIndexOfProcess = new Map<string, number>();
-      lifecycle.phases.forEach((phase, phaseIndex) => phase.processes.forEach((processId) => phaseIndexOfProcess.set(processId, phaseIndex)));
+      lifecycle.phases.forEach((phase, phaseIndex) =>
+        phase.processes.forEach((processId) => phaseIndexOfProcess.set(processId, phaseIndex)),
+      );
       const workProductsById = new Map(content.getWorkProducts(version, defaultLocale).map((workProduct) => [workProduct.id, workProduct]));
 
       // A phase that returns to an earlier one repeats every phase in between.

@@ -5,7 +5,14 @@ import type { Translate } from '../lifecycle-diagram';
 import { phaseOf, slug, type Phase, type State, type Version } from './model';
 
 /** The interface strings the exports use. */
-export const exportKeys = ['tailor.untitled', 'tailor.phase-new', 'tailor.phase-returnsTo', 'tailor.unassigned', 'tailor.excluded', 'lc.iterative'];
+export const exportKeys = [
+  'tailor.untitled',
+  'tailor.phase-new',
+  'tailor.phase-returnsTo',
+  'tailor.unassigned',
+  'tailor.excluded',
+  'lc.iterative',
+];
 
 export interface ExportContext {
   state: State;
@@ -50,7 +57,9 @@ export function markdown(ctx: ExportContext) {
   for (const g of groups(ctx)) {
     if (phased) {
       const ph = g.phase;
-      out += ph ? `## ${String(state.phases.indexOf(ph) + 1).padStart(2, '0')} ${name(ph)}${ph.iterative ? ` (↻ ${s('lc.iterative')})` : ''}\n\n` : `## ${s('tailor.unassigned')}\n\n`;
+      out += ph
+        ? `## ${String(state.phases.indexOf(ph) + 1).padStart(2, '0')} ${name(ph)}${ph.iterative ? ` (↻ ${s('lc.iterative')})` : ''}\n\n`
+        : `## ${s('tailor.unassigned')}\n\n`;
       if (ph?.description) out += `${ph.description}\n\n`;
       const back = ph?.returnsTo && state.phases.find((x) => x.id === ph.returnsTo);
       if (back) out += `↩ ${s('tailor.phase-returnsTo')} ${name(back)}${ph!.returnNote ? `: ${ph!.returnNote}` : ''}\n\n`;
@@ -78,7 +87,17 @@ export function csv(ctx: Omit<ExportContext, 'link'>) {
   for (const x of rows(ctx)) {
     const ph = phaseOf(state, x.p.id);
     for (const a of x.activities) {
-      lines.push([x.p.id, q(x.p.name), q(ph ? phaseName(state, ph, s) : ''), a.id, q(a.title), a.included ? 'yes' : 'no', q(x.included ? '' : x.rationale)].join(','));
+      lines.push(
+        [
+          x.p.id,
+          q(x.p.name),
+          q(ph ? phaseName(state, ph, s) : ''),
+          a.id,
+          q(a.title),
+          a.included ? 'yes' : 'no',
+          q(x.included ? '' : x.rationale),
+        ].join(','),
+      );
     }
   }
   return '\uFEFF' + lines.join('\n');
@@ -130,7 +149,8 @@ export function lifecyclePhases(state: State, s: Translate) {
 export function yaml(state: State, s: Translate) {
   // Plain scalars when they are unambiguous, double-quoted (JSON) strings otherwise.
   // A parser would read "2026", "1e3", "0x1f" or "2026-11-15" as a number or a date.
-  const ambiguous = (x: string) => !Number.isNaN(Number(x)) || /^\d{4}-\d\d?-\d\d?/.test(x) || /^(true|false|yes|no|on|off|null|~)$/i.test(x);
+  const ambiguous = (x: string) =>
+    !Number.isNaN(Number(x)) || /^\d{4}-\d\d?-\d\d?/.test(x) || /^(true|false|yes|no|on|off|null|~)$/i.test(x);
   const q = (x: string) => (/^[\p{L}\p{N}][\p{L}\p{N} ,.()'’/&–—-]*$/u.test(x) && !ambiguous(x) ? x : JSON.stringify(x));
   // IDs are slugs, so only the number and date cases can happen.
   const qid = (x: string) => (/^\d/.test(x) && ambiguous(x) ? JSON.stringify(x) : x);

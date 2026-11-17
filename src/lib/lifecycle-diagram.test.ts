@@ -16,7 +16,13 @@ describe('lifecycleLoops', () => {
   });
 
   it('leaves out a return to the same phase or to one that does not exist', () => {
-    expect(lifecycleLoops([{ id: 'a', returnsTo: 'a' }, { id: 'b', returnsTo: 'gone' }, { id: 'c', returnsTo: '' }])).toEqual([]);
+    expect(
+      lifecycleLoops([
+        { id: 'a', returnsTo: 'a' },
+        { id: 'b', returnsTo: 'gone' },
+        { id: 'c', returnsTo: '' },
+      ]),
+    ).toEqual([]);
   });
 
   it('accepts a return to a later phase', () => {

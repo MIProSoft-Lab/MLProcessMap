@@ -8,7 +8,13 @@ interface Item {
 }
 const item = (id: string, text = id): Item => ({ id, text });
 const pair = (from: Item[], to: Item[]) =>
-  align(from, to, (x) => x.id, (x) => x.text, (a, b) => a.text === b.text).map((p) => [p.status, p.from?.id, p.to?.id].filter(Boolean).join(' '));
+  align(
+    from,
+    to,
+    (x) => x.id,
+    (x) => x.text,
+    (a, b) => a.text === b.text,
+  ).map((p) => [p.status, p.from?.id, p.to?.id].filter(Boolean).join(' '));
 
 describe('align', () => {
   it('pairs items with the same key, in the order of the new list', () => {
@@ -72,7 +78,9 @@ describe('wordDiff', () => {
   });
 
   it('separates a replaced word from the one that replaces it', () => {
-    expect(wordDiff('the identified sources', 'the inventory of sources')).toBe('the <del>identified</del> <ins>inventory of</ins> sources');
+    expect(wordDiff('the identified sources', 'the inventory of sources')).toBe(
+      'the <del>identified</del> <ins>inventory of</ins> sources',
+    );
     expect(wordDiff('data. Then', 'data, then')).not.toContain('</del> <ins>,');
   });
 
@@ -122,7 +130,11 @@ describe('diffProcess', () => {
     expect(d.outcomes.map((p) => p.status)).toEqual(['same']);
     expect(d.inputs.map((p) => p.status)).toEqual(['removed']);
     expect(d.outputs.map((p) => p.status)).toEqual(['changed', 'added']);
-    expect(d.activities.map((p) => `${p.status} ${p.from?.id ?? '–'} ${p.to?.id ?? '–'}`)).toEqual(['added – A1', 'same A1 A2', 'changed A2 A3']);
+    expect(d.activities.map((p) => `${p.status} ${p.from?.id ?? '–'} ${p.to?.id ?? '–'}`)).toEqual([
+      'added – A1',
+      'same A1 A2',
+      'changed A2 A3',
+    ]);
     expect(d.counts).toEqual({ changed: 3, added: 2, removed: 1 });
     expect(d.changed).toBe(true);
   });

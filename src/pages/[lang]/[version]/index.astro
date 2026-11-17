@@ -31,7 +31,15 @@ const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as 
 const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).map((x) => [x.p.id, x.fields]));
 ---
 
-<Layout locale={locale} title={`${t('map.title')} ${version}`} description={`${t('home.card-map')} ${pick(v.description, locale)}`} section="processes" version={version} versionLinks={versionLinks} translated={translated}>
+<Layout
+  locale={locale}
+  title={`${t('map.title')} ${version}`}
+  description={`${t('home.card-map')} ${pick(v.description, locale)}`}
+  section="processes"
+  version={version}
+  versionLinks={versionLinks}
+  translated={translated}
+>
   <p class="breadcrumbs">ML-PRM / {version}</p>
   <h1>{t('map.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
   <p class="muted prose">{pick(v.description, locale)}</p>
@@ -77,7 +85,13 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
             <ol class="column">
               {col.map(({ p }) => (
                 <li data-id={p.id}>
-                  <a class="node" href={href(locale, version, 'processes', p.id)} data-process={p.id} data-version={version} data-name={p.name}>
+                  <a
+                    class="node"
+                    href={href(locale, version, 'processes', p.id)}
+                    data-process={p.id}
+                    data-version={version}
+                    data-name={p.name}
+                  >
                     <span class={`node-tab origin-${p.origin}`}>
                       <span>{p.id}</span>
                       <span>
@@ -111,7 +125,9 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
   // address, so it is still there on coming back to the map.
   type Field = { label: string; text: string; key: string };
   const data = JSON.parse(document.getElementById('map-search')!.textContent!) as Record<string, [string, string][]>;
-  const index = new Map<string, Field[]>(Object.entries(data).map(([id, fields]) => [id, fields.map(([label, text]) => ({ label, text, key: searchKey(text) }))]));
+  const index = new Map<string, Field[]>(
+    Object.entries(data).map(([id, fields]) => [id, fields.map(([label, text]) => ({ label, text, key: searchKey(text) }))]),
+  );
 
   const input = document.querySelector<HTMLInputElement>('#q')!;
   const items = [...document.querySelectorAll<HTMLElement>('li[data-id]')];
@@ -136,7 +152,7 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
       for (const w of words) for (let i = key.indexOf(w); i >= 0; i = key.indexOf(w, i + 1)) marks.fill(true, i, i + w.length);
     }
     let html = '';
-    for (let i = 0; i < text.length; ) {
+    for (let i = 0; i < text.length;) {
       let j = i;
       while (j < text.length && marks[j] === marks[i]) j++;
       const part = escapeHtml(text.slice(i, j));

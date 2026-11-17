@@ -10,7 +10,10 @@ const locale = Astro.props.locale as Locale;
 const t = useTranslations(locale);
 
 // Compare the default version with the one before it.
-const i = Math.max(1, versions.findIndex((v) => v.id === defaultVersion));
+const i = Math.max(
+  1,
+  versions.findIndex((v) => v.id === defaultVersion),
+);
 const from = versions[i - 1]?.id;
 const to = versions[i]?.id;
 ---

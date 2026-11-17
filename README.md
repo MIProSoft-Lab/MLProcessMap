@@ -13,7 +13,7 @@ A website to explore the Process Reference Model (PRM) for Machine Learning from
 
 If you use the PRM, cite the thesis:
 
-> Crespí Tobeña, A. (2027). *A Process Reference Model for Machine Learning Applications* [Doctoral thesis, Universitat de les Illes Balears].
+> Crespí Tobeña, A. (2027). _A Process Reference Model for Machine Learning Applications_ [Doctoral thesis, Universitat de les Illes Balears].
 
 ```bibtex
 @phdthesis{crespi2027prm,
@@ -37,6 +37,8 @@ npm run dev
 ```
 
 Requires Node 22.12 or newer.
+
+The code is formatted with [Prettier](https://prettier.io): run `npm run format` before committing, as the deploy fails if `npm run format:check` does. The content in `content/` is left out, as the admin panel writes it in its own style.
 
 ## Content
 
@@ -64,21 +66,21 @@ Acronyms listed in `acronyms.yaml` are marked wherever the text of the PRM uses 
 
 The build checks the content against the rules below. An error stops the build with a message naming the file; a warning points at a place where the model may be unsound and is left to the author's judgement, so it is listed but does not stop the build.
 
-| Rule | Severity | What it checks |
-|---|---|---|
-| `files` | error | Every required file exists, every file is in a place the site reads, is valid YAML and matches its schema, and every translation has an English file. |
-| `versions` | error | The default version exists, no version is called `latest`, every version has English process files, and its topology places each of its processes exactly once. |
-| `process-id` | error | The `id` in a process file matches the name of the file. |
-| `process-unique-ids` | error | A process names each outcome and activity once, and lists a work product once among its inputs and once among its outputs. |
-| `process-outcomes` | error | The inputs and outputs of a process serve outcomes of that process. |
-| `citations` | error | Activities cite studies in `studies.yaml` and references in `references.yaml`, and a study points to a reference that exists. |
-| `work-product-flow` | error | Every input is an output of a process of the same version or is marked `external` in its `work-products.yaml`, an external work product is not produced by any process, a work product has the same name everywhere, and `work-products.yaml` lists no unused work product. |
-| `process-translations` | error | A translated process has the same outcomes, activities, inputs and outputs as the English one. |
-| `lifecycles` | error | A lifecycle uses a PRM version that exists, its phases list processes of that version, and phases return to phases that exist. |
-| `ui-translations` | error | Translated interface strings exist in `content/ui/en.yaml` and use the same `{placeholders}`. |
-| `outcome-evidence` | warning | Every outcome of a process is served by at least one of its outputs, the work product an assessor would look at to see it was achieved. |
-| `work-product-dead-ends` | warning | Every work product a process produces is an input of another process, except records, which are kept as evidence of what was done. |
-| `lifecycle-dataflow` | warning | In a lifecycle, every required input of a process is external or produced in the same phase, an earlier one, or a later one that returns to it. |
+| Rule                     | Severity | What it checks                                                                                                                                                                                                                                                              |
+| ------------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `files`                  | error    | Every required file exists, every file is in a place the site reads, is valid YAML and matches its schema, and every translation has an English file.                                                                                                                       |
+| `versions`               | error    | The default version exists, no version is called `latest`, every version has English process files, and its topology places each of its processes exactly once.                                                                                                             |
+| `process-id`             | error    | The `id` in a process file matches the name of the file.                                                                                                                                                                                                                    |
+| `process-unique-ids`     | error    | A process names each outcome and activity once, and lists a work product once among its inputs and once among its outputs.                                                                                                                                                  |
+| `process-outcomes`       | error    | The inputs and outputs of a process serve outcomes of that process.                                                                                                                                                                                                         |
+| `citations`              | error    | Activities cite studies in `studies.yaml` and references in `references.yaml`, and a study points to a reference that exists.                                                                                                                                               |
+| `work-product-flow`      | error    | Every input is an output of a process of the same version or is marked `external` in its `work-products.yaml`, an external work product is not produced by any process, a work product has the same name everywhere, and `work-products.yaml` lists no unused work product. |
+| `process-translations`   | error    | A translated process has the same outcomes, activities, inputs and outputs as the English one.                                                                                                                                                                              |
+| `lifecycles`             | error    | A lifecycle uses a PRM version that exists, its phases list processes of that version, and phases return to phases that exist.                                                                                                                                              |
+| `ui-translations`        | error    | Translated interface strings exist in `content/ui/en.yaml` and use the same `{placeholders}`.                                                                                                                                                                               |
+| `outcome-evidence`       | warning  | Every outcome of a process is served by at least one of its outputs, the work product an assessor would look at to see it was achieved.                                                                                                                                     |
+| `work-product-dead-ends` | warning  | Every work product a process produces is an input of another process, except records, which are kept as evidence of what was done.                                                                                                                                          |
+| `lifecycle-dataflow`     | warning  | In a lifecycle, every required input of a process is external or produced in the same phase, an earlier one, or a later one that returns to it.                                                                                                                             |
 
 To list every error and warning without building the site:
 
@@ -114,9 +116,9 @@ This copies the process files, drops the list of changes (it belongs to the vers
 
 The site is published in two editions from this repository:
 
-| Edition | Branch | Address | Admin |
-| --- | --- | --- | --- |
-| Live: the tool as it keeps evolving | `main` | `/` | `/admin/` |
+| Edition                                              | Branch   | Address    | Admin            |
+| ---------------------------------------------------- | -------- | ---------- | ---------------- |
+| Live: the tool as it keeps evolving                  | `main`   | `/`        | `/admin/`        |
 | Thesis: the version described in the doctoral thesis | `thesis` | `/thesis/` | `/thesis/admin/` |
 
 The thesis edition receives corrections and translations but no new features. It shows a banner that links to the live edition, and search engines do not index it; the live edition links to it from the footer. GitHub Pages publishes one site per repository, so the deploy workflow builds both branches on every push to either of them; keep `.github/workflows/deploy.yml` the same on both. The edition of a build is set by `PUBLIC_EDITION` (`live` or `thesis`, see `src/lib/edition.ts`); a local build is the live edition.
@@ -138,6 +140,5 @@ Only people with write access to the repository can save changes. Add admins as 
 
 Admins can sign in in two ways:
 
-- **Access token** (no setup): create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens/new) for this repository with *Contents: Read and write*, and paste it in **Sign In Using Access Token**.
+- **Access token** (no setup): create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens/new) for this repository with _Contents: Read and write_, and paste it in **Sign In Using Access Token**.
 - **Sign in with GitHub**: deploy [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) to Cloudflare Workers (free) and set its URL as the repository variable `CMS_AUTH_URL` in **Settings → Secrets and variables → Actions → Variables**.
-

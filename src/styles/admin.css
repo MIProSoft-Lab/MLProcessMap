@@ -86,10 +86,8 @@
 :root .app-shell .main:has(> .container > .inner > .logo) {
   background-color: hsl(var(--sui-background-color-2-hsl));
   background-image:
-    linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid-minor) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+    linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
   background-size:
     100px 100px,
     100px 100px,
@@ -133,7 +131,9 @@
 /* Buttons with the site's offset shadow on hover. */
 .sui.button.primary,
 .sui.button.secondary {
-  transition: box-shadow 0.1s ease, transform 0.1s ease;
+  transition:
+    box-shadow 0.1s ease,
+    transform 0.1s ease;
 }
 
 :root .app-shell .inner:has(> .logo) .sui.button:hover {

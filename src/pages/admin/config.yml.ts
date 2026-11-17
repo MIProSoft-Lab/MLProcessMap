@@ -17,7 +17,13 @@ const localizedText = (name: string, label: string, widget = 'string') => ({
 });
 
 const ioFields = [
-  { name: 'workProduct', label: 'Work product ID', widget: 'string', hint: 'Same ID in every process that uses this work product, e.g. raw-dataset.', ...dup },
+  {
+    name: 'workProduct',
+    label: 'Work product ID',
+    widget: 'string',
+    hint: 'Same ID in every process that uses this work product, e.g. raw-dataset.',
+    ...dup,
+  },
   { name: 'name', label: 'Name', widget: 'string', ...tr },
   { name: 'description', label: 'Description', widget: 'text', required: false, ...tr },
   { name: 'serves', label: 'Supports outcomes', widget: 'list', hint: 'Outcome letters, e.g. a, b', required: false, ...dup },
@@ -64,7 +70,14 @@ const processFields = [
       { name: 'title', label: 'Title', widget: 'string', ...tr },
       { name: 'description', label: 'Description', widget: 'text', ...tr },
       { name: 'primaryStudies', label: 'Primary studies', widget: 'list', hint: 'P1 … P18', required: false, ...dup },
-      { name: 'literature', label: 'Specialized literature', widget: 'list', hint: 'Bibliography keys from References', required: false, ...dup },
+      {
+        name: 'literature',
+        label: 'Specialized literature',
+        widget: 'list',
+        hint: 'Bibliography keys from References',
+        required: false,
+        ...dup,
+      },
     ],
   },
   {
@@ -220,7 +233,8 @@ export const GET: APIRoute = () => {
       {
         name: 'interface',
         label: 'Interface text',
-        description: 'Menus, buttons and page texts of the site. Words in braces, such as {n}, are filled in by the site: keep them as they are. A text left empty is shown in English.',
+        description:
+          'Menus, buttons and page texts of the site. Words in braces, such as {n}, are filled in by the site: keep them as they are. A text left empty is shown in English.',
         format: 'yaml',
         i18n: true,
         files: [{ name: 'strings', label: 'Interface text', file: 'content/ui/{{locale}}.yaml', i18n: true, fields: uiFields }],
@@ -334,7 +348,12 @@ export const GET: APIRoute = () => {
                     widget: 'list',
                     fields: [
                       localizedText('group', 'Group'),
-                      { name: 'columns', label: 'Columns', widget: 'list', field: { name: 'column', label: 'Column', widget: 'list', hint: 'Process IDs' } },
+                      {
+                        name: 'columns',
+                        label: 'Columns',
+                        widget: 'list',
+                        field: { name: 'column', label: 'Column', widget: 'list', hint: 'Process IDs' },
+                      },
                     ],
                   },
                 ],

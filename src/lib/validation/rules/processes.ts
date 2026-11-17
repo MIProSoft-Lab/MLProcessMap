@@ -10,7 +10,11 @@ export const processIds: Rule = {
   check({ content, report }) {
     for (const { file, id: idFromFileName, process } of processFiles(content)) {
       if (process.id !== idFromFileName) {
-        report(file, `The id is ${process.id}, but the file is named ${idFromFileName}.yaml.`, `Change the id to ${idFromFileName}, or rename the file.`);
+        report(
+          file,
+          `The id is ${process.id}, but the file is named ${idFromFileName}.yaml.`,
+          `Change the id to ${idFromFileName}, or rename the file.`,
+        );
       }
     }
   },
@@ -63,7 +67,11 @@ export const processUniqueIds: Rule = {
         ['outputs', process.outputs],
       ] as const) {
         for (const workProductId of duplicatesOf(list.map((entry) => entry.workProduct))) {
-          report(file, `The work product "${workProductId}" is listed more than once among the ${listName}.`, 'List it once, with every outcome it serves.');
+          report(
+            file,
+            `The work product "${workProductId}" is listed more than once among the ${listName}.`,
+            'List it once, with every outcome it serves.',
+          );
         }
       }
     }

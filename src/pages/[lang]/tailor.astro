@@ -30,7 +30,10 @@ const data = {
       inputs: p.inputs.map((i) => i.workProduct),
     })),
     workProducts: Object.fromEntries(
-      getWorkProducts(v.id, locale).map((w) => [w.id, { name: w.name, external: w.external, producers: w.producers.map((p) => p.process) }]),
+      getWorkProducts(v.id, locale).map((w) => [
+        w.id,
+        { name: w.name, external: w.external, producers: w.producers.map((p) => p.process) },
+      ]),
     ),
   })),
   lifecycles: lifecycleIds().map((id) => {
@@ -111,7 +114,13 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     <label>
       <span>{t('tailor.version')}</span>
       <select id="version">
-        {versions.map((v) => <option value={v.id}>{v.id} · {pick(v.title, locale)}</option>)}
+        {
+          versions.map((v) => (
+            <option value={v.id}>
+              {v.id} · {pick(v.title, locale)}
+            </option>
+          ))
+        }
       </select>
     </label>
     <details class="menu start-menu" id="start">
@@ -127,7 +136,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
           {t('tailor.tab-processes')}
         </button>
         <button type="button" role="tab" id="tab-phases" data-tab="phases" aria-controls="panel-phases" aria-selected="false" tabindex="-1">
-          {t('tailor.tab-phases')} <span id="phase-count" class="count"></span>
+          {t('tailor.tab-phases')}
+          <span id="phase-count" class="count"></span>
         </button>
       </div>
 
@@ -327,7 +337,9 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!state.phases.length || !state.selected.has(id)) return '';
     const current = phaseOf(id)?.id ?? '';
     const options = [`<option value="">${esc(s('tailor.phase-none'))}</option>`]
-      .concat(state.phases.map((p, i) => `<option value="${esc(p.id)}" ${p.id === current ? 'selected' : ''}>${esc(phaseLabel(p, i))}</option>`))
+      .concat(
+        state.phases.map((p, i) => `<option value="${esc(p.id)}" ${p.id === current ? 'selected' : ''}>${esc(phaseLabel(p, i))}</option>`),
+      )
       .join('');
     return `<select class="phase-select" data-phase-of="${id}" aria-label="${esc(s('tailor.phase-of', { id }))}">${options}</select>`;
   }
@@ -339,10 +351,15 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   function rememberView() {
     const rows = 'li.proc, li.phase-card';
     const rowSel = (row: HTMLElement) =>
-      row.dataset.phase !== undefined ? `#phases [data-phase="${CSS.escape(row.dataset.phase)}"]` : `#processes [data-id="${CSS.escape(row.dataset.id!)}"]`;
-    const open = [...document.querySelectorAll<HTMLElement>('#processes details[open], #phases details[open]')].map((d) => rowSel(d.closest<HTMLElement>(rows)!));
+      row.dataset.phase !== undefined
+        ? `#phases [data-phase="${CSS.escape(row.dataset.phase)}"]`
+        : `#processes [data-id="${CSS.escape(row.dataset.id!)}"]`;
+    const open = [...document.querySelectorAll<HTMLElement>('#processes details[open], #phases details[open]')].map((d) =>
+      rowSel(d.closest<HTMLElement>(rows)!),
+    );
     const active = document.activeElement;
-    const row = active instanceof HTMLElement && (list.contains(active) || phaseList.contains(active)) ? active.closest<HTMLElement>(rows) : null;
+    const row =
+      active instanceof HTMLElement && (list.contains(active) || phaseList.contains(active)) ? active.closest<HTMLElement>(rows) : null;
     // The focused control is found again by its tag and data attributes, e.g. input[data-proc="P01"].
     const focused = row && {
       row: rowSel(row),
@@ -373,7 +390,9 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         const on = state.selected.has(p.id);
         const acts = p.activities
           .map(
-            (a) => `<li><label><input type="checkbox" data-act="${p.id}.${a.id}" ${state.excluded.has(`${p.id}.${a.id}`) ? '' : 'checked'} ${on ? '' : 'disabled'}>
+            (
+              a,
+            ) => `<li><label><input type="checkbox" data-act="${p.id}.${a.id}" ${state.excluded.has(`${p.id}.${a.id}`) ? '' : 'checked'} ${on ? '' : 'disabled'}>
               <span class="aid">${a.id}</span> ${esc(a.title)}</label></li>`,
           )
           .join('');
@@ -408,21 +427,23 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     phaseList.innerHTML = state.phases
       .map((p, i) => {
         const others = state.phases
-          .map((o, k) => (o.id === p.id ? '' : `<option value="${esc(o.id)}" ${o.id === p.returnsTo ? 'selected' : ''}>${esc(phaseLabel(o, k))}</option>`))
+          .map((o, k) =>
+            o.id === p.id ? '' : `<option value="${esc(o.id)}" ${o.id === p.returnsTo ? 'selected' : ''}>${esc(phaseLabel(o, k))}</option>`,
+          )
           .join('');
         // The menu adds a process without a phase, or moves one here from another
         // phase, which is the way to arrange them without dragging.
         const option = (id: string) => `<option value="${id}">${id} ${esc(procOf(id)?.name ?? '')}</option>`;
-        const group = (label: string, ids: string[]) => (ids.length ? `<optgroup label="${esc(label)}">${ids.map(option).join('')}</optgroup>` : '');
+        const group = (label: string, ids: string[]) =>
+          ids.length ? `<optgroup label="${esc(label)}">${ids.map(option).join('')}</optgroup>` : '';
         const choices =
           group(
             s('tailor.phase-none'),
             free.map((f) => f.id),
-          ) +
-          state.phases
-            .map((o, k) => (o.id === p.id ? '' : group(phaseLabel(o, k), o.processes)))
-            .join('');
-        const add = choices ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${choices}</select>` : '';
+          ) + state.phases.map((o, k) => (o.id === p.id ? '' : group(phaseLabel(o, k), o.processes))).join('');
+        const add = choices
+          ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${choices}</select>`
+          : '';
         return `<li class="phase-card" data-phase="${esc(p.id)}">
           <div class="pc-head">
             <span class="pc-step">${String(i + 1).padStart(2, '0')}</span>
@@ -447,7 +468,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         </li>`;
       })
       .join('');
-    unassignedList.innerHTML = free.map((p) => chip(p.id, '')).join('') || `<li class="pc-empty small muted">${esc(s('tailor.unassigned-none'))}</li>`;
+    unassignedList.innerHTML =
+      free.map((p) => chip(p.id, '')).join('') || `<li class="pc-empty small muted">${esc(s('tailor.unassigned-none'))}</li>`;
     $('#phase-count').textContent = state.phases.length ? `(${state.phases.length})` : '';
     renderPreview();
     renderSummary();
@@ -496,7 +518,8 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     $('#missing-count').textContent = missing.size ? `(${missing.size})` : '';
     $('#missing-note').hidden = !missing.size;
     $('#mobile-summary').textContent =
-      s('tailor.bar-selected', { n: state.selected.size, total: v.processes.length }) + (missing.size ? ` · ${s('tailor.bar-missing', { m: missing.size })}` : '');
+      s('tailor.bar-selected', { n: state.selected.size, total: v.processes.length }) +
+      (missing.size ? ` · ${s('tailor.bar-missing', { m: missing.size })}` : '');
     $('#missing').innerHTML = missing.size
       ? [...missing]
           .map(([wid, users]) => {
@@ -686,7 +709,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (field === 'name') {
       // Rename the phase in the menus in place; redrawing them would lose the focus.
       const label = phaseLabel(p, state.phases.indexOf(p));
-      document.querySelectorAll<HTMLOptionElement>(`#panel-processes option[value="${CSS.escape(p.id)}"], #phases option[value="${CSS.escape(p.id)}"]`).forEach((o) => (o.textContent = label));
+      document
+        .querySelectorAll<HTMLOptionElement>(
+          `#panel-processes option[value="${CSS.escape(p.id)}"], #phases option[value="${CSS.escape(p.id)}"]`,
+        )
+        .forEach((o) => (o.textContent = label));
       renderSummary();
     }
     renderPreview();
@@ -702,8 +729,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     else if (el.dataset.addTo && el.value) {
       for (const o of state.phases) if (o !== p) o.processes = o.processes.filter((x) => x !== el.value);
       insertInOrder(p, el.value);
-    }
-    else return;
+    } else return;
     renderList();
   });
 
@@ -719,7 +745,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
       renderList();
       // At the top or the bottom the pressed arrow is disabled, so the other one takes the focus.
       const card = `.phase-card[data-phase="${CSS.escape(p.id)}"]`;
-      (phaseList.querySelector<HTMLButtonElement>(`${card} [data-move="${el.dataset.move}"]:not(:disabled)`) ?? phaseList.querySelector<HTMLButtonElement>(`${card} [data-move]:not(:disabled)`))?.focus();
+      (
+        phaseList.querySelector<HTMLButtonElement>(`${card} [data-move="${el.dataset.move}"]:not(:disabled)`) ??
+        phaseList.querySelector<HTMLButtonElement>(`${card} [data-move]:not(:disabled)`)
+      )?.focus();
     } else if (el.hasAttribute('data-remove')) {
       const before = snapshot();
       const name = phaseLabel(p, i);
@@ -756,7 +785,9 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
   }
 
   function clearMarks() {
-    panel.querySelectorAll('.drop-target, .drop-before, .drop-end').forEach((x) => x.classList.remove('drop-target', 'drop-before', 'drop-end'));
+    panel
+      .querySelectorAll('.drop-target, .drop-before, .drop-end')
+      .forEach((x) => x.classList.remove('drop-target', 'drop-before', 'drop-end'));
   }
 
   panel.addEventListener('dragover', (e) => {
@@ -829,7 +860,9 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
         .groups(context())
         .map(
           (g) =>
-            (phased ? `<h2>${esc(g.phase ? `${String(state.phases.indexOf(g.phase) + 1).padStart(2, '0')} ${phaseName(g.phase)}` : s('tailor.unassigned'))}</h2>` : '') +
+            (phased
+              ? `<h2>${esc(g.phase ? `${String(state.phases.indexOf(g.phase) + 1).padStart(2, '0')} ${phaseName(g.phase)}` : s('tailor.unassigned'))}</h2>`
+              : '') +
             g.rows
               .map(
                 (x) =>
@@ -879,7 +912,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     if (!file) return;
     const messages: string[] = [];
     try {
-      const m = await readModel(await file.text(), file.name, { versions: data.versions, fallback: version(state.version), untitled: s('tailor.untitled') });
+      const m = await readModel(await file.text(), file.name, {
+        versions: data.versions,
+        fallback: version(state.version),
+        untitled: s('tailor.untitled'),
+      });
       const v = data.versions.find((x) => x.id === m.version);
       if (!v) throw new ImportError(s('tailor.import-version', { v: m.version || '?' }));
       const ids = new Set(v.processes.map((p) => p.id));
@@ -960,4 +997,3 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     restore.hidden = false;
   }
 </script>
-

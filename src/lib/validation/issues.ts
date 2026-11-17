@@ -94,5 +94,7 @@ function groupByFile(issues: Issue[]): [string, Issue[]][] {
 function explainRules(issues: Issue[], ruleDescriptions: Record<string, string>, colors: Palette): string[] {
   const ruleIds = [...new Set(issues.map((issue) => issue.rule))].filter((ruleId) => ruleDescriptions[ruleId]);
   if (ruleIds.length === 0) return [];
-  return [[colors.dim('About these rules:'), ...ruleIds.map((ruleId) => colors.dim(`  ${ruleId}: ${ruleDescriptions[ruleId]}`))].join('\n')];
+  return [
+    [colors.dim('About these rules:'), ...ruleIds.map((ruleId) => colors.dim(`  ${ruleId}: ${ruleDescriptions[ruleId]}`))].join('\n'),
+  ];
 }

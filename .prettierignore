@@ -1,0 +1,9 @@
+# Built and generated files.
+dist/
+.astro/
+package-lock.json
+
+# The content is written by the admin panel (Sveltia CMS), which has its own
+# YAML style; formatting it here would make every edit from the panel fail
+# the format check.
+content/

@@ -54,14 +54,29 @@ const sections = [
 const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).padStart(2, '0');
 ---
 
-<Layout locale={locale} title={p.name} description={plain(p.purpose)} section="processes" version={version} versionLinks={versionLinks} translated={translated} pageClass="process-page">
+<Layout
+  locale={locale}
+  title={p.name}
+  description={plain(p.purpose)}
+  section="processes"
+  version={version}
+  versionLinks={versionLinks}
+  translated={translated}
+  pageClass="process-page"
+>
   <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, version)}>ML-PRM / {version}</a> / {p.id}
   </nav>
 
   <div class="title-row">
     <h1>{p.name}</h1>
-    {compareHref && <a class="button no-print" href={compareHref}>⇄ {t('compare.title')}</a>}
+    {
+      compareHref && (
+        <a class="button no-print" href={compareHref}>
+          ⇄ {t('compare.title')}
+        </a>
+      )
+    }
   </div>
 
   <dl class="sheet title-block">
@@ -110,106 +125,117 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
           <CollapseToggle locale={locale} controls="outcomes-body" name={t('process.outcomes')} class="no-print" />
         </div>
         <div class="collapse-body" id="outcomes-body">
-        <ol class="outcomes">
-          {
-            p.outcomes.map((o) => (
-              <li id={`outcome-${o.id}`}>
-                <span class="letter">{o.id}</span>
-                <div>
-                  <span set:html={prose(o.text, locale)} />
-                  {servedBy(o.id).length > 0 && (
-                    <div class="chips served" aria-label={t('process.outcomeServedBy')}>
-                      {servedBy(o.id).map((io) => (
-                        <a class="chip" href={`#${io.dir === 'in' ? 'input' : 'output'}-${io.workProduct}`}>
-                          <span class="num">{io.dir === 'in' ? 'IN' : 'OUT'}</span>
-                          {io.name}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))
-          }
-        </ol>
+          <ol class="outcomes">
+            {
+              p.outcomes.map((o) => (
+                <li id={`outcome-${o.id}`}>
+                  <span class="letter">{o.id}</span>
+                  <div>
+                    <span set:html={prose(o.text, locale)} />
+                    {servedBy(o.id).length > 0 && (
+                      <div class="chips served" aria-label={t('process.outcomeServedBy')}>
+                        {servedBy(o.id).map((io) => (
+                          <a class="chip" href={`#${io.dir === 'in' ? 'input' : 'output'}-${io.workProduct}`}>
+                            <span class="num">{io.dir === 'in' ? 'IN' : 'OUT'}</span>
+                            {io.name}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
         </div>
       </section>
 
       <section id="interface" class="collapsible">
         <div class="section-head">
           <h2><span class="sec">{num('interface')}</span>{t('process.inputs')} · {t('process.outputs')}</h2>
-          <CollapseToggle locale={locale} controls="interface-body" name={`${t('process.inputs')} · ${t('process.outputs')}`} class="no-print" />
+          <CollapseToggle
+            locale={locale}
+            controls="interface-body"
+            name={`${t('process.inputs')} · ${t('process.outputs')}`}
+            class="no-print"
+          />
         </div>
         <div class="collapse-body" id="interface-body">
-        <div class="flow grid-paper">
-          {
-            (['inputs', 'outputs'] as const).map((kind) => (
-              <div class:list={['flow-col', 'collapsible', kind]} id={kind}>
-                <span class="label col-label print-only">{t(`process.${kind}`)}</span>
-                <CollapseToggle locale={locale} controls={`${kind}-body`} name={t(`process.${kind}`)} text={t(`process.${kind}`)} class="col-toggle no-print" />
-                <div class="collapse-body" id={`${kind}-body`}>
-                <div class="io-list">
-                {p[kind].length === 0 && <p class="muted small">—</p>}
-                {p[kind].map((io) => {
-                  const wp = wps.get(io.workProduct);
-                  const links = kind === 'inputs' ? wp?.producers : wp?.consumers.filter((c) => c.process !== id);
-                  return (
-                    <div class="io-node" id={`${kind === 'inputs' ? 'input' : 'output'}-${io.workProduct}`}>
-                      <div class="io-head">
-                        <a class="io-name" href={wpHref(io.workProduct)}>
-                          {io.name}
-                        </a>
-                        {io.serves.length > 0 && (
-                          <span class="serves" title={t('process.serves')}>
-                            {io.serves.map((s) => (
-                              <a href={`#outcome-${s}`}>{s}</a>
-                            ))}
-                          </span>
-                        )}
-                      </div>
-                      <div class="io-tags">
-                        {wp && <span class="badge">{t(`wp.type-${wp.type}`)}</span>}
-                        {io.optional && <span class="badge">{t('process.optional')}</span>}
-                      </div>
-                      {io.description && <p class="io-desc" set:html={prose(io.description, locale)} />}
-                      <div class="io-links">
-                        <span class="label">{kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}</span>
-                        {links && links.length > 0 ? (
-                          <span class="chips">
-                            {links.map((l) => (
-                              <a class="chip" href={href(locale, version, 'processes', l.process)}>
-                                <span class="num">{l.process}</span>
-                                <span class="link-name">{name(l.process)}</span>
+          <div class="flow grid-paper">
+            {
+              (['inputs', 'outputs'] as const).map((kind) => (
+                <div class:list={['flow-col', 'collapsible', kind]} id={kind}>
+                  <span class="label col-label print-only">{t(`process.${kind}`)}</span>
+                  <CollapseToggle
+                    locale={locale}
+                    controls={`${kind}-body`}
+                    name={t(`process.${kind}`)}
+                    text={t(`process.${kind}`)}
+                    class="col-toggle no-print"
+                  />
+                  <div class="collapse-body" id={`${kind}-body`}>
+                    <div class="io-list">
+                      {p[kind].length === 0 && <p class="muted small">—</p>}
+                      {p[kind].map((io) => {
+                        const wp = wps.get(io.workProduct);
+                        const links = kind === 'inputs' ? wp?.producers : wp?.consumers.filter((c) => c.process !== id);
+                        return (
+                          <div class="io-node" id={`${kind === 'inputs' ? 'input' : 'output'}-${io.workProduct}`}>
+                            <div class="io-head">
+                              <a class="io-name" href={wpHref(io.workProduct)}>
+                                {io.name}
                               </a>
-                            ))}
-                          </span>
-                        ) : (
-                          <span class="muted small">{kind === 'inputs' ? t('process.external') : t('process.notUsed')}</span>
-                        )}
-                      </div>
+                              {io.serves.length > 0 && (
+                                <span class="serves" title={t('process.serves')}>
+                                  {io.serves.map((s) => (
+                                    <a href={`#outcome-${s}`}>{s}</a>
+                                  ))}
+                                </span>
+                              )}
+                            </div>
+                            <div class="io-tags">
+                              {wp && <span class="badge">{t(`wp.type-${wp.type}`)}</span>}
+                              {io.optional && <span class="badge">{t('process.optional')}</span>}
+                            </div>
+                            {io.description && <p class="io-desc" set:html={prose(io.description, locale)} />}
+                            <div class="io-links">
+                              <span class="label">{kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}</span>
+                              {links && links.length > 0 ? (
+                                <span class="chips">
+                                  {links.map((l) => (
+                                    <a class="chip" href={href(locale, version, 'processes', l.process)}>
+                                      <span class="num">{l.process}</span>
+                                      <span class="link-name">{name(l.process)}</span>
+                                    </a>
+                                  ))}
+                                </span>
+                              ) : (
+                                <span class="muted small">{kind === 'inputs' ? t('process.external') : t('process.notUsed')}</span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
+                  </div>
                 </div>
-                </div>
+              ))
+            }
+            <svg class="wires" aria-hidden="true">
+              <defs>
+                <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+                  <path d="M0 0 L8 4 L0 8 z" fill="currentColor"></path>
+                </marker>
+              </defs>
+            </svg>
+            <div class="flow-core" aria-hidden="true">
+              <div class="core-box">
+                <span class="mono core-id">{p.id}</span>
+                <span class="core-name">{p.name}</span>
+                <span class="core-outcomes mono">{p.outcomes.map((o) => o.id).join(' ')}</span>
               </div>
-            ))
-          }
-          <svg class="wires" aria-hidden="true">
-            <defs>
-              <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
-                <path d="M0 0 L8 4 L0 8 z" fill="currentColor" />
-              </marker>
-            </defs>
-          </svg>
-          <div class="flow-core" aria-hidden="true">
-            <div class="core-box">
-              <span class="mono core-id">{p.id}</span>
-              <span class="core-name">{p.name}</span>
-              <span class="core-outcomes mono">{p.outcomes.map((o) => o.id).join(' ')}</span>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
@@ -222,58 +248,58 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
           <CollapseToggle locale={locale} controls="activities-body" name={t('process.activities')} class="no-print" />
         </div>
         <div class="collapse-body" id="activities-body">
-        <ol class="activities">
-          {
-            p.activities.map((a) => (
-              <li id={`activity-${a.id}`}>
-                <details open>
-                  <summary>
-                    <span class="aid">{a.id}</span>
-                    <span class="atitle" set:html={prose(a.title, locale)} />
-                  </summary>
-                  <div class="collapse-body">
-                  <div class="abody">
-                    <p class="prose" set:html={prose(a.description, locale)} />
-                    {(a.primaryStudies?.length || a.literature?.length) && (
-                      <dl class="sources small">
-                        {a.primaryStudies?.length ? (
-                          <>
-                            <dt class="label">{t('process.primaryStudies')}</dt>
-                            <dd class="chips">
-                              {a.primaryStudies.map((s) => {
-                                const study = studyById.get(s);
-                                const cite = study?.reference && shortCite(referenceByKey.get(study.reference));
-                                return (
-                                  <a class="chip" href={`${href(locale, 'references')}#${s}`} title={study?.title}>
-                                    <span class="study-id">{s}</span>
-                                    {cite}
-                                  </a>
-                                );
-                              })}
-                            </dd>
-                          </>
-                        ) : null}
-                        {a.literature?.length ? (
-                          <>
-                            <dt class="label">{t('process.literature')}</dt>
-                            <dd class="chips">
-                              {a.literature.map((k) => (
-                                <a class="chip" href={`${href(locale, 'references')}#${k}`} title={referenceByKey.get(k)?.title}>
-                                  {shortCite(referenceByKey.get(k), k)}
-                                </a>
-                              ))}
-                            </dd>
-                          </>
-                        ) : null}
-                      </dl>
-                    )}
-                  </div>
-                  </div>
-                </details>
-              </li>
-            ))
-          }
-        </ol>
+          <ol class="activities">
+            {
+              p.activities.map((a) => (
+                <li id={`activity-${a.id}`}>
+                  <details open>
+                    <summary>
+                      <span class="aid">{a.id}</span>
+                      <span class="atitle" set:html={prose(a.title, locale)} />
+                    </summary>
+                    <div class="collapse-body">
+                      <div class="abody">
+                        <p class="prose" set:html={prose(a.description, locale)} />
+                        {(a.primaryStudies?.length || a.literature?.length) && (
+                          <dl class="sources small">
+                            {a.primaryStudies?.length ? (
+                              <>
+                                <dt class="label">{t('process.primaryStudies')}</dt>
+                                <dd class="chips">
+                                  {a.primaryStudies.map((s) => {
+                                    const study = studyById.get(s);
+                                    const cite = study?.reference && shortCite(referenceByKey.get(study.reference));
+                                    return (
+                                      <a class="chip" href={`${href(locale, 'references')}#${s}`} title={study?.title}>
+                                        <span class="study-id">{s}</span>
+                                        {cite}
+                                      </a>
+                                    );
+                                  })}
+                                </dd>
+                              </>
+                            ) : null}
+                            {a.literature?.length ? (
+                              <>
+                                <dt class="label">{t('process.literature')}</dt>
+                                <dd class="chips">
+                                  {a.literature.map((k) => (
+                                    <a class="chip" href={`${href(locale, 'references')}#${k}`} title={referenceByKey.get(k)?.title}>
+                                      {shortCite(referenceByKey.get(k), k)}
+                                    </a>
+                                  ))}
+                                </dd>
+                              </>
+                            ) : null}
+                          </dl>
+                        )}
+                      </div>
+                    </div>
+                  </details>
+                </li>
+              ))
+            }
+          </ol>
         </div>
       </section>
 
@@ -288,16 +314,16 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
               <CollapseToggle locale={locale} controls="changes-body" name={t('process.changes')} class="no-print" />
             </div>
             <div class="collapse-body" id="changes-body">
-            {previousVersion && <p class="muted small">{t('process.changesFrom', { version: previousVersion })}</p>}
-            <ul class="changes">
-              {changelog.map((ch) => (
-                <li>
-                  <span class={`kind kind-${ch.kind}`}>{t(`change.${ch.kind}`)}</span>
-                  {ch.target && <strong>{ch.target}: </strong>}
-                  <span set:html={prose(ch.text, locale)} />
-                </li>
-              ))}
-            </ul>
+              {previousVersion && <p class="muted small">{t('process.changesFrom', { version: previousVersion })}</p>}
+              <ul class="changes">
+                {changelog.map((ch) => (
+                  <li>
+                    <span class={`kind kind-${ch.kind}`}>{t(`change.${ch.kind}`)}</span>
+                    {ch.target && <strong>{ch.target}: </strong>}
+                    <span set:html={prose(ch.text, locale)} />
+                  </li>
+                ))}
+              </ul>
             </div>
           </section>
         )
@@ -363,7 +389,8 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
       svg.appendChild(path);
     };
     // Only the columns that are open and still.
-    const nodes = (kind: string) => flow.querySelectorAll<HTMLElement>(`.${kind}:not([data-state='closed'], [data-state='moving']) .io-node`);
+    const nodes = (kind: string) =>
+      flow.querySelectorAll<HTMLElement>(`.${kind}:not([data-state='closed'], [data-state='moving']) .io-node`);
     nodes('inputs').forEach((n) => {
       const r = n.getBoundingClientRect();
       const x1 = r.right - box.left;

@@ -42,7 +42,10 @@ const changelog = b?.data.changes ?? [];
 // What the page leaves out until "Show unchanged sections" is ticked: whole
 // sections without a change, and the unchanged entries of the other sections.
 const allSame = (s: Section) => s.pairs.every((p) => p.status === 'same');
-const unchangedSections = [...(d.purpose === 'same' ? [t('process.purpose')] : []), ...sections.filter(allSame).map((s) => t(`process.${s.key}`))];
+const unchangedSections = [
+  ...(d.purpose === 'same' ? [t('process.purpose')] : []),
+  ...sections.filter(allSame).map((s) => t(`process.${s.key}`)),
+];
 const unchangedItems = sections.filter((s) => !allSame(s)).reduce((n, s) => n + s.pairs.filter((p) => p.status === 'same').length, 0);
 
 // Version pickers: any older version against any newer one. The pages exist
@@ -52,7 +55,13 @@ const pairHref = href(locale, 'compare', 'FROM-vs-TO', id);
 const home = b ? to : from;
 ---
 
-<Layout locale={locale} title={`${name} · ${from} → ${to}`} description={t('compare.description', { name, from, to })} section="processes" translated={translated}>
+<Layout
+  locale={locale}
+  title={`${name} · ${from} → ${to}`}
+  description={t('compare.description', { name, from, to })}
+  section="processes"
+  translated={translated}
+>
   <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
     <a href={href(locale, home)}>ML-PRM / {home}</a> / <a href={href(locale, home, 'processes', id)}>{id}</a> / {t('compare.title')}
   </nav>
@@ -63,22 +72,26 @@ const home = b ? to : from;
     <label>
       <span class="small muted">{t('compare.from')}</span>
       <select name="from">
-        {versions.map((v, i) => (
-          <option value={v.id} selected={v.id === from} disabled={i >= order.indexOf(to)}>
-            {v.id} · {pick(v.title, locale)}
-          </option>
-        ))}
+        {
+          versions.map((v, i) => (
+            <option value={v.id} selected={v.id === from} disabled={i >= order.indexOf(to)}>
+              {v.id} · {pick(v.title, locale)}
+            </option>
+          ))
+        }
       </select>
     </label>
     <span class="arrow" aria-hidden="true">→</span>
     <label>
       <span class="small muted">{t('compare.to')}</span>
       <select name="to">
-        {versions.map((v, i) => (
-          <option value={v.id} selected={v.id === to} disabled={i <= order.indexOf(from)}>
-            {v.id} · {pick(v.title, locale)}
-          </option>
-        ))}
+        {
+          versions.map((v, i) => (
+            <option value={v.id} selected={v.id === to} disabled={i <= order.indexOf(from)}>
+              {v.id} · {pick(v.title, locale)}
+            </option>
+          ))
+        }
       </select>
     </label>
     <a class="small all" href={href(locale, 'compare', slug)}>{t('compare.allChanges', { from, to })} →</a>
@@ -88,7 +101,17 @@ const home = b ? to : from;
     {a && <a href={href(locale, from, 'processes', id)}>{from}</a>}
     {a && b && ' · '}
     {b && <a href={href(locale, to, 'processes', id)}>{to}</a>}
-    {changelog.length > 0 && <> · <a href={`${href(locale, to, 'processes', id)}#changes`}>{t('process.changes')} ({to})</a></>}
+    {
+      changelog.length > 0 && (
+        <>
+          {' '}
+          ·{' '}
+          <a href={`${href(locale, to, 'processes', id)}#changes`}>
+            {t('process.changes')} ({to})
+          </a>
+        </>
+      )
+    }
   </p>
   <p class="legend small">
     <span><ins>{t('change.added')}</ins></span>
@@ -111,7 +134,10 @@ const home = b ? to : from;
 
   <section class:list={['diff-section', { same: d.purpose === 'same' }]}>
     <h2>{t('process.purpose')}</h2>
-    <p class="prose" set:html={d.purpose === 'same' ? escapeHtml(plain(b?.data.purpose ?? '')) : wordDiff(a?.data.purpose ?? '', b?.data.purpose ?? '')} />
+    <p
+      class="prose"
+      set:html={d.purpose === 'same' ? escapeHtml(plain(b?.data.purpose ?? '')) : wordDiff(a?.data.purpose ?? '', b?.data.purpose ?? '')}
+    />
   </section>
 
   {
@@ -127,7 +153,9 @@ const home = b ? to : from;
               return (
                 <li class:list={[`status-${p.status}`, { same: p.status === 'same' }]}>
                   {(fromLabel || toLabel) && (
-                    <span class="label">{fromLabel && toLabel && fromLabel !== toLabel ? `${fromLabel} → ${toLabel}` : toLabel || fromLabel}</span>
+                    <span class="label">
+                      {fromLabel && toLabel && fromLabel !== toLabel ? `${fromLabel} → ${toLabel}` : toLabel || fromLabel}
+                    </span>
                   )}
                   <span class="text" set:html={render(p, s.text)} />
                 </li>

@@ -5,18 +5,27 @@ import type { Rule } from '../rule';
 // The topology is the layout of the process map: the processes of each column.
 export const versions: Rule = {
   id: 'versions',
-  description: 'The default version exists, no version is called "latest", and the topology of every version places each of its processes exactly once.',
+  description:
+    'The default version exists, no version is called "latest", and the topology of every version places each of its processes exactly once.',
   severity: 'error',
   check({ content, report }) {
     const versionsFile = paths.versions;
     const versionIds = content.versions.map((version) => version.id);
 
     if (!versionIds.includes(content.defaultVersion)) {
-      report(versionsFile, `The default version "${content.defaultVersion}" is not one of the versions.`, `Set default to one of: ${versionIds.join(', ')}.`);
+      report(
+        versionsFile,
+        `The default version "${content.defaultVersion}" is not one of the versions.`,
+        `Set default to one of: ${versionIds.join(', ')}.`,
+      );
     }
 
     if (versionIds.includes('latest')) {
-      report(versionsFile, 'A version is called "latest", which is reserved for links to the default version.', 'Give the version another ID.');
+      report(
+        versionsFile,
+        'A version is called "latest", which is reserved for links to the default version.',
+        'Give the version another ID.',
+      );
     }
 
     for (const version of content.versions) {
@@ -48,7 +57,11 @@ export const versions: Rule = {
 
       for (const processId of processIdsWithFile) {
         if (!placedProcessIds.includes(processId)) {
-          report(versionsFile, `The topology of ${version.id} does not list ${processId}, so the process map does not show it.`, `Add ${processId} to one of the columns.`);
+          report(
+            versionsFile,
+            `The topology of ${version.id} does not list ${processId}, so the process map does not show it.`,
+            `Add ${processId} to one of the columns.`,
+          );
         }
       }
     }

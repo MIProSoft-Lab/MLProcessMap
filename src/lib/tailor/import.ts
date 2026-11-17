@@ -49,7 +49,9 @@ export function fromObject(x: any, untitled: string): Imported {
     excluded: (kept ?? []).flatMap((p) =>
       Array.isArray(p.activities) ? p.activities.filter((a: any) => a?.included === false).map((a: any) => `${p.id}.${a.id}`) : [],
     ),
-    rationale: Object.fromEntries((procs ?? []).filter((p) => p.included === false && p.rationale).map((p) => [str(p.id), str(p.rationale)])),
+    rationale: Object.fromEntries(
+      (procs ?? []).filter((p) => p.included === false && p.rationale).map((p) => [str(p.id), str(p.rationale)]),
+    ),
     phases,
   };
 }
@@ -124,7 +126,11 @@ export function fromCsv(text: string, file: string, versions: Version[], fallbac
 }
 
 /** A model from the text of a file of any of the formats. */
-export async function readModel(text: string, file: string, options: { versions: Version[]; fallback: Version; untitled: string }): Promise<Imported> {
+export async function readModel(
+  text: string,
+  file: string,
+  options: { versions: Version[]; fallback: Version; untitled: string },
+): Promise<Imported> {
   text = text.replace(/^﻿/, '');
   if (/^\s*"?process_id"?[,;]/.test(text)) return fromCsv(text, file, options.versions, options.fallback);
   if (/^\s*\{/.test(text)) return fromObject(JSON.parse(text), options.untitled);

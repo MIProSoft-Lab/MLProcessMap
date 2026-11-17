@@ -26,12 +26,12 @@ export function format(s: string, vars: Record<string, string | number> = {}) {
 
 /** Lowercase and without accents, so a search for "gestion" finds "gestión". */
 export function searchKey(s: string) {
-  return s
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase();
+  return s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 }
 
 export function plain(s: string) {
-  return s.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1').replace(/`(.+?)`/g, '$1');
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/`(.+?)`/g, '$1');
 }

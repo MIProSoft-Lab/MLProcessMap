@@ -13,7 +13,13 @@ const t = useTranslations(locale);
 const lifecycles = lifecycleIds().map((id) => getLifecycle(id, locale));
 ---
 
-<Layout locale={locale} title={t('lc.title')} description={t('lc.intro')} section="lifecycles" translated={lifecycles.every((l) => l.translated)}>
+<Layout
+  locale={locale}
+  title={t('lc.title')}
+  description={t('lc.intro')}
+  section="lifecycles"
+  translated={lifecycles.every((l) => l.translated)}
+>
   <h1>{t('lc.title')}</h1>
   <p class="muted prose">{t('lc.intro')}</p>
 

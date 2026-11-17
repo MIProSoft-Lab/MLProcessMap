@@ -19,7 +19,14 @@ function initials(given: string) {
   return given
     .split(/[\s.]+/)
     .filter(Boolean)
-    .map((w) => (/^\p{Ll}/u.test(w) ? w : w.split('-').map((p) => `${p[0]}.`).join('-')))
+    .map((w) =>
+      /^\p{Ll}/u.test(w)
+        ? w
+        : w
+            .split('-')
+            .map((p) => `${p[0]}.`)
+            .join('-'),
+    )
     .join(' ');
 }
 
@@ -50,7 +57,12 @@ const sentence = (s: string) => (/[.?!]$/.test(s) ? s : `${s}.`);
 export function fullCite(r: Reference, { title = true } = {}) {
   const authors = r.authors && formatAuthors(r.authors);
   const head = title ? [authors, r.year && `(${r.year})`].filter(Boolean).join(' ') : authors;
-  const parts = [head && sentence(head), title && r.title && sentence(r.title), r.venue && (/\.$/.test(r.venue) ? `*${r.venue}*` : `*${r.venue}*.`), r.publisher && sentence(r.publisher)];
+  const parts = [
+    head && sentence(head),
+    title && r.title && sentence(r.title),
+    r.venue && (/\.$/.test(r.venue) ? `*${r.venue}*` : `*${r.venue}*.`),
+    r.publisher && sentence(r.publisher),
+  ];
   return parts.filter(Boolean).join(' ');
 }
 

@@ -33,7 +33,13 @@ const phaseName = (id: string) => l.phases.find((p) => p.id === id)?.name ?? id;
             const p = getProcess(l.prmVersion, pid, locale).data;
             return (
               <li>
-                <a class={`proc origin-${p.origin}`} href={href(locale, l.prmVersion, 'processes', pid)} data-process={pid} data-version={l.prmVersion} data-name={p.name}>
+                <a
+                  class={`proc origin-${p.origin}`}
+                  href={href(locale, l.prmVersion, 'processes', pid)}
+                  data-process={pid}
+                  data-version={l.prmVersion}
+                  data-name={p.name}
+                >
                   <span class="num">{pid}</span>
                   {!compact && <span>{p.name}</span>}
                 </a>

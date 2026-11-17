@@ -27,16 +27,22 @@ describe('shortCite', () => {
 
 describe('fullCite', () => {
   it('joins the parts that are present', () => {
-    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests', publisher: 'ACM' }))).toBe('Khan, A. (2024). A study. *Journal of Tests*. ACM.');
+    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests', publisher: 'ACM' }))).toBe(
+      'Khan, A. (2024). A study. *Journal of Tests*. ACM.',
+    );
     expect(fullCite(ref({ title: 'A study' }))).toBe('A study.');
   });
 
   it('adds no second full stop after an abbreviation or a question', () => {
-    expect(fullCite(ref({ title: 'Is it important?', venue: 'ACM Comput. Surv.', publisher: 'Springer Inc.' }))).toBe('Is it important? *ACM Comput. Surv.* Springer Inc.');
+    expect(fullCite(ref({ title: 'Is it important?', venue: 'ACM Comput. Surv.', publisher: 'Springer Inc.' }))).toBe(
+      'Is it important? *ACM Comput. Surv.* Springer Inc.',
+    );
   });
 
   it('leaves out the title and year when asked', () => {
-    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests' }), { title: false })).toBe('Khan, A. *Journal of Tests*.');
+    expect(fullCite(ref({ authors: 'Khan, Arif', year: '2024', title: 'A study', venue: 'Journal of Tests' }), { title: false })).toBe(
+      'Khan, A. *Journal of Tests*.',
+    );
   });
 });
 
