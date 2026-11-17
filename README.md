@@ -13,14 +13,14 @@ A website to explore the Process Reference Model (PRM) for Machine Learning from
 
 If you use the PRM, cite the thesis:
 
-> Crespí Tobeña, A. (2026). *A Process Reference Model for Machine Learning Applications* [Doctoral thesis, Universitat de les Illes Balears].
+> Crespí Tobeña, A. (2027). *A Process Reference Model for Machine Learning Applications* [Doctoral thesis, Universitat de les Illes Balears].
 
 ```bibtex
-@phdthesis{crespi2026prm,
+@phdthesis{crespi2027prm,
   author = {Crespí Tobeña, Antonio},
   title  = {A Process Reference Model for Machine Learning Applications},
   school = {Universitat de les Illes Balears},
-  year   = {2026}
+  year   = {2027}
 }
 ```
 
