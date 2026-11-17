@@ -13,7 +13,6 @@
     "check": "astro check",
     "check:content": "tsx scripts/check-content.ts",
     "test": "vitest run",
-    "import-thesis": "python3 scripts/import_thesis.py",
     "new-version": "node scripts/new-version.mjs"
   },
   "dependencies": {
