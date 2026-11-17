@@ -54,6 +54,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </script>
   </head>
   <body>
-    <script is:inline src="https://unpkg.com/@sveltia/cms@0.235.0/dist/sveltia-cms.js"></script>
+    <!-- The hash pins the exact file: when upgrading, recompute it with
+         curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A -->
+    <script
+      is:inline
+      src="https://unpkg.com/@sveltia/cms@0.235.0/dist/sveltia-cms.js"
+      integrity="sha384-If5TbzShP3s2h939e3J7kBmInvU7kam8ruKiGFbLSKrCo3TooLjHIh8u8GD7JTni"
+      crossorigin="anonymous"></script>
   </body>
 </html>
