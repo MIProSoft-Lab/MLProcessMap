@@ -131,54 +131,24 @@ activities:
   - P14
   - P16
 changes:
-- annotation: A-04
-  text: Número excesivo de resultados del proceso
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Resultados
-    text: consolidados de ocho a cuatro
-- annotation: A-05
-  text: El Enunciado técnico del problema no debería ser una entrada
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-06
-  text: No debería incluirse la calidad de las salidas
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Resultado (c)
-    text: características de calidad integradas en los requisitos acordados
-- annotation: A-07
-  text: Distinción entre necesidades y requisitos de las partes interesadas
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Resultados (b) y (c)
-    text: necesidades y requisitos como resultados separados
-  - kind: updated
-    target: A3
-    text: transformar las necesidades en requisitos verificables
-- annotation: A-08
-  text: Falta la visión funcional
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Propósito
-    text: incluye la visión funcional
-  - kind: updated
-    target: A2
-    text: Definir las necesidades de las partes interesadas y la visión funcional
-  - kind: updated
-    target: Salida
-    text: La Especificación de requisitos de las partes interesadas incluye la visión funcional
+- kind: updated
+  target: Resultados
+  text: consolidados de ocho a cuatro
+- kind: updated
+  target: Resultado (c)
+  text: características de calidad integradas en los requisitos acordados
+- kind: updated
+  target: Resultados (b) y (c)
+  text: necesidades y requisitos como resultados separados
+- kind: updated
+  target: A3
+  text: transformar las necesidades en requisitos verificables
+- kind: updated
+  target: Propósito
+  text: incluye la visión funcional
+- kind: updated
+  target: A2
+  text: Definir las necesidades de las partes interesadas y la visión funcional
+- kind: updated
+  target: Salida
+  text: La Especificación de requisitos de las partes interesadas incluye la visión funcional

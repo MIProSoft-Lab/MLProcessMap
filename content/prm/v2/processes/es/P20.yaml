@@ -148,19 +148,6 @@ activities:
   - P15
   - P16
 changes:
-- annotation: A-49
-  text: "Definir el tipo de despliegue: canario, A/B, azul-verde"
-  redVotes: 2
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-20
-  raisedElsewhere: true
-  text: No se define un Plan de recuperación ante desastres
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Plan de recuperación ante desastres
+- kind: added
+  target: Entrada
+  text: Plan de recuperación ante desastres

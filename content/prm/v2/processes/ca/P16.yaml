@@ -135,28 +135,14 @@ activities:
   - P8
   - P14
 changes:
-- annotation: A-41
-  text: >-
-    Tenir en compte la documentació de les iteracions anteriors abans de començar, per evitar repetir feina
-  redVotes: 3
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registre d'optimització del model de les iteracions anteriors.
-  - kind: added
-    target: A1
-    text: Revisar els resultats d'optimització anteriors
-- annotation: A-42
-  text: >-
-    Definir millor què vol dir millorar un model (latència, dispersió del rendiment entre conjunts de dades, …)
-  redVotes: 1
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Marc d'avaluació.
-  - kind: added
-    text: l'A1 defineix la millora que es pretén a partir de les seves mètriques
+- kind: added
+  target: Entrada
+  text: Registre d'optimització del model de les iteracions anteriors.
+- kind: added
+  target: A1
+  text: Revisar els resultats d'optimització anteriors
+- kind: added
+  target: Entrada
+  text: Marc d'avaluació.
+- kind: added
+  text: l'A1 defineix la millora que es pretén a partir de les seves mètriques

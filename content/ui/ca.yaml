@@ -83,8 +83,6 @@ process:
   changes: Canvis en aquesta versió
   changesFrom: "Canvis respecte a {version}, la versió anterior del PRM."
   contents: Contingut
-  annotation: Anotació
-  votes: Vots
   previous: Procés anterior
   next: Procés següent
   outcomeServedBy: Productes de treball que contribueixen a aquest resultat

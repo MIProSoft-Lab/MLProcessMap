@@ -191,25 +191,6 @@ activities:
   - krossOrientingFramingBridging2021
   - wongsuphasawatGoalsProcessChallenges2019
 changes:
-- annotation: A-30
-  text: "Falta contexto: ¿cómo debería analizarse una tabla con 300 columnas?"
-  redVotes: 0
-  yellowVotes: 3
-  decision: rejected
-  changes: []
-- annotation: A-31
-  text: La A2, la A3 y la A4 deben hacerse de forma iterativa tras limpiar los valores atípicos
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-27
-  raisedElsewhere: true
-  text: Identificar la clave primaria desde el principio
-  redVotes: 4
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registro de recopilación de datos
+- kind: added
+  target: Entrada
+  text: Registro de recopilación de datos

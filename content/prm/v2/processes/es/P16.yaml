@@ -140,28 +140,14 @@ activities:
   - P8
   - P14
 changes:
-- annotation: A-41
-  text: Considerar la documentación de las iteraciones anteriores antes de empezar, para no repetir trabajo
-  redVotes: 3
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registro de optimización del modelo de las iteraciones anteriores.
-  - kind: added
-    target: A1
-    text: Revisar los resultados de optimización anteriores
-- annotation: A-42
-  text: >-
-    Definir mejor qué significa mejorar un modelo (latencia, dispersión del rendimiento entre conjuntos de
-    datos, …)
-  redVotes: 1
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Marco de evaluación.
-  - kind: added
-    text: La A1 define la mejora que se persigue a partir de sus métricas
+- kind: added
+  target: Entrada
+  text: Registro de optimización del modelo de las iteraciones anteriores.
+- kind: added
+  target: A1
+  text: Revisar los resultados de optimización anteriores
+- kind: added
+  target: Entrada
+  text: Marco de evaluación.
+- kind: added
+  text: La A1 define la mejora que se persigue a partir de sus métricas

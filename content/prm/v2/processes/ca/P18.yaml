@@ -105,10 +105,3 @@ activities:
   literature:
   - ISO12207
   - ISO5338
-changes:
-- annotation: A-44
-  text: Implementar revisions entre iguals per a la documentació tècnica
-  redVotes: 0
-  yellowVotes: 3
-  decision: rejected
-  changes: []

@@ -132,14 +132,8 @@ activities:
   - P13
   - P14
 changes:
-- annotation: A-43
-  text: Fer també proves d'estrès
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Fer proves d'estrès.
-  - kind: updated
-    text: el resultat (d) i l'Informe de validació inclouen les proves d'estrès
+- kind: added
+  target: A5
+  text: Fer proves d'estrès.
+- kind: updated
+  text: el resultat (d) i l'Informe de validació inclouen les proves d'estrès

@@ -137,16 +137,9 @@ activities:
   - hutchinsonAccountabilityMachineLearning2021
   - haliburtonUncoveringLabelerBias2025
 changes:
-- annotation: A-35
-  text: El proceso no está claro; el objetivo se define al inicio del proyecto
-  redVotes: 2
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: >-
-      A1 limitada a la estrategia de etiquetado, con los valores objetivo tomados de la Especificación de
-      requisitos de datos.
-  - kind: added
-    target: A2
-    text: Diseñar las pautas de etiquetado
+- kind: updated
+  text: >-
+    A1 limitada a la estrategia de etiquetado, con los valores objetivo tomados de la Especificación de requisitos de datos.
+- kind: added
+  target: A2
+  text: Diseñar las pautas de etiquetado

@@ -203,40 +203,20 @@ activities:
   literature:
   - ISO12207
 changes:
-- annotation: A-48
-  text: L'A4 (preparació operacional) és un punt molt interessant
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: – (es manté com a A7)
-- annotation: A-45
-  raisedElsewhere: true
-  text: Integrar la validació de vulnerabilitats a la validació del sistema
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Verificar la seguretat
-- annotation: –
-  text: >-
-    Reorientació de la Verificació del sistema i la Validació del sistema, arran de la discussió del taller
-  redVotes: null
-  yellowVotes: null
-  decision: –
-  changes:
-  - kind: updated
-    text: Propòsit i resultats.
-  - kind: added
-    target: A1
-    text: Preparar la verificació.
-  - kind: updated
-    text: A2–A4 fusionades amb el *Procés de validació del sistema*.
-  - kind: added
-    target: A6
-    text: Verificar l'entorn i les dependències.
-  - kind: added
-    text: Sis entrades
+- kind: updated
+  text: – (es manté com a A7)
+- kind: added
+  target: A5
+  text: Verificar la seguretat
+- kind: updated
+  text: Propòsit i resultats.
+- kind: added
+  target: A1
+  text: Preparar la verificació.
+- kind: updated
+  text: A2–A4 fusionades amb el *Procés de validació del sistema*.
+- kind: added
+  target: A6
+  text: Verificar l'entorn i les dependències.
+- kind: added
+  text: Sis entrades

@@ -130,14 +130,8 @@ activities:
   - P13
   - P14
 changes:
-- annotation: A-43
-  text: Also perform stress testing
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Conduct stress testing.
-  - kind: updated
-    text: Outcome (d) and Validation Report include stress testing
+- kind: added
+  target: A5
+  text: Conduct stress testing.
+- kind: updated
+  text: Outcome (d) and Validation Report include stress testing

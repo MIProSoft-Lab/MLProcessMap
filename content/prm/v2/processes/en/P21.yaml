@@ -127,44 +127,18 @@ activities:
     between the validation results and the stakeholder requirements, and make the performance observed
     during validation available as the reference for continuous validation.
 changes:
-- annotation: A-45
-  text: Integrate vulnerability validation into system validation
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Verify security in the *System Verification Process*.
-  - kind: updated
-    text: A4 includes security concerns of stakeholders
-- annotation: A-46
-  text: Technical validation of code quality
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-47
-  text: Validate the percentage of test coverage
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: –
-  text: >-
-    Refocus of System Verification and System Validation, following an informal discussion during the
-    workshop
-  redVotes: null
-  yellowVotes: null
-  decision: –
-  changes:
-  - kind: updated
-    text: Purpose, outcomes, inputs, A1, A2, A5.
-  - kind: added
-    target: A3
-    text: Validate business objectives.
-  - kind: added
-    target: A4
-    text: Confirm fitness for use.
-  - kind: removed
-    text: Functional, dependency, failure, and rollback tests moved to System Verification
+- kind: added
+  target: A5
+  text: Verify security in the *System Verification Process*.
+- kind: updated
+  text: A4 includes security concerns of stakeholders
+- kind: updated
+  text: Purpose, outcomes, inputs, A1, A2, A5.
+- kind: added
+  target: A3
+  text: Validate business objectives.
+- kind: added
+  target: A4
+  text: Confirm fitness for use.
+- kind: removed
+  text: Functional, dependency, failure, and rollback tests moved to System Verification

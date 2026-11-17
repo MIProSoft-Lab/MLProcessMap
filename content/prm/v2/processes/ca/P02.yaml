@@ -129,54 +129,24 @@ activities:
   - P14
   - P16
 changes:
-- annotation: A-04
-  text: Nombre excessiu de resultats del procés
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Resultats
-    text: consolidats de vuit a quatre
-- annotation: A-05
-  text: L'Enunciat tècnic del problema no hauria de ser una entrada
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-06
-  text: No s'hauria d'incloure la qualitat de la sortida
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Resultat (c)
-    text: característiques de qualitat integrades en els requisits acordats
-- annotation: A-07
-  text: Distinció entre necessitats i requisits de les parts interessades
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Resultats (b) i (c)
-    text: necessitats i requisits com a resultats separats
-  - kind: updated
-    target: A3
-    text: transformar les necessitats en requisits verificables
-- annotation: A-08
-  text: Hi manca la visió funcional
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Propòsit
-    text: inclou la visió funcional
-  - kind: updated
-    target: A2
-    text: Definir les necessitats de les parts interessades i la visió funcional
-  - kind: updated
-    target: Sortida
-    text: l'Especificació de requisits de les parts interessades inclou la visió funcional
+- kind: updated
+  target: Resultats
+  text: consolidats de vuit a quatre
+- kind: updated
+  target: Resultat (c)
+  text: característiques de qualitat integrades en els requisits acordats
+- kind: updated
+  target: Resultats (b) i (c)
+  text: necessitats i requisits com a resultats separats
+- kind: updated
+  target: A3
+  text: transformar les necessitats en requisits verificables
+- kind: updated
+  target: Propòsit
+  text: inclou la visió funcional
+- kind: updated
+  target: A2
+  text: Definir les necessitats de les parts interessades i la visió funcional
+- kind: updated
+  target: Sortida
+  text: l'Especificació de requisits de les parts interessades inclou la visió funcional

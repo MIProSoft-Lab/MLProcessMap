@@ -86,8 +86,6 @@ process:
   changes: Changes in this version
   changesFrom: "Changes from {version}, the previous version of the PRM."
   contents: Contents
-  annotation: Annotation
-  votes: Votes
   previous: Previous process
   next: Next process
   outcomeServedBy: Work products that support this outcome

@@ -180,32 +180,14 @@ activities:
   - P13
   - P16
 changes:
-- annotation: A-01
-  text: Les pràctiques base requereixen nivells de traçabilitat
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes:
-  - kind: updated
-    text: – (ja coberta pel resultat (c) i l'A6, ara (d) i A7)
-- annotation: A-02
-  text: Rellevància dels costs d'entrenament i d'operació
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A6
-    text: Analitzar la viabilitat computacional i operacional
-  - kind: added
-    target: Sortida
-    text: Registre de restriccions de cost i recursos
-  - kind: added
-    target: Resultat (c)
-    text: restriccions de cost computacional i operacional de la classe de solució escollida
-- annotation: A-03
-  text: La definició del procés és genèrica
-  redVotes: 0
-  yellowVotes: 1
-  decision: rejected
-  changes: []
+- kind: updated
+  text: – (ja coberta pel resultat (c) i l'A6, ara (d) i A7)
+- kind: added
+  target: A6
+  text: Analitzar la viabilitat computacional i operacional
+- kind: added
+  target: Sortida
+  text: Registre de restriccions de cost i recursos
+- kind: added
+  target: Resultat (c)
+  text: restriccions de cost computacional i operacional de la classe de solució escollida

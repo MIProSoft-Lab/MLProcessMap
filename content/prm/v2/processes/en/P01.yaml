@@ -175,32 +175,14 @@ activities:
   - P13
   - P16
 changes:
-- annotation: A-01
-  text: Base practices require traceability levels
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes:
-  - kind: updated
-    text: – (already covered by outcome (c) and A6, now (d) and A7)
-- annotation: A-02
-  text: Relevance of training and operational costs
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A6
-    text: Analyze computational and operational feasibility
-  - kind: added
-    target: Output
-    text: Cost and Resource Constraint Record
-  - kind: added
-    target: Outcome (c)
-    text: computational and operational cost constraints for the selected solution class
-- annotation: A-03
-  text: The process definition is generic
-  redVotes: 0
-  yellowVotes: 1
-  decision: rejected
-  changes: []
+- kind: updated
+  text: – (already covered by outcome (c) and A6, now (d) and A7)
+- kind: added
+  target: A6
+  text: Analyze computational and operational feasibility
+- kind: added
+  target: Output
+  text: Cost and Resource Constraint Record
+- kind: added
+  target: Outcome (c)
+  text: computational and operational cost constraints for the selected solution class

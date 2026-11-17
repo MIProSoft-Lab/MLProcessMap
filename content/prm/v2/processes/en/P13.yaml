@@ -131,15 +131,9 @@ activities:
   - hutchinsonAccountabilityMachineLearning2021
   - haliburtonUncoveringLabelerBias2025
 changes:
-- annotation: A-35
-  text: The process is not clear; the target is defined at the start of the project
-  redVotes: 2
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: >-
-      A1 limited to the labeling strategy, with target values taken from the Data Requirements Specification.
-  - kind: added
-    target: A2
-    text: Design labeling guidelines
+- kind: updated
+  text: >-
+    A1 limited to the labeling strategy, with target values taken from the Data Requirements Specification.
+- kind: added
+  target: A2
+  text: Design labeling guidelines

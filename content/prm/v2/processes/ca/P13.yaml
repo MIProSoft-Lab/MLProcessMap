@@ -135,16 +135,9 @@ activities:
   - hutchinsonAccountabilityMachineLearning2021
   - haliburtonUncoveringLabelerBias2025
 changes:
-- annotation: A-35
-  text: El procés no és clar; l'objectiu es defineix al començament del projecte
-  redVotes: 2
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: >-
-      L'A1 es limita a l'estratègia d'etiquetatge, amb els valors objectiu presos de l'Especificació de
-      requisits de dades.
-  - kind: added
-    target: A2
-    text: Dissenyar les pautes d'etiquetatge
+- kind: updated
+  text: >-
+    L'A1 es limita a l'estratègia d'etiquetatge, amb els valors objectiu presos de l'Especificació de requisits de dades.
+- kind: added
+  target: A2
+  text: Dissenyar les pautes d'etiquetatge

@@ -123,26 +123,7 @@ activities:
   - P9
   - P10
 changes:
-- annotation: A-38
-  text: Remarca la importància de l'A3
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: updated
-    text: l'A3 s'ha reformulat arran dels comentaris fets durant la pausa
-- annotation: A-39
-  text: >-
-    L'*Entrenament del model* s'hauria de fer dins la *Selecció del model* (15.1, després 14.x, després 15.x)
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-40
-  text: Documentar també per què un model no s'ha acabat emprant
-  redVotes: 2
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    text: l'A5 i el Registre d'entrenament del model inclouen la justificació dels experiments descartats
+- kind: updated
+  text: l'A3 s'ha reformulat arran dels comentaris fets durant la pausa
+- kind: updated
+  text: l'A5 i el Registre d'entrenament del model inclouen la justificació dels experiments descartats

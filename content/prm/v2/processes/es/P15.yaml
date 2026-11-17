@@ -124,28 +124,8 @@ activities:
   - P9
   - P10
 changes:
-- annotation: A-38
-  text: Destaca la importancia de la A3
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: updated
-    text: La A3 se ha reformulado a partir de los comentarios hechos durante la pausa
-- annotation: A-39
+- kind: updated
+  text: La A3 se ha reformulado a partir de los comentarios hechos durante la pausa
+- kind: updated
   text: >-
-    El *Entrenamiento del modelo* debería hacerse dentro de la *Selección del modelo* (15.1, luego 14.x, luego
-    15.x)
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-40
-  text: Documentar también por qué un modelo no se acabó usando
-  redVotes: 2
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    text: >-
-      La A5 y el Registro de entrenamiento del modelo incluyen la justificación de los experimentos descartados
+    La A5 y el Registro de entrenamiento del modelo incluyen la justificación de los experimentos descartados

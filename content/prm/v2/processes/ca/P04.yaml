@@ -212,63 +212,39 @@ activities:
   literature:
   - sculleyHiddenTechnicalDebt2015
 changes:
-- annotation: A-18
-  text: Hi manquen els acords de nivell de servei
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Especificació de requisits d'arquitectura
-  - kind: updated
-    target: A1
-    text: límits derivats dels requisits d'arquitectura
-  - kind: updated
-    target: Resultat (c)
-    text: inclou els objectius de nivell de servei
-- annotation: A-19
-  text: Hi manca l'anàlisi de costs
-  redVotes: 3
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registre de restriccions de cost i recursos
-  - kind: updated
-    target: A4
-    text: verificar la pila tecnològica amb les restriccions de cost
-  - kind: updated
-    target: Sortida
-    text: la Documentació de l'arquitectura del sistema inclou els costs d'infraestructura
-  - kind: added
-    target: Resultat (f)
-    text: línia de base de cost d'infraestructura
-- annotation: A-20
-  text: No es defineix cap Pla de recuperació davant desastres
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Planificar la resiliència i la recuperació
-  - kind: added
-    target: Sortida
-    text: Pla de recuperació davant desastres
-  - kind: updated
-    target: Propòsit i resultat (e)
-    text: mecanismes de recuperació
-- annotation: A-21
-  text: No hi ha cap model formal de gestió de dependències per a dades, models i programari
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A3
-    text: gestió de dependències al llarg del cicle de vida
-  - kind: added
-    target: Resultat (g)
-    text: gestió de dependències definida
+- kind: added
+  target: Entrada
+  text: Especificació de requisits d'arquitectura
+- kind: updated
+  target: A1
+  text: límits derivats dels requisits d'arquitectura
+- kind: updated
+  target: Resultat (c)
+  text: inclou els objectius de nivell de servei
+- kind: added
+  target: Entrada
+  text: Registre de restriccions de cost i recursos
+- kind: updated
+  target: A4
+  text: verificar la pila tecnològica amb les restriccions de cost
+- kind: updated
+  target: Sortida
+  text: la Documentació de l'arquitectura del sistema inclou els costs d'infraestructura
+- kind: added
+  target: Resultat (f)
+  text: línia de base de cost d'infraestructura
+- kind: added
+  target: A5
+  text: Planificar la resiliència i la recuperació
+- kind: added
+  target: Sortida
+  text: Pla de recuperació davant desastres
+- kind: updated
+  target: Propòsit i resultat (e)
+  text: mecanismes de recuperació
+- kind: updated
+  target: A3
+  text: gestió de dependències al llarg del cicle de vida
+- kind: added
+  target: Resultat (g)
+  text: gestió de dependències definida

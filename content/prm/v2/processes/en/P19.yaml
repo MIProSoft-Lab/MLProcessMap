@@ -200,40 +200,20 @@ activities:
   literature:
   - ISO12207
 changes:
-- annotation: A-48
-  text: A4 (operational readiness) is a very interesting point
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: – (kept as A7)
-- annotation: A-45
-  raisedElsewhere: true
-  text: Integrate vulnerability validation into system validation
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Verify security
-- annotation: –
-  text: >-
-    Refocus of System Verification and System Validation, following the workshop discussion
-  redVotes: null
-  yellowVotes: null
-  decision: –
-  changes:
-  - kind: updated
-    text: Purpose and outcomes.
-  - kind: added
-    target: A1
-    text: Prepare verification.
-  - kind: updated
-    text: A2–A4 merged with *System Validation Process*.
-  - kind: added
-    target: A6
-    text: Verify environment and dependencies.
-  - kind: added
-    text: Six inputs
+- kind: updated
+  text: – (kept as A7)
+- kind: added
+  target: A5
+  text: Verify security
+- kind: updated
+  text: Purpose and outcomes.
+- kind: added
+  target: A1
+  text: Prepare verification.
+- kind: updated
+  text: A2–A4 merged with *System Validation Process*.
+- kind: added
+  target: A6
+  text: Verify environment and dependencies.
+- kind: added
+  text: Six inputs

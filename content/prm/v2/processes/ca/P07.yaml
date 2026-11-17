@@ -161,43 +161,30 @@ activities:
   - P13
   - P15
 changes:
-- annotation: A-23
-  text: >-
-    Hi manquen les sortides del *Procés de definició de requisits del sistema* com a entrades del procés
-  redVotes: 0
-  yellowVotes: 4
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Especificació de requisits de dades
-  - kind: added
-    target: Entrada
-    text: Especificació de requisits d'arquitectura
-  - kind: updated
-    target: A1
-    text: objectius derivats dels objectius de nivell de servei
-  - kind: updated
-    target: A2
-    text: mètriques basades en els requisits de dades
-- annotation: A-24
-  text: Hi manquen mètriques d'entrenament, de costs i bancs de proves competitius
-  redVotes: 2
-  yellowVotes: 3
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registre de restriccions de cost i recursos
-  - kind: updated
-    target: A3
-    text: Definir les mètriques de model i d'entrenament
-  - kind: updated
-    target: A4
-    text: bancs de proves de l'estat de l'art
-  - kind: added
-    target: A5
-    text: Definir la verificació de cost i de recursos
-  - kind: updated
-    target: Propòsit, resultat (b) i sortida
-    text: el Marc d'avaluació inclou mètriques d'entrenament i de cost
+- kind: added
+  target: Entrada
+  text: Especificació de requisits de dades
+- kind: added
+  target: Entrada
+  text: Especificació de requisits d'arquitectura
+- kind: updated
+  target: A1
+  text: objectius derivats dels objectius de nivell de servei
+- kind: updated
+  target: A2
+  text: mètriques basades en els requisits de dades
+- kind: added
+  target: Entrada
+  text: Registre de restriccions de cost i recursos
+- kind: updated
+  target: A3
+  text: Definir les mètriques de model i d'entrenament
+- kind: updated
+  target: A4
+  text: bancs de proves de l'estat de l'art
+- kind: added
+  target: A5
+  text: Definir la verificació de cost i de recursos
+- kind: updated
+  target: Propòsit, resultat (b) i sortida
+  text: el Marc d'avaluació inclou mètriques d'entrenament i de cost

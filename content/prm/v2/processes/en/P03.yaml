@@ -166,102 +166,38 @@ activities:
   - P8
   - P9
 changes:
-- annotation: A-09
-  text: Insufficient process inputs (e.g., context)
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Technical Problem Statement
-  - kind: added
-    target: Input
-    text: Cost and Resource Constraint Record
-- annotation: A-10
-  text: Training and operational costs as a process output
-  redVotes: 1
-  yellowVotes: 1
-  decision: partial
-  changes:
-  - kind: updated
-    target: A4
-    text: technical cost baseline
-  - kind: updated
-    target: Output
-    text: System Requirements Specification includes the cost baseline
-- annotation: A-11
-  text: The process name lacks an active verb
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes:
-  - kind: updated
-    text: – (print error in the workshop materials)
-- annotation: A-12
-  text: The process lacks a technical perspective
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A1
-    text: Review technical needs and stakeholder requirements
-- annotation: A-13
-  text: Missing process output for A2
-  redVotes: 0
-  yellowVotes: 1
-  decision: rejected
-  changes: []
-- annotation: A-14
-  text: Delete A2
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-15
-  text: Consolidate A2, A3, and A5 into a single activity
-  redVotes: 0
-  yellowVotes: 2
-  decision: partial
-  changes:
-  - kind: updated
-    target: A5
-    text: Define architecture requirements
-  - kind: added
-    target: Output
-    text: Architecture Requirements Specification
-- annotation: A-16
+- kind: added
+  target: Input
+  text: Technical Problem Statement
+- kind: added
+  target: Input
+  text: Cost and Resource Constraint Record
+- kind: updated
+  target: A4
+  text: technical cost baseline
+- kind: updated
+  target: Output
+  text: System Requirements Specification includes the cost baseline
+- kind: updated
+  text: – (print error in the workshop materials)
+- kind: updated
+  target: A1
+  text: Review technical needs and stakeholder requirements
+- kind: updated
+  target: A5
+  text: Define architecture requirements
+- kind: added
+  target: Output
+  text: Architecture Requirements Specification
+- kind: updated
+  target: A6
+  text: scope limited to system requirements
+- kind: updated
+  target: A5
   text: >-
-    Redundancy between A3 of the *Stakeholder Needs and Requirements Definition Process* and A6 of the
-    *System Requirements Definition Process*
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: updated
-    target: A6
-    text: scope limited to system requirements
-- annotation: A-17
-  text: >-
-    Feedback on system requirements (Chief Technology Officer, CTO, to Operations transition)
-  redVotes: 2
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A5
-    text: >-
-      Service Level Indicators (SLIs) and Service Level Objectives (SLOs) as an operational baseline
-- annotation: A-18
-  raisedElsewhere: true
-  text: Missing Service Level Agreements
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: updated
-    text: A5 defines the SLIs and SLOs the architecture has to support
-  - kind: added
-    target: Output
-    text: Architecture Requirements Specification
+    Service Level Indicators (SLIs) and Service Level Objectives (SLOs) as an operational baseline
+- kind: updated
+  text: A5 defines the SLIs and SLOs the architecture has to support
+- kind: added
+  target: Output
+  text: Architecture Requirements Specification

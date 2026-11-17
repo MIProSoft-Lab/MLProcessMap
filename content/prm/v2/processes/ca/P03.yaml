@@ -173,102 +173,38 @@ activities:
   - P8
   - P9
 changes:
-- annotation: A-09
-  text: Entrades del procés insuficients (p. ex., el context)
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Enunciat tècnic del problema
-  - kind: added
-    target: Entrada
-    text: Registre de restriccions de cost i recursos
-- annotation: A-10
-  text: Els costs d'entrenament i d'operació com a sortida del procés
-  redVotes: 1
-  yellowVotes: 1
-  decision: partial
-  changes:
-  - kind: updated
-    target: A4
-    text: línia de base de cost tècnic
-  - kind: updated
-    target: Sortida
-    text: l'Especificació de requisits del sistema inclou la línia de base de cost
-- annotation: A-11
-  text: Al nom del procés li manca un verb actiu
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes:
-  - kind: updated
-    text: – (errada d'impressió als materials del taller)
-- annotation: A-12
-  text: Al procés li manca una perspectiva tècnica
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A1
-    text: Revisar les necessitats tècniques i els requisits de les parts interessades
-- annotation: A-13
-  text: Hi manca una sortida del procés per a l'A2
-  redVotes: 0
-  yellowVotes: 1
-  decision: rejected
-  changes: []
-- annotation: A-14
-  text: Eliminar l'A2
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-15
-  text: Consolidar l'A2, l'A3 i l'A5 en una sola activitat
-  redVotes: 0
-  yellowVotes: 2
-  decision: partial
-  changes:
-  - kind: updated
-    target: A5
-    text: Definir els requisits d'arquitectura
-  - kind: added
-    target: Sortida
-    text: Especificació de requisits d'arquitectura
-- annotation: A-16
+- kind: added
+  target: Entrada
+  text: Enunciat tècnic del problema
+- kind: added
+  target: Entrada
+  text: Registre de restriccions de cost i recursos
+- kind: updated
+  target: A4
+  text: línia de base de cost tècnic
+- kind: updated
+  target: Sortida
+  text: l'Especificació de requisits del sistema inclou la línia de base de cost
+- kind: updated
+  text: – (errada d'impressió als materials del taller)
+- kind: updated
+  target: A1
+  text: Revisar les necessitats tècniques i els requisits de les parts interessades
+- kind: updated
+  target: A5
+  text: Definir els requisits d'arquitectura
+- kind: added
+  target: Sortida
+  text: Especificació de requisits d'arquitectura
+- kind: updated
+  target: A6
+  text: abast limitat als requisits del sistema
+- kind: updated
+  target: A5
   text: >-
-    Redundància entre l'A3 del *Procés de definició de necessitats i requisits de les parts interessades* i l'A6
-    del *Procés de definició de requisits del sistema*
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: updated
-    target: A6
-    text: abast limitat als requisits del sistema
-- annotation: A-17
-  text: >-
-    Retroalimentació sobre els requisits del sistema (Director de tecnologia, CTO, a la transició a Operacions)
-  redVotes: 2
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A5
-    text: >-
-      Indicadors de nivell de servei (SLI) i objectius de nivell de servei (SLO) com a línia de base operacional
-- annotation: A-18
-  raisedElsewhere: true
-  text: Hi manquen els acords de nivell de servei
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: updated
-    text: l'A5 defineix els SLI i els SLO que l'arquitectura ha de suportar
-  - kind: added
-    target: Sortida
-    text: Especificació de requisits d'arquitectura
+    Indicadors de nivell de servei (SLI) i objectius de nivell de servei (SLO) com a línia de base operacional
+- kind: updated
+  text: l'A5 defineix els SLI i els SLO que l'arquitectura ha de suportar
+- kind: added
+  target: Sortida
+  text: Especificació de requisits d'arquitectura

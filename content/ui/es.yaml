@@ -83,8 +83,6 @@ process:
   changes: Cambios en esta versión
   changesFrom: "Cambios respecto a {version}, la versión anterior del PRM."
   contents: Contenido
-  annotation: Anotación
-  votes: Votos
   previous: Proceso anterior
   next: Proceso siguiente
   outcomeServedBy: Productos de trabajo que contribuyen a este resultado

@@ -149,19 +149,6 @@ activities:
   - P15
   - P16
 changes:
-- annotation: A-49
-  text: 'Definir el tipus de desplegament: canari, A/B, blau-verd'
-  redVotes: 2
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-20
-  raisedElsewhere: true
-  text: No es defineix cap Pla de recuperació davant desastres
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Pla de recuperació davant desastres
+- kind: added
+  target: Entrada
+  text: Pla de recuperació davant desastres

@@ -146,19 +146,6 @@ activities:
   - P15
   - P16
 changes:
-- annotation: A-49
-  text: 'Define the deployment type: canary, A/B, blue-green'
-  redVotes: 2
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-20
-  raisedElsewhere: true
-  text: A Disaster Recovery Plan isn't defined
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Disaster Recovery Plan
+- kind: added
+  target: Input
+  text: Disaster Recovery Plan

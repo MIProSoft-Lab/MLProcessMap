@@ -129,30 +129,12 @@ activities:
   - khanOverviewETLTechniques2024
   - yuliantoExtractTransformLoad2019
 changes:
-- annotation: A-27
-  text: Identify the primary key from the very beginning
-  redVotes: 4
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A1
-    text: identify the unique identifiers needed to link records
-  - kind: updated
-    target: Output
-    text: Data Collection Record includes the identifiers
-- annotation: A-28
-  text: 'External data scraping: volatility, legality, and access protocols'
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Manage external source volatility and access protocols
-- annotation: A-29
-  text: Documentation can also be used as an input to create agents
-  redVotes: 0
-  yellowVotes: 3
-  decision: rejected
-  changes: []
+- kind: updated
+  target: A1
+  text: identify the unique identifiers needed to link records
+- kind: updated
+  target: Output
+  text: Data Collection Record includes the identifiers
+- kind: added
+  target: A5
+  text: Manage external source volatility and access protocols

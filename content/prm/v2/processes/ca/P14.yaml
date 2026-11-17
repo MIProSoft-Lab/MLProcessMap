@@ -115,38 +115,18 @@ activities:
   - P11
   - P14
 changes:
-- annotation: A-36
-  text: >-
-    S'hauria de definir el procés per emprar les dades disponibles per avaluar cada model candidat
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Marc d'avaluació.
-  - kind: updated
-    text: l'A1 estableix els criteris a partir del Marc d'avaluació
-- annotation: A-37
-  text: Hi hauria d'haver dades d'entrenament disponibles per seleccionar un model
-  redVotes: 0
-  yellowVotes: 4
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrades
-    text: Conjunt de dades etiquetat i Informe d'anàlisi exploratòria de dades
-  - kind: updated
-    text: l'A3 deixa de banda les dades reservades per a l'avaluació final
-- annotation: A-02
-  raisedElsewhere: true
-  text: Rellevància dels costs d'entrenament i d'operació
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registre de restriccions de cost i recursos
-  - kind: updated
-    text: l'A1 té en compte les restriccions de cost i recursos
+- kind: added
+  target: Entrada
+  text: Marc d'avaluació.
+- kind: updated
+  text: l'A1 estableix els criteris a partir del Marc d'avaluació
+- kind: added
+  target: Entrades
+  text: Conjunt de dades etiquetat i Informe d'anàlisi exploratòria de dades
+- kind: updated
+  text: l'A3 deixa de banda les dades reservades per a l'avaluació final
+- kind: added
+  target: Entrada
+  text: Registre de restriccions de cost i recursos
+- kind: updated
+  text: l'A1 té en compte les restriccions de cost i recursos

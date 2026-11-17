@@ -127,54 +127,24 @@ activities:
   - P14
   - P16
 changes:
-- annotation: A-04
-  text: Excessive number of process outcomes
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Outcomes
-    text: consolidated from eight to four
-- annotation: A-05
-  text: The Technical Problem Statement shouldn't be an input
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-06
-  text: Output quality shouldn't be included
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Outcome (c)
-    text: quality characteristics integrated into the agreed requirements
-- annotation: A-07
-  text: Distinction between stakeholder needs and requirements
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Outcomes (b) and (c)
-    text: needs and requirements as separate results
-  - kind: updated
-    target: A3
-    text: transform needs into verifiable requirements
-- annotation: A-08
-  text: Missing functional vision
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: Purpose
-    text: includes the functional vision
-  - kind: updated
-    target: A2
-    text: Define stakeholder needs and functional vision
-  - kind: updated
-    target: Output
-    text: Stakeholder Requirements Specification includes the functional vision
+- kind: updated
+  target: Outcomes
+  text: consolidated from eight to four
+- kind: updated
+  target: Outcome (c)
+  text: quality characteristics integrated into the agreed requirements
+- kind: updated
+  target: Outcomes (b) and (c)
+  text: needs and requirements as separate results
+- kind: updated
+  target: A3
+  text: transform needs into verifiable requirements
+- kind: updated
+  target: Purpose
+  text: includes the functional vision
+- kind: updated
+  target: A2
+  text: Define stakeholder needs and functional vision
+- kind: updated
+  target: Output
+  text: Stakeholder Requirements Specification includes the functional vision

@@ -134,14 +134,8 @@ activities:
   - P13
   - P14
 changes:
-- annotation: A-43
-  text: Realizar también pruebas de estrés
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Realizar pruebas de estrés.
-  - kind: updated
-    text: El resultado (d) y el Informe de validación incluyen las pruebas de estrés
+- kind: added
+  target: A5
+  text: Realizar pruebas de estrés.
+- kind: updated
+  text: El resultado (d) y el Informe de validación incluyen las pruebas de estrés

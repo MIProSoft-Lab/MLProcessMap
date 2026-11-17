@@ -137,36 +137,14 @@ activities:
   primaryStudies:
   - P3
 changes:
-- annotation: A-50
-  text: >-
-    Falta un proceso entre el *Proceso de definición de métricas de verificación y benchmarks* y el *Proceso
-    de retirada* relativo a las métricas de esperanza de vida del modelo
-  redVotes: 1
-  yellowVotes: 2
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Marco de evaluación.
-  - kind: updated
-    text: La A1 fundamenta la decisión en métricas
-- annotation: A-51
-  text: Diferenciar la justificación para retirar componentes concretos
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    text: El propósito y los resultados (b, c) se refieren a los componentes.
-  - kind: updated
-    text: A1
-- annotation: A-52
-  text: >-
-    Abordar las implicaciones de la sustitución parcial de componentes (alcance, gestión del cambio, coste,
-    riesgos, …)
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: La A2 evalúa las implicaciones de la retirada o sustitución parcial
+- kind: added
+  target: Entrada
+  text: Marco de evaluación.
+- kind: updated
+  text: La A1 fundamenta la decisión en métricas
+- kind: updated
+  text: El propósito y los resultados (b, c) se refieren a los componentes.
+- kind: updated
+  text: A1
+- kind: updated
+  text: La A2 evalúa las implicaciones de la retirada o sustitución parcial

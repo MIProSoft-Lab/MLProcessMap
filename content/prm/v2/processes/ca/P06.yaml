@@ -111,30 +111,24 @@ activities:
   - kazman1998
   - siebert2022
 changes:
-- annotation: A-22
-  text: La definició dels resultats, les activitats i les entrades és massa abstracta
-  redVotes: 1
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Especificació de requisits de dades
-  - kind: updated
-    target: Propòsit
-    text: inclou els compromisos entre enfocaments tècnics
-  - kind: updated
-    target: Resultats (a) i (b)
-    text: dependències de dades i estudis de compromisos
-  - kind: updated
-    target: A2
-    text: anomena els elements d'aprenentatge automàtic
-  - kind: updated
-    target: A3
-    text: cadenes de dependència de dades i estabilitat
-  - kind: updated
-    target: A4
-    text: complexitat del model i cost operacional
-  - kind: updated
-    target: Sortida
-    text: contingut de l'Informe d'anàlisi del sistema
+- kind: added
+  target: Entrada
+  text: Especificació de requisits de dades
+- kind: updated
+  target: Propòsit
+  text: inclou els compromisos entre enfocaments tècnics
+- kind: updated
+  target: Resultats (a) i (b)
+  text: dependències de dades i estudis de compromisos
+- kind: updated
+  target: A2
+  text: anomena els elements d'aprenentatge automàtic
+- kind: updated
+  target: A3
+  text: cadenes de dependència de dades i estabilitat
+- kind: updated
+  target: A4
+  text: complexitat del model i cost operacional
+- kind: updated
+  target: Sortida
+  text: contingut de l'Informe d'anàlisi del sistema

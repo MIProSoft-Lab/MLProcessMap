@@ -180,32 +180,14 @@ activities:
   - P13
   - P16
 changes:
-- annotation: A-01
-  text: Las prácticas base requieren niveles de trazabilidad
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes:
-  - kind: updated
-    text: – (ya cubierto por el resultado (c) y la A6, ahora (d) y A7)
-- annotation: A-02
-  text: Relevancia de los costes de entrenamiento y operación
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A6
-    text: Analizar la viabilidad computacional y operativa
-  - kind: added
-    target: Salida
-    text: Registro de restricciones de coste y recursos
-  - kind: added
-    target: Resultado (c)
-    text: restricciones de coste computacional y operativo de la clase de solución seleccionada
-- annotation: A-03
-  text: La definición del proceso es genérica
-  redVotes: 0
-  yellowVotes: 1
-  decision: rejected
-  changes: []
+- kind: updated
+  text: – (ya cubierto por el resultado (c) y la A6, ahora (d) y A7)
+- kind: added
+  target: A6
+  text: Analizar la viabilidad computacional y operativa
+- kind: added
+  target: Salida
+  text: Registro de restricciones de coste y recursos
+- kind: added
+  target: Resultado (c)
+  text: restricciones de coste computacional y operativo de la clase de solución seleccionada

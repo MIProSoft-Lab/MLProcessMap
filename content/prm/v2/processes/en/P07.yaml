@@ -155,43 +155,30 @@ activities:
   - P13
   - P15
 changes:
-- annotation: A-23
-  text: >-
-    Missing outputs from the *System Requirements Definition Process* as process inputs
-  redVotes: 0
-  yellowVotes: 4
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Data Requirements Specification
-  - kind: added
-    target: Input
-    text: Architecture Requirements Specification
-  - kind: updated
-    target: A1
-    text: objectives derived from the Service Level Objectives
-  - kind: updated
-    target: A2
-    text: metrics based on the data requirements
-- annotation: A-24
-  text: Missing metrics for training, costs, and competitive benchmarks
-  redVotes: 2
-  yellowVotes: 3
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Cost and Resource Constraint Record
-  - kind: updated
-    target: A3
-    text: Define model and training metrics
-  - kind: updated
-    target: A4
-    text: state-of-the-art benchmarks
-  - kind: added
-    target: A5
-    text: Define cost and resource verification
-  - kind: updated
-    target: Purpose, outcome (b), and output
-    text: Evaluation Framework includes training and cost metrics
+- kind: added
+  target: Input
+  text: Data Requirements Specification
+- kind: added
+  target: Input
+  text: Architecture Requirements Specification
+- kind: updated
+  target: A1
+  text: objectives derived from the Service Level Objectives
+- kind: updated
+  target: A2
+  text: metrics based on the data requirements
+- kind: added
+  target: Input
+  text: Cost and Resource Constraint Record
+- kind: updated
+  target: A3
+  text: Define model and training metrics
+- kind: updated
+  target: A4
+  text: state-of-the-art benchmarks
+- kind: added
+  target: A5
+  text: Define cost and resource verification
+- kind: updated
+  target: Purpose, outcome (b), and output
+  text: Evaluation Framework includes training and cost metrics

@@ -167,18 +167,3 @@ activities:
   - P15
   literature:
   - stonebrakerMachineLearningBig2019
-changes:
-- annotation: A-33
-  text: Remove all activities except A7, A8, and A9
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-34
-  text: >-
-    It should be emphasized that the *Exploratory Data Analysis Process*, *Data Cleaning Process*, and
-    *Data Enrichment Process* are iterative
-  redVotes: 5
-  yellowVotes: 0
-  decision: rejected
-  changes: []

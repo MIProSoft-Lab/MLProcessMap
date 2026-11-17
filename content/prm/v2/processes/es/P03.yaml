@@ -176,102 +176,38 @@ activities:
   - P8
   - P9
 changes:
-- annotation: A-09
-  text: Entradas del proceso insuficientes (p. ej., contexto)
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Enunciado técnico del problema
-  - kind: added
-    target: Entrada
-    text: Registro de restricciones de coste y recursos
-- annotation: A-10
-  text: Los costes de entrenamiento y operación como salida del proceso
-  redVotes: 1
-  yellowVotes: 1
-  decision: partial
-  changes:
-  - kind: updated
-    target: A4
-    text: línea base de coste técnico
-  - kind: updated
-    target: Salida
-    text: La Especificación de requisitos del sistema incluye la línea base de coste
-- annotation: A-11
-  text: Al nombre del proceso le falta un verbo activo
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes:
-  - kind: updated
-    text: – (errata en los materiales del taller)
-- annotation: A-12
-  text: Al proceso le falta una perspectiva técnica
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A1
-    text: Revisar las necesidades técnicas y los requisitos de las partes interesadas
-- annotation: A-13
-  text: Falta una salida del proceso para la A2
-  redVotes: 0
-  yellowVotes: 1
-  decision: rejected
-  changes: []
-- annotation: A-14
-  text: Eliminar la A2
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-15
-  text: Consolidar la A2, la A3 y la A5 en una única actividad
-  redVotes: 0
-  yellowVotes: 2
-  decision: partial
-  changes:
-  - kind: updated
-    target: A5
-    text: Definir los requisitos de arquitectura
-  - kind: added
-    target: Salida
-    text: Especificación de requisitos de arquitectura
-- annotation: A-16
+- kind: added
+  target: Entrada
+  text: Enunciado técnico del problema
+- kind: added
+  target: Entrada
+  text: Registro de restricciones de coste y recursos
+- kind: updated
+  target: A4
+  text: línea base de coste técnico
+- kind: updated
+  target: Salida
+  text: La Especificación de requisitos del sistema incluye la línea base de coste
+- kind: updated
+  text: – (errata en los materiales del taller)
+- kind: updated
+  target: A1
+  text: Revisar las necesidades técnicas y los requisitos de las partes interesadas
+- kind: updated
+  target: A5
+  text: Definir los requisitos de arquitectura
+- kind: added
+  target: Salida
+  text: Especificación de requisitos de arquitectura
+- kind: updated
+  target: A6
+  text: alcance limitado a los requisitos del sistema
+- kind: updated
+  target: A5
   text: >-
-    Redundancia entre la A3 del *Proceso de definición de necesidades y requisitos de las partes interesadas*
-    y la A6 del *Proceso de definición de requisitos del sistema*
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: updated
-    target: A6
-    text: alcance limitado a los requisitos del sistema
-- annotation: A-17
-  text: >-
-    Comentarios sobre los requisitos del sistema (transición del director de tecnología, CTO, a operaciones)
-  redVotes: 2
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A5
-    text: >-
-      Indicadores de nivel de servicio (SLI) y objetivos de nivel de servicio (SLO) como línea base operativa
-- annotation: A-18
-  raisedElsewhere: true
-  text: Faltan los acuerdos de nivel de servicio
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: updated
-    text: La A5 define los SLI y SLO que debe soportar la arquitectura
-  - kind: added
-    target: Salida
-    text: Especificación de requisitos de arquitectura
+    Indicadores de nivel de servicio (SLI) y objetivos de nivel de servicio (SLO) como línea base operativa
+- kind: updated
+  text: La A5 define los SLI y SLO que debe soportar la arquitectura
+- kind: added
+  target: Salida
+  text: Especificación de requisitos de arquitectura

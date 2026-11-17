@@ -129,36 +129,14 @@ activities:
   primaryStudies:
   - P3
 changes:
-- annotation: A-50
-  text: >-
-    Missing process between the *Verification Metrics and Benchmark Definition Process* and the *Disposal
-    Process* regarding model life expectancy metrics
-  redVotes: 1
-  yellowVotes: 2
-  decision: partial
-  changes:
-  - kind: added
-    target: Input
-    text: Evaluation Framework.
-  - kind: updated
-    text: A1 supports the decision with metrics
-- annotation: A-51
-  text: Differentiate the rationale for disposing specific components
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    text: Purpose and outcomes (b, c) refer to components.
-  - kind: updated
-    text: A1
-- annotation: A-52
-  text: >-
-    Address the implications of partial component substitution (scope, change management, cost, risks,
-    …)
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: A2 assesses the implications of partial retirement or substitution
+- kind: added
+  target: Input
+  text: Evaluation Framework.
+- kind: updated
+  text: A1 supports the decision with metrics
+- kind: updated
+  text: Purpose and outcomes (b, c) refer to components.
+- kind: updated
+  text: A1
+- kind: updated
+  text: A2 assesses the implications of partial retirement or substitution

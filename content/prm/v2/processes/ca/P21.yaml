@@ -131,44 +131,18 @@ activities:
     requisits de les parts interessades, i posar el rendiment observat durant la validació a disposició com a
     referència per a la validació contínua.
 changes:
-- annotation: A-45
-  text: Integrar la validació de vulnerabilitats a la validació del sistema
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Verificar la seguretat al *Procés de verificació del sistema*.
-  - kind: updated
-    text: l'A4 inclou les preocupacions de seguretat de les parts interessades
-- annotation: A-46
-  text: Validació tècnica de la qualitat del codi
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-47
-  text: Validar el percentatge de cobertura de les proves
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: –
-  text: >-
-    Reorientació de la Verificació del sistema i la Validació del sistema, arran d'una discussió informal durant
-    el taller
-  redVotes: null
-  yellowVotes: null
-  decision: –
-  changes:
-  - kind: updated
-    text: Propòsit, resultats, entrades, A1, A2, A5.
-  - kind: added
-    target: A3
-    text: Validar els objectius de negoci.
-  - kind: added
-    target: A4
-    text: Confirmar l'adequació a l'ús.
-  - kind: removed
-    text: Les proves funcionals, de dependències, de fallades i de reversió passen a la Verificació del sistema
+- kind: added
+  target: A5
+  text: Verificar la seguretat al *Procés de verificació del sistema*.
+- kind: updated
+  text: l'A4 inclou les preocupacions de seguretat de les parts interessades
+- kind: updated
+  text: Propòsit, resultats, entrades, A1, A2, A5.
+- kind: added
+  target: A3
+  text: Validar els objectius de negoci.
+- kind: added
+  target: A4
+  text: Confirmar l'adequació a l'ús.
+- kind: removed
+  text: Les proves funcionals, de dependències, de fallades i de reversió passen a la Verificació del sistema

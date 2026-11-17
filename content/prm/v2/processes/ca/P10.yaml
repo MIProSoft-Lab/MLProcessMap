@@ -193,25 +193,6 @@ activities:
   - krossOrientingFramingBridging2021
   - wongsuphasawatGoalsProcessChallenges2019
 changes:
-- annotation: A-30
-  text: 'Hi manca context: com s''hauria d''analitzar una taula de 300 columnes?'
-  redVotes: 0
-  yellowVotes: 3
-  decision: rejected
-  changes: []
-- annotation: A-31
-  text: L'A2, l'A3 i l'A4 s'han de fer de manera iterativa després de netejar els valors atípics
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-27
-  raisedElsewhere: true
-  text: Identificar la clau primària des del principi
-  redVotes: 4
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registre de recollida de dades
+- kind: added
+  target: Entrada
+  text: Registre de recollida de dades

@@ -131,30 +131,12 @@ activities:
   - khanOverviewETLTechniques2024
   - yuliantoExtractTransformLoad2019
 changes:
-- annotation: A-27
-  text: Identificar la clau primària des del principi
-  redVotes: 4
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A1
-    text: identificar els identificadors únics necessaris per vincular els registres
-  - kind: updated
-    target: Sortida
-    text: el Registre de recollida de dades inclou els identificadors
-- annotation: A-28
-  text: 'Extracció web de dades externes: volatilitat, legalitat i protocols d''accés'
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Gestionar la volatilitat i els protocols d'accés de les fonts externes
-- annotation: A-29
-  text: La documentació també es pot emprar com a entrada per crear agents
-  redVotes: 0
-  yellowVotes: 3
-  decision: rejected
-  changes: []
+- kind: updated
+  target: A1
+  text: identificar els identificadors únics necessaris per vincular els registres
+- kind: updated
+  target: Sortida
+  text: el Registre de recollida de dades inclou els identificadors
+- kind: added
+  target: A5
+  text: Gestionar la volatilitat i els protocols d'accés de les fonts externes

@@ -169,18 +169,3 @@ activities:
   - P15
   literature:
   - stonebrakerMachineLearningBig2019
-changes:
-- annotation: A-33
-  text: Eliminar totes les activitats excepte l'A7, l'A8 i l'A9
-  redVotes: 0
-  yellowVotes: 2
-  decision: rejected
-  changes: []
-- annotation: A-34
-  text: >-
-    S'hauria de remarcar que el *Procés d'anàlisi exploratòria de dades*, el *Procés de neteja de dades* i el
-    *Procés d'enriquiment de dades* són iteratius
-  redVotes: 5
-  yellowVotes: 0
-  decision: rejected
-  changes: []

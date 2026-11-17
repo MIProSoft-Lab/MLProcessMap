@@ -112,30 +112,24 @@ activities:
   - kazman1998
   - siebert2022
 changes:
-- annotation: A-22
-  text: La definición de los resultados, las actividades y las entradas es demasiado abstracta
-  redVotes: 1
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Especificación de requisitos de datos
-  - kind: updated
-    target: Propósito
-    text: incluye los compromisos entre enfoques técnicos
-  - kind: updated
-    target: Resultados (a) y (b)
-    text: dependencias de datos y estudios de compromisos
-  - kind: updated
-    target: A2
-    text: nombra los elementos de aprendizaje automático
-  - kind: updated
-    target: A3
-    text: cadenas de dependencias de datos y estabilidad
-  - kind: updated
-    target: A4
-    text: complejidad del modelo y coste operativo
-  - kind: updated
-    target: Salida
-    text: contenido del Informe de análisis del sistema
+- kind: added
+  target: Entrada
+  text: Especificación de requisitos de datos
+- kind: updated
+  target: Propósito
+  text: incluye los compromisos entre enfoques técnicos
+- kind: updated
+  target: Resultados (a) y (b)
+  text: dependencias de datos y estudios de compromisos
+- kind: updated
+  target: A2
+  text: nombra los elementos de aprendizaje automático
+- kind: updated
+  target: A3
+  text: cadenas de dependencias de datos y estabilidad
+- kind: updated
+  target: A4
+  text: complejidad del modelo y coste operativo
+- kind: updated
+  target: Salida
+  text: contenido del Informe de análisis del sistema

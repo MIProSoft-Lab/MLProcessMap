@@ -108,30 +108,24 @@ activities:
   - kazman1998
   - siebert2022
 changes:
-- annotation: A-22
-  text: The definition of outcomes, activities, and inputs is too abstract
-  redVotes: 1
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Input
-    text: Data Requirements Specification
-  - kind: updated
-    target: Purpose
-    text: includes the trade-offs between technical approaches
-  - kind: updated
-    target: Outcomes (a) and (b)
-    text: data dependencies and trade-off studies
-  - kind: updated
-    target: A2
-    text: names the Machine Learning elements
-  - kind: updated
-    target: A3
-    text: data-dependency chains and stability
-  - kind: updated
-    target: A4
-    text: model complexity and operational cost
-  - kind: updated
-    target: Output
-    text: System Analysis Report contents
+- kind: added
+  target: Input
+  text: Data Requirements Specification
+- kind: updated
+  target: Purpose
+  text: includes the trade-offs between technical approaches
+- kind: updated
+  target: Outcomes (a) and (b)
+  text: data dependencies and trade-off studies
+- kind: updated
+  target: A2
+  text: names the Machine Learning elements
+- kind: updated
+  target: A3
+  text: data-dependency chains and stability
+- kind: updated
+  target: A4
+  text: model complexity and operational cost
+- kind: updated
+  target: Output
+  text: System Analysis Report contents

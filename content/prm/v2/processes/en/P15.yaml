@@ -120,26 +120,7 @@ activities:
   - P9
   - P10
 changes:
-- annotation: A-38
-  text: Highlights the importance of A3
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: updated
-    text: A3 reworded following comments made during the break
-- annotation: A-39
-  text: >-
-    *Model Training* should be done within *Model Selection* (15.1, then 14.x, then 15.x)
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-40
-  text: Also document why a model did not end up being used
-  redVotes: 2
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    text: A5 and Model Training Record include the rationale for discarded experiments
+- kind: updated
+  text: A3 reworded following comments made during the break
+- kind: updated
+  text: A5 and Model Training Record include the rationale for discarded experiments

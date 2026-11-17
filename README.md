@@ -3,7 +3,7 @@
 A website to explore the Process Reference Model (PRM) for Machine Learning from the doctoral thesis. Anyone can browse it without signing in, and admins edit the model from `/admin` with their GitHub account.
 
 - **Process map** of each PRM version, coloured by origin, with full-text search.
-- **Process pages** with purpose, outcomes, inputs, outputs, activities, the sources of each activity, traceability to the ISO/IEC standards and the workshop annotations that changed it.
+- **Process pages** with purpose, outcomes, inputs, outputs, activities, the sources of each activity, traceability to the ISO/IEC standards and the changes from the previous version.
 - **Work products**: which process produces each input and which processes use each output.
 - **Compare versions**: word-level diff of every process between two versions.
 - **Lifecycle templates** that arrange the processes of a version into phases and iterations, and serve as starting points for the lifecycle builder.
@@ -101,7 +101,7 @@ npm run new-version -- v3              # copy of the default version
 npm run new-version -- v3 --from v1
 ```
 
-This copies the process files, drops the workshop annotations (they belong to the version they produced), and adds the version to `versions.yaml` as a draft. Edit it from the admin panel, then set its status to `current` and make it the default.
+This copies the process files, drops the list of changes (it belongs to the version that made them), and adds the version to `versions.yaml` as a draft. Edit it from the admin panel, then set its status to `current` and make it the default.
 
 ## Publishing on GitHub Pages
 

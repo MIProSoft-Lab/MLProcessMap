@@ -149,34 +149,21 @@ activities:
   - P10
   - P17
 changes:
-- annotation: A-25
-  text: No activity establishes relationships between A1 and A2
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A2
-    text: Survey and map internal data sources
-  - kind: updated
-    target: Outcome (a)
-    text: sources mapped to the data requirements
-- annotation: A-26
-  text: >-
-    Many data sources are not documented; documented sources should be requested first
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A3
-    text: Collect and evaluate existing documentation
-  - kind: added
-    target: A4
-    text: Perform technical source discovery
-  - kind: updated
-    target: Outcome (b)
-    text: includes metadata and undocumented sources
-  - kind: updated
-    target: Output
-    text: Data Catalog includes documentation status
+- kind: updated
+  target: A2
+  text: Survey and map internal data sources
+- kind: updated
+  target: Outcome (a)
+  text: sources mapped to the data requirements
+- kind: added
+  target: A3
+  text: Collect and evaluate existing documentation
+- kind: added
+  target: A4
+  text: Perform technical source discovery
+- kind: updated
+  target: Outcome (b)
+  text: includes metadata and undocumented sources
+- kind: updated
+  target: Output
+  text: Data Catalog includes documentation status

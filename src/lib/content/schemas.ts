@@ -30,16 +30,11 @@ const traceSchema = z.object({
   note: z.string().optional(),
 });
 
+/** A change from the previous version: what kind, to which element (A5, Output…), and a description. */
 const changeSchema = z.object({
-  annotation: z.string(),
-  raisedElsewhere: z.boolean().optional(),
+  kind: z.enum(['added', 'updated', 'removed']),
+  target: z.string().optional(),
   text: z.string(),
-  redVotes: z.number().nullable().optional(),
-  yellowVotes: z.number().nullable().optional(),
-  decision: z.string(),
-  changes: z
-    .array(z.object({ kind: z.enum(['added', 'updated', 'removed']), target: z.string().optional(), text: z.string() }))
-    .default([]),
 });
 
 export const processSchema = z.object({

@@ -18,10 +18,8 @@ const v = getVersion(version);
 
 const wps = new Map(getWorkProducts(version, locale).map((w) => [w.id, w]));
 const name = (pid: string) => getProcess(version, pid, locale).data.name;
-// Changelog: what changed from the previous version. The content records the
-// changes under the workshop annotations that motivated them; the live site
-// lists only the changes.
-const changelog = (p.changes ?? []).flatMap((c) => c.changes);
+// Changelog: what changed from the previous version.
+const changelog = p.changes ?? [];
 const previousVersion = versions[versions.findIndex((x) => x.id === version) - 1]?.id;
 
 const ids = processIds(version);

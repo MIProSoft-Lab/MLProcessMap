@@ -134,30 +134,12 @@ activities:
   - khanOverviewETLTechniques2024
   - yuliantoExtractTransformLoad2019
 changes:
-- annotation: A-27
-  text: Identificar la clave primaria desde el principio
-  redVotes: 4
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A1
-    text: identificar los identificadores únicos necesarios para vincular los registros
-  - kind: updated
-    target: Salida
-    text: El Registro de recopilación de datos incluye los identificadores
-- annotation: A-28
-  text: "*Scraping* de datos externos: volatilidad, legalidad y protocolos de acceso"
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Gestionar la volatilidad y los protocolos de acceso de las fuentes externas
-- annotation: A-29
-  text: La documentación también puede usarse como entrada para crear agentes
-  redVotes: 0
-  yellowVotes: 3
-  decision: rejected
-  changes: []
+- kind: updated
+  target: A1
+  text: identificar los identificadores únicos necesarios para vincular los registros
+- kind: updated
+  target: Salida
+  text: El Registro de recopilación de datos incluye los identificadores
+- kind: added
+  target: A5
+  text: Gestionar la volatilidad y los protocolos de acceso de las fuentes externas

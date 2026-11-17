@@ -115,38 +115,18 @@ activities:
   - P11
   - P14
 changes:
-- annotation: A-36
-  text: >-
-    Debería definirse el proceso para usar los datos disponibles en la evaluación de cada modelo candidato
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Marco de evaluación.
-  - kind: updated
-    text: La A1 establece los criterios a partir del Marco de evaluación
-- annotation: A-37
-  text: Deberían estar disponibles los datos de entrenamiento para seleccionar un modelo
-  redVotes: 0
-  yellowVotes: 4
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entradas
-    text: Conjunto de datos etiquetado e Informe de análisis exploratorio de datos
-  - kind: updated
-    text: La A3 aparta los datos reservados para la evaluación final
-- annotation: A-02
-  raisedElsewhere: true
-  text: Relevancia de los costes de entrenamiento y operación
-  redVotes: 0
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registro de restricciones de coste y recursos
-  - kind: updated
-    text: La A1 considera las restricciones de coste y recursos
+- kind: added
+  target: Entrada
+  text: Marco de evaluación.
+- kind: updated
+  text: La A1 establece los criterios a partir del Marco de evaluación
+- kind: added
+  target: Entradas
+  text: Conjunto de datos etiquetado e Informe de análisis exploratorio de datos
+- kind: updated
+  text: La A3 aparta los datos reservados para la evaluación final
+- kind: added
+  target: Entrada
+  text: Registro de restricciones de coste y recursos
+- kind: updated
+  text: La A1 considera las restricciones de coste y recursos

@@ -207,63 +207,39 @@ activities:
   literature:
   - sculleyHiddenTechnicalDebt2015
 changes:
-- annotation: A-18
-  text: Missing Service Level Agreements
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Input
-    text: Architecture Requirements Specification
-  - kind: updated
-    target: A1
-    text: boundaries derived from the architecture requirements
-  - kind: updated
-    target: Outcome (c)
-    text: includes the Service Level Objectives
-- annotation: A-19
-  text: Missing cost analysis
-  redVotes: 3
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Cost and Resource Constraint Record
-  - kind: updated
-    target: A4
-    text: verify the technical stack against the cost constraints
-  - kind: updated
-    target: Output
-    text: System Architecture Documentation includes infrastructure costs
-  - kind: added
-    target: Outcome (f)
-    text: infrastructure cost baseline
-- annotation: A-20
-  text: A Disaster Recovery Plan isn't defined
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Plan for resilience and recovery
-  - kind: added
-    target: Output
-    text: Disaster Recovery Plan
-  - kind: updated
-    target: Purpose and outcome (e)
-    text: recovery mechanisms
-- annotation: A-21
-  text: No formal dependency management model for data, models, and software
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A3
-    text: dependency management across the lifecycle
-  - kind: added
-    target: Outcome (g)
-    text: defined dependency management
+- kind: added
+  target: Input
+  text: Architecture Requirements Specification
+- kind: updated
+  target: A1
+  text: boundaries derived from the architecture requirements
+- kind: updated
+  target: Outcome (c)
+  text: includes the Service Level Objectives
+- kind: added
+  target: Input
+  text: Cost and Resource Constraint Record
+- kind: updated
+  target: A4
+  text: verify the technical stack against the cost constraints
+- kind: updated
+  target: Output
+  text: System Architecture Documentation includes infrastructure costs
+- kind: added
+  target: Outcome (f)
+  text: infrastructure cost baseline
+- kind: added
+  target: A5
+  text: Plan for resilience and recovery
+- kind: added
+  target: Output
+  text: Disaster Recovery Plan
+- kind: updated
+  target: Purpose and outcome (e)
+  text: recovery mechanisms
+- kind: updated
+  target: A3
+  text: dependency management across the lifecycle
+- kind: added
+  target: Outcome (g)
+  text: defined dependency management

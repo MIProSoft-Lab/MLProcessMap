@@ -133,46 +133,19 @@ activities:
     resultados de la validación y los requisitos de las partes interesadas, y poner el rendimiento observado
     durante la validación a disposición de la validación continua como referencia.
 changes:
-- annotation: A-45
-  text: Integrar la validación de vulnerabilidades en la validación del sistema
-  redVotes: 1
-  yellowVotes: 2
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Verificar la seguridad en el *Proceso de verificación del sistema*.
-  - kind: updated
-    text: La A4 incluye las preocupaciones de seguridad de las partes interesadas
-- annotation: A-46
-  text: Validación técnica de la calidad del código
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: A-47
-  text: Validar el porcentaje de cobertura de las pruebas
-  redVotes: 0
-  yellowVotes: 0
-  decision: rejected
-  changes: []
-- annotation: –
+- kind: added
+  target: A5
+  text: Verificar la seguridad en el *Proceso de verificación del sistema*.
+- kind: updated
+  text: La A4 incluye las preocupaciones de seguridad de las partes interesadas
+- kind: updated
+  text: Propósito, resultados, entradas, A1, A2, A5.
+- kind: added
+  target: A3
+  text: Validar los objetivos de negocio.
+- kind: added
+  target: A4
+  text: Confirmar la adecuación al uso.
+- kind: removed
   text: >-
-    Reenfoque de la verificación y la validación del sistema a partir de una discusión informal durante el
-    taller
-  redVotes: null
-  yellowVotes: null
-  decision: –
-  changes:
-  - kind: updated
-    text: Propósito, resultados, entradas, A1, A2, A5.
-  - kind: added
-    target: A3
-    text: Validar los objetivos de negocio.
-  - kind: added
-    target: A4
-    text: Confirmar la adecuación al uso.
-  - kind: removed
-    text: >-
-      Las pruebas funcionales, de dependencias, de fallos y de reversión se trasladan a la verificación del
-      sistema
+    Las pruebas funcionales, de dependencias, de fallos y de reversión se trasladan a la verificación del sistema

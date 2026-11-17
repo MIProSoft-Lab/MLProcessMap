@@ -157,33 +157,21 @@ activities:
   - P10
   - P17
 changes:
-- annotation: A-25
-  text: Ninguna actividad establece relaciones entre la A1 y la A2
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A2
-    text: Inventariar y relacionar las fuentes de datos internas
-  - kind: updated
-    target: Resultado (a)
-    text: fuentes relacionadas con los requisitos de datos
-- annotation: A-26
-  text: Muchas fuentes de datos no están documentadas; deberían solicitarse primero las fuentes documentadas
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A3
-    text: Recopilar y evaluar la documentación existente
-  - kind: added
-    target: A4
-    text: Realizar el descubrimiento técnico de las fuentes
-  - kind: updated
-    target: Resultado (b)
-    text: incluye los metadatos y las fuentes no documentadas
-  - kind: updated
-    target: Salida
-    text: El Catálogo de datos incluye el estado de la documentación
+- kind: updated
+  target: A2
+  text: Inventariar y relacionar las fuentes de datos internas
+- kind: updated
+  target: Resultado (a)
+  text: fuentes relacionadas con los requisitos de datos
+- kind: added
+  target: A3
+  text: Recopilar y evaluar la documentación existente
+- kind: added
+  target: A4
+  text: Realizar el descubrimiento técnico de las fuentes
+- kind: updated
+  target: Resultado (b)
+  text: incluye los metadatos y las fuentes no documentadas
+- kind: updated
+  target: Salida
+  text: El Catálogo de datos incluye el estado de la documentación

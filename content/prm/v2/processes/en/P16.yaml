@@ -133,28 +133,14 @@ activities:
   - P8
   - P14
 changes:
-- annotation: A-41
-  text: >-
-    Consider the documentation from previous iterations before starting, to avoid repeating work
-  redVotes: 3
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Model Optimization Record of previous iterations.
-  - kind: added
-    target: A1
-    text: Review previous optimization results
-- annotation: A-42
-  text: >-
-    Better define what it means to improve a model (latency, performance dispersion across datasets, …)
-  redVotes: 1
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: added
-    target: Input
-    text: Evaluation Framework.
-  - kind: added
-    text: A1 defines the improvement targeted from its metrics
+- kind: added
+  target: Input
+  text: Model Optimization Record of previous iterations.
+- kind: added
+  target: A1
+  text: Review previous optimization results
+- kind: added
+  target: Input
+  text: Evaluation Framework.
+- kind: added
+  text: A1 defines the improvement targeted from its metrics

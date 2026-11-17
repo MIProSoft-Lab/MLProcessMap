@@ -215,63 +215,39 @@ activities:
   literature:
   - sculleyHiddenTechnicalDebt2015
 changes:
-- annotation: A-18
-  text: Faltan los acuerdos de nivel de servicio
-  redVotes: 0
-  yellowVotes: 0
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Especificación de requisitos de arquitectura
-  - kind: updated
-    target: A1
-    text: límites derivados de los requisitos de arquitectura
-  - kind: updated
-    target: Resultado (c)
-    text: incluye los objetivos de nivel de servicio
-- annotation: A-19
-  text: Falta un análisis de costes
-  redVotes: 3
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: added
-    target: Entrada
-    text: Registro de restricciones de coste y recursos
-  - kind: updated
-    target: A4
-    text: verificar la pila tecnológica frente a las restricciones de coste
-  - kind: updated
-    target: Salida
-    text: La Documentación de la arquitectura del sistema incluye los costes de infraestructura
-  - kind: added
-    target: Resultado (f)
-    text: línea base de coste de infraestructura
-- annotation: A-20
-  text: No se define un Plan de recuperación ante desastres
-  redVotes: 0
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: added
-    target: A5
-    text: Planificar la resiliencia y la recuperación
-  - kind: added
-    target: Salida
-    text: Plan de recuperación ante desastres
-  - kind: updated
-    target: Propósito y resultado (e)
-    text: mecanismos de recuperación
-- annotation: A-21
-  text: No hay un modelo formal de gestión de dependencias para datos, modelos y software
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    target: A3
-    text: gestión de dependencias a lo largo del ciclo de vida
-  - kind: added
-    target: Resultado (g)
-    text: gestión de dependencias definida
+- kind: added
+  target: Entrada
+  text: Especificación de requisitos de arquitectura
+- kind: updated
+  target: A1
+  text: límites derivados de los requisitos de arquitectura
+- kind: updated
+  target: Resultado (c)
+  text: incluye los objetivos de nivel de servicio
+- kind: added
+  target: Entrada
+  text: Registro de restricciones de coste y recursos
+- kind: updated
+  target: A4
+  text: verificar la pila tecnológica frente a las restricciones de coste
+- kind: updated
+  target: Salida
+  text: La Documentación de la arquitectura del sistema incluye los costes de infraestructura
+- kind: added
+  target: Resultado (f)
+  text: línea base de coste de infraestructura
+- kind: added
+  target: A5
+  text: Planificar la resiliencia y la recuperación
+- kind: added
+  target: Salida
+  text: Plan de recuperación ante desastres
+- kind: updated
+  target: Propósito y resultado (e)
+  text: mecanismos de recuperación
+- kind: updated
+  target: A3
+  text: gestión de dependencias a lo largo del ciclo de vida
+- kind: added
+  target: Resultado (g)
+  text: gestión de dependencias definida

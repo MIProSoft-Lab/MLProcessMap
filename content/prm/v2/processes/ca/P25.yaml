@@ -133,35 +133,14 @@ activities:
   primaryStudies:
   - P3
 changes:
-- annotation: A-50
-  text: >-
-    Hi manca un procés entre el *Procés de definició de mètriques de verificació i bancs de proves* i el *Procés
-    de retirada* pel que fa a les mètriques d'esperança de vida del model
-  redVotes: 1
-  yellowVotes: 2
-  decision: partial
-  changes:
-  - kind: added
-    target: Entrada
-    text: Marc d'avaluació.
-  - kind: updated
-    text: l'A1 fonamenta la decisió en mètriques
-- annotation: A-51
-  text: Diferenciar la justificació per retirar components concrets
-  redVotes: 0
-  yellowVotes: 0
-  decision: adopted
-  changes:
-  - kind: updated
-    text: El propòsit i els resultats (b, c) fan referència als components.
-  - kind: updated
-    text: A1
-- annotation: A-52
-  text: >-
-    Tractar les implicacions de la substitució parcial de components (abast, gestió del canvi, cost, riscs, …)
-  redVotes: 1
-  yellowVotes: 1
-  decision: adopted
-  changes:
-  - kind: updated
-    text: l'A2 avalua les implicacions de la retirada o la substitució parcials
+- kind: added
+  target: Entrada
+  text: Marc d'avaluació.
+- kind: updated
+  text: l'A1 fonamenta la decisió en mètriques
+- kind: updated
+  text: El propòsit i els resultats (b, c) fan referència als components.
+- kind: updated
+  text: A1
+- kind: updated
+  text: l'A2 avalua les implicacions de la retirada o la substitució parcials
