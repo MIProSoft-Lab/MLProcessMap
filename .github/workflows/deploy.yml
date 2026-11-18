@@ -3,12 +3,16 @@ name: Build and deploy
 # The site is published in two editions from this repository: the live tool,
 # from main, at the root of the site, and the edition described in the doctoral
 # thesis, from the thesis branch, at /thesis/. GitHub Pages replaces the whole
-# site on each deploy, so a push to either branch builds both. Keep this file
-# the same on both branches.
+# site on each deploy, so each deploy builds both. The site is deployed only
+# when a version tag (v1.2.0, ...) is pushed: the live edition is built from the
+# tagged commit and the thesis edition from the head of the thesis branch.
+# Pushes to main or thesis, including edits from the admin panel, are not
+# published until the next tag. Run the workflow by hand to deploy the head of
+# main. Keep this file the same on both branches.
 
 on:
   push:
-    branches: [main, thesis]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -22,7 +26,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # A pull request is built on its own, to check it.
+  # A pull request is built on its own, to check it. Pushes to a branch are no
+  # longer checked here, so open a pull request, or tag, to run the checks.
   check:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -47,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref_type == 'tag' && github.ref || 'main' }}
           path: live
       - id: thesis
         name: Look for the thesis branch
