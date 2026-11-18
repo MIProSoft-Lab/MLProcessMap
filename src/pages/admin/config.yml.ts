@@ -190,6 +190,8 @@ export const GET: APIRoute = () => {
         delete: 'Delete {{collection}} “{{slug}}”',
       },
     },
+    // Each entry is saved on its own branch, cms/<collection>/<slug>
+    publish_mode: 'editorial_workflow',
     // The published site, which the app icon in the header links to: the
     // domain plus the project path of a GitHub Pages site, e.g. /<repo>/.
     ...(siteUrl ? { site_url: siteUrl, display_url: siteUrl } : {}),
