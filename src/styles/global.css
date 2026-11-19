@@ -8,7 +8,10 @@
 @import '@fontsource/ibm-plex-mono/400.css';
 @import '@fontsource/ibm-plex-mono/500.css';
 
-:root {
+/* The light palette, also for what has to stay light in dark mode (the class
+   light-palette), such as the printable PRM, a preview of paper. */
+:root,
+.light-palette {
   color-scheme: light;
   --bg: #f5f4ee;
   --surface: #fdfcf8;

@@ -110,6 +110,65 @@ wp:
   filter: Filtrar por producto de trabajo o proceso
   noResults: Ningún producto de trabajo coincide con el filtro.
   all: Todos
+print:
+  button: Imprimir / PDF
+  title: Versión imprimible
+  intro: "Elige qué incluir y cómo se ve. Después imprime la página o elige Guardar como PDF en el diálogo de impresión."
+  print: Imprimir o guardar como PDF
+  headersHint: "Si la dirección y la fecha aparecen arriba o abajo de las páginas, desmarca Encabezados y pies de página en el diálogo de impresión."
+  reset: Restablecer opciones
+  cover: Portada
+  map: Mapa de procesos
+  toc: Índice
+  processes: Procesos
+  all: Todos
+  none: Ninguno
+  selected: "{n} de {total} procesos"
+  parts: En cada proceso
+  descriptions: Descripciones
+  sources: Fuentes
+  standards: Trazabilidad con los estándares
+  references: Referencias citadas
+  appearance: Página
+  colours: Colores según el origen
+  idColour: ID del proceso coloreado según el origen
+  breaks: Cada proceso en una página nueva
+  checklist: Una casilla para marcar cada una
+  size: Tamaño del texto
+  small: Pequeño
+  normal: Normal
+  large: Grande
+  paper: Papel
+  empty: Elige al menos un proceso, u otra parte, para imprimir.
+  printed: "Impreso el {date} desde {url}"
+  standard: Estándar
+  standardActivity: Actividad del estándar
+  prmActivity: Actividad del PRM
+  note: Nota
+  document: Documento
+  origin: Origen de cada proceso
+  legend: Leyenda de los orígenes
+  author: Autor e institución
+  printedOption: Fecha y dirección de esta copia
+  activityCount: Número de actividades
+  ioSideBySide: Una junto a otra
+  wpType: Tipo de cada una
+  serves: Resultados a los que contribuye cada una
+  ioDescriptions: Descripciones
+  links: Procesos que las producen o las usan
+  notes: Espacio para notas
+  notesTitle: Notas
+  pageNumbers: Números de página
+  header: Encabezado
+  headerText: Texto del encabezado
+  footer: Pie de página
+  footerText: Texto del pie de página
+  phase: "Fase {n}"
+  basedOn: "Basado en {prm}"
+  unassigned: "Sin fase"
+  leftOut: "Procesos excluidos"
+  repeats: Esta fase se puede repetir
+  returnsTo: "Vuelve a {phase}"
 compare:
   title: Comparar versiones
   intro: Cambios en el texto de cada proceso entre dos versiones del PRM.

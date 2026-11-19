@@ -110,6 +110,65 @@ wp:
   filter: Filtra per producte de treball o procés
   noResults: Cap producte de treball coincideix amb el filtre.
   all: Tots
+print:
+  button: Imprimeix / PDF
+  title: Versió imprimible
+  intro: "Tria què vols incloure i com es veu. Després imprimeix la pàgina o tria Desa com a PDF al diàleg d'impressió."
+  print: Imprimeix o desa com a PDF
+  headersHint: "Si l'adreça i la data surten a dalt o a baix de les pàgines, desmarca Capçaleres i peus de pàgina al diàleg d'impressió."
+  reset: Restableix les opcions
+  cover: Portada
+  map: Mapa de processos
+  toc: Índex
+  processes: Processos
+  all: Tots
+  none: Cap
+  selected: "{n} de {total} processos"
+  parts: A cada procés
+  descriptions: Descripcions
+  sources: Fonts
+  standards: Traçabilitat amb els estàndards
+  references: Referències citades
+  appearance: Pàgina
+  colours: Colors segons l'origen
+  idColour: "ID del procés acolorit segons l'origen"
+  breaks: Cada procés en una pàgina nova
+  checklist: Una casella per marcar cadascuna
+  size: Mida del text
+  small: Petita
+  normal: Normal
+  large: Gran
+  paper: Paper
+  empty: Tria almenys un procés, o una altra part, per imprimir.
+  printed: "Imprès el {date} des de {url}"
+  standard: Estàndard
+  standardActivity: Activitat de l'estàndard
+  prmActivity: Activitat del PRM
+  note: Nota
+  document: Document
+  origin: Origen de cada procés
+  legend: Llegenda dels orígens
+  author: Autor i institució
+  printedOption: Data i adreça d'aquesta còpia
+  activityCount: Nombre d'activitats
+  ioSideBySide: "Una al costat de l'altra"
+  wpType: Tipus de cadascuna
+  serves: Resultats als quals contribueix cadascuna
+  ioDescriptions: Descripcions
+  links: Processos que les produeixen o les empren
+  notes: Espai per a notes
+  notesTitle: Notes
+  pageNumbers: Números de pàgina
+  header: Capçalera
+  headerText: Text de la capçalera
+  footer: Peu de pàgina
+  footerText: Text del peu de pàgina
+  phase: "Fase {n}"
+  basedOn: "Basat en {prm}"
+  unassigned: "Sense fase"
+  leftOut: "Processos exclosos"
+  repeats: Aquesta fase es pot repetir
+  returnsTo: "Torna a {phase}"
 compare:
   title: Compara versions
   intro: Canvis en el text de cada procés entre dues versions del PRM.

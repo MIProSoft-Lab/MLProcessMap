@@ -1,0 +1,348 @@
+---
+// The printable version of a PRM version: a document with a cover, the process
+// map, the contents, every process and the references they cite, next to the
+// options for what to include and how it looks. It is an ordinary page: the
+// browser prints it, or saves it as a PDF from its print dialog. The options
+// are applied in the browser by src/lib/print-page.ts and kept in the address
+// (src/lib/print-options.ts), so the same page serves one process
+// (?p=P08&off=cover,map), as the process pages link to it. Every element a
+// setting includes is marked with data-part, named after the setting.
+import Layout from '../../../layouts/Layout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Topology from '../../../components/Topology.astro';
+import PrintProcess from '../../../components/print/PrintProcess.astro';
+import '../../../styles/print.css';
+import { acronyms, getProcess, getVersion, getWorkProducts, pick, processIds, site, versions } from '../../../lib/content';
+import { prose } from '../../../lib/acronyms';
+import { versionLinks, versionPaths } from '../../../lib/paths';
+import { fullCite, referenceByKey, studyById } from '../../../lib/refs';
+import { inline } from '../../../lib/text';
+import { printKeys } from '../../../lib/print-page';
+import { settings, sizes, papers, type Setting } from '../../../lib/print-options';
+import { pageLocale, href, stringsFor } from '../../../i18n/ui';
+
+export const getStaticPaths = versionPaths;
+const { locale, t } = pageLocale(Astro.props);
+const { version } = Astro.params as { version: string };
+const v = getVersion(version);
+const processes = processIds(version).map((id) => getProcess(version, id, locale));
+const translated = processes.every((x) => x.translated);
+const workProducts = new Map(getWorkProducts(version, locale).map((w) => [w.id, w]));
+const previousVersion = versions[versions.findIndex((x) => x.id === version) - 1]?.id;
+const hasStandards = processes.some((x) => x.data.standards?.length);
+const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as const;
+
+// The references the processes cite, each with the processes that cite it, so
+// the page can list only those of the processes printed.
+const citedBy = new Map<string, Set<string>>();
+for (const { data: p } of processes) {
+  for (const a of p.activities) {
+    for (const key of [...(a.primaryStudies ?? []), ...(a.literature ?? [])]) {
+      citedBy.set(key, (citedBy.get(key) ?? new Set()).add(p.id));
+    }
+  }
+}
+// The acronyms in the text of each process, as prose() marks them, so the
+// appendix lists only those of the processes printed.
+const acronymUsers = new Map<string, Set<string>>();
+for (const { data: p } of processes) {
+  const texts = [
+    p.purpose,
+    ...p.outcomes.map((o) => o.text),
+    ...[...p.inputs, ...p.outputs].map((io) => io.description ?? ''),
+    ...p.activities.flatMap((a) => [a.title, a.description]),
+  ];
+  const html = texts.map((x) => prose(x, locale)).join(' ');
+  for (const a of acronyms) {
+    if (html.includes(`>${a.id}</abbr>`) || html.includes(`>${a.id}s</abbr>`)) {
+      acronymUsers.set(a.id, (acronymUsers.get(a.id) ?? new Set()).add(p.id));
+    }
+  }
+}
+const usedAcronyms = [...acronyms].filter((a) => acronymUsers.has(a.id)).sort((a, b) => a.id.localeCompare(b.id));
+const citers = (key: string) => [...(citedBy.get(key) ?? [])].join(' ');
+const citedStudies = [...studyById.values()].filter((s) => citedBy.has(s.id));
+const citedLiterature = [...referenceByKey.values()].filter((r) => citedBy.has(r.key)).sort((a, b) => a.authors.localeCompare(b.authors));
+
+// The settings in the panel, by group, as [setting, label], in the order of
+// the settings (src/lib/print-options.ts), which is that of the document; a
+// setting with a parent is shown under it.
+const order = Object.keys(settings);
+const inOrder = (list: [Setting, string][]) => list.sort(([a], [b]) => order.indexOf(a) - order.indexOf(b));
+const documentOptions = inOrder([
+  ['cover', t('print.cover')],
+  ['legend', t('print.legend')],
+  ['author', t('print.author')],
+  ['printed', t('print.printedOption')],
+  ['map', t('print.map')],
+  ['activityCount', t('print.activityCount')],
+  ['mapColour', t('print.colours')],
+  ['toc', t('print.toc')],
+  ['references', t('print.references')],
+  ['acronyms', t('refs.acronyms')],
+]);
+const processOptions = inOrder([
+  ['origin', t('print.origin')],
+  ['idColour', t('print.idColour')],
+  ['purpose', t('process.purpose')],
+  ['outcomes', t('process.outcomes')],
+  ['interface', `${t('process.inputs')} · ${t('process.outputs')}`],
+  ['ioSideBySide', t('print.ioSideBySide')],
+  ['wpType', t('print.wpType')],
+  ['serves', t('print.serves')],
+  ['ioDescriptions', t('print.ioDescriptions')],
+  ['links', t('print.links')],
+  ['activities', t('process.activities')],
+  ['descriptions', t('print.descriptions')],
+  ['sources', t('print.sources')],
+  ['checklist', t('print.checklist')],
+  ...(hasStandards ? ([['standards', t('print.standards')]] as [Setting, string][]) : []),
+  ['changes', t('process.changes')],
+  ['notes', t('print.notes')],
+]);
+const pageOptions = inOrder([
+  ['breaks', t('print.breaks')],
+  ['pageNumbers', t('print.pageNumbers')],
+  ['header', t('print.header')],
+  ['footer', t('print.footer')],
+]);
+// What the header and footer say unless the user writes something else: the
+// name of the document, and the group and institution behind it.
+const defaultHeader = `${pick(site.title, locale)} · ${version} · ${pick(v.title, locale)}`;
+const defaultFooter = [site.group?.name, site.institution].filter(Boolean).join(' · ');
+const parentOf = (name: Setting) => (settings[name] as { parent?: Setting }).parent;
+const sizeLabels = { small: t('print.small'), normal: t('print.normal'), large: t('print.large') };
+const paperLabels = { a4: 'A4', letter: 'Letter' };
+const title = `${pick(site.title, locale)} · ${version}`;
+---
+
+<Layout
+  locale={locale}
+  title={`${t('print.title')} · ${title}`}
+  description={t('print.intro')}
+  section="processes"
+  version={version}
+  versionLinks={versionLinks(locale, ['print'])}
+  translated={translated}
+  pageClass="print-page"
+>
+  <div class="no-print">
+    <Breadcrumbs locale={locale} items={[{ text: `ML-PRM / ${version}`, href: href(locale, version) }, { text: t('print.title') }]} />
+    <h1>{t('print.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
+    <p class="muted prose">{t('print.intro')}</p>
+  </div>
+
+  <div class="print-layout">
+    <form class="print-options card no-print" id="print-options">
+      <p>
+        <button type="button" class="primary button" id="print-now">{t('print.print')}</button>
+      </p>
+      <p class="print-hint small muted">{t('print.headersHint')}</p>
+
+      <fieldset>
+        <legend>{t('print.document')}</legend>
+        {
+          documentOptions.map(([name, label]) => (
+            <label class:list={{ sub: parentOf(name) }}>
+              <input type="checkbox" data-setting={name} data-parent={parentOf(name)} /> {label}
+            </label>
+          ))
+        }
+      </fieldset>
+
+      <fieldset class="print-processes">
+        <legend>{t('print.processes')}</legend>
+        <p class="small">
+          <span id="print-count" class="muted" data-text={t('print.selected')}></span>
+          <button type="button" class="link" data-all>{t('print.all')}</button>
+          <button type="button" class="link" data-none>{t('print.none')}</button>
+        </p>
+        <div class="print-process-list">
+          {
+            processes.map(({ data: p }) => (
+              <label>
+                <input type="checkbox" data-process-option={p.id} checked />
+                <span class="mono">{p.id}</span> {p.name}
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>{t('print.parts')}</legend>
+        {
+          processOptions.map(([name, label]) => (
+            <label class:list={{ sub: parentOf(name) }}>
+              <input type="checkbox" data-setting={name} data-parent={parentOf(name)} /> {label}
+            </label>
+          ))
+        }
+      </fieldset>
+
+      <fieldset>
+        <legend>{t('print.appearance')}</legend>
+        {
+          pageOptions.map(([name, label]) => (
+            <>
+              <label>
+                <input type="checkbox" data-setting={name} /> {label}
+              </label>
+              {(name === 'header' || name === 'footer') && (
+                <input
+                  type="text"
+                  class="margin-text"
+                  name={`${name}Text`}
+                  value={name === 'header' ? defaultHeader : defaultFooter}
+                  data-default={name === 'header' ? defaultHeader : defaultFooter}
+                  aria-label={t(name === 'header' ? 'print.headerText' : 'print.footerText')}
+                />
+              )}
+            </>
+          ))
+        }
+        <label class="select">
+          {t('print.size')}
+          <select name="size">
+            {sizes.map((s) => <option value={s}>{sizeLabels[s]}</option>)}
+          </select>
+        </label>
+        <label class="select">
+          {t('print.paper')}
+          <select name="paper">
+            {papers.map((p) => <option value={p}>{paperLabels[p]}</option>)}
+          </select>
+        </label>
+      </fieldset>
+
+      <p>
+        <button type="button" class="link small" id="print-reset">{t('print.reset')}</button>
+      </p>
+    </form>
+
+    <div
+      class="print-doc light-palette"
+      id="doc"
+      data-strings={JSON.stringify(stringsFor(t, printKeys))}
+      data-locale={locale}
+      data-version={version}
+    >
+      <section class="pd-cover" data-part="cover">
+        <p class="pd-kicker mono">ML-PRM · {version}</p>
+        <h1>{pick(site.title, locale)}</h1>
+        <p class="pd-version">{pick(v.title, locale)}</p>
+        <dl class="pd-meta" data-part="author">
+          <dt>{site.author}</dt>
+          {site.institution && <dd>{site.institution}</dd>}
+          {
+            site.group && (
+              <dd>
+                {site.group.name} · {pick(site.group.fullName, locale)}
+              </dd>
+            )
+          }
+          {
+            site.thesis && (
+              <dd>
+                {site.thesis.title} ({site.thesis.year})
+              </dd>
+            )
+          }
+        </dl>
+        <ul class="pd-legend" data-part="legend">
+          {
+            origins.map((o) => (
+              <li>
+                <span class={`swatch origin-${o}`} />
+                <strong>{t(`origin.${o}`)}</strong> — {t(`origin.${o}-long`)}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="pd-printed small" id="printed" data-part="printed"></p>
+      </section>
+
+      <section class="pd-map" data-part="map">
+        <h2>{t('print.map')}</h2>
+        <Topology locale={locale} version={version} compact />
+      </section>
+
+      <section class="pd-acronyms" data-part="acronyms">
+        <h2>{t('refs.acronyms')}</h2>
+        <dl>
+          {
+            usedAcronyms.map((a) => (
+              <div data-cited-by={[...acronymUsers.get(a.id)!].join(' ')}>
+                <dt class="mono">{a.id}</dt>
+                <dd>{pick(a.expansion, locale)}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <section class="pd-toc" data-part="toc">
+        <h2>{t('print.toc')}</h2>
+        <ol>
+          {
+            processes.map(({ data: p }) => (
+              <li data-toc={p.id}>
+                <a href={`#process-${p.id}`}>
+                  <span class="mono">{p.id}</span> {p.name}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      {
+        processes.map(({ data: p }) => (
+          <PrintProcess locale={locale} process={p} workProducts={workProducts} previousVersion={previousVersion} />
+        ))
+      }
+
+      <section class="pd-references" data-part="references">
+        <h2>{t('print.references')}</h2>
+        <div class="pd-ref-group">
+          <h3>{t('process.primaryStudies')}</h3>
+          <ol>
+            {
+              citedStudies.map((s) => {
+                const ref = s.reference ? referenceByKey.get(s.reference) : undefined;
+                return (
+                  <li data-cited-by={citers(s.id)}>
+                    <span class="mono">{s.id}</span>{' '}
+                    {ref ? <span set:html={inline(fullCite(ref))} /> : <span>{`${s.title} (${s.year}).`}</span>}
+                  </li>
+                );
+              })
+            }
+          </ol>
+        </div>
+        <div class="pd-ref-group">
+          <h3>{t('process.literature')}</h3>
+          <ol>
+            {
+              citedLiterature.map((r) => (
+                <li data-cited-by={citers(r.key)}>
+                  <span set:html={inline(fullCite(r))} />
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </section>
+
+      <p class="pd-empty no-print" id="print-empty" hidden>{t('print.empty')}</p>
+    </div>
+  </div>
+  <!-- The paper size, set by src/lib/print-page.ts: @page cannot be switched with a class. -->
+  <style is:inline id="print-page-size"></style>
+</Layout>
+
+<script>
+  import { initPrintPage } from '../../../lib/print-page';
+
+  initPrintPage();
+</script>

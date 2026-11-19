@@ -9,7 +9,7 @@ import { diagramKeys } from '../../lib/lifecycle-diagram';
 import { exportKeys } from '../../lib/tailor/export';
 import { builderData } from '../../lib/tailor/data';
 import { renderKeys } from '../../lib/tailor/render';
-import { pageLocale, href, stringsFor, type UiKey } from '../../i18n/ui';
+import { pageLocale, stringsFor, type UiKey } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
 const { locale, t } = pageLocale(Astro.props);
@@ -132,7 +132,8 @@ const strings = stringsFor(t, keys);
         <h3 class="export-group" id="export-documents">{t('tailor.exportDocuments')}</h3>
         <div class="exports" role="group" aria-labelledby="export-documents">
           <button type="button" data-export="md">{t('tailor.markdown')}</button>
-          <button type="button" id="print">{t('tailor.print')}</button>
+          <!-- The printable PRM with this model (src/lib/print-model.ts); the script keeps the link up to date. -->
+          <a class="button" id="print" href="#" target="_blank" rel="noopener">⎙ {t('print.button')}</a>
         </div>
         <h3 class="export-group" id="export-data">{t('tailor.exportData')}</h3>
         <p class="small muted">{t('tailor.exportDataNote')}</p>
@@ -171,8 +172,6 @@ const strings = stringsFor(t, keys);
     <span id="mobile-summary"></span>
     <span class="mobile-bar-go">{t('tailor.export')} ↓</span>
   </a>
-
-  <div id="print-view" class="print-only"></div>
 
   <ProcessModal locale={locale} />
 
@@ -228,6 +227,8 @@ const strings = stringsFor(t, keys);
   const toHash = () => {
     const hash = model.toHash(state);
     history.replaceState(null, '', `#${hash}`);
+    // The printable version of the model, in its PRM version.
+    $<HTMLAnchorElement>('#print').href = `${data.base}${state.version}/print/?model=${encodeURIComponent(hash)}`;
     if (undo && modelKey(state) !== undo.after) dismissUndo();
     edited ||= modelKey(state) !== opened;
     if (!edited) return;
@@ -574,11 +575,6 @@ const strings = stringsFor(t, keys);
       if (kind === 'yaml') download(`${model.slug(state.project) || 'lifecycle-model'}.yaml`, 'application/yaml', exporter.yaml(state, s));
     }),
   );
-
-  $('#print').addEventListener('click', () => {
-    $('#print-view').innerHTML = render.printView(view());
-    window.print();
-  });
 
   $('#copy').addEventListener('click', async (e) => {
     const b = e.currentTarget as HTMLButtonElement;

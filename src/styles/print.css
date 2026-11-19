@@ -1,0 +1,740 @@
+/* The printable PRM (src/pages/[lang]/[version]/print.astro): on screen, the
+   options next to a preview of the document on a sheet of paper; on paper,
+   the document alone. */
+
+.print-page .print-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+  .print-page .print-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- The options ---------------------------------------------------------- */
+
+.print-page .print-options {
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  padding: 14px 16px;
+  font-size: 0.9rem;
+}
+
+.print-page .print-options fieldset {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 12px 0 0;
+  padding: 10px 0 0;
+  display: grid;
+  gap: 4px;
+}
+
+.print-page .print-options legend {
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.print-page .print-options label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.print-page .print-options label.sub {
+  padding-left: 22px;
+}
+
+.print-page .print-options label:has(:disabled) {
+  color: var(--muted);
+}
+
+.print-page .print-options label.select {
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* The menus share one width, so they line up whatever their options say. */
+.print-page .print-options label.select select {
+  flex: none;
+  width: 8.5rem;
+}
+
+.print-page .print-options p {
+  margin: 0;
+}
+
+/* The text of the header or the footer, under its checkbox. */
+.print-page .print-options .margin-text {
+  width: calc(100% - 22px);
+  margin: 2px 0 6px 22px;
+  padding: 3px 6px;
+  font-size: 0.85rem;
+}
+
+.print-page .print-options .print-hint {
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.print-page .print-options #print-now {
+  width: 100%;
+  justify-content: center;
+}
+
+.print-page .print-options .link {
+  padding: 1px 8px;
+  font-size: 0.8rem;
+}
+
+.print-page .print-options .link + .link {
+  margin-left: 4px;
+}
+
+.print-page .print-options #print-count {
+  margin-right: 8px;
+}
+
+.print-page .print-process-list {
+  display: grid;
+  gap: 2px;
+  max-height: 260px;
+  overflow: auto;
+  font-size: 0.85rem;
+}
+
+/* --- The document --------------------------------------------------------- */
+
+/* Always in the light palette (the class light-palette, global.css): it is a
+   preview of paper, also in dark mode. Paper is white, so its background and
+   surfaces are too; .print-page makes these win over the palette. */
+.print-page .print-doc {
+  --bg: #ffffff;
+  --surface: #ffffff;
+}
+
+.print-doc {
+  /* The page margins, on paper (print-page.ts) and in the preview on screen. */
+  --page-margin-block: 20mm;
+  --page-margin-inline: 15mm;
+
+  background: var(--bg);
+  color: var(--text);
+  font-size: 10.5pt;
+  line-height: 1.45;
+  /* On screen, a sheet of paper. */
+  padding: var(--page-margin-block) var(--page-margin-inline);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 12%);
+  max-width: 210mm;
+}
+
+.print-doc[data-size='small'] {
+  font-size: 9pt;
+}
+
+.print-doc[data-size='large'] {
+  font-size: 12pt;
+}
+
+.print-doc h1,
+.print-doc h2,
+.print-doc h3 {
+  break-after: avoid;
+}
+
+.print-doc h2 {
+  font-size: 1.45em;
+  margin: 1.4em 0 0.6em;
+}
+
+.print-doc h3 {
+  font-size: 0.82em;
+  font-family: var(--mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.2em 0 0.4em;
+}
+
+.print-doc p {
+  margin: 0 0 0.5em;
+}
+
+.print-doc a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.print-doc .mono {
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+
+.print-doc .muted {
+  color: var(--muted);
+}
+
+/* The parts the settings leave out: print-page.ts lists in data-off every
+   setting without effect, and each element a setting includes is marked with
+   data-part, named after it. */
+.print-doc[data-off~='cover'] [data-part='cover'],
+.print-doc[data-off~='legend'] [data-part='legend'],
+.print-doc[data-off~='author'] [data-part='author'],
+.print-doc[data-off~='printed'] [data-part='printed'],
+.print-doc[data-off~='map'] [data-part='map'],
+.print-doc[data-off~='activityCount'] [data-part='activityCount'],
+.print-doc[data-off~='toc'] [data-part='toc'],
+.print-doc[data-off~='references'] [data-part='references'],
+.print-doc[data-off~='acronyms'] [data-part='acronyms'],
+.print-doc[data-off~='origin'] [data-part='origin'],
+.print-doc[data-off~='purpose'] [data-part='purpose'],
+.print-doc[data-off~='outcomes'] [data-part='outcomes'],
+.print-doc[data-off~='interface'] [data-part='interface'],
+.print-doc[data-off~='wpType'] [data-part='wpType'],
+.print-doc[data-off~='serves'] [data-part='serves'],
+.print-doc[data-off~='ioDescriptions'] [data-part='ioDescriptions'],
+.print-doc[data-off~='links'] [data-part='links'],
+.print-doc[data-off~='activities'] [data-part='activities'],
+.print-doc[data-off~='descriptions'] [data-part='descriptions'],
+.print-doc[data-off~='sources'] [data-part='sources'],
+.print-doc[data-off~='checklist'] [data-part='checklist'],
+.print-doc[data-off~='standards'] [data-part='standards'],
+.print-doc[data-off~='changes'] [data-part='changes'],
+.print-doc[data-off~='notes'] [data-part='notes'],
+.print-doc .none-cited,
+.print-doc [hidden] {
+  display: none;
+}
+
+/* Cover */
+.print-doc .pd-cover h1 {
+  font-size: 2.4em;
+  line-height: 1.1;
+  margin: 0.3em 0 0.2em;
+}
+
+.print-doc .pd-kicker {
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.print-doc .pd-version {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.print-doc .pd-meta {
+  margin: 2em 0;
+}
+
+.print-doc .pd-meta dt {
+  font-weight: 600;
+}
+
+.print-doc .pd-meta dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.print-doc .pd-legend {
+  list-style: none;
+  padding: 0;
+  margin: 2em 0;
+  display: grid;
+  gap: 6px;
+}
+
+.print-doc .swatch {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.5em;
+  vertical-align: -0.1em;
+  border: 1px solid var(--ink);
+}
+
+.print-doc .pd-printed {
+  color: var(--muted);
+  margin-top: 3em;
+}
+
+/* Map: processes left out of the document are greyed out. */
+.print-doc .pd-map .left-out {
+  opacity: 0.35;
+}
+
+/* Contents */
+.print-doc .pd-toc ol {
+  list-style: none;
+  padding: 0;
+  columns: 2;
+  column-gap: 2em;
+}
+
+.print-doc .pd-toc li {
+  padding: 2px 0;
+  break-inside: avoid;
+}
+
+/* A process */
+.print-doc .print-process {
+  margin-top: 2em;
+}
+
+.print-doc .pp-head {
+  border-top: 2px solid var(--ink);
+  padding-top: 0.4em;
+}
+
+.print-doc .pp-head h2 {
+  margin: 0.3em 0 0.4em;
+}
+
+.print-doc .pp-tab {
+  display: inline-flex;
+  gap: 1em;
+  padding: 1px 8px;
+  border: 1px solid var(--ink);
+  font-size: 0.8em;
+}
+
+.print-doc .pp-outcomes,
+.print-doc .pp-acts,
+.print-doc .pp-io {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.print-doc .pp-outcomes li {
+  display: flex;
+  gap: 0.6em;
+  margin-bottom: 0.3em;
+  break-inside: avoid;
+}
+
+.print-doc .letter {
+  flex: none;
+  width: 1.5em;
+  text-align: center;
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.85em;
+  height: fit-content;
+}
+
+.print-doc .pp-interface {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2em;
+}
+
+/* Inputs and outputs one below the other (ioSideBySide off). */
+.print-doc[data-off~='ioSideBySide'] .pp-interface {
+  grid-template-columns: 1fr;
+}
+
+.print-doc .pp-io li {
+  margin-bottom: 0.6em;
+  break-inside: avoid;
+}
+
+.print-doc .badge {
+  display: inline-block;
+  margin-left: 0.5em;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.72em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+}
+
+.print-doc .pp-serves {
+  margin-left: 0.4em;
+  font-family: var(--mono);
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
+.print-doc .pp-io-desc,
+.print-doc .pp-links {
+  margin: 0.15em 0 0;
+  font-size: 0.9em;
+}
+
+.print-doc .pp-links {
+  color: var(--muted);
+}
+
+/* A long activity may run onto the next page, but its title stays with its text. */
+.print-doc .pp-acts li {
+  margin-bottom: 0.7em;
+}
+
+/* An activity's title line: the box to tick, its ID in a box like the outcome
+   letters, and its title, all centred on the line. */
+.print-doc .pp-act-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0 0 0.2em;
+  break-after: avoid;
+}
+
+.print-doc .pp-aid {
+  flex: none;
+  min-width: 2.6em;
+  padding: 0 3px;
+  text-align: center;
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+
+/* Under the title, not under the ID box (2.6em at 0.85em, and the gap). */
+.print-doc .pp-act-desc {
+  margin-left: 2.7em;
+}
+
+/* With a box to tick before the ID, the title starts further in: its width and the gap. */
+.print-doc:not([data-off~='checklist']) .pp-act-desc {
+  margin-left: 4.05em;
+}
+
+.print-doc:not([data-off~='checklist']) .pp-sources {
+  margin-left: calc(4.05em / 0.85);
+}
+
+.print-doc .pp-act-desc p:last-child {
+  margin-bottom: 0;
+}
+
+/* Its own text is at 0.85em, so the indent of the description is divided by it. */
+.print-doc .pp-sources {
+  margin: 0.25em 0 0 calc(2.7em / 0.85);
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
+/* A box to tick before each activity (the checklist setting). */
+.print-doc .pp-box {
+  display: inline-block;
+  flex: none;
+  width: 0.85em;
+  height: 0.85em;
+  border: 1px solid var(--ink);
+}
+
+.print-doc .pp-standards {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.print-doc .pp-standards th,
+.print-doc .pp-standards td {
+  text-align: left;
+  vertical-align: top;
+  padding: 3px 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.print-doc .pp-standards thead {
+  display: table-header-group;
+}
+
+.print-doc .pp-standards tr {
+  break-inside: avoid;
+}
+
+/* Changes, as on the process page (process.css). */
+.print-doc .changes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.print-doc .changes > li {
+  padding: 3px 0;
+  break-inside: avoid;
+}
+
+.print-doc .changes > li + li {
+  border-top: 1px solid var(--border);
+}
+
+.print-doc .kind {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 6px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+}
+
+.print-doc .kind-added {
+  background: var(--ins-bg);
+  color: var(--ins-text);
+}
+
+.print-doc .kind-removed {
+  background: var(--del-bg);
+  color: var(--del-text);
+}
+
+/* Space for notes after each process: ruled lines to write on. */
+.print-doc .pp-notes {
+  break-inside: avoid;
+}
+
+.print-doc .pp-lines span {
+  display: block;
+  height: 2em;
+  border-bottom: 1px solid var(--border);
+}
+
+/* A model from the lifecycle builder (print-model.ts): its phases, each a
+   heading before its processes, and the processes left out with the reason. */
+.print-doc .pd-model-description {
+  margin-top: 1em;
+}
+
+.print-doc .pd-phase {
+  margin-top: 2.5em;
+  padding: 0.6em 0 0.2em;
+  border-top: 3px double var(--ink);
+}
+
+.print-doc .pd-phase-step {
+  margin: 0;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.print-doc .pd-phase-title {
+  margin: 0.1em 0 0.3em;
+  font-size: 1.7em;
+}
+
+.print-doc .pd-phase-title::after {
+  display: none;
+}
+
+.print-doc .pd-phase-description,
+.print-doc .pd-phase-note {
+  margin: 0 0 0.3em;
+}
+
+.print-doc .pd-phase-note {
+  color: var(--muted);
+}
+
+/* A process right under its phase heading needs no space or page of its own. */
+.print-doc .pd-phase + .print-process {
+  margin-top: 1em;
+}
+
+.print-doc .pd-toc .pd-toc-group {
+  break-inside: avoid;
+  padding-bottom: 0.6em;
+}
+
+.print-doc .pd-toc .pd-toc-group ol {
+  columns: auto;
+}
+
+.print-doc .pd-toc .pd-toc-phase {
+  margin: 0 0 0.2em;
+  font-weight: 600;
+}
+
+.print-doc .pd-left-out ul {
+  list-style: none;
+  padding: 0;
+}
+
+.print-doc .pd-left-out li {
+  margin-bottom: 0.3em;
+  break-inside: avoid;
+}
+
+.print-doc .pd-reason {
+  color: var(--muted);
+}
+
+/* Acronyms used in the processes printed. */
+.print-doc .pd-acronyms dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 1.2em;
+  margin: 0;
+}
+
+.print-doc .pd-acronyms dl > div {
+  display: contents;
+}
+
+.print-doc .pd-acronyms dl > div[hidden] {
+  display: none;
+}
+
+.print-doc .pd-acronyms dd {
+  margin: 0;
+}
+
+/* References */
+.print-doc .pd-references ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+.print-doc .pd-references li {
+  margin-bottom: 0.4em;
+  padding-left: 2.6em;
+  text-indent: -2.6em;
+  break-inside: avoid;
+}
+
+.print-doc .pd-references li .mono {
+  display: inline-block;
+  min-width: 2.2em;
+  text-indent: 0;
+}
+
+.print-doc .pd-empty {
+  padding: 2em;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+}
+
+/* Colours, printed as they are shown, even where the print dialog leaves out backgrounds. */
+.print-doc {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Colours by origin, set apart for the map (mapColour) and for the ID of each
+   process (idColour); without them, the map loses its grid paper too. The
+   legend on the cover keeps its colours while either is on. */
+.print-doc[data-off~='mapColour'] .topology :is(.origin-standards-and-literature, .origin-standards-only, .origin-decomposed),
+.print-doc[data-off~='idColour'] .pp-tab:is(.origin-standards-and-literature, .origin-standards-only, .origin-decomposed),
+.print-doc[data-off~='mapColour'][data-off~='idColour'] .pd-legend .swatch {
+  background: transparent;
+  color: inherit;
+}
+
+.print-doc[data-off~='mapColour'] .grid-paper {
+  background-image: none;
+}
+
+/* Without the origin, the ID sits on the line of the name: [P01] Name ─────
+   The tag is centred on the name; aligned on the baseline, its box would hang
+   below the larger letters. The space goes around the line, not on the name,
+   so that the centring is exact. */
+.print-doc[data-off~='origin'] .pp-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.7em 0 0.4em;
+}
+
+.print-doc[data-off~='origin'] .pp-head h2 {
+  flex: 1;
+  margin: 0;
+}
+
+.print-doc[data-off~='origin'] .pp-tab {
+  flex: none;
+  align-items: center;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+/* --- On paper -------------------------------------------------------------- */
+
+/* In Firefox the top and bottom page margins are 0, so that it leaves out its
+   header and footer (print-page.ts); the document takes that space back as
+   padding, repeated on every page it runs onto. */
+@supports (-moz-appearance: none) {
+  @media print {
+    .print-page .print-doc {
+      padding: var(--page-margin-block) 0;
+      box-decoration-break: clone;
+    }
+  }
+}
+
+@media print {
+  .print-page main {
+    max-width: none;
+  }
+
+  .print-page .print-layout {
+    display: block;
+    margin: 0;
+  }
+
+  .print-doc {
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    max-width: none;
+  }
+
+  /* The cover on a page of its own, then the map, then the contents. */
+  .print-doc .pd-cover {
+    break-after: page;
+  }
+
+  .print-doc .pd-map h2,
+  .print-doc .pd-toc h2 {
+    margin-top: 0;
+  }
+
+  .print-doc .pd-toc,
+  .print-doc .pd-left-out,
+  .print-doc .pd-references,
+  .print-doc .pd-acronyms {
+    break-before: page;
+  }
+
+  .print-doc:not([data-off~='breaks']) .print-process {
+    break-before: page;
+    margin-top: 0;
+  }
+
+  /* A phase starts a page, and its first process stays with it. */
+  .print-doc .pd-phase {
+    break-before: page;
+    break-after: avoid;
+    margin-top: 0;
+  }
+
+  .print-doc:not([data-off~='breaks']) .pd-phase + .print-process {
+    break-before: auto;
+  }
+
+  .print-doc:not([data-off~='breaks']) .print-process .pp-head {
+    margin-top: 0;
+  }
+}

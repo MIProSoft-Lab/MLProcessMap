@@ -78,7 +78,7 @@
   gap: 6px;
 }
 
-.tailor-page .exports button {
+.tailor-page .exports :is(button, a.button) {
   font-size: 0.85rem;
   padding: 4px 10px;
 }
@@ -92,22 +92,6 @@
 
 .tailor-page .export-group + .small {
   margin-top: 0;
-}
-
-.tailor-page .print-only {
-  display: none;
-}
-
-@media print {
-  .tailor-page .print-only {
-    display: block;
-  }
-
-  /* The page title and intro; the print view has its own. */
-  .tailor-page > .container > h1,
-  .tailor-page > .container > p {
-    display: none;
-  }
 }
 
 /* Rendered by the script */

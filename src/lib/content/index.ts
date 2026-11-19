@@ -26,6 +26,7 @@ export const {
 export { contentFiles };
 export type { Localized } from './model';
 export type { WorkProduct, WorkProductLink } from './work-products';
+export { ioLinks } from './work-products';
 export type { Acronym, Activity, Lifecycle, Process, Reference, Study, Version, WorkProductType } from './schemas';
 
 /** Pick the text for a locale from a localized map, falling back to English. */

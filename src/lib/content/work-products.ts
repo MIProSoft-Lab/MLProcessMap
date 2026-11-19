@@ -19,6 +19,15 @@ export interface WorkProduct {
   consumers: WorkProductLink[];
 }
 
+/**
+ * The processes linked to a process through one of its inputs or outputs: for
+ * an input, those that produce it; for an output, the others that use it.
+ */
+export function ioLinks(wp: WorkProduct | undefined, kind: 'inputs' | 'outputs', processId: string): WorkProductLink[] {
+  if (!wp) return [];
+  return kind === 'inputs' ? wp.producers : wp.consumers.filter((c) => c.process !== processId);
+}
+
 export function deriveWorkProducts(processes: Process[], meta: WorkProductMeta[], locale: Locale): WorkProduct[] {
   const metaById = new Map(meta.map((w) => [w.id, w]));
   const byId = new Map<string, WorkProduct>();

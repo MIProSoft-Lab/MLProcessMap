@@ -609,6 +609,12 @@
   justify-content: space-between;
 }
 
+.process-page .title-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .process-page .title-row .button {
   flex: none;
 }

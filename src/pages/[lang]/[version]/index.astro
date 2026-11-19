@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import LegendHelp from '../../../components/LegendHelp.astro';
 import SearchToolbar from '../../../components/SearchToolbar.astro';
+import Topology from '../../../components/Topology.astro';
 import { getVersion, getProcess, pick } from '../../../lib/content';
 import { versionLinks, versionPaths } from '../../../lib/paths';
 import { plain } from '../../../lib/text';
@@ -42,7 +43,10 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
   translated={translated}
 >
   <p class="breadcrumbs">ML-PRM / {version}</p>
-  <h1>{t('map.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
+  <div class="title-row">
+    <h1>{t('map.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
+    <a class="button no-print" href={href(locale, version, 'print')}>⎙ {t('print.button')}</a>
+  </div>
   <p class="muted prose">{pick(v.description, locale)}</p>
 
   <SearchToolbar placeholder={t('map.search')} count={t('map.matches')}>
@@ -62,39 +66,7 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
     items={origins.map((o) => ({ term: t(`origin.${o}`), description: t(`origin.${o}-long`), swatch: `origin-${o}` }))}
   />
 
-  {
-    groups.map((g) => (
-      <section class="group grid-paper">
-        <h2 class="group-label">{g.name}</h2>
-        <div class="columns">
-          {g.columns.map((col) => (
-            <ol class="column">
-              {col.map(({ p }) => (
-                <li data-id={p.id}>
-                  <a
-                    class="node"
-                    href={href(locale, version, 'processes', p.id)}
-                    data-process={p.id}
-                    data-version={version}
-                    data-name={p.name}
-                  >
-                    <span class={`node-tab origin-${p.origin}`}>
-                      <span>{p.id}</span>
-                      <span>
-                        {p.activities.length} {t('map.activities')}
-                      </span>
-                    </span>
-                    <span class="node-name">{p.name}</span>
-                    <span class="node-hit" hidden />
-                  </a>
-                </li>
-              ))}
-            </ol>
-          ))}
-        </div>
-      </section>
-    ))
-  }
+  <Topology locale={locale} version={version} />
   <p id="empty" class="muted" hidden>{t('map.noResults')}</p>
   <ProcessModal locale={locale} openLinksIn="main" />
   <script type="application/json" id="map-search" set:html={JSON.stringify(searchData).replace(/</g, '\\u003c')} />
@@ -170,126 +142,20 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
 </script>
 
 <style>
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .title-row .button {
+    flex: none;
+  }
+
   .toolbar {
     gap: 12px 24px;
     margin: 20px 0 16px;
-  }
-
-  .group {
-    border: 1px solid var(--ink);
-    padding: 44px 24px 24px;
-    margin-top: 8px;
-    position: relative;
-  }
-
-  /* The group name sits in a tab on the frame, like a drawing label. */
-  .group-label {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    margin: 0;
-    padding: 4px 12px;
-    background: var(--ink-fill);
-    color: var(--surface);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .group-label::after {
-    display: none;
-  }
-
-  .columns {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    gap: 14px 28px;
-    align-items: start;
-  }
-
-  .column {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 14px;
-  }
-
-  .node {
-    display: flex;
-    flex-direction: column;
-    background: var(--surface);
-    border: 1px solid var(--ink);
-    color: var(--text);
-    text-decoration: none;
-    transition:
-      transform 0.1s ease,
-      box-shadow 0.1s ease,
-      opacity 0.15s ease;
-  }
-
-  .node:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: var(--lift);
-  }
-
-  .node-tab {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 2px 8px;
-    border-bottom: 1px solid var(--ink);
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
-
-  .node-tab span:last-child {
-    opacity: 0.8;
-  }
-
-  .node-name {
-    padding: 8px 10px 10px;
-    font-weight: 600;
-    line-height: 1.3;
-    min-height: 3.2em;
-  }
-
-  .dim .node {
-    opacity: 0.25;
-  }
-
-  /* Where the search matched, when it is not in the name. */
-  .node-hit {
-    padding: 6px 10px 8px;
-    border-top: 1px dashed var(--border);
-    font-size: 0.82rem;
-    line-height: 1.45;
-    color: var(--muted);
-  }
-
-  .node-hit :global(.hit-label) {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--text);
-  }
-
-  .node-hit :global(mark) {
-    background: var(--warn-bg);
-    color: inherit;
-    box-shadow: 0 0 0 1px var(--warn-border);
-  }
-
-  @media (max-width: 600px) {
-    .group {
-      padding: 40px 12px 12px;
-    }
-
-    .node-name {
-      min-height: 0;
-    }
   }
 </style>

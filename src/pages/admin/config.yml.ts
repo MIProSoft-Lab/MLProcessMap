@@ -121,6 +121,7 @@ const sectionLabels: Record<string, string> = {
   process: 'Process page',
   change: 'Kinds of change',
   wp: 'Work products',
+  print: 'Printable version',
   compare: 'Compare versions',
   lc: 'Lifecycle models',
   tailor: 'Lifecycle builder',

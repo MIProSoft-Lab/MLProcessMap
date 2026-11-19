@@ -6,6 +6,7 @@ import { diagramKeys } from './lifecycle-diagram';
 import { modalKeys } from './process-modal';
 import { exportKeys } from './tailor/export';
 import { renderKeys } from './tailor/render';
+import { printKeys } from './print-page';
 
 const read = (path: string) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), 'utf8');
 
@@ -36,6 +37,11 @@ describe('the strings handed to the scripts', () => {
 
   it("cover what the lifecycle builder's templates use", () => {
     expect(renderKeys).toEqual(expect.arrayContaining(used(read('lib/tailor/render.ts'))));
+  });
+
+  it('cover what the printable version uses', () => {
+    expect(printKeys).toEqual(expect.arrayContaining(used(read('lib/print-page.ts'))));
+    expect(printKeys).toEqual(expect.arrayContaining(used(read('lib/print-model.ts'))));
   });
 
   it('cover what the process modal uses', () => {

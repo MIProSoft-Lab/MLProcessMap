@@ -16,6 +16,7 @@ import { getProcess, getVersion, processIds, versions } from '../../../../lib/co
 import { processPaths, versionLinks } from '../../../../lib/paths';
 import { plain } from '../../../../lib/text';
 import { prose } from '../../../../lib/acronyms';
+import { printHref } from '../../../../lib/print-options';
 import { pageLocale, href } from '../../../../i18n/ui';
 
 export const getStaticPaths = processPaths;
@@ -63,13 +64,16 @@ const title = (key: string) => sections.find(([k]) => k === key)![1];
 
   <div class="title-row">
     <h1>{p.name}</h1>
-    {
-      compareHref && (
-        <a class="button no-print" href={compareHref}>
-          ⇄ {t('compare.title')}
-        </a>
-      )
-    }
+    <span class="title-actions no-print">
+      {
+        compareHref && (
+          <a class="button" href={compareHref}>
+            ⇄ {t('compare.title')}
+          </a>
+        )
+      }
+      <a class="button" href={printHref(href(locale, version, 'print'), id)}>⎙ {t('print.button')}</a>
+    </span>
   </div>
 
   <TitleBlock locale={locale} process={p} version={getVersion(version)} index={i} total={ids.length} />

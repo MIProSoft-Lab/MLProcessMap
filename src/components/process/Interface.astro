@@ -6,7 +6,7 @@
 // produce or use it.
 import CollapseToggle from '../CollapseToggle.astro';
 import ProcessChip from '../ProcessChip.astro';
-import { getProcess, getWorkProducts, type Process } from '../../lib/content';
+import { getProcess, getWorkProducts, ioLinks, type Process } from '../../lib/content';
 import { prose } from '../../lib/acronyms';
 import { href, useTranslations, type Locale } from '../../i18n/ui';
 
@@ -40,7 +40,7 @@ const wpHref = (wid: string) => `${href(locale, version, 'work-products')}#${wid
             {p[kind].length === 0 && <p class="muted small">—</p>}
             {p[kind].map((io) => {
               const wp = wps.get(io.workProduct);
-              const links = kind === 'inputs' ? wp?.producers : wp?.consumers.filter((c) => c.process !== p.id);
+              const links = ioLinks(wp, kind, p.id);
               return (
                 <div class="io-node" id={`${kind === 'inputs' ? 'input' : 'output'}-${io.workProduct}`}>
                   <div class="io-head">
@@ -62,7 +62,7 @@ const wpHref = (wid: string) => `${href(locale, version, 'work-products')}#${wid
                   {io.description && <p class="io-desc" set:html={prose(io.description, locale)} />}
                   <div class="io-links">
                     <span class="label">{kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}</span>
-                    {links && links.length > 0 ? (
+                    {links.length > 0 ? (
                       <span class="chips">
                         {links.map((l) => (
                           <ProcessChip locale={locale} version={version} id={l.process} name={name(l.process)} modal={false} />

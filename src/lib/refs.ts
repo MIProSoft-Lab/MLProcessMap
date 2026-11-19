@@ -3,6 +3,12 @@ import { references, studies, type Reference } from './content';
 export const referenceByKey = new Map(references.map((r) => [r.key, r]));
 export const studyById = new Map(studies.map((s) => [s.id, s]));
 
+/** The short citation of a primary study (P10 → "Akkiraju et al., 2020"), when it has a reference. */
+export function studyCite(id: string) {
+  const study = studyById.get(id);
+  return study?.reference ? shortCite(referenceByKey.get(study.reference)) : undefined;
+}
+
 /** "Khan et al., 2024" style label for a bibliography entry. */
 export function shortCite(r: Reference | undefined, key = '') {
   if (!r) return key;

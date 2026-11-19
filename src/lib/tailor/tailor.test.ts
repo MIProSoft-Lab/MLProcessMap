@@ -20,7 +20,7 @@ import {
   type State,
   type Version,
 } from './model';
-import { missingList, phaseCard, phaseLabel, phaseSelect, printView, processRow, startOptions } from './render';
+import { missingList, phaseCard, phaseLabel, phaseSelect, processRow, startOptions } from './render';
 
 const strings: Record<string, string> = {
   'tailor.untitled': 'Untitled model',
@@ -261,14 +261,6 @@ describe('the builder templates', () => {
   it('offer the templates of the version only', () => {
     expect(startOptions(data, model(), s)).toContain('data-start="lc:basic"');
     expect(startOptions(data, { ...model(), version: 'v1' }, s)).not.toContain('lc:basic');
-  });
-
-  it('print the included activities by phase', () => {
-    const html = printView(view());
-    expect(html).toContain('<h1>Fraud detection</h1>');
-    expect(html).toContain('<h2>02 Phase 2</h2>');
-    expect(html).toContain('☐ A1. First of P01');
-    expect(html).not.toContain('Second of P01');
   });
 });
 

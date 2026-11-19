@@ -2,7 +2,7 @@
 // Where an activity comes from: the primary studies of the review (P1, P2…)
 // and the specialized literature, each a chip linking to the references page.
 import type { Activity } from '../../lib/content';
-import { referenceByKey, shortCite, studyById } from '../../lib/refs';
+import { referenceByKey, shortCite, studyById, studyCite } from '../../lib/refs';
 import { href, useTranslations, type Locale } from '../../i18n/ui';
 
 interface Props {
@@ -24,7 +24,7 @@ const references = href(locale, 'references');
           <dd class="chips">
             {a.primaryStudies.map((s) => {
               const study = studyById.get(s);
-              const cite = study?.reference && shortCite(referenceByKey.get(study.reference));
+              const cite = studyCite(s);
               return (
                 <a class="chip" href={`${references}#${s}`} title={study?.title}>
                   <span class="study-id">{s}</span>

@@ -113,6 +113,65 @@ wp:
   filter: Filter by work product or process
   noResults: No work product matches your filter.
   all: All
+print:
+  button: Print / PDF
+  title: Printable version
+  intro: "Choose what to include and how it looks. Then print the page, or choose Save as PDF in the print dialog."
+  print: Print or save as PDF
+  headersHint: "If the address and the date appear at the top or the bottom of the pages, untick Headers and footers in the print dialog."
+  reset: Reset options
+  cover: Cover page
+  map: Process map
+  toc: Table of contents
+  processes: Processes
+  all: All
+  none: None
+  selected: "{n} of {total} processes"
+  parts: In each process
+  descriptions: Descriptions
+  sources: Sources
+  standards: Traceability to the standards
+  references: References cited
+  appearance: Page
+  colours: Colours by origin
+  idColour: Process ID coloured by origin
+  breaks: Each process on a new page
+  checklist: A box to tick before each
+  size: Text size
+  small: Small
+  normal: Normal
+  large: Large
+  paper: Paper
+  empty: Choose at least one process, or another part, to print.
+  printed: "Printed on {date} from {url}"
+  standard: Standard
+  standardActivity: Activity of the standard
+  prmActivity: PRM activity
+  note: Note
+  document: Document
+  origin: Origin of each process
+  legend: Legend of the origins
+  author: Author and institution
+  printedOption: Date and address of this copy
+  activityCount: Number of activities
+  ioSideBySide: Side by side
+  wpType: Type of each one
+  serves: Outcomes each one supports
+  ioDescriptions: Descriptions
+  links: Processes that produce or use them
+  notes: Space for notes
+  notesTitle: Notes
+  pageNumbers: Page numbers
+  header: Header
+  headerText: Text of the header
+  footer: Footer
+  footerText: Text of the footer
+  phase: "Phase {n}"
+  basedOn: "Based on {prm}"
+  unassigned: "Not in a phase"
+  leftOut: "Processes left out"
+  repeats: This phase can be repeated
+  returnsTo: "Returns to {phase}"
 compare:
   title: Compare versions
   intro: Changes in the text of each process between two versions of the PRM.

@@ -1,0 +1,175 @@
+---
+// A process in the printable PRM: every part of the process page, laid out for
+// paper. Each part is marked with data-part, named after the setting that
+// includes it (src/lib/print-options.ts), so the options can leave it out.
+import Changes from '../process/Changes.astro';
+import { ioLinks, type Process, type WorkProduct } from '../../lib/content';
+import { prose } from '../../lib/acronyms';
+import { referenceByKey, shortCite, studyCite } from '../../lib/refs';
+import { useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  process: Process;
+  /** The work products of the version, by ID. */
+  workProducts: Map<string, WorkProduct>;
+  /** The version the changes are from, when there is one. */
+  previousVersion?: string;
+}
+
+const { locale, process: p, workProducts, previousVersion } = Astro.props;
+const t = useTranslations(locale);
+/** A primary study as the sources cite it: "P10 (Akkiraju et al., 2020)". */
+const studyLabel = (id: string) => {
+  const cite = studyCite(id);
+  return cite ? `${id} (${cite})` : id;
+};
+---
+
+<article class="print-process" id={`process-${p.id}`} data-process={p.id}>
+  <header class="pp-head">
+    <span class={`pp-tab origin-${p.origin}`}>
+      <span class="mono">{p.id}</span>
+      <span data-part="origin">{t(`origin.${p.origin}`)}</span>
+    </span>
+    <h2>{p.name}</h2>
+  </header>
+
+  <section data-part="purpose">
+    <h3>{t('process.purpose')}</h3>
+    <p set:html={prose(p.purpose, locale)} />
+  </section>
+
+  <section data-part="outcomes">
+    <h3>{t('process.outcomes')}</h3>
+    <ol class="pp-outcomes">
+      {
+        p.outcomes.map((o) => (
+          <li>
+            <span class="letter">{o.id}</span>
+            <span set:html={prose(o.text, locale)} />
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section data-part="interface" class="pp-interface">
+    {
+      (['inputs', 'outputs'] as const).map((kind) => (
+        <div>
+          <h3>{t(`process.${kind}`)}</h3>
+          {p[kind].length === 0 && <p class="muted">—</p>}
+          <ul class="pp-io">
+            {p[kind].map((io) => {
+              const wp = workProducts.get(io.workProduct);
+              const links = ioLinks(wp, kind, p.id);
+              return (
+                <li>
+                  <strong>{io.name}</strong>
+                  {wp && (
+                    <span class="badge" data-part="wpType">
+                      {t(`wp.type-${wp.type}`)}
+                    </span>
+                  )}
+                  {io.optional && <span class="badge">{t('process.optional')}</span>}
+                  {io.serves.length > 0 && (
+                    <span class="pp-serves" data-part="serves">
+                      ({io.serves.join(', ')})
+                    </span>
+                  )}
+                  {io.description && <p class="pp-io-desc" data-part="ioDescriptions" set:html={prose(io.description, locale)} />}
+                  <p class="pp-links" data-part="links">
+                    {kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}:{' '}
+                    {links.length > 0
+                      ? links.map((l) => l.process).join(', ')
+                      : kind === 'inputs'
+                        ? t('process.external')
+                        : t('process.notUsed')}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))
+    }
+  </section>
+
+  <section data-part="activities">
+    <h3>{t('process.activities')}</h3>
+    <ol class="pp-acts">
+      {
+        p.activities.map((a) => (
+          <li data-activity={`${p.id}.${a.id}`}>
+            <p class="pp-act-title">
+              <span class="pp-box" data-part="checklist" aria-hidden="true" />
+              <span class="pp-aid">{a.id}</span>
+              <strong set:html={prose(a.title, locale)} />
+            </p>
+            <div data-part="descriptions" class="pp-act-desc" set:html={prose(a.description, locale)} />
+            {(a.primaryStudies?.length || a.literature?.length) && (
+              <p data-part="sources" class="pp-sources">
+                {a.primaryStudies?.length ? (
+                  <span>
+                    {t('process.primaryStudies')}: {a.primaryStudies.map(studyLabel).join('; ')}.
+                  </span>
+                ) : null}{' '}
+                {a.literature?.length ? (
+                  <span>
+                    {t('process.literature')}: {a.literature.map((k) => shortCite(referenceByKey.get(k), k)).join('; ')}.
+                  </span>
+                ) : null}
+              </p>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  {
+    p.standards?.length ? (
+      <section data-part="standards">
+        <h3>{t('print.standards')}</h3>
+        <table class="pp-standards">
+          <thead>
+            <tr>
+              <th>{t('print.standard')}</th>
+              <th>{t('print.standardActivity')}</th>
+              <th>{t('print.prmActivity')}</th>
+              <th>{t('print.note')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {p.standards.map((s) => (
+              <tr>
+                <td>
+                  {s.standard}
+                  {s.standardProcess && <span class="muted"> · {s.standardProcess}</span>}
+                </td>
+                <td>{s.activity || '—'}</td>
+                <td class="mono">{s.prmActivity || '—'}</td>
+                <td>{s.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    ) : null
+  }
+
+  {
+    p.changes?.length ? (
+      <section data-part="changes">
+        <h3>{t('process.changes')}</h3>
+        <Changes locale={locale} changes={p.changes} previousVersion={previousVersion} />
+      </section>
+    ) : null
+  }
+
+  <section data-part="notes" class="pp-notes">
+    <h3>{t('print.notesTitle')}</h3>
+    <div class="pp-lines" aria-hidden="true">{Array.from({ length: 8 }, () => <span />)}</div>
+  </section>
+</article>

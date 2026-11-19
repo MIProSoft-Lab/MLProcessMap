@@ -114,6 +114,20 @@ export function writePhases(phases: Phase[]) {
   );
 }
 
+/**
+ * The reasons for leaving processes out, as the link keeps them (JSON of
+ * process → text). Anything else, or broken JSON, reads as no reasons.
+ */
+export function readRationale(text: string | null): Record<string, string> {
+  try {
+    const r: unknown = JSON.parse(text ?? '{}');
+    if (r && typeof r === 'object' && !Array.isArray(r)) {
+      return Object.fromEntries(Object.entries(r).filter(([, value]) => typeof value === 'string'));
+    }
+  } catch {}
+  return {};
+}
+
 /** The model in a URL hash (without the "#"). */
 export function fromHash(data: Data, hash: string): State {
   const h = new URLSearchParams(hash);
@@ -121,13 +135,7 @@ export function fromHash(data: Data, hash: string): State {
   const lc = data.lifecycles.find((l) => l.id === h.get('lc'));
   const all = v.processes.map((p) => p.id);
   const selected = h.has('p') ? h.get('p')!.split(',').filter(Boolean) : lc ? lc.processes : all;
-  let rationale: Record<string, string> = {};
-  try {
-    const r: unknown = JSON.parse(h.get('r') ?? '{}');
-    if (r && typeof r === 'object' && !Array.isArray(r)) {
-      rationale = Object.fromEntries(Object.entries(r).filter(([, text]) => typeof text === 'string'));
-    }
-  } catch {}
+  const rationale = readRationale(h.get('r'));
   return {
     version: v.id,
     project: h.get('n') ?? (lc && !h.has('p') ? lc.name : ''),

@@ -1,10 +1,9 @@
 // The HTML of the lifecycle builder's lists, drawn in the browser from the
 // model: a process in the list, a phase card, a process chip, the menus, the
-// missing inputs and the print view. Each function only builds text; the page
+// missing inputs. (The model is printed by the printable PRM, src/lib/print-model.ts.) Each function only builds text; the page
 // (src/pages/[lang]/tailor.astro) puts it in place and handles the events.
 import type { Translate } from '../client-strings';
 import { escapeHtml as esc } from '../text';
-import * as exporter from './export';
 import type { Data, Phase, Proc, State, Version } from './model';
 
 /** The strings these templates use; the page hands them to its script. */
@@ -19,8 +18,6 @@ export const renderKeys = [
   'tailor.start-all',
   'tailor.start-none',
   'tailor.start-note',
-  'tailor.untitled',
-  'tailor.unassigned',
   'tailor.unassigned-none',
   'tailor.phase-new',
   'tailor.phase-name',
@@ -182,32 +179,5 @@ export function startOptions(data: Data, state: State, s: Translate) {
     item('none', s('tailor.start-none')) +
     (lcs.length ? `<li class="menu-group">${esc(s('nav.lifecycles'))}</li>${lcs.map((l) => item(`lc:${l.id}`, l.name)).join('')}` : '') +
     `<li class="menu-foot">${esc(s('tailor.start-note'))}</li>`
-  );
-}
-
-/** The page printed: the model as a checklist of activities, by phase when there are phases. */
-export function printView(view: View) {
-  const { state, s } = view;
-  const phased = state.phases.length > 0;
-  return (
-    `<h1>${esc(state.project || s('tailor.untitled'))}</h1><p>PRM ${esc(state.version)}</p>` +
-    exporter
-      .groups(view)
-      .map(
-        (g) =>
-          (phased
-            ? `<h2>${esc(g.phase ? `${step(state.phases.indexOf(g.phase))} ${exporter.phaseName(state, g.phase, s)}` : s('tailor.unassigned'))}</h2>`
-            : '') +
-          g.rows
-            .map(
-              (x) =>
-                `<h3>${x.p.id} ${esc(x.p.name)}</h3><ul>${x.activities
-                  .filter((a) => a.included)
-                  .map((a) => `<li>☐ ${a.id}. ${esc(a.title)}</li>`)
-                  .join('')}</ul>`,
-            )
-            .join(''),
-      )
-      .join('')
   );
 }
