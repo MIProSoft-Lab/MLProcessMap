@@ -1,0 +1,31 @@
+---
+// A link to a process as a chip: its ID and name. On a page with the process
+// modal (src/components/ProcessModal.astro) it opens the process there, unless
+// modal is false, as on a process page, which has no modal.
+import { href, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  version: string;
+  id: string;
+  name: string;
+  /** Part of the process page to go to, e.g. "output-raw-dataset". */
+  hash?: string;
+  /** Open the process in the modal on a plain click (default true). */
+  modal?: boolean;
+}
+
+const { locale, version, id, name, hash, modal = true } = Astro.props;
+const link = href(locale, version, 'processes', id);
+---
+
+<a
+  class="chip"
+  href={hash ? `${link}#${hash}` : link}
+  data-process={modal ? id : undefined}
+  data-version={modal ? version : undefined}
+  data-name={modal ? name : undefined}
+>
+  <span class="num">{id}</span>
+  <span class="link-name">{name}</span>
+</a>

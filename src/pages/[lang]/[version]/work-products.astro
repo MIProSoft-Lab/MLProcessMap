@@ -2,35 +2,27 @@
 import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import LegendHelp from '../../../components/LegendHelp.astro';
-import { getProcess, getWorkProducts, versions } from '../../../lib/content';
-import { versionPaths } from '../../../lib/paths';
+import ProcessChip from '../../../components/ProcessChip.astro';
+import SearchToolbar from '../../../components/SearchToolbar.astro';
+import { getProcess, getWorkProducts } from '../../../lib/content';
+import { versionLinks, versionPaths } from '../../../lib/paths';
 import { searchKey } from '../../../lib/text';
-import { useTranslations, href, type Locale } from '../../../i18n/ui';
+import { pageLocale } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
-const locale = Astro.props.locale as Locale;
+const { locale, t } = pageLocale(Astro.props);
 const { version } = Astro.params as { version: string };
-const t = useTranslations(locale);
 const wps = getWorkProducts(version, locale);
 const name = (pid: string) => getProcess(version, pid, locale).data.name;
-const versionLinks = Object.fromEntries(versions.map((x) => [x.id, href(locale, x.id, 'work-products')]));
+const links = versionLinks(locale, ['work-products']);
 const types = ['information-item', 'artifact', 'record'] as const;
 ---
 
-<Layout
-  locale={locale}
-  title={t('wp.title')}
-  description={t('wp.intro')}
-  section="workProducts"
-  version={version}
-  versionLinks={versionLinks}
->
+<Layout locale={locale} title={t('wp.title')} description={t('wp.intro')} section="workProducts" version={version} versionLinks={links}>
   <h1>{t('wp.title')} <span class="muted">· {version}</span></h1>
   <p class="muted prose">{t('wp.intro')}</p>
 
-  <div class="toolbar no-print">
-    <label class="visually-hidden" for="q">{t('wp.filter')}</label>
-    <input id="q" type="search" placeholder={t('wp.filter')} autocomplete="off" />
+  <SearchToolbar class="no-print" placeholder={t('wp.filter')}>
     <div class="pills" role="group" aria-label={t('wp.type')}>
       <button type="button" data-type="" aria-pressed="true">{t('wp.all')}</button>
       {
@@ -41,7 +33,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
         ))
       }
     </div>
-  </div>
+  </SearchToolbar>
   <LegendHelp
     summary={t('wp.typesHelp')}
     items={types.map((ty) => ({ term: t(`wp.type-${ty}`), description: t(`wp.def-${ty}`) }))}
@@ -78,16 +70,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
                 {w.producers.length ? (
                   <span class="chips">
                     {w.producers.map((l) => (
-                      <a
-                        class="chip"
-                        href={`${href(locale, version, 'processes', l.process)}#output-${w.id}`}
-                        data-process={l.process}
-                        data-version={version}
-                        data-name={name(l.process)}
-                      >
-                        <span class="num">{l.process}</span>
-                        {name(l.process)}
-                      </a>
+                      <ProcessChip locale={locale} version={version} id={l.process} name={name(l.process)} hash={`output-${w.id}`} />
                     ))}
                   </span>
                 ) : (
@@ -98,16 +81,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
                 {w.consumers.length ? (
                   <span class="chips">
                     {w.consumers.map((l) => (
-                      <a
-                        class="chip"
-                        href={`${href(locale, version, 'processes', l.process)}#input-${w.id}`}
-                        data-process={l.process}
-                        data-version={version}
-                        data-name={name(l.process)}
-                      >
-                        <span class="num">{l.process}</span>
-                        {name(l.process)}
-                      </a>
+                      <ProcessChip locale={locale} version={version} id={l.process} name={name(l.process)} hash={`input-${w.id}`} />
                     ))}
                   </span>
                 ) : (
@@ -121,14 +95,11 @@ const types = ['information-item', 'artifact', 'record'] as const;
     </table>
   </div>
   <p id="empty" class="muted" hidden>{t('wp.noResults')}</p>
-  <ProcessModal locale={locale} />
+  <ProcessModal locale={locale} openLinksIn="main" />
 </Layout>
 
 <script>
-  import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
-  import { searchKey } from '../../../lib/text';
-
-  openLinksInModal(document.getElementById('main')!, createProcessModal());
+  import { bindSearch, highlightTarget, queryWords } from '../../../lib/search';
 
   const input = document.querySelector<HTMLInputElement>('#q')!;
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-type]:is(button)')];
@@ -137,7 +108,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
   const empty = document.querySelector<HTMLElement>('#empty')!;
   let type = '';
   const apply = () => {
-    const words = searchKey(input.value).split(/\s+/).filter(Boolean);
+    const words = queryWords(input.value);
     let shown = 0;
     for (const r of rows) {
       r.hidden = (type !== '' && r.dataset.type !== type) || !words.every((w) => r.dataset.search!.includes(w));
@@ -146,7 +117,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
     table.hidden = shown === 0;
     empty.hidden = shown > 0;
   };
-  input.addEventListener('input', apply);
+  bindSearch(input, apply);
   for (const b of buttons) {
     b.addEventListener('click', () => {
       type = b.dataset.type!;
@@ -154,22 +125,13 @@ const types = ['information-item', 'artifact', 'record'] as const;
       apply();
     });
   }
-  const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
-  target?.classList.add('highlight');
+  highlightTarget();
 </script>
 
 <style>
   .toolbar {
-    display: flex;
-    flex-wrap: wrap;
     gap: 12px;
-    align-items: center;
     margin: 16px 0;
-  }
-
-  .toolbar input {
-    flex: 1 1 260px;
-    max-width: 420px;
   }
 
   /* As tall as the search field next to it. */
@@ -190,7 +152,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
     background: var(--surface-2);
   }
 
-  .wp-table .chip {
+  .wp-table :global(.chip) {
     font-size: 0.8rem;
   }
 

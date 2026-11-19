@@ -2,15 +2,15 @@
 import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
 import LegendHelp from '../../../components/LegendHelp.astro';
-import { getVersion, getProcess, pick, versions } from '../../../lib/content';
-import { versionPaths } from '../../../lib/paths';
+import SearchToolbar from '../../../components/SearchToolbar.astro';
+import { getVersion, getProcess, pick } from '../../../lib/content';
+import { versionLinks, versionPaths } from '../../../lib/paths';
 import { plain } from '../../../lib/text';
-import { useTranslations, href, type Locale } from '../../../i18n/ui';
+import { pageLocale, href } from '../../../i18n/ui';
 
 export const getStaticPaths = versionPaths;
-const locale = Astro.props.locale as Locale;
+const { locale, t } = pageLocale(Astro.props);
 const { version } = Astro.params as { version: string };
-const t = useTranslations(locale);
 const v = getVersion(version);
 
 // What the search looks through in each process: its name, then every other
@@ -27,7 +27,7 @@ const tile = (id: string) => {
 };
 const groups = v.topology.map((g) => ({ name: pick(g.group, locale), columns: g.columns.map((c) => c.map(tile)) }));
 const translated = groups.every((g) => g.columns.every((c) => c.every((x) => x.translated)));
-const versionLinks = Object.fromEntries(versions.map((x) => [x.id, href(locale, x.id)]));
+const links = versionLinks(locale);
 const origins = ['standards-and-literature', 'standards-only', 'decomposed'] as const;
 const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).map((x) => [x.p.id, x.fields]));
 ---
@@ -38,17 +38,14 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
   description={`${t('home.card-map')} ${pick(v.description, locale)}`}
   section="processes"
   version={version}
-  versionLinks={versionLinks}
+  versionLinks={links}
   translated={translated}
 >
   <p class="breadcrumbs">ML-PRM / {version}</p>
   <h1>{t('map.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
   <p class="muted prose">{pick(v.description, locale)}</p>
 
-  <div class="toolbar">
-    <label class="visually-hidden" for="q">{t('map.search')}</label>
-    <input id="q" type="search" placeholder={t('map.search')} autocomplete="off" />
-    <span id="count" class="small muted" role="status" data-text={t('map.matches')}></span>
+  <SearchToolbar placeholder={t('map.search')} count={t('map.matches')}>
     <div class="legend" aria-label={t('map.legend')}>
       {
         origins.map((o) => (
@@ -59,7 +56,7 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
         ))
       }
     </div>
-  </div>
+  </SearchToolbar>
   <LegendHelp
     summary={t('map.legendHelp')}
     items={origins.map((o) => ({ term: t(`origin.${o}`), description: t(`origin.${o}-long`), swatch: `origin-${o}` }))}
@@ -99,15 +96,13 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
     ))
   }
   <p id="empty" class="muted" hidden>{t('map.noResults')}</p>
-  <ProcessModal locale={locale} />
+  <ProcessModal locale={locale} openLinksIn="main" />
   <script type="application/json" id="map-search" set:html={JSON.stringify(searchData).replace(/</g, '\\u003c')} />
 </Layout>
 
 <script>
-  import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
-  import { escapeHtml, format, searchKey } from '../../../lib/text';
-
-  openLinksInModal(document.getElementById('main')!, createProcessModal());
+  import { bindSearch, queryWords, showCount } from '../../../lib/search';
+  import { escapeHtml, searchKey } from '../../../lib/text';
 
   // Search: dim the processes that do not match, say how many do, and show
   // where the match is when it is not in the name. The query is kept in the
@@ -152,7 +147,7 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
   }
 
   const apply = () => {
-    const words = searchKey(input.value).split(/\s+/).filter(Boolean);
+    const words = queryWords(input.value);
     let shown = 0;
     for (const el of items) {
       const [name, ...rest] = index.get(el.dataset.id!)!;
@@ -168,29 +163,16 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
       hit.hidden = !where?.n;
       hit.innerHTML = where?.n ? excerpt(where.f, words) : '';
     }
-    count.textContent = words.length ? format(count.dataset.text!, { n: shown, total: items.length }) : '';
+    showCount(count, words, shown, items.length);
     empty.hidden = shown > 0;
-    const url = new URL(location.href);
-    input.value.trim() ? url.searchParams.set('q', input.value) : url.searchParams.delete('q');
-    history.replaceState(history.state, '', url);
   };
-  input.value = new URLSearchParams(location.search).get('q') ?? '';
-  input.addEventListener('input', apply);
-  apply();
+  bindSearch(input, apply, { applyOnLoad: true });
 </script>
 
 <style>
   .toolbar {
-    display: flex;
-    flex-wrap: wrap;
     gap: 12px 24px;
-    align-items: center;
     margin: 20px 0 16px;
-  }
-
-  .toolbar input {
-    flex: 1 1 280px;
-    max-width: 460px;
   }
 
   .group {

@@ -1,16 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Cited from '../../components/Cited.astro';
+import SearchToolbar from '../../components/SearchToolbar.astro';
 import { studies, references, acronyms, getProcesses, defaultVersion, versions, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
 import { fullCite, referenceByKey, referenceUrl } from '../../lib/refs';
 import { inline, searchKey } from '../../lib/text';
 import type { Reference } from '../../lib/content/schemas';
-import { useTranslations, type Locale } from '../../i18n/ui';
+import { pageLocale } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
-const locale = Astro.props.locale as Locale;
-const t = useTranslations(locale);
+const { locale, t } = pageLocale(Astro.props);
 
 // Where each study and reference is cited, in the default version when it
 // is cited there and in the earlier versions otherwise.
@@ -40,11 +40,7 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
 <Layout locale={locale} title={t('refs.title')} description={t('home.card-references')} section="references">
   <h1>{t('refs.title')}</h1>
 
-  <div class="toolbar">
-    <label class="visually-hidden" for="q">{t('refs.filter')}</label>
-    <input id="q" type="search" placeholder={t('refs.filter')} autocomplete="off" />
-    <span id="count" class="small muted" role="status" data-text={t('refs.matches')}></span>
-  </div>
+  <SearchToolbar placeholder={t('refs.filter')} count={t('refs.matches')} />
   <nav class="jump small" aria-label={t('process.contents')}>
     <a href="#studies">{t('refs.studies')} <span class="num" data-count="studies">{studies.length}</span></a>
     <a href="#literature">{t('refs.literature')} <span class="num" data-count="literature">{literature.length}</span></a>
@@ -127,10 +123,9 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
 </Layout>
 
 <script>
-  import { format, searchKey } from '../../lib/text';
+  import { bindSearch, highlightTarget, queryWords, showCount } from '../../lib/search';
 
-  const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
-  target?.classList.add('highlight');
+  highlightTarget();
 
   // Filter: every word has to be in the entry, except a study, process or
   // activity identifier (P3, P03, P03.A4), which has to match one exactly, so
@@ -151,7 +146,7 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
   const id = /^p\d+(\.a\d+)?$/;
 
   const apply = () => {
-    const words = searchKey(input.value).replace(/·/g, '.').split(/\s+/).filter(Boolean);
+    const words = queryWords(input.value.replace(/·/g, '.'));
     const matches = (item: (typeof references)[number]) => words.every((w) => (id.test(w) ? item.ids.has(w) : item.text.includes(w)));
     let shown = 0;
     for (const g of groups) {
@@ -178,29 +173,16 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
         cited.some((w) => c === w || c.startsWith(`${w}.`)),
       );
     });
-    count.textContent = words.length ? format(count.dataset.text!, { n: shown, total: references.length }) : '';
+    showCount(count, words, shown, references.length);
     empty.hidden = groups.some((g) => !g.section.hidden);
-    const url = new URL(location.href);
-    input.value.trim() ? url.searchParams.set('q', input.value) : url.searchParams.delete('q');
-    history.replaceState(history.state, '', url);
   };
-  input.value = new URLSearchParams(location.search).get('q') ?? '';
-  input.addEventListener('input', apply);
-  if (input.value) apply();
+  bindSearch(input, apply);
 </script>
 
 <style>
   .toolbar {
-    display: flex;
-    flex-wrap: wrap;
     gap: 8px 16px;
-    align-items: center;
     margin: 16px 0 10px;
-  }
-
-  .toolbar input {
-    flex: 1 1 280px;
-    max-width: 460px;
   }
 
   .jump {

@@ -1,5 +1,14 @@
-import { locales } from '../i18n/ui';
+import { href, locales, type Locale } from '../i18n/ui';
 import { versions, processIds, lifecycleIds } from './content';
+
+/**
+ * The same page in every PRM version, for the version menu of the layout:
+ * version → address of <locale>/<version>/<segments>. A version that does not
+ * have the page (exists returns false) links to its process map instead.
+ */
+export function versionLinks(locale: Locale, segments: string[] = [], exists: (version: string) => boolean = () => true) {
+  return Object.fromEntries(versions.map((v) => [v.id, exists(v.id) ? href(locale, v.id, ...segments) : href(locale, v.id)]));
+}
 
 export function localePaths() {
   return locales.map((lang) => ({ params: { lang }, props: { locale: lang } }));

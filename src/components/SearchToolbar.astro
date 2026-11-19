@@ -1,0 +1,39 @@
+---
+// The search field above a filtered list (process map, work products,
+// references): the field (#q), the count of matches (#count) when count is
+// given, and whatever the page adds after them in the slot. The page's script
+// filters with the helpers in src/lib/search.ts.
+//
+// Extra attributes, including the page's own class, are passed on to the bar,
+// so the page's styles can set its spacing.
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  /** Placeholder and accessible name of the field. */
+  placeholder: string;
+  /** Text of the count, with {n} and {total}, e.g. "{n} of {total} processes". */
+  count?: string;
+}
+
+const { placeholder, count, class: className, ...rest } = Astro.props;
+---
+
+<div class:list={['toolbar', className]} {...rest}>
+  <label class="visually-hidden" for="q">{placeholder}</label>
+  <input id="q" type="search" placeholder={placeholder} autocomplete="off" />
+  {count && <span id="count" class="small muted" role="status" data-text={count} />}
+  <slot />
+</div>
+
+<style>
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .toolbar input {
+    flex: 1 1 280px;
+    max-width: 460px;
+  }
+</style>

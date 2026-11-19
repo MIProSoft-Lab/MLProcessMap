@@ -1,18 +1,18 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
 import CollapseToggle from '../../../../components/CollapseToggle.astro';
+import ProcessChip from '../../../../components/ProcessChip.astro';
 import '../../../../styles/process.css';
 import { getProcess, getVersion, getWorkProducts, processIds, versions, pick } from '../../../../lib/content';
-import { processPaths } from '../../../../lib/paths';
+import { processPaths, versionLinks } from '../../../../lib/paths';
 import { plain } from '../../../../lib/text';
 import { prose } from '../../../../lib/acronyms';
 import { referenceByKey, shortCite, studyById } from '../../../../lib/refs';
-import { useTranslations, href, type Locale } from '../../../../i18n/ui';
+import { pageLocale, href } from '../../../../i18n/ui';
 
 export const getStaticPaths = processPaths;
-const locale = Astro.props.locale as Locale;
+const { locale, t } = pageLocale(Astro.props);
 const { version, id } = Astro.params as { version: string; id: string };
-const t = useTranslations(locale);
 const { data: p, translated } = getProcess(version, id, locale);
 const v = getVersion(version);
 
@@ -27,9 +27,7 @@ const i = ids.indexOf(id);
 const prev = ids[i - 1];
 const next = ids[i + 1];
 
-const versionLinks = Object.fromEntries(
-  versions.map((x) => [x.id, processIds(x.id).includes(id) ? href(locale, x.id, 'processes', id) : href(locale, x.id)]),
-);
+const links = versionLinks(locale, ['processes', id], (v) => processIds(v).includes(id));
 // Compare this version with the previous one, or with the next from the first.
 const order = versions.map((x) => x.id);
 const at = order.indexOf(version);
@@ -60,7 +58,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
   description={plain(p.purpose)}
   section="processes"
   version={version}
-  versionLinks={versionLinks}
+  versionLinks={links}
   translated={translated}
   pageClass="process-page"
 >
@@ -203,10 +201,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
                               {links && links.length > 0 ? (
                                 <span class="chips">
                                   {links.map((l) => (
-                                    <a class="chip" href={href(locale, version, 'processes', l.process)}>
-                                      <span class="num">{l.process}</span>
-                                      <span class="link-name">{name(l.process)}</span>
-                                    </a>
+                                    <ProcessChip locale={locale} version={version} id={l.process} name={name(l.process)} modal={false} />
                                   ))}
                                 </span>
                               ) : (

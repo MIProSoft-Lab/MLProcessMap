@@ -39,6 +39,27 @@ export function useTranslations(locale: Locale) {
   };
 }
 
+/** The function useTranslations returns: a string by key, with {placeholders} filled in. */
+export type Translate = ReturnType<typeof useTranslations>;
+
+/**
+ * The locale a page is built for, from the props its getStaticPaths gives
+ * (see src/lib/paths.ts), and the strings in that locale:
+ * `const { locale, t } = pageLocale(Astro.props);`
+ */
+export function pageLocale(props: Record<string, unknown>) {
+  const locale = props.locale as Locale;
+  return { locale, t: useTranslations(locale) };
+}
+
+/**
+ * The strings of keys as key → text, to hand to a script in the browser,
+ * which reads them with translator() from src/lib/client-strings.ts.
+ */
+export function stringsFor(t: Translate, keys: readonly UiKey[]) {
+  return Object.fromEntries(keys.map((k) => [k, t(k)]));
+}
+
 /** Absolute path inside the site, honoring the configured base path. */
 export function href(...segments: string[]) {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');

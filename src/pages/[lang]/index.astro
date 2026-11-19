@@ -7,11 +7,10 @@ import { localePaths } from '../../lib/paths';
 import { edition, otherEditionUrl } from '../../lib/edition';
 import { inline } from '../../lib/text';
 import { prose } from '../../lib/acronyms';
-import { useTranslations, href, type Locale } from '../../i18n/ui';
+import { pageLocale, href } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
-const locale = Astro.props.locale as Locale;
-const t = useTranslations(locale);
+const { locale, t } = pageLocale(Astro.props);
 const { thesis, group, people, timeline } = site;
 
 const cards = [

@@ -3,16 +3,16 @@ import Layout from '../../../layouts/Layout.astro';
 import LifecyclePhases from '../../../components/LifecyclePhases.astro';
 import LifecycleDiagram from '../../../components/LifecycleDiagram.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
+import ProcessChip from '../../../components/ProcessChip.astro';
 import { getLifecycle, getProcess, processIds } from '../../../lib/content';
 import { lifecyclePaths } from '../../../lib/paths';
 import { prose } from '../../../lib/acronyms';
 import { plain } from '../../../lib/text';
-import { useTranslations, href, type Locale } from '../../../i18n/ui';
+import { pageLocale, href } from '../../../i18n/ui';
 
 export const getStaticPaths = lifecyclePaths;
-const locale = Astro.props.locale as Locale;
+const { locale, t } = pageLocale(Astro.props);
 const { id } = Astro.params as { id: string };
-const t = useTranslations(locale);
 const { data: l, translated } = getLifecycle(id, locale);
 const included = new Set(l.phases.flatMap((p) => p.processes));
 const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
@@ -53,16 +53,7 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
         <h2>{t('lc.notCovered')}</h2>
         <div class="chips">
           {missing.map((pid) => (
-            <a
-              class="chip"
-              href={href(locale, l.prmVersion, 'processes', pid)}
-              data-process={pid}
-              data-version={l.prmVersion}
-              data-name={getProcess(l.prmVersion, pid, locale).data.name}
-            >
-              <span class="num">{pid}</span>
-              {getProcess(l.prmVersion, pid, locale).data.name}
-            </a>
+            <ProcessChip locale={locale} version={l.prmVersion} id={pid} name={getProcess(l.prmVersion, pid, locale).data.name} />
           ))}
         </div>
       </section>
@@ -72,14 +63,8 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
   <p class="no-print">
     <a class="button primary" href={`${href(locale, 'tailor')}#v=${l.prmVersion}&lc=${l.id}`}>{t('lc.useInTailor')} →</a>
   </p>
-  <ProcessModal locale={locale} />
+  <ProcessModal locale={locale} openLinksIn="main" />
 </Layout>
-
-<script>
-  import { createProcessModal, openLinksInModal } from '../../../lib/process-modal';
-
-  openLinksInModal(document.getElementById('main')!, createProcessModal());
-</script>
 
 <style>
   .meta {

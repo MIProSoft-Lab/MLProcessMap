@@ -8,11 +8,10 @@ import { localePaths } from '../../lib/paths';
 import { plain } from '../../lib/text';
 import { diagramKeys } from '../../lib/lifecycle-diagram';
 import { exportKeys } from '../../lib/tailor/export';
-import { useTranslations, href, type Locale, type UiKey } from '../../i18n/ui';
+import { pageLocale, href, stringsFor, type UiKey } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
-const locale = Astro.props.locale as Locale;
-const t = useTranslations(locale);
+const { locale, t } = pageLocale(Astro.props);
 
 // Everything the client needs, for every version.
 const data = {
@@ -93,7 +92,7 @@ const keys: UiKey[] = [
   'tailor.import-version',
   'tailor.import-error',
 ];
-const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
+const strings = stringsFor(t, keys);
 ---
 
 <Layout locale={locale} title={t('tailor.title')} description={t('tailor.intro')} section="tailor" pageClass="tailor-page">

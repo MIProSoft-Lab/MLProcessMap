@@ -4,11 +4,10 @@
 import Layout from '../../layouts/Layout.astro';
 import NotFound from '../../components/NotFound.astro';
 import { localePaths } from '../../lib/paths';
-import { useTranslations, type Locale } from '../../i18n/ui';
+import { pageLocale } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
-const locale = Astro.props.locale as Locale;
-const t = useTranslations(locale);
+const { locale, t } = pageLocale(Astro.props);
 ---
 
 <Layout locale={locale} title={t('notFound.title')} description={t('notFound.text')} indexable={false}>

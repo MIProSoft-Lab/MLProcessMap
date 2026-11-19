@@ -1,19 +1,29 @@
 ---
 // Modal with the details of a process, filled by src/lib/process-modal.ts.
-// Include it once on a page and create it from the page's script.
-import { useTranslations, href, type Locale } from '../i18n/ui';
+// Include it once on a page. With openLinksIn (the id of an element, e.g.
+// "main"), the process links in that element open in it; a page that needs
+// more (the lifecycle builder) leaves it out and creates the modal itself.
+import { useTranslations, href, stringsFor, type Locale } from '../i18n/ui';
 import { modalKeys } from '../lib/process-modal';
 
 interface Props {
   locale: Locale;
+  openLinksIn?: string;
 }
 
-const { locale } = Astro.props;
+const { locale, openLinksIn } = Astro.props;
 const t = useTranslations(locale);
-const strings = JSON.stringify(Object.fromEntries(modalKeys.map((k) => [k, t(k)])));
+const strings = JSON.stringify(stringsFor(t, modalKeys));
 ---
 
-<dialog id="process-modal" class="process-modal" aria-labelledby="pm-title" data-base={href(locale)} data-strings={strings}>
+<dialog
+  id="process-modal"
+  class="process-modal"
+  aria-labelledby="pm-title"
+  data-base={href(locale)}
+  data-strings={strings}
+  data-open-links-in={openLinksIn}
+>
   <header class="pm-head">
     <span class="pm-id mono"></span>
     <h2 id="pm-title" class="pm-title"></h2>
@@ -25,6 +35,14 @@ const strings = JSON.stringify(Object.fromEntries(modalKeys.map((k) => [k, t(k)]
     <a class="pm-goto button primary" href="#">{t('modal.goTo')} →</a>
   </footer>
 </dialog>
+
+<script>
+  import { createProcessModal, openLinksInModal } from '../lib/process-modal';
+
+  const within = document.getElementById('process-modal')?.dataset.openLinksIn;
+  const root = within && document.getElementById(within);
+  if (root) openLinksInModal(root, createProcessModal());
+</script>
 
 <style is:global>
   .process-modal {

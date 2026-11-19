@@ -3,7 +3,7 @@
 // keyboard focuses, anything that leads to a process: links to a process page
 // and elements marked with data-process or data-hover-process plus the matching
 // data-version or data-hover-version. Included once, by the layout.
-import { useTranslations, href, type Locale, type UiKey } from '../i18n/ui';
+import { useTranslations, href, type Locale, type UiKey, stringsFor } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
@@ -20,7 +20,7 @@ const keys: UiKey[] = [
   'origin.standards-only',
   'origin.decomposed',
 ];
-const strings = JSON.stringify(Object.fromEntries(keys.map((k) => [k, t(k)])));
+const strings = JSON.stringify(stringsFor(t, keys));
 ---
 
 <div id="process-hover" class="process-hover" role="tooltip" hidden data-base={href(locale)} data-strings={strings}>
