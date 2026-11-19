@@ -1,0 +1,44 @@
+---
+// The outcomes of a process, each with the inputs (IN) and outputs (OUT) that
+// support it, which link to them further down the page.
+import type { Process } from '../../lib/content';
+import { prose } from '../../lib/acronyms';
+import { useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  process: Process;
+}
+
+const { locale, process: p } = Astro.props;
+const t = useTranslations(locale);
+
+// Work products that support each outcome, from the serves lists.
+const servedBy = (oid: string) => [
+  ...p.inputs.filter((io) => io.serves.includes(oid)).map((io) => ({ ...io, dir: 'in' })),
+  ...p.outputs.filter((io) => io.serves.includes(oid)).map((io) => ({ ...io, dir: 'out' })),
+];
+---
+
+<ol class="outcomes">
+  {
+    p.outcomes.map((o) => (
+      <li id={`outcome-${o.id}`}>
+        <span class="letter">{o.id}</span>
+        <div>
+          <span set:html={prose(o.text, locale)} />
+          {servedBy(o.id).length > 0 && (
+            <div class="chips served" aria-label={t('process.outcomeServedBy')}>
+              {servedBy(o.id).map((io) => (
+                <a class="chip" href={`#${io.dir === 'in' ? 'input' : 'output'}-${io.workProduct}`}>
+                  <span class="num">{io.dir === 'in' ? 'IN' : 'OUT'}</span>
+                  {io.name}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>

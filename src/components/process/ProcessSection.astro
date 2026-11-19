@@ -1,0 +1,45 @@
+---
+// A numbered section of a process page (01 Purpose, 02 Outcomes…), as on a
+// drawing sheet. A collapsible section has a button that opens and closes its
+// body; buttons of its own go in the "tools" slot, before that one.
+import CollapseToggle from '../CollapseToggle.astro';
+import type { Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /** The section's id, which the contents link to. */
+  id: string;
+  /** Its number, e.g. "02". */
+  num: string;
+  title: string;
+  collapsible?: boolean;
+}
+
+const { locale, id, num, title, collapsible = true } = Astro.props;
+---
+
+{
+  collapsible ? (
+    <section id={id} class="collapsible">
+      <div class="section-head">
+        <h2>
+          <span class="sec">{num}</span>
+          {title}
+        </h2>
+        <slot name="tools" />
+        <CollapseToggle locale={locale} controls={`${id}-body`} name={title} class="no-print" />
+      </div>
+      <div class="collapse-body" id={`${id}-body`}>
+        <slot />
+      </div>
+    </section>
+  ) : (
+    <section id={id}>
+      <h2>
+        <span class="sec">{num}</span>
+        {title}
+      </h2>
+      <slot />
+    </section>
+  )
+}

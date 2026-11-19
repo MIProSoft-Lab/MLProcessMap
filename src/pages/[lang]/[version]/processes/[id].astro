@@ -1,31 +1,34 @@
 ---
+// A process of a PRM version, laid out like a drawing sheet: a title block,
+// then numbered sections (src/components/process/), each but the purpose
+// opening and closing on its own (src/lib/process-page.ts).
 import Layout from '../../../../layouts/Layout.astro';
-import CollapseToggle from '../../../../components/CollapseToggle.astro';
-import ProcessChip from '../../../../components/ProcessChip.astro';
+import Breadcrumbs from '../../../../components/Breadcrumbs.astro';
+import ProcessSection from '../../../../components/process/ProcessSection.astro';
+import TitleBlock from '../../../../components/process/TitleBlock.astro';
+import Outcomes from '../../../../components/process/Outcomes.astro';
+import Interface from '../../../../components/process/Interface.astro';
+import Activities from '../../../../components/process/Activities.astro';
+import Changes from '../../../../components/process/Changes.astro';
+import Pager from '../../../../components/process/Pager.astro';
 import '../../../../styles/process.css';
-import { getProcess, getVersion, getWorkProducts, processIds, versions, pick } from '../../../../lib/content';
+import { getProcess, getVersion, processIds, versions } from '../../../../lib/content';
 import { processPaths, versionLinks } from '../../../../lib/paths';
 import { plain } from '../../../../lib/text';
 import { prose } from '../../../../lib/acronyms';
-import { referenceByKey, shortCite, studyById } from '../../../../lib/refs';
 import { pageLocale, href } from '../../../../i18n/ui';
 
 export const getStaticPaths = processPaths;
 const { locale, t } = pageLocale(Astro.props);
 const { version, id } = Astro.params as { version: string; id: string };
 const { data: p, translated } = getProcess(version, id, locale);
-const v = getVersion(version);
 
-const wps = new Map(getWorkProducts(version, locale).map((w) => [w.id, w]));
-const name = (pid: string) => getProcess(version, pid, locale).data.name;
 // Changelog: what changed from the previous version.
 const changelog = p.changes ?? [];
 const previousVersion = versions[versions.findIndex((x) => x.id === version) - 1]?.id;
 
 const ids = processIds(version);
 const i = ids.indexOf(id);
-const prev = ids[i - 1];
-const next = ids[i + 1];
 
 const links = versionLinks(locale, ['processes', id], (v) => processIds(v).includes(id));
 // Compare this version with the previous one, or with the next from the first.
@@ -33,13 +36,6 @@ const order = versions.map((x) => x.id);
 const at = order.indexOf(version);
 const compareHref =
   order.length > 1 ? href(locale, 'compare', at > 0 ? `${order[at - 1]}-vs-${version}` : `${version}-vs-${order[at + 1]}`, id) : undefined;
-
-// Work products that support each outcome, from the serves lists.
-const servedBy = (oid: string) => [
-  ...p.inputs.filter((io) => io.serves.includes(oid)).map((io) => ({ ...io, dir: 'in' })),
-  ...p.outputs.filter((io) => io.serves.includes(oid)).map((io) => ({ ...io, dir: 'out' })),
-];
-const wpHref = (wid: string) => `${href(locale, version, 'work-products')}#${wid}`;
 
 // Numbered sections, as on a drawing sheet.
 const sections = [
@@ -50,6 +46,7 @@ const sections = [
   ...(changelog.length ? [['changes', t('process.changes')]] : []),
 ] as [string, string][];
 const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).padStart(2, '0');
+const title = (key: string) => sections.find(([k]) => k === key)![1];
 ---
 
 <Layout
@@ -62,9 +59,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
   translated={translated}
   pageClass="process-page"
 >
-  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
-    <a href={href(locale, version)}>ML-PRM / {version}</a> / {p.id}
-  </nav>
+  <Breadcrumbs locale={locale} items={[{ text: `ML-PRM / ${version}`, href: href(locale, version) }, { text: p.id }]} />
 
   <div class="title-row">
     <h1>{p.name}</h1>
@@ -77,24 +72,7 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
     }
   </div>
 
-  <dl class="sheet title-block">
-    <div>
-      <dt class="label">{t('process.sheet-process')}</dt>
-      <dd class="mono">{p.id}</dd>
-    </div>
-    <div>
-      <dt class="label">{t('nav.version')}</dt>
-      <dd><span class="mono">{version}</span> · {pick(v.title, locale)}</dd>
-    </div>
-    <div>
-      <dt class="label">{t('map.legend')}</dt>
-      <dd><span class={`badge origin-${p.origin}`} title={t(`origin.${p.origin}-long`)}>{t(`origin.${p.origin}`)}</span></dd>
-    </div>
-    <div>
-      <dt class="label">{t('process.sheet-sheet')}</dt>
-      <dd class="mono">{String(i + 1).padStart(2, '0')} / {String(ids.length).padStart(2, '0')}</dd>
-    </div>
-  </dl>
+  <TitleBlock locale={locale} process={p} version={getVersion(version)} index={i} total={ids.length} />
 
   <div class="layout">
     <aside class="toc no-print" aria-label={t('process.contents')}>
@@ -112,352 +90,46 @@ const num = (key: string) => String(sections.findIndex(([k]) => k === key) + 1).
     </aside>
 
     <article class="content">
-      <section id="purpose">
-        <h2><span class="sec">{num('purpose')}</span>{t('process.purpose')}</h2>
+      <ProcessSection locale={locale} id="purpose" num={num('purpose')} title={title('purpose')} collapsible={false}>
         <p class="prose purpose" set:html={prose(p.purpose, locale)} />
-      </section>
+      </ProcessSection>
 
-      <section id="outcomes" class="collapsible">
-        <div class="section-head">
-          <h2><span class="sec">{num('outcomes')}</span>{t('process.outcomes')}</h2>
-          <CollapseToggle locale={locale} controls="outcomes-body" name={t('process.outcomes')} class="no-print" />
-        </div>
-        <div class="collapse-body" id="outcomes-body">
-          <ol class="outcomes">
-            {
-              p.outcomes.map((o) => (
-                <li id={`outcome-${o.id}`}>
-                  <span class="letter">{o.id}</span>
-                  <div>
-                    <span set:html={prose(o.text, locale)} />
-                    {servedBy(o.id).length > 0 && (
-                      <div class="chips served" aria-label={t('process.outcomeServedBy')}>
-                        {servedBy(o.id).map((io) => (
-                          <a class="chip" href={`#${io.dir === 'in' ? 'input' : 'output'}-${io.workProduct}`}>
-                            <span class="num">{io.dir === 'in' ? 'IN' : 'OUT'}</span>
-                            {io.name}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
-      </section>
+      <ProcessSection locale={locale} id="outcomes" num={num('outcomes')} title={title('outcomes')}>
+        <Outcomes locale={locale} process={p} />
+      </ProcessSection>
 
-      <section id="interface" class="collapsible">
-        <div class="section-head">
-          <h2><span class="sec">{num('interface')}</span>{t('process.inputs')} · {t('process.outputs')}</h2>
-          <CollapseToggle
-            locale={locale}
-            controls="interface-body"
-            name={`${t('process.inputs')} · ${t('process.outputs')}`}
-            class="no-print"
-          />
-        </div>
-        <div class="collapse-body" id="interface-body">
-          <div class="flow grid-paper">
-            {
-              (['inputs', 'outputs'] as const).map((kind) => (
-                <div class:list={['flow-col', 'collapsible', kind]} id={kind}>
-                  <span class="label col-label print-only">{t(`process.${kind}`)}</span>
-                  <CollapseToggle
-                    locale={locale}
-                    controls={`${kind}-body`}
-                    name={t(`process.${kind}`)}
-                    text={t(`process.${kind}`)}
-                    class="col-toggle no-print"
-                  />
-                  <div class="collapse-body" id={`${kind}-body`}>
-                    <div class="io-list">
-                      {p[kind].length === 0 && <p class="muted small">—</p>}
-                      {p[kind].map((io) => {
-                        const wp = wps.get(io.workProduct);
-                        const links = kind === 'inputs' ? wp?.producers : wp?.consumers.filter((c) => c.process !== id);
-                        return (
-                          <div class="io-node" id={`${kind === 'inputs' ? 'input' : 'output'}-${io.workProduct}`}>
-                            <div class="io-head">
-                              <a class="io-name" href={wpHref(io.workProduct)}>
-                                {io.name}
-                              </a>
-                              {io.serves.length > 0 && (
-                                <span class="serves" title={t('process.serves')}>
-                                  {io.serves.map((s) => (
-                                    <a href={`#outcome-${s}`}>{s}</a>
-                                  ))}
-                                </span>
-                              )}
-                            </div>
-                            <div class="io-tags">
-                              {wp && <span class="badge">{t(`wp.type-${wp.type}`)}</span>}
-                              {io.optional && <span class="badge">{t('process.optional')}</span>}
-                            </div>
-                            {io.description && <p class="io-desc" set:html={prose(io.description, locale)} />}
-                            <div class="io-links">
-                              <span class="label">{kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}</span>
-                              {links && links.length > 0 ? (
-                                <span class="chips">
-                                  {links.map((l) => (
-                                    <ProcessChip locale={locale} version={version} id={l.process} name={name(l.process)} modal={false} />
-                                  ))}
-                                </span>
-                              ) : (
-                                <span class="muted small">{kind === 'inputs' ? t('process.external') : t('process.notUsed')}</span>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ))
-            }
-            <svg class="wires" aria-hidden="true">
-              <defs>
-                <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
-                  <path d="M0 0 L8 4 L0 8 z" fill="currentColor"></path>
-                </marker>
-              </defs>
-            </svg>
-            <div class="flow-core" aria-hidden="true">
-              <div class="core-box">
-                <span class="mono core-id">{p.id}</span>
-                <span class="core-name">{p.name}</span>
-                <span class="core-outcomes mono">{p.outcomes.map((o) => o.id).join(' ')}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProcessSection locale={locale} id="interface" num={num('interface')} title={title('interface')}>
+        <Interface locale={locale} version={version} process={p} />
+      </ProcessSection>
 
-      <section id="activities" class="collapsible">
-        <div class="section-head">
-          <h2><span class="sec">{num('activities')}</span>{t('process.activities')}</h2>
-          <button type="button" class="toggle-all no-print" data-expand={t('process.expandAll')} data-collapse={t('process.collapseAll')}>
-            {t('process.collapseAll')}
-          </button>
-          <CollapseToggle locale={locale} controls="activities-body" name={t('process.activities')} class="no-print" />
-        </div>
-        <div class="collapse-body" id="activities-body">
-          <ol class="activities">
-            {
-              p.activities.map((a) => (
-                <li id={`activity-${a.id}`}>
-                  <details open>
-                    <summary>
-                      <span class="aid">{a.id}</span>
-                      <span class="atitle" set:html={prose(a.title, locale)} />
-                    </summary>
-                    <div class="collapse-body">
-                      <div class="abody">
-                        <p class="prose" set:html={prose(a.description, locale)} />
-                        {(a.primaryStudies?.length || a.literature?.length) && (
-                          <dl class="sources small">
-                            {a.primaryStudies?.length ? (
-                              <>
-                                <dt class="label">{t('process.primaryStudies')}</dt>
-                                <dd class="chips">
-                                  {a.primaryStudies.map((s) => {
-                                    const study = studyById.get(s);
-                                    const cite = study?.reference && shortCite(referenceByKey.get(study.reference));
-                                    return (
-                                      <a class="chip" href={`${href(locale, 'references')}#${s}`} title={study?.title}>
-                                        <span class="study-id">{s}</span>
-                                        {cite}
-                                      </a>
-                                    );
-                                  })}
-                                </dd>
-                              </>
-                            ) : null}
-                            {a.literature?.length ? (
-                              <>
-                                <dt class="label">{t('process.literature')}</dt>
-                                <dd class="chips">
-                                  {a.literature.map((k) => (
-                                    <a class="chip" href={`${href(locale, 'references')}#${k}`} title={referenceByKey.get(k)?.title}>
-                                      {shortCite(referenceByKey.get(k), k)}
-                                    </a>
-                                  ))}
-                                </dd>
-                              </>
-                            ) : null}
-                          </dl>
-                        )}
-                      </div>
-                    </div>
-                  </details>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
-      </section>
+      <ProcessSection locale={locale} id="activities" num={num('activities')} title={title('activities')}>
+        <button
+          slot="tools"
+          type="button"
+          class="toggle-all no-print"
+          data-expand={t('process.expandAll')}
+          data-collapse={t('process.collapseAll')}
+        >
+          {t('process.collapseAll')}
+        </button>
+        <Activities locale={locale} process={p} />
+      </ProcessSection>
 
       {
         changelog.length > 0 && (
-          <section id="changes" class="collapsible">
-            <div class="section-head">
-              <h2>
-                <span class="sec">{num('changes')}</span>
-                {t('process.changes')}
-              </h2>
-              <CollapseToggle locale={locale} controls="changes-body" name={t('process.changes')} class="no-print" />
-            </div>
-            <div class="collapse-body" id="changes-body">
-              {previousVersion && <p class="muted small">{t('process.changesFrom', { version: previousVersion })}</p>}
-              <ul class="changes">
-                {changelog.map((ch) => (
-                  <li>
-                    <span class={`kind kind-${ch.kind}`}>{t(`change.${ch.kind}`)}</span>
-                    {ch.target && <strong>{ch.target}: </strong>}
-                    <span set:html={prose(ch.text, locale)} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
+          <ProcessSection locale={locale} id="changes" num={num('changes')} title={title('changes')}>
+            <Changes locale={locale} changes={changelog} previousVersion={previousVersion} />
+          </ProcessSection>
         )
       }
 
-      <nav class="pager title-block no-print">
-        {
-          prev ? (
-            <a href={href(locale, version, 'processes', prev)}>
-              <span class="label">← {t('process.previous')}</span>
-              <span>
-                <span class="mono muted">{prev}</span> {name(prev)}
-              </span>
-            </a>
-          ) : (
-            <span />
-          )
-        }
-        {
-          next ? (
-            <a class="next" href={href(locale, version, 'processes', next)}>
-              <span class="label">{t('process.next')} →</span>
-              <span>
-                <span class="mono muted">{next}</span> {name(next)}
-              </span>
-            </a>
-          ) : (
-            <span />
-          )
-        }
-      </nav>
+      <Pager locale={locale} version={version} prev={ids[i - 1]} next={ids[i + 1]} />
     </article>
   </div>
 </Layout>
 
 <script>
-  import { animateDetails, setBodyOpen, setDetailsOpen, willBeOpen } from '../../../../lib/collapse';
+  import { initProcessPage } from '../../../../lib/process-page';
 
-  // Route a right-angle wire from every input to the process and from the
-  // process to every output. The wires share a vertical bus in each gap.
-  const flow = document.querySelector<HTMLElement>('.flow');
-  const svg = flow?.querySelector<SVGSVGElement>('.wires');
-  const core = flow?.querySelector<HTMLElement>('.core-box');
-  const NS = 'http://www.w3.org/2000/svg';
-
-  function drawWires() {
-    if (!flow || !svg || !core) return;
-    svg.querySelectorAll('path.wire').forEach((p) => p.remove());
-    if (getComputedStyle(svg).display === 'none') return;
-    // Nothing to route while the whole section is closed or moving.
-    if (flow.closest("[data-state='closed'], [data-state='moving']")) return;
-    const box = flow.getBoundingClientRect();
-    const c = core.getBoundingClientRect();
-    const coreY = c.top + c.height / 2 - box.top;
-    const wire = (d: string) => {
-      const path = document.createElementNS(NS, 'path');
-      path.setAttribute('d', d);
-      path.setAttribute('class', 'wire');
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', 'currentColor');
-      path.setAttribute('stroke-width', '1');
-      path.setAttribute('marker-end', 'url(#arrow)');
-      svg.appendChild(path);
-    };
-    // Only the columns that are open and still.
-    const nodes = (kind: string) =>
-      flow.querySelectorAll<HTMLElement>(`.${kind}:not([data-state='closed'], [data-state='moving']) .io-node`);
-    nodes('inputs').forEach((n) => {
-      const r = n.getBoundingClientRect();
-      const x1 = r.right - box.left;
-      const y1 = r.top - box.top + 20;
-      const x2 = c.left - box.left;
-      const mid = (x1 + x2) / 2;
-      wire(`M${x1} ${y1} H${mid} V${coreY} H${x2 - 1}`);
-    });
-    nodes('outputs').forEach((n) => {
-      const r = n.getBoundingClientRect();
-      const x1 = c.right - box.left;
-      const x2 = r.left - box.left;
-      const y2 = r.top - box.top + 20;
-      const mid = (x1 + x2) / 2;
-      wire(`M${x1} ${coreY} H${mid} V${y2} H${x2 - 1}`);
-    });
-  }
-
-  if (flow) new ResizeObserver(drawWires).observe(flow);
-  document.fonts?.ready.then(drawWires);
-
-  // Outcomes, inputs, outputs and activities each open and close on their own.
-  // A column of the diagram has no wires while it is closed or moving.
-  const toggles = [...document.querySelectorAll<HTMLButtonElement>('.collapse-toggle')];
-  const bodyOf = (t: HTMLButtonElement) => document.getElementById(t.getAttribute('aria-controls')!)!;
-  const setSection = (toggle: HTMLButtonElement, open: boolean, animate = true) => {
-    const body = bodyOf(toggle);
-    const part = toggle.closest<HTMLElement>('.collapsible')!;
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.title = open ? toggle.dataset.collapse! : toggle.dataset.expand!;
-    if (toggle.hasAttribute('aria-label')) toggle.setAttribute('aria-label', toggle.title);
-    part.dataset.state = 'moving';
-    drawWires();
-    setBodyOpen(body, open, {
-      animate,
-      done: () => {
-        part.dataset.state = open ? 'open' : 'closed';
-        drawWires();
-      },
-    });
-  };
-  toggles.forEach((t) => t.addEventListener('click', () => setSection(t, t.getAttribute('aria-expanded') !== 'true')));
-
-  // Every activity, and the button that opens or closes them all.
-  animateDetails(document.querySelector('.activities')!);
-  const button = document.querySelector<HTMLButtonElement>('.toggle-all');
-  const all = [...document.querySelectorAll<HTMLDetailsElement>('.activities details')];
-  const sync = () => {
-    const anyOpen = all.some(willBeOpen);
-    button!.textContent = anyOpen ? button!.dataset.collapse! : button!.dataset.expand!;
-  };
-  button?.addEventListener('click', () => {
-    const open = !all.some(willBeOpen);
-    all.forEach((d) => setDetailsOpen(d, open));
-    sync();
-  });
-  all.forEach((d) => d.addEventListener('toggle', sync));
-
-  // Open what a link points to, and the parts that contain it, on load and on in-page links.
-  const openTarget = () => {
-    if (!location.hash) return;
-    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if (!target) return;
-    for (const t of toggles) {
-      const part = t.closest('.collapsible')!;
-      const inside = part.contains(target) && part !== target && !t.contains(target);
-      if ((inside || part === target) && t.getAttribute('aria-expanded') !== 'true') setSection(t, true, false);
-    }
-    const details = target.querySelector('details') ?? target.closest('details');
-    if (details) setDetailsOpen(details, true, { animate: false });
-    sync();
-  };
-  openTarget();
-  window.addEventListener('hashchange', openTarget);
+  initProcessPage();
 </script>

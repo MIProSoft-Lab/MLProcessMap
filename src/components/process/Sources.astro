@@ -1,0 +1,52 @@
+---
+// Where an activity comes from: the primary studies of the review (P1, P2…)
+// and the specialized literature, each a chip linking to the references page.
+import type { Activity } from '../../lib/content';
+import { referenceByKey, shortCite, studyById } from '../../lib/refs';
+import { href, useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  activity: Activity;
+}
+
+const { locale, activity: a } = Astro.props;
+const t = useTranslations(locale);
+const references = href(locale, 'references');
+---
+
+{
+  (a.primaryStudies?.length || a.literature?.length) && (
+    <dl class="sources small">
+      {a.primaryStudies?.length ? (
+        <>
+          <dt class="label">{t('process.primaryStudies')}</dt>
+          <dd class="chips">
+            {a.primaryStudies.map((s) => {
+              const study = studyById.get(s);
+              const cite = study?.reference && shortCite(referenceByKey.get(study.reference));
+              return (
+                <a class="chip" href={`${references}#${s}`} title={study?.title}>
+                  <span class="study-id">{s}</span>
+                  {cite}
+                </a>
+              );
+            })}
+          </dd>
+        </>
+      ) : null}
+      {a.literature?.length ? (
+        <>
+          <dt class="label">{t('process.literature')}</dt>
+          <dd class="chips">
+            {a.literature.map((k) => (
+              <a class="chip" href={`${references}#${k}`} title={referenceByKey.get(k)?.title}>
+                {shortCite(referenceByKey.get(k), k)}
+              </a>
+            ))}
+          </dd>
+        </>
+      ) : null}
+    </dl>
+  )
+}

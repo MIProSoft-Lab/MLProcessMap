@@ -1,0 +1,97 @@
+---
+// The inputs and outputs of a process as a diagram: inputs on the left, the
+// process in the middle, outputs on the right, each column opening and closing
+// on its own. The wires between them are drawn in the browser by
+// src/lib/process-flow.ts. Each work product links to the processes that
+// produce or use it.
+import CollapseToggle from '../CollapseToggle.astro';
+import ProcessChip from '../ProcessChip.astro';
+import { getProcess, getWorkProducts, type Process } from '../../lib/content';
+import { prose } from '../../lib/acronyms';
+import { href, useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  version: string;
+  process: Process;
+}
+
+const { locale, version, process: p } = Astro.props;
+const t = useTranslations(locale);
+const wps = new Map(getWorkProducts(version, locale).map((w) => [w.id, w]));
+const name = (pid: string) => getProcess(version, pid, locale).data.name;
+const wpHref = (wid: string) => `${href(locale, version, 'work-products')}#${wid}`;
+---
+
+<div class="flow grid-paper">
+  {
+    (['inputs', 'outputs'] as const).map((kind) => (
+      <div class:list={['flow-col', 'collapsible', kind]} id={kind}>
+        <span class="label col-label print-only">{t(`process.${kind}`)}</span>
+        <CollapseToggle
+          locale={locale}
+          controls={`${kind}-body`}
+          name={t(`process.${kind}`)}
+          text={t(`process.${kind}`)}
+          class="col-toggle no-print"
+        />
+        <div class="collapse-body" id={`${kind}-body`}>
+          <div class="io-list">
+            {p[kind].length === 0 && <p class="muted small">—</p>}
+            {p[kind].map((io) => {
+              const wp = wps.get(io.workProduct);
+              const links = kind === 'inputs' ? wp?.producers : wp?.consumers.filter((c) => c.process !== p.id);
+              return (
+                <div class="io-node" id={`${kind === 'inputs' ? 'input' : 'output'}-${io.workProduct}`}>
+                  <div class="io-head">
+                    <a class="io-name" href={wpHref(io.workProduct)}>
+                      {io.name}
+                    </a>
+                    {io.serves.length > 0 && (
+                      <span class="serves" title={t('process.serves')}>
+                        {io.serves.map((s) => (
+                          <a href={`#outcome-${s}`}>{s}</a>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                  <div class="io-tags">
+                    {wp && <span class="badge">{t(`wp.type-${wp.type}`)}</span>}
+                    {io.optional && <span class="badge">{t('process.optional')}</span>}
+                  </div>
+                  {io.description && <p class="io-desc" set:html={prose(io.description, locale)} />}
+                  <div class="io-links">
+                    <span class="label">{kind === 'inputs' ? t('process.producedBy') : t('process.usedBy')}</span>
+                    {links && links.length > 0 ? (
+                      <span class="chips">
+                        {links.map((l) => (
+                          <ProcessChip locale={locale} version={version} id={l.process} name={name(l.process)} modal={false} />
+                        ))}
+                      </span>
+                    ) : (
+                      <span class="muted small">{kind === 'inputs' ? t('process.external') : t('process.notUsed')}</span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    ))
+  }
+  <svg class="wires" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0 0 L8 4 L0 8 z" fill="currentColor"></path>
+      </marker>
+    </defs>
+  </svg>
+  <div class="flow-core" aria-hidden="true">
+    <div class="core-box">
+      <span class="mono core-id">{p.id}</span>
+      <span class="core-name">{p.name}</span>
+      <span class="core-outcomes mono">{p.outcomes.map((o) => o.id).join(' ')}</span>
+    </div>
+  </div>
+</div>

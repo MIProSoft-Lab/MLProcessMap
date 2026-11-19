@@ -1,0 +1,36 @@
+---
+// The activities of a process, each opening to its description and the
+// sources it comes from (src/components/process/Sources.astro).
+import Sources from './Sources.astro';
+import type { Process } from '../../lib/content';
+import { prose } from '../../lib/acronyms';
+import type { Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  process: Process;
+}
+
+const { locale, process: p } = Astro.props;
+---
+
+<ol class="activities">
+  {
+    p.activities.map((a) => (
+      <li id={`activity-${a.id}`}>
+        <details open>
+          <summary>
+            <span class="aid">{a.id}</span>
+            <span class="atitle" set:html={prose(a.title, locale)} />
+          </summary>
+          <div class="collapse-body">
+            <div class="abody">
+              <p class="prose" set:html={prose(a.description, locale)} />
+              <Sources locale={locale} activity={a} />
+            </div>
+          </div>
+        </details>
+      </li>
+    ))
+  }
+</ol>

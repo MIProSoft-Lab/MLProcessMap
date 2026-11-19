@@ -1,0 +1,24 @@
+---
+// The trail above a page's title: the pages it sits under, linked, then the
+// page itself, e.g. ML-PRM / v2 / P01. An item without href is plain text.
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  items: { text: string; href?: string }[];
+}
+
+const { locale, items } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
+  {
+    items.map((item, i) => (
+      <>
+        {i > 0 && ' / '}
+        {item.href ? <a href={item.href}>{item.text}</a> : item.text}
+      </>
+    ))
+  }
+</nav>

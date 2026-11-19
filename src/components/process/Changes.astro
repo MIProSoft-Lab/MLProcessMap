@@ -1,0 +1,30 @@
+---
+// What changed in a process from the previous PRM version: what was added,
+// updated or removed, and in which part.
+import type { Process } from '../../lib/content';
+import { prose } from '../../lib/acronyms';
+import { useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  changes: NonNullable<Process['changes']>;
+  /** The version the changes are from, when there is one. */
+  previousVersion?: string;
+}
+
+const { locale, changes, previousVersion } = Astro.props;
+const t = useTranslations(locale);
+---
+
+{previousVersion && <p class="muted small">{t('process.changesFrom', { version: previousVersion })}</p>}
+<ul class="changes">
+  {
+    changes.map((ch) => (
+      <li>
+        <span class={`kind kind-${ch.kind}`}>{t(`change.${ch.kind}`)}</span>
+        {ch.target && <strong>{ch.target}: </strong>}
+        <span set:html={prose(ch.text, locale)} />
+      </li>
+    ))
+  }
+</ul>

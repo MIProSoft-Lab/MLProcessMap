@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
+import Breadcrumbs from '../../../../components/Breadcrumbs.astro';
 import { getProcess, processIds, versions, pick } from '../../../../lib/content';
 import { diffProcess, wordDiff, type Pair } from '../../../../lib/diff';
 import { compareProcessPaths } from '../../../../lib/paths';
@@ -62,9 +63,14 @@ const home = b ? to : from;
   section="processes"
   translated={translated}
 >
-  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
-    <a href={href(locale, home)}>ML-PRM / {home}</a> / <a href={href(locale, home, 'processes', id)}>{id}</a> / {t('compare.title')}
-  </nav>
+  <Breadcrumbs
+    locale={locale}
+    items={[
+      { text: `ML-PRM / ${home}`, href: href(locale, home) },
+      { text: id, href: href(locale, home, 'processes', id) },
+      { text: t('compare.title') },
+    ]}
+  />
   <h1><span class="pid">{id}</span> {name}</h1>
 
   <form class="pick card no-print" data-pattern={pairHref} data-order={JSON.stringify(order)}>

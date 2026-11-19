@@ -1,0 +1,38 @@
+---
+// The title block of a process page, as on a drawing sheet: the process, its
+// PRM version, its origin and its place among the version's processes.
+import { pick, type Process, type Version } from '../../lib/content';
+import { useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  process: Process;
+  version: Version;
+  /** Position of the process in its version (0 for the first) and how many there are. */
+  index: number;
+  total: number;
+}
+
+const { locale, process: p, version: v, index, total } = Astro.props;
+const t = useTranslations(locale);
+const two = (n: number) => String(n).padStart(2, '0');
+---
+
+<dl class="sheet title-block">
+  <div>
+    <dt class="label">{t('process.sheet-process')}</dt>
+    <dd class="mono">{p.id}</dd>
+  </div>
+  <div>
+    <dt class="label">{t('nav.version')}</dt>
+    <dd><span class="mono">{v.id}</span> · {pick(v.title, locale)}</dd>
+  </div>
+  <div>
+    <dt class="label">{t('map.legend')}</dt>
+    <dd><span class={`badge origin-${p.origin}`} title={t(`origin.${p.origin}-long`)}>{t(`origin.${p.origin}`)}</span></dd>
+  </div>
+  <div>
+    <dt class="label">{t('process.sheet-sheet')}</dt>
+    <dd class="mono">{two(index + 1)} / {two(total)}</dd>
+  </div>
+</dl>

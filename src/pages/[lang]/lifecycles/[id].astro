@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import LifecyclePhases from '../../../components/LifecyclePhases.astro';
 import LifecycleDiagram from '../../../components/LifecycleDiagram.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
@@ -25,9 +26,7 @@ const missing = processIds(l.prmVersion).filter((pid) => !included.has(pid));
   section="lifecycles"
   translated={translated}
 >
-  <nav class="breadcrumbs" aria-label={t('nav.breadcrumb')}>
-    <a href={href(locale, 'lifecycles')}>{t('lc.title')}</a> / {l.name}
-  </nav>
+  <Breadcrumbs locale={locale} items={[{ text: t('lc.title'), href: href(locale, 'lifecycles') }, { text: l.name }]} />
   <h1>{l.name}</h1>
   <div class="meta">
     {l.status === 'draft' && <span class="badge">{t('lc.draft')}</span>}

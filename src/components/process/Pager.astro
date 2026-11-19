@@ -1,0 +1,44 @@
+---
+// Links to the previous and the next process of the version, at the foot of a
+// process page. An empty span keeps the next link on the right of the first.
+import { getProcess } from '../../lib/content';
+import { href, useTranslations, type Locale } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  version: string;
+  prev?: string;
+  next?: string;
+}
+
+const { locale, version, prev, next } = Astro.props;
+const t = useTranslations(locale);
+const name = (pid: string) => getProcess(version, pid, locale).data.name;
+---
+
+<nav class="pager title-block no-print">
+  {
+    prev ? (
+      <a href={href(locale, version, 'processes', prev)}>
+        <span class="label">← {t('process.previous')}</span>
+        <span>
+          <span class="mono muted">{prev}</span> {name(prev)}
+        </span>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+  {
+    next ? (
+      <a class="next" href={href(locale, version, 'processes', next)}>
+        <span class="label">{t('process.next')} →</span>
+        <span>
+          <span class="mono muted">{next}</span> {name(next)}
+        </span>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+</nav>
