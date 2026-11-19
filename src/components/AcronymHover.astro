@@ -82,6 +82,12 @@
     display: none;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .acronym-hover {
+      animation: fade-in 120ms ease-out;
+    }
+  }
+
   :global(abbr.acronym) {
     text-decoration: underline dotted;
     text-decoration-thickness: 1px;

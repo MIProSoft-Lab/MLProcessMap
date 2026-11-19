@@ -109,3 +109,19 @@ export function animateDetail(details: HTMLDetailsElement) {
 export function animateDetails(root: ParentNode = document) {
   root.querySelectorAll<HTMLDetailsElement>('details').forEach(animateDetail);
 }
+
+/**
+ * The same for a container whose content is drawn again and again (e.g. with
+ * innerHTML): one listener on root covers every <details> it holds, now or later.
+ */
+export function animateDetailsWithin(root: HTMLElement) {
+  root.addEventListener('click', (e) => {
+    const summary = (e.target as Element).closest('summary');
+    const details = summary?.parentElement;
+    if (!(details instanceof HTMLDetailsElement) || !root.contains(details) || summary !== details.querySelector(':scope > summary'))
+      return;
+    if (!details.querySelector(':scope > .collapse-body')) return;
+    e.preventDefault();
+    setDetailsOpen(details, !willBeOpen(details));
+  });
+}

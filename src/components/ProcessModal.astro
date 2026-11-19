@@ -78,6 +78,38 @@ const strings = JSON.stringify(Object.fromEntries(modalKeys.map((k) => [k, t(k)]
     }
   }
 
+  /* Closing (src/lib/process-modal.ts adds .closing, then closes the dialog
+     once these end): the opening in reverse, a little quicker. */
+  @keyframes pm-sheet-out {
+    to {
+      opacity: 0;
+      transform: translate(6px, 14px);
+      box-shadow: 0 0 0 var(--ink);
+    }
+  }
+
+  @keyframes pm-backdrop-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes pm-sheet-down {
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .process-modal[open].closing {
+      animation: pm-sheet-out 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
+    }
+
+    .process-modal[open].closing::backdrop {
+      animation: pm-backdrop-out 0.15s ease-in forwards;
+    }
+  }
+
   .pm-head {
     display: flex;
     align-items: center;
@@ -256,6 +288,10 @@ const strings = JSON.stringify(Object.fromEntries(modalKeys.map((k) => [k, t(k)]
   @media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
     .process-modal[open] {
       animation: pm-sheet-up 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .process-modal[open].closing {
+      animation: pm-sheet-down 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
     }
   }
 </style>

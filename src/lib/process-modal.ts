@@ -122,7 +122,30 @@ export function createProcessModal(options: ModalOptions = {}) {
       <ol class="pm-acts">${d.activities.map(activity).join('')}</ol>`;
   }
 
+  // Closing plays the opening animation in reverse (the .closing styles in
+  // ProcessModal.astro) before the dialog really closes. Each close gets a
+  // number, so a close that was cut short by reopening does nothing when its
+  // animation ends.
+  let closing = 0;
+  async function close() {
+    if (!dialog.open || dialog.classList.contains('closing')) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return dialog.close();
+    const ticket = ++closing;
+    dialog.classList.add('closing');
+    const animations = dialog.getAnimations({ subtree: true }).map((a) => a.finished);
+    // The timeout is a safety net in case an animation never settles.
+    await Promise.race([Promise.allSettled(animations), new Promise((r) => setTimeout(r, 400))]);
+    if (ticket !== closing || !dialog.classList.contains('closing')) return;
+    dialog.classList.remove('closing');
+    dialog.close();
+  }
+
   async function open(version: string, id: string, name = '') {
+    // Opening again while it closes keeps it open.
+    if (dialog.classList.contains('closing')) {
+      closing++;
+      dialog.classList.remove('closing');
+    }
     openId = id;
     if (!dialog.open) opener = document.activeElement as HTMLElement | null;
     dialog.querySelector('.pm-id')!.textContent = id;
@@ -157,22 +180,29 @@ export function createProcessModal(options: ModalOptions = {}) {
     if (tailor && el.dataset.pmAct) tailor.setActivityIncluded(el.dataset.pmAct, el.checked);
   });
 
-  dialog.querySelector('.pm-close')!.addEventListener('click', () => dialog.close());
+  dialog.querySelector('.pm-close')!.addEventListener('click', close);
   // Escape closes the dialog. Browsers do this for modal dialogs on their own,
   // but not all of them reliably (some skip it when the dialog was opened
   // without a fresh user gesture), so handle it here too.
   dialog.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape' || !dialog.open) return;
     e.preventDefault();
-    dialog.close();
+    close();
+  });
+  // Other ways the browser closes it (e.g. the back gesture on Android) are
+  // animated too.
+  dialog.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    close();
   });
   // A click on the backdrop, outside the dialog box, closes it.
   dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.close();
+    if (e.target === dialog) close();
   });
   dialog.addEventListener('close', () => {
     // Return focus to what opened the dialog, after the browser's own focus
     // restoration, finding it again if the page re-rendered it meanwhile.
+    dialog.classList.remove('closing');
     const id = openId;
     const target = opener?.isConnected ? opener : (options.findOpener?.(id) ?? null);
     openId = '';
@@ -180,7 +210,7 @@ export function createProcessModal(options: ModalOptions = {}) {
     setTimeout(() => target?.focus());
   });
 
-  return { open };
+  return { open, close };
 }
 
 /**

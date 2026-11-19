@@ -372,16 +372,8 @@
   align-self: center;
 }
 
-/* Opening and closing each part of the page (src/lib/collapse.ts). */
-.process-page .collapse-body {
-  /* Keeps the margins of the content inside, so the measured height is the shown one. */
-  display: flow-root;
-}
-
-.process-page .collapse-body[hidden] {
-  display: none;
-}
-
+/* Opening and closing each part of the page (src/lib/collapse.ts; the
+   collapse-body itself is styled in global.css). */
 .process-page .collapse-toggle .chevron {
   flex: none;
   transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);

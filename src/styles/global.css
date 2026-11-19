@@ -143,6 +143,41 @@ html {
   }
 }
 
+/* Entrances shared across the site. They move with `translate`, so they
+   compose with a transform the element already has (the undo bar is centred
+   with one). Used only under prefers-reduced-motion: no-preference. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* A menu panel drops a few pixels into place below its button. */
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+/* A notice or bar rises into place. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* The body of a collapsible part, animated by src/lib/collapse.ts. It keeps
+   the margins of its content inside, so the measured height is the shown one. */
+.collapse-body {
+  display: flow-root;
+}
+
+.collapse-body[hidden] {
+  display: none;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -386,6 +421,20 @@ code,
 .menu[open] summary::after {
   margin-top: 3px;
   transform: rotate(-135deg);
+}
+
+/* Opening a menu turns its arrow and drops the panel into place. Closing is
+   immediate, so a choice is never held up. */
+@media (prefers-reduced-motion: no-preference) {
+  .menu summary::after {
+    transition:
+      transform 150ms cubic-bezier(0.2, 0, 0, 1),
+      margin-top 150ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .menu[open] > ul {
+    animation: drop-in 150ms cubic-bezier(0.2, 0, 0, 1);
+  }
 }
 
 .menu summary:hover,

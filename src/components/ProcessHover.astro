@@ -153,6 +153,13 @@ const strings = JSON.stringify(Object.fromEntries(keys.map((k) => [k, t(k)])));
     display: none;
   }
 
+  /* Fades in when it appears; moving to another process keeps it shown. */
+  @media (prefers-reduced-motion: no-preference) {
+    .process-hover {
+      animation: fade-in 120ms ease-out;
+    }
+  }
+
   .ph-head {
     display: flex;
     gap: 8px;

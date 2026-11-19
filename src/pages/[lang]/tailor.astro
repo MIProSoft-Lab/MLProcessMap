@@ -233,6 +233,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
 <script>
   import { createProcessModal, openLinksInModal } from '../../lib/process-modal';
+  import { animateDetailsWithin } from '../../lib/collapse';
   import { diagramSvgs } from '../../lib/lifecycle-diagram';
   import { translator } from '../../lib/client-strings';
   import { escapeHtml as esc } from '../../lib/text';
@@ -328,6 +329,10 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
 
   const list = $('#processes');
   const phaseList = $('#phases');
+  // The activities of each process and the description of each phase open
+  // and close like the parts of a process page, also after a redraw.
+  animateDetailsWithin(list);
+  animateDetailsWithin(phaseList);
   const unassignedList = $('#unassigned');
   const figure = $('#preview .lc-diagram');
   const viewport = figure.querySelector<HTMLElement>('.viewport')!;
@@ -409,7 +414,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
             <span class="proc-tools">${phaseSelect(p.id)}
               <button type="button" class="info" data-info="${p.id}" aria-label="${esc(s('modal.details', { name: p.name }))}">i</button></span>
           </div>
-          <details><summary class="small muted">${s('process.activities')} (<span data-count="${p.id}"></span>)</summary><ul class="acts">${acts}</ul></details>
+          <details><summary class="small muted">${s('process.activities')} (<span data-count="${p.id}"></span>)</summary><div class="collapse-body"><ul class="acts">${acts}</ul></div></details>
           <label class="rationale small" ${on ? 'hidden' : ''}><span>${s('tailor.rationale')}</span>
             <input type="text" data-why="${p.id}" value="${esc(state.rationale[p.id] ?? '')}"></label>
         </li>`;
@@ -470,7 +475,7 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
               <input type="text" data-field="returnNote" value="${esc(p.returnNote)}"></label>
           </div>
           <details class="small" ${p.description ? 'open' : ''}><summary class="muted">${esc(s('tailor.phase-description'))}</summary>
-            <textarea data-field="description" rows="2">${esc(p.description)}</textarea></details>
+            <div class="collapse-body"><textarea data-field="description" rows="2">${esc(p.description)}</textarea></div></details>
         </li>`;
       })
       .join('');
@@ -886,7 +891,11 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     try {
       await navigator.clipboard.writeText(location.href);
       b.textContent = s('tailor.copied');
-      setTimeout(() => (b.textContent = s('tailor.copyLink')), 1500);
+      b.classList.add('copied');
+      setTimeout(() => {
+        b.textContent = s('tailor.copyLink');
+        b.classList.remove('copied');
+      }, 1500);
     } catch {
       prompt('', location.href);
     }

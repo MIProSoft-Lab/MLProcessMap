@@ -574,6 +574,36 @@
   }
 }
 
+/* Notices rise into place as they appear, the bar at the bottom of a narrow
+   screen slides up, and the copy button pulses once when the link is copied. */
+@media (prefers-reduced-motion: no-preference) {
+  .tailor-page .undo:not([hidden]),
+  .tailor-page .restore:not([hidden]),
+  .tailor-page #import-status:not([hidden]) {
+    animation: rise-in 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .tailor-page .mobile-bar:not([hidden]) {
+    animation: slide-up 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .tailor-page #copy.copied {
+    animation: copied 300ms cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    translate: 0 100%;
+  }
+}
+
+@keyframes copied {
+  40% {
+    scale: 1.06;
+  }
+}
+
 /* The "Start from" menu, a button as tall as the fields beside it. */
 .tailor-page .start-menu {
   align-self: end;

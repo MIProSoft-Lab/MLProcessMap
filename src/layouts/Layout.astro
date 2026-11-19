@@ -291,11 +291,20 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
         };
         button.addEventListener('click', () => {
           const next = current() === 'dark' ? 'light' : 'dark';
-          root.dataset.theme = next;
-          try {
-            localStorage.setItem('theme', next);
-          } catch {}
-          sync();
+          const apply = () => {
+            root.dataset.theme = next;
+            try {
+              localStorage.setItem('theme', next);
+            } catch {}
+            sync();
+          };
+          // Cross-fade between the two themes, like between pages (see the
+          // view transition in global.css), where the browser can.
+          if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.startViewTransition(apply);
+          } else {
+            apply();
+          }
         });
         system.addEventListener('change', sync);
         sync();
