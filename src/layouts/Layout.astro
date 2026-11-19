@@ -135,7 +135,7 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
                 <ul>
                   {latestLink && (
                     <li>
-                      <a href={latestLink}>
+                      <a href={latestLink} data-version-link={defaultVersion}>
                         <span class="menu-key">{t('nav.latest')}</span>
                         <span class="menu-note">{defaultVersion}</span>
                       </a>
@@ -144,7 +144,7 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
                   {versions.map((v) =>
                     versionLinks[v.id] ? (
                       <li>
-                        <a href={versionLinks[v.id]} aria-current={v.id === version ? 'true' : undefined}>
+                        <a href={versionLinks[v.id]} aria-current={v.id === version ? 'true' : undefined} data-version-link={v.id}>
                           <span class="menu-key">{v.id}</span>
                           <span class="menu-note">{pick(v.title, locale)}</span>
                         </a>
@@ -182,7 +182,13 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
               {
                 languageLinks.map((l) => (
                   <li>
-                    <a href={l.href} hreflang={l.locale} lang={l.locale} aria-current={l.locale === locale ? 'true' : undefined}>
+                    <a
+                      href={l.href}
+                      hreflang={l.locale}
+                      lang={l.locale}
+                      aria-current={l.locale === locale ? 'true' : undefined}
+                      data-same-page={indexable ? '' : undefined}
+                    >
                       <span class="menu-key">{l.locale.toUpperCase()}</span>
                       <span class="menu-note">{languageNames[l.locale]}</span>
                     </a>
@@ -277,6 +283,28 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
         </p>
       </div>
     </footer>
+    {/* Before the script below, which sets it up. */}
+    {
+      version && versionLinks && (
+        <dialog id="version-change" class="version-change" aria-labelledby="vc-title">
+          <form method="dialog">
+            <h2 id="vc-title">{t('nav.versionChange')}</h2>
+            <p class="vc-text" data-text={t('nav.versionQuestion')} />
+            <p class="vc-actions">
+              <button value="apply" class="primary button">
+                {t('nav.versionApply')}
+              </button>
+              <button value="reset" class="button">
+                {t('nav.versionReset')}
+              </button>
+              <button value="cancel" class="link">
+                {t('nav.versionCancel')}
+              </button>
+            </p>
+          </form>
+        </dialog>
+      )
+    }
     <script is:inline>
       (() => {
         const button = document.getElementById('theme-toggle');
@@ -335,6 +363,18 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
           } catch {}
         }),
       );
+      // The same page in another language keeps what the address holds: a search
+      // (?q=), the options of the printable version, the model of the builder
+      // (#…). Pages change their address as they are used, so it is copied when
+      // a link is about to be followed: pressed, focused or clicked, also to open
+      // it in a new tab.
+      document.querySelectorAll('.site-header a[hreflang][data-same-page]').forEach((a) => {
+        const carry = () => {
+          a.search = location.search;
+          a.hash = location.hash;
+        };
+        for (const type of ['pointerdown', 'focus', 'click']) a.addEventListener(type, carry);
+      });
       // Close the header menus on a click outside them or on Escape.
       (() => {
         const menus = [...document.querySelectorAll('.site-header details.menu')];
@@ -349,6 +389,38 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
         });
         // Opening one menu closes the other.
         for (const m of menus) m.addEventListener('toggle', () => m.open && menus.forEach((x) => x !== m && (x.open = false)));
+      })();
+      // Another PRM version from the menu, when the address holds the user's
+      // changes (?…: a search, the options of the printable version): ask
+      // whether to try them on the other version or to start again. A click
+      // that opens a new tab is left alone, without the changes.
+      (() => {
+        const dialog = document.getElementById('version-change');
+        if (!dialog) return;
+        const text = dialog.querySelector('.vc-text');
+        let target = null;
+        document.querySelectorAll('.site-header a[data-version-link]').forEach((a) =>
+          a.addEventListener('click', (e) => {
+            if (!location.search || a.getAttribute('aria-current') === 'true') return;
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault();
+            a.closest('details').open = false;
+            target = a;
+            text.textContent = text.dataset.text.replace('{version}', a.dataset.versionLink);
+            // Escape closes it without an answer: clear the one from last time.
+            dialog.returnValue = '';
+            dialog.showModal();
+          }),
+        );
+        dialog.addEventListener('close', () => {
+          if (!target || !dialog.returnValue || dialog.returnValue === 'cancel') return (target = null);
+          const url = new URL(target.href);
+          if (dialog.returnValue === 'apply') {
+            url.search = location.search;
+            url.hash = location.hash;
+          }
+          location.href = url.href;
+        });
       })();
     </script>
     <ProcessHover locale={locale} />

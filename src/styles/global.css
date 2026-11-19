@@ -869,6 +869,53 @@ del {
   border: 1px solid var(--ink);
 }
 
+/* The question on changing the PRM version with changes in the address (Layout.astro). */
+.version-change {
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 20px 22px;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.version-change::backdrop {
+  background: rgb(17 20 15 / 55%);
+}
+
+.version-change h2 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.version-change h2::after {
+  display: none;
+}
+
+/* The three answers on one line, each label whole; on a narrow screen there
+   is no room for them side by side, so they wrap. */
+.version-change .vc-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0 0;
+}
+
+.version-change .vc-actions button {
+  white-space: nowrap;
+}
+
+.version-change .vc-actions .link {
+  margin-left: auto;
+}
+
+@media (max-width: 560px) {
+  .version-change .vc-actions {
+    flex-wrap: wrap;
+  }
+}
+
 @media print {
   .site-header,
   .site-footer,

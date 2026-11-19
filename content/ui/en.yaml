@@ -14,6 +14,11 @@ nav:
   language: Language
   version: PRM version
   latest: Latest
+  versionChange: "Change the PRM version"
+  versionQuestion: "Do you want to try and apply your changes to {version}, or reset your current progress?"
+  versionApply: "Apply my changes"
+  versionReset: "Reset progress"
+  versionCancel: "Cancel"
   skip: Skip to content
   main: Main
   breadcrumb: Breadcrumb

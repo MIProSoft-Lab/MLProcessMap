@@ -11,6 +11,11 @@ nav:
   language: Idioma
   version: Versió del PRM
   latest: Darrera
+  versionChange: "Canvia la versió del PRM"
+  versionQuestion: "Vols intentar aplicar els teus canvis a {version} o reiniciar el teu progrés actual?"
+  versionApply: "Aplica els meus canvis"
+  versionReset: "Reinicia el progrés"
+  versionCancel: "Cancel·la"
   skip: Vés al contingut
   main: Principal
   breadcrumb: Ruta de navegació
