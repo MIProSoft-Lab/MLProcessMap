@@ -5,6 +5,7 @@ import { translator } from './client-strings';
 import { diagramKeys } from './lifecycle-diagram';
 import { modalKeys } from './process-modal';
 import { exportKeys } from './tailor/export';
+import { renderKeys } from './tailor/render';
 
 const read = (path: string) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), 'utf8');
 
@@ -33,6 +34,10 @@ describe('the strings handed to the scripts', () => {
     expect(exportKeys).toEqual(expect.arrayContaining(used(read('lib/tailor/export.ts'))));
   });
 
+  it("cover what the lifecycle builder's templates use", () => {
+    expect(renderKeys).toEqual(expect.arrayContaining(used(read('lib/tailor/render.ts'))));
+  });
+
   it('cover what the process modal uses', () => {
     expect(modalKeys).toEqual(expect.arrayContaining(used(read('lib/process-modal.ts'))));
   });
@@ -43,7 +48,7 @@ describe('the strings handed to the scripts', () => {
   });
 
   it('cover what the lifecycle builder uses', () => {
-    const { keys, script } = page('pages/[lang]/tailor.astro', { diagramKeys, exportKeys });
+    const { keys, script } = page('pages/[lang]/tailor.astro', { diagramKeys, exportKeys, renderKeys: [...renderKeys] });
     expect(keys).toEqual(expect.arrayContaining(used(script)));
   });
 });

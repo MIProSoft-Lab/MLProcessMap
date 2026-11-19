@@ -3,89 +3,38 @@ import Layout from '../../layouts/Layout.astro';
 import ProcessModal from '../../components/ProcessModal.astro';
 import LifecycleDiagram from '../../components/LifecycleDiagram.astro';
 import '../../styles/tailor.css';
-import { versions, defaultVersion, getProcesses, getWorkProducts, lifecycleIds, getLifecycle, pick } from '../../lib/content';
+import { versions, pick } from '../../lib/content';
 import { localePaths } from '../../lib/paths';
-import { plain } from '../../lib/text';
 import { diagramKeys } from '../../lib/lifecycle-diagram';
 import { exportKeys } from '../../lib/tailor/export';
+import { builderData } from '../../lib/tailor/data';
+import { renderKeys } from '../../lib/tailor/render';
 import { pageLocale, href, stringsFor, type UiKey } from '../../i18n/ui';
 
 export const getStaticPaths = localePaths;
 const { locale, t } = pageLocale(Astro.props);
 
-// Everything the client needs, for every version.
-const data = {
-  defaultVersion,
-  base: href(locale),
-  versions: versions.map((v) => ({
-    id: v.id,
-    title: pick(v.title, locale),
-    processes: getProcesses(v.id, locale).map(({ data: p }) => ({
-      id: p.id,
-      name: p.name,
-      origin: p.origin,
-      purpose: plain(p.purpose),
-      activities: p.activities.map((a) => ({ id: a.id, title: plain(a.title) })),
-      inputs: p.inputs.map((i) => i.workProduct),
-    })),
-    workProducts: Object.fromEntries(
-      getWorkProducts(v.id, locale).map((w) => [
-        w.id,
-        { name: w.name, external: w.external, producers: w.producers.map((p) => p.process) },
-      ]),
-    ),
-  })),
-  lifecycles: lifecycleIds().map((id) => {
-    const l = getLifecycle(id, locale).data;
-    return {
-      id,
-      name: l.name,
-      version: l.prmVersion,
-      description: plain(l.description),
-      processes: l.phases.flatMap((p) => p.processes),
-      phases: l.phases.map((ph) => ({ ...ph, description: ph.description ? plain(ph.description) : '' })),
-    };
-  }),
-};
+// Everything the script needs, for every version.
+const data = builderData(locale);
 
-// The strings of the page's script; the drawing and the exports list their own.
+// The strings of the page's script; the drawing, the exports and the templates list their own.
 const keys: UiKey[] = [
   ...diagramKeys,
   ...exportKeys,
+  ...renderKeys,
   'tailor.selected',
-  'tailor.allCovered',
-  'tailor.copied',
-  'tailor.copyLink',
-  'tailor.rationale',
-  'tailor.start-all',
-  'tailor.start-none',
-  'tailor.start-note',
-  'process.activities',
-  'process.producedBy',
-  'nav.lifecycles',
-  'modal.details',
-  'tailor.phase-name',
-  'tailor.phase-up',
-  'tailor.phase-down',
-  'tailor.phase-remove',
-  'tailor.phase-description',
-  'tailor.phase-noReturn',
-  'tailor.phase-returnNote',
-  'tailor.phase-drop',
-  'tailor.phase-drop-touch',
+  'tailor.phases-summary',
   'tailor.bar-selected',
   'tailor.bar-missing',
+  'tailor.copied',
+  'tailor.copyLink',
+  'tailor.untitled',
+  'tailor.phase-new',
   'tailor.undo-replaced',
   'tailor.undo-all',
   'tailor.undo-none',
   'tailor.undo-phase',
   'tailor.undo-version',
-  'tailor.phase-addProcess',
-  'tailor.phase-unassign',
-  'tailor.phase-none',
-  'tailor.phase-of',
-  'tailor.unassigned-none',
-  'tailor.phases-summary',
   'tailor.import-done',
   'tailor.import-csv',
   'tailor.import-skipped',
@@ -231,15 +180,21 @@ const strings = stringsFor(t, keys);
 </Layout>
 
 <script>
+  // The page's part of the builder: the model being edited, kept in the URL
+  // hash so it can be shared, drawn from src/lib/tailor/render.ts and changed
+  // by the events below with src/lib/tailor/model.ts.
   import { createProcessModal, openLinksInModal } from '../../lib/process-modal';
   import { animateDetailsWithin } from '../../lib/collapse';
   import { diagramSvgs } from '../../lib/lifecycle-diagram';
   import { translator } from '../../lib/client-strings';
-  import { escapeHtml as esc } from '../../lib/text';
   import * as model from '../../lib/tailor/model';
-  import type { Data, Phase, Proc, State } from '../../lib/tailor/model';
+  import type { Data, Proc, State } from '../../lib/tailor/model';
   import * as exporter from '../../lib/tailor/export';
-  import { ImportError, readModel } from '../../lib/tailor/import';
+  import * as render from '../../lib/tailor/render';
+  import { ImportError, readModel, toState } from '../../lib/tailor/import';
+  import { rememberView } from '../../lib/tailor/view';
+  import { enableDragging } from '../../lib/tailor/drag';
+  import { download, lastModel } from '../../lib/tailor/browser';
 
   const { data, strings } = JSON.parse(document.getElementById('tailor-data')!.textContent!) as {
     data: Data;
@@ -247,34 +202,21 @@ const strings = stringsFor(t, keys);
   };
   const s = translator(strings);
   const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
-  const { phase, phasesOf, slug } = model;
 
   // --- State, kept in the URL hash so a selection can be shared ---------
 
   const version = (id: string) => model.versionOf(data, id);
+  const current = () => version(state.version);
+  /** What the templates read. */
+  const view = (): render.View => ({ state, version: current(), s });
 
   // The last model edited is also kept in the browser, to offer it again on a
   // visit that starts without one. Opening a model does not replace it; editing does.
-  const STORE = 'prm-tool:tailor:last';
-  const stored = {
-    get() {
-      try {
-        return localStorage.getItem(STORE);
-      } catch {
-        return null; // Storage can be blocked, and the builder works without it.
-      }
-    },
-    set(hash: string | null) {
-      try {
-        hash === null ? localStorage.removeItem(STORE) : localStorage.setItem(STORE, hash);
-      } catch {}
-    },
-  };
-  const last = location.hash.length > 1 ? null : stored.get();
+  const last = location.hash.length > 1 ? null : lastModel.get();
 
   let state = model.fromHash(data, location.hash.slice(1));
 
-  const syncPhases = () => model.syncPhases(state, version(state.version));
+  const syncPhases = () => model.syncPhases(state, current());
   syncPhases();
 
   /** The model without the open tab, which is not part of it. */
@@ -289,7 +231,7 @@ const strings = stringsFor(t, keys);
     if (undo && modelKey(state) !== undo.after) dismissUndo();
     edited ||= modelKey(state) !== opened;
     if (!edited) return;
-    stored.set(hash);
+    lastModel.set(hash);
     restore.hidden = true;
   };
 
@@ -332,154 +274,28 @@ const strings = stringsFor(t, keys);
   // and close like the parts of a process page, also after a redraw.
   animateDetailsWithin(list);
   animateDetailsWithin(phaseList);
-  const unassignedList = $('#unassigned');
   const figure = $('#preview .lc-diagram');
   const viewport = figure.querySelector<HTMLElement>('.viewport')!;
 
-  const procOf = (id: string) => version(state.version).processes.find((p) => p.id === id);
-  const phaseOf = (id: string) => model.phaseOf(state, id);
-  const unassigned = () => model.unassigned(state, version(state.version));
+  const procOf = (id: string) => current().processes.find((p) => p.id === id);
+  const unassigned = () => model.unassigned(state, current());
   // A touch screen cannot drag the process chips, so an empty phase points at the menu below it.
   const touch = matchMedia('(pointer: coarse)').matches;
-  const phaseLabel = (p: Phase, i: number) => `${String(i + 1).padStart(2, '0')} ${p.name || s('tailor.phase-new', { n: i + 1 })}`;
 
-  function phaseSelect(id: string) {
-    if (!state.phases.length || !state.selected.has(id)) return '';
-    const current = phaseOf(id)?.id ?? '';
-    const options = [`<option value="">${esc(s('tailor.phase-none'))}</option>`]
-      .concat(
-        state.phases.map((p, i) => `<option value="${esc(p.id)}" ${p.id === current ? 'selected' : ''}>${esc(phaseLabel(p, i))}</option>`),
-      )
-      .join('');
-    return `<select class="phase-select" data-phase-of="${id}" aria-label="${esc(s('tailor.phase-of', { id }))}">${options}</select>`;
-  }
-
-  /**
-   * Redrawing replaces every row, which would close the open lists and drop the
-   * keyboard focus. This notes both before a redraw and returns the way to put them back.
-   */
-  function rememberView() {
-    const rows = 'li.proc, li.phase-card';
-    const rowSel = (row: HTMLElement) =>
-      row.dataset.phase !== undefined
-        ? `#phases [data-phase="${CSS.escape(row.dataset.phase)}"]`
-        : `#processes [data-id="${CSS.escape(row.dataset.id!)}"]`;
-    const open = [...document.querySelectorAll<HTMLElement>('#processes details[open], #phases details[open]')].map((d) =>
-      rowSel(d.closest<HTMLElement>(rows)!),
-    );
-    const active = document.activeElement;
-    const row =
-      active instanceof HTMLElement && (list.contains(active) || phaseList.contains(active)) ? active.closest<HTMLElement>(rows) : null;
-    // The focused control is found again by its tag and data attributes, e.g. input[data-proc="P01"].
-    const focused = row && {
-      row: rowSel(row),
-      el:
-        active!.tagName.toLowerCase() +
-        [...active!.attributes]
-          .filter((a) => a.name.startsWith('data-'))
-          .map((a) => `[${a.name}="${CSS.escape(a.value)}"]`)
-          .join(''),
-    };
-    return () => {
-      for (const sel of open) document.querySelector<HTMLDetailsElement>(`${sel} details`)?.setAttribute('open', '');
-      if (!focused) return;
-      // A control that is gone (a removed chip, a removed phase) hands the focus to its row, or to "Add phase".
-      const again =
-        document.querySelector<HTMLElement>(`${focused.row} ${focused.el}`) ??
-        document.querySelector<HTMLElement>(`${focused.row} :is(input, select, button:not(:disabled))`) ??
-        $('#add-phase');
-      again.focus();
-    };
-  }
-
+  /** Draw everything again from the model, keeping the open lists and the focus. */
   function renderList() {
-    const restoreView = rememberView();
-    const v = version(state.version);
-    list.innerHTML = v.processes
-      .map((p) => {
-        const on = state.selected.has(p.id);
-        const acts = p.activities
-          .map(
-            (
-              a,
-            ) => `<li><label><input type="checkbox" data-act="${p.id}.${a.id}" ${state.excluded.has(`${p.id}.${a.id}`) ? '' : 'checked'} ${on ? '' : 'disabled'}>
-              <span class="aid">${a.id}</span> ${esc(a.title)}</label></li>`,
-          )
-          .join('');
-        return `<li class="proc ${on ? '' : 'off'}" data-id="${p.id}">
-          <div class="proc-head" data-hover-process="${p.id}" data-hover-version="${state.version}">
-            <label class="proc-label"><input type="checkbox" data-proc="${p.id}" ${on ? 'checked' : ''}>
-              <span class="dot origin-${p.origin}"></span><span class="num">${p.id}</span> <strong>${esc(p.name)}</strong></label>
-            <span class="proc-tools">${phaseSelect(p.id)}
-              <button type="button" class="info" data-info="${p.id}" aria-label="${esc(s('modal.details', { name: p.name }))}">i</button></span>
-          </div>
-          <details><summary class="small muted">${s('process.activities')} (<span data-count="${p.id}"></span>)</summary><div class="collapse-body"><ul class="acts">${acts}</ul></div></details>
-          <label class="rationale small" ${on ? 'hidden' : ''}><span>${s('tailor.rationale')}</span>
-            <input type="text" data-why="${p.id}" value="${esc(state.rationale[p.id] ?? '')}"></label>
-        </li>`;
-      })
-      .join('');
+    const restoreView = rememberView([list, phaseList], () => $('#add-phase'));
+    const v = view();
+    list.innerHTML = v.version.processes.map((p) => render.processRow(v, p)).join('');
     renderPhases();
     restoreView();
   }
 
-  const chip = (id: string, from: string) => {
-    const p = procOf(id);
-    if (!p) return '';
-    return `<li class="pchip origin-${p.origin}" draggable="true" data-pid="${id}" data-from="${esc(from)}" data-hover-process="${id}" data-hover-version="${state.version}">
-      <span class="num">${id}</span><span class="pchip-name">${esc(p.name)}</span>
-      ${from ? `<button type="button" class="pchip-x" data-unassign="${id}" data-from="${esc(from)}" aria-label="${esc(s('tailor.phase-unassign', { id }))}">×</button>` : ''}
-    </li>`;
-  };
-
   function renderPhases() {
+    const v = view();
     const free = unassigned();
-    phaseList.innerHTML = state.phases
-      .map((p, i) => {
-        const others = state.phases
-          .map((o, k) =>
-            o.id === p.id ? '' : `<option value="${esc(o.id)}" ${o.id === p.returnsTo ? 'selected' : ''}>${esc(phaseLabel(o, k))}</option>`,
-          )
-          .join('');
-        // The menu adds a process without a phase, or moves one here from another
-        // phase, which is the way to arrange them without dragging.
-        const option = (id: string) => `<option value="${id}">${id} ${esc(procOf(id)?.name ?? '')}</option>`;
-        const group = (label: string, ids: string[]) =>
-          ids.length ? `<optgroup label="${esc(label)}">${ids.map(option).join('')}</optgroup>` : '';
-        const choices =
-          group(
-            s('tailor.phase-none'),
-            free.map((f) => f.id),
-          ) + state.phases.map((o, k) => (o.id === p.id ? '' : group(phaseLabel(o, k), o.processes))).join('');
-        const add = choices
-          ? `<select class="pc-add" data-add-to="${esc(p.id)}"><option value="">${esc(s('tailor.phase-addProcess'))}</option>${choices}</select>`
-          : '';
-        return `<li class="phase-card" data-phase="${esc(p.id)}">
-          <div class="pc-head">
-            <span class="pc-step">${String(i + 1).padStart(2, '0')}</span>
-            <input type="text" class="pc-name" data-field="name" value="${esc(p.name)}" placeholder="${esc(s('tailor.phase-new', { n: i + 1 }))}" aria-label="${esc(s('tailor.phase-name'))}">
-            <span class="pc-tools">
-              <button type="button" data-move="-1" ${i === 0 ? 'disabled' : ''} aria-label="${esc(s('tailor.phase-up'))}" title="${esc(s('tailor.phase-up'))}">↑</button>
-              <button type="button" data-move="1" ${i === state.phases.length - 1 ? 'disabled' : ''} aria-label="${esc(s('tailor.phase-down'))}" title="${esc(s('tailor.phase-down'))}">↓</button>
-              <button type="button" data-remove aria-label="${esc(s('tailor.phase-remove'))}" title="${esc(s('tailor.phase-remove'))}">✕</button>
-            </span>
-          </div>
-          <ul class="pc-procs dropzone" data-drop="${esc(p.id)}">${p.processes.map((id) => chip(id, p.id)).join('') || `<li class="pc-empty small muted">${esc(touch && add ? s('tailor.phase-drop-touch') : s('tailor.phase-drop'))}</li>`}</ul>
-          ${add}
-          <div class="pc-options small">
-            <label><input type="checkbox" data-field="iterative" ${p.iterative ? 'checked' : ''}> ↻ ${esc(s('lc.iterative'))}</label>
-            <label>↩ ${esc(s('tailor.phase-returnsTo'))}
-              <select data-field="returnsTo"><option value="">${esc(s('tailor.phase-noReturn'))}</option>${others}</select></label>
-            <label class="pc-note" ${p.returnsTo ? '' : 'hidden'}>${esc(s('tailor.phase-returnNote'))}
-              <input type="text" data-field="returnNote" value="${esc(p.returnNote)}"></label>
-          </div>
-          <details class="small" ${p.description ? 'open' : ''}><summary class="muted">${esc(s('tailor.phase-description'))}</summary>
-            <div class="collapse-body"><textarea data-field="description" rows="2">${esc(p.description)}</textarea></div></details>
-        </li>`;
-      })
-      .join('');
-    unassignedList.innerHTML =
-      free.map((p) => chip(p.id, '')).join('') || `<li class="pc-empty small muted">${esc(s('tailor.unassigned-none'))}</li>`;
+    phaseList.innerHTML = state.phases.map((p, i) => render.phaseCard(v, p, i, { free, touch })).join('');
+    $('#unassigned').innerHTML = render.unassignedChips(v, free);
     $('#phase-count').textContent = state.phases.length ? `(${state.phases.length})` : '';
     renderPreview();
     renderSummary();
@@ -507,12 +323,11 @@ const strings = stringsFor(t, keys);
     figure.dispatchEvent(new Event('lc-diagram:update'));
   }
 
-  const activeActivities = (p: Proc) => model.activeActivities(state, p);
-  const missingInputs = () => model.missingInputs(state, version(state.version));
-
+  /** The counts in the sidebar and the bar at the bottom, the missing inputs, and the link. */
   function renderSummary() {
-    const v = version(state.version);
-    const acts = v.processes.reduce((n, p) => n + activeActivities(p).length, 0);
+    const v = current();
+    const active = (p: Proc) => model.activeActivities(state, p);
+    const acts = v.processes.reduce((n, p) => n + active(p).length, 0);
     $('#summary').textContent = s('tailor.selected', { n: state.selected.size, total: v.processes.length, a: acts });
     const phaseSummary = $('#phase-summary');
     phaseSummary.hidden = !state.phases.length;
@@ -520,36 +335,16 @@ const strings = stringsFor(t, keys);
     $<HTMLButtonElement>('#export-yaml').disabled = !state.phases.length;
     for (const p of v.processes) {
       const el = list.querySelector(`[data-count="${p.id}"]`);
-      if (el) el.textContent = `${activeActivities(p).length}/${p.activities.length}`;
+      if (el) el.textContent = `${active(p).length}/${p.activities.length}`;
     }
-    const missing = missingInputs();
+    const missing = model.missingInputs(state, v);
     $('#missing-count').textContent = missing.size ? `(${missing.size})` : '';
     $('#missing-note').hidden = !missing.size;
     $('#mobile-summary').textContent =
       s('tailor.bar-selected', { n: state.selected.size, total: v.processes.length }) +
       (missing.size ? ` · ${s('tailor.bar-missing', { m: missing.size })}` : '');
-    $('#missing').innerHTML = missing.size
-      ? [...missing]
-          .map(([wid, users]) => {
-            const wp = v.workProducts[wid];
-            return `<li><strong>${esc(wp.name)}</strong> <span class="muted">→ ${[...users].join(', ')}</span><br>
-              <span class="muted">${s('process.producedBy')}:</span> ${wp.producers
-                .map((pid) => `<button type="button" class="link" data-add="${pid}">+ ${pid}</button>`)
-                .join(' ')}</li>`;
-          })
-          .join('')
-      : `<li class="muted">${s('tailor.allCovered')}</li>`;
+    $('#missing').innerHTML = render.missingList(view(), missing);
     toHash();
-  }
-
-  function renderStartOptions() {
-    const lcs = data.lifecycles.filter((l) => l.version === state.version);
-    const item = (value: string, label: string) => `<li><button type="button" data-start="${esc(value)}">${esc(label)}</button></li>`;
-    $('#start-list').innerHTML =
-      item('all', s('tailor.start-all')) +
-      item('none', s('tailor.start-none')) +
-      (lcs.length ? `<li class="menu-group">${esc(s('nav.lifecycles'))}</li>${lcs.map((l) => item(`lc:${l.id}`, l.name)).join('')}` : '') +
-      `<li class="menu-foot">${esc(s('tailor.start-note'))}</li>`;
   }
 
   function showTab(tab: State['tab'], focus = false) {
@@ -566,6 +361,18 @@ const strings = stringsFor(t, keys);
     toHash();
   }
 
+  /** Replace the model being edited and show it. */
+  function load(next: State) {
+    state = next;
+    syncPhases();
+    $<HTMLInputElement>('#project').value = state.project;
+    $<HTMLTextAreaElement>('#lc-description').value = state.description;
+    $<HTMLSelectElement>('#version').value = state.version;
+    $('#start-list').innerHTML = render.startOptions(data, state, s);
+    renderList();
+    showTab(state.tab);
+  }
+
   // --- Events: processes --------------------------------------------------
 
   list.addEventListener('change', (e) => {
@@ -578,10 +385,7 @@ const strings = stringsFor(t, keys);
       el.checked ? state.excluded.delete(el.dataset.act) : state.excluded.add(el.dataset.act);
       renderSummary();
     } else if (el.dataset.phaseOf) {
-      const id = el.dataset.phaseOf;
-      for (const p of state.phases) p.processes = p.processes.filter((x) => x !== id);
-      const target = state.phases.find((p) => p.id === el.value);
-      if (target) insertInOrder(target, id);
+      model.assignToPhase(state, el.dataset.phaseOf, el.value, current());
       renderList();
     }
   });
@@ -611,14 +415,11 @@ const strings = stringsFor(t, keys);
 
   $<HTMLSelectElement>('#version').addEventListener('change', (e) => {
     const before = snapshot();
-    const v = version((e.target as HTMLSelectElement).value);
-    // Keep the processes that exist in both versions; activities may differ.
-    const ids = new Set(v.processes.map((p) => p.id));
-    state = { ...state, version: v.id, selected: new Set([...state.selected].filter((id) => ids.has(id))), excluded: new Set() };
+    state = model.inVersion(state, version((e.target as HTMLSelectElement).value));
     syncPhases();
-    renderStartOptions();
+    $('#start-list').innerHTML = render.startOptions(data, state, s);
     renderList();
-    offerUndo(before, s('tailor.undo-version', { v: v.id }));
+    offerUndo(before, s('tailor.undo-version', { v: state.version }));
   });
 
   // The "Start from" menu: each item replaces the selection, and a template the phases too.
@@ -635,33 +436,22 @@ const strings = stringsFor(t, keys);
   });
 
   $('#start-list').addEventListener('click', (e) => {
-    const value = (e.target as HTMLElement).closest<HTMLElement>('[data-start]')?.dataset.start;
-    if (!value) return;
-    const v = version(state.version);
+    const choice = (e.target as HTMLElement).closest<HTMLElement>('[data-start]')?.dataset.start;
+    if (!choice) return;
     const before = snapshot();
-    let message = value === 'all' ? s('tailor.undo-all') : s('tailor.undo-none');
-    if (value === 'all') state.selected = new Set(v.processes.map((p) => p.id));
-    else if (value === 'none') state.selected = new Set();
-    else if (value.startsWith('lc:')) {
-      const lc = data.lifecycles.find((l) => l.id === value.slice(3))!;
-      state.selected = new Set(lc.processes);
-      state.phases = phasesOf(lc);
-      state.description = lc.description;
-      state.project = lc.name;
-      message = s('tailor.undo-replaced', { name: lc.name });
+    const lc = model.startFrom(state, choice, data);
+    if (lc) {
       $<HTMLInputElement>('#project').value = state.project;
       $<HTMLTextAreaElement>('#lc-description').value = state.description;
     }
-    state.excluded = new Set();
-    syncPhases();
     closeStart(true);
     renderList();
-    offerUndo(before, message);
+    offerUndo(before, lc ? s('tailor.undo-replaced', { name: lc.name }) : choice === 'all' ? s('tailor.undo-all') : s('tailor.undo-none'));
   });
 
   $('#all').addEventListener('click', () => {
     const before = snapshot();
-    state.selected = new Set(version(state.version).processes.map((p) => p.id));
+    state.selected = new Set(current().processes.map((p) => p.id));
     renderList();
     offerUndo(before, s('tailor.undo-all'));
   });
@@ -691,11 +481,8 @@ const strings = stringsFor(t, keys);
 
   // --- Events: phases -----------------------------------------------------
 
-  const insertInOrder = (p: Phase, id: string) => model.insertInOrder(p, id, version(state.version));
-  const newPhaseId = () => model.newPhaseId(state);
-
   $('#add-phase').addEventListener('click', () => {
-    state.phases.push(phase({ id: newPhaseId() }));
+    state.phases.push(model.phase({ id: model.newPhaseId(state) }));
     renderList();
     phaseList.querySelector<HTMLInputElement>('.phase-card:last-child .pc-name')?.focus();
   });
@@ -716,7 +503,7 @@ const strings = stringsFor(t, keys);
     p[field] = el.value;
     if (field === 'name') {
       // Rename the phase in the menus in place; redrawing them would lose the focus.
-      const label = phaseLabel(p, state.phases.indexOf(p));
+      const label = render.phaseLabel(p, state.phases.indexOf(p), s);
       document
         .querySelectorAll<HTMLOptionElement>(
           `#panel-processes option[value="${CSS.escape(p.id)}"], #phases option[value="${CSS.escape(p.id)}"]`,
@@ -734,10 +521,8 @@ const strings = stringsFor(t, keys);
     if (!p) return;
     if (el.dataset.field === 'iterative') p.iterative = el.checked;
     else if (el.dataset.field === 'returnsTo') p.returnsTo = el.value;
-    else if (el.dataset.addTo && el.value) {
-      for (const o of state.phases) if (o !== p) o.processes = o.processes.filter((x) => x !== el.value);
-      insertInOrder(p, el.value);
-    } else return;
+    else if (el.dataset.addTo && el.value) model.assignToPhase(state, el.value, p.id, current());
+    else return;
     renderList();
   });
 
@@ -748,8 +533,7 @@ const strings = stringsFor(t, keys);
     if (!p) return;
     const i = state.phases.indexOf(p);
     if (el.dataset.move) {
-      const j = i + Number(el.dataset.move);
-      [state.phases[i], state.phases[j]] = [state.phases[j], state.phases[i]];
+      model.movePhase(state, i, Number(el.dataset.move));
       renderList();
       // At the top or the bottom the pressed arrow is disabled, so the other one takes the focus.
       const card = `.phase-card[data-phase="${CSS.escape(p.id)}"]`;
@@ -759,7 +543,7 @@ const strings = stringsFor(t, keys);
       )?.focus();
     } else if (el.hasAttribute('data-remove')) {
       const before = snapshot();
-      const name = phaseLabel(p, i);
+      const name = render.phaseLabel(p, i, s);
       state.phases.splice(i, 1);
       syncPhases();
       renderList();
@@ -771,117 +555,28 @@ const strings = stringsFor(t, keys);
   });
 
   // Drag a process between phases, or within one to change its order.
-  let dragged: { id: string; from: string } | null = null;
-
-  const panel = $('#panel-phases');
-  panel.addEventListener('dragstart', (e) => {
-    const el = (e.target as HTMLElement).closest<HTMLElement>('.pchip');
-    if (!el) return;
-    dragged = { id: el.dataset.pid!, from: el.dataset.from! };
-    e.dataTransfer!.effectAllowed = 'move';
-    e.dataTransfer!.setData('text/plain', dragged.id);
-    requestAnimationFrame(() => el.classList.add('dragging'));
-  });
-
-  /** The chip a drop at this point goes before, or null for the end. */
-  function dropBefore(zone: HTMLElement, x: number, y: number) {
-    for (const c of zone.querySelectorAll<HTMLElement>('.pchip:not(.dragging)')) {
-      const r = c.getBoundingClientRect();
-      if (y < r.top || (y <= r.bottom && x < r.left + r.width / 2)) return c;
-    }
-    return null;
-  }
-
-  function clearMarks() {
-    panel
-      .querySelectorAll('.drop-target, .drop-before, .drop-end')
-      .forEach((x) => x.classList.remove('drop-target', 'drop-before', 'drop-end'));
-  }
-
-  panel.addEventListener('dragover', (e) => {
-    const zone = (e.target as HTMLElement).closest<HTMLElement>('.dropzone');
-    if (!dragged || !zone) return;
-    e.preventDefault();
-    e.dataTransfer!.dropEffect = 'move';
-    clearMarks();
-    zone.classList.add('drop-target');
-    const before = dropBefore(zone, e.clientX, e.clientY);
-    if (before) before.classList.add('drop-before');
-    else if (zone.dataset.drop) zone.classList.add('drop-end');
-  });
-
-  panel.addEventListener('dragleave', (e) => {
-    if (!(e.relatedTarget instanceof Node) || !panel.contains(e.relatedTarget)) clearMarks();
-  });
-
-  panel.addEventListener('drop', (e) => {
-    const zone = (e.target as HTMLElement).closest<HTMLElement>('.dropzone');
-    if (!dragged || !zone) return;
-    e.preventDefault();
-    const before = dropBefore(zone, e.clientX, e.clientY)?.dataset.pid;
-    const source = state.phases.find((p) => p.id === dragged!.from);
-    if (source) source.processes.splice(source.processes.indexOf(dragged.id), 1);
-    const target = state.phases.find((p) => p.id === zone.dataset.drop);
-    if (target) {
-      target.processes = target.processes.filter((x) => x !== dragged!.id);
-      const at = before ? target.processes.indexOf(before) : -1;
-      target.processes.splice(at < 0 ? target.processes.length : at, 0, dragged.id);
-    }
-    dragged = null;
+  enableDragging($('#panel-phases'), (id, from, to, before) => {
+    model.moveProcess(state, id, from, to, before);
     renderList();
-  });
-
-  panel.addEventListener('dragend', () => {
-    dragged = null;
-    clearMarks();
-    panel.querySelectorAll('.dragging').forEach((x) => x.classList.remove('dragging'));
   });
 
   // --- Export -----------------------------------------------------------
 
-  const context = () => ({ state, version: version(state.version), s, link: location.href });
-  const phaseName = (p: Phase) => exporter.phaseName(state, p, s);
+  const context = () => ({ state, version: current(), s, link: location.href });
+  const fileBase = () => (model.slug(state.project) || 'lifecycle-model') + `-${state.version}`;
 
-  function download(name: string, type: string, text: string) {
-    const url = URL.createObjectURL(new Blob([text], { type }));
-    const a = Object.assign(document.createElement('a'), { href: url, download: name });
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  const fileBase = () => (slug(state.project) || 'lifecycle-model') + `-${state.version}`;
   document.querySelectorAll<HTMLButtonElement>('[data-export]').forEach((b) =>
     b.addEventListener('click', () => {
       const kind = b.dataset.export!;
       if (kind === 'md') download(`${fileBase()}.md`, 'text/markdown', exporter.markdown(context()));
       if (kind === 'csv') download(`${fileBase()}.csv`, 'text/csv', exporter.csv(context()));
       if (kind === 'json') download(`${fileBase()}.json`, 'application/json', exporter.json(context()));
-      if (kind === 'yaml') download(`${slug(state.project) || 'lifecycle-model'}.yaml`, 'application/yaml', exporter.yaml(state, s));
+      if (kind === 'yaml') download(`${model.slug(state.project) || 'lifecycle-model'}.yaml`, 'application/yaml', exporter.yaml(state, s));
     }),
   );
 
   $('#print').addEventListener('click', () => {
-    const phased = state.phases.length > 0;
-    $('#print-view').innerHTML =
-      `<h1>${esc(state.project || s('tailor.untitled'))}</h1><p>PRM ${esc(state.version)}</p>` +
-      exporter
-        .groups(context())
-        .map(
-          (g) =>
-            (phased
-              ? `<h2>${esc(g.phase ? `${String(state.phases.indexOf(g.phase) + 1).padStart(2, '0')} ${phaseName(g.phase)}` : s('tailor.unassigned'))}</h2>`
-              : '') +
-            g.rows
-              .map(
-                (x) =>
-                  `<h3>${x.p.id} ${esc(x.p.name)}</h3><ul>${x.activities
-                    .filter((a) => a.included)
-                    .map((a) => `<li>☐ ${a.id}. ${esc(a.title)}</li>`)
-                    .join('')}</ul>`,
-              )
-              .join(''),
-        )
-        .join('');
+    $('#print-view').innerHTML = render.printView(view());
     window.print();
   });
 
@@ -902,18 +597,6 @@ const strings = stringsFor(t, keys);
 
   // --- Import -----------------------------------------------------------
 
-  /** Replace the model being edited and show it. */
-  function load(next: State) {
-    state = next;
-    syncPhases();
-    $<HTMLInputElement>('#project').value = state.project;
-    $<HTMLTextAreaElement>('#lc-description').value = state.description;
-    $<HTMLSelectElement>('#version').value = state.version;
-    renderStartOptions();
-    renderList();
-    showTab(state.tab);
-  }
-
   const importFile = $<HTMLInputElement>('#import-file');
   const importStatus = $('#import-status');
   $('#import').addEventListener('click', () => importFile.click());
@@ -926,24 +609,14 @@ const strings = stringsFor(t, keys);
     try {
       const m = await readModel(await file.text(), file.name, {
         versions: data.versions,
-        fallback: version(state.version),
+        fallback: current(),
         untitled: s('tailor.untitled'),
       });
       const v = data.versions.find((x) => x.id === m.version);
       if (!v) throw new ImportError(s('tailor.import-version', { v: m.version || '?' }));
-      const ids = new Set(v.processes.map((p) => p.id));
-      const unknown = [...new Set([...m.selected, ...m.phases.flatMap((p) => p.processes)])].filter((id) => !ids.has(id));
+      const { state: next, unknown } = toState(m, v);
       const before = snapshot();
-      load({
-        version: v.id,
-        project: m.project,
-        description: m.description,
-        selected: new Set(m.selected.filter((id) => ids.has(id))),
-        excluded: new Set(m.excluded),
-        rationale: m.rationale,
-        phases: m.phases,
-        tab: m.phases.length ? 'phases' : 'processes',
-      });
+      load(next);
       offerUndo(before, s('tailor.undo-replaced', { name: file.name }));
       messages.push(s('tailor.import-done', { file: file.name }));
       if (m.csv) messages.push(s('tailor.import-csv'));
@@ -977,9 +650,7 @@ const strings = stringsFor(t, keys);
 
   list.addEventListener('click', (e) => {
     const id = (e.target as HTMLElement).closest<HTMLElement>('[data-info]')?.dataset.info;
-    if (!id) return;
-    const p = version(state.version).processes.find((x) => x.id === id);
-    modal.open(state.version, id, p?.name);
+    if (id) modal.open(state.version, id, procOf(id)?.name);
   });
   openLinksInModal(figure, modal);
 
@@ -1003,7 +674,7 @@ const strings = stringsFor(t, keys);
       done();
     });
     $('#restore-no').addEventListener('click', () => {
-      stored.set(null);
+      lastModel.set(null);
       done();
     });
     restore.hidden = false;

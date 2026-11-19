@@ -1,6 +1,6 @@
 // Reading a model back from a file: the JSON export, a lifecycle file (YAML)
 // in the format of content/lifecycles, or the CSV export (see export.ts).
-import { phase, type Phase, type Version } from './model';
+import { phase, type Phase, type State, type Version } from './model';
 
 /** A model read from a file, before it is checked against the PRM version. */
 export type Imported = {
@@ -122,6 +122,29 @@ export function fromCsv(text: string, file: string, versions: Version[], fallbac
     rationale: Object.fromEntries(Object.entries(rationale).filter(([id]) => !selected.has(id))),
     phases,
     csv: true,
+  };
+}
+
+/**
+ * The model to edit from one read from a file, in its PRM version: processes
+ * the version does not have are left out and listed in `unknown`. It opens on
+ * the phases when it has any.
+ */
+export function toState(m: Imported, v: Version): { state: State; unknown: string[] } {
+  const ids = new Set(v.processes.map((p) => p.id));
+  const unknown = [...new Set([...m.selected, ...m.phases.flatMap((p) => p.processes)])].filter((id) => !ids.has(id));
+  return {
+    state: {
+      version: v.id,
+      project: m.project,
+      description: m.description,
+      selected: new Set(m.selected.filter((id) => ids.has(id))),
+      excluded: new Set(m.excluded),
+      rationale: m.rationale,
+      phases: m.phases,
+      tab: m.phases.length ? 'phases' : 'processes',
+    },
+    unknown,
   };
 }
 

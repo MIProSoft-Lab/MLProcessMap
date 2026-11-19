@@ -178,6 +178,60 @@ export function insertInOrder(p: Phase, id: string, v: Version) {
   p.processes.splice(at < 0 ? p.processes.length : at, 0, id);
 }
 
+/** Put a process in a phase (in the order of the PRM), taking it out of any other; no phase ('') leaves it unassigned. */
+export function assignToPhase(state: State, id: string, phaseId: string, v: Version) {
+  for (const p of state.phases) p.processes = p.processes.filter((x) => x !== id);
+  const target = state.phases.find((p) => p.id === phaseId);
+  if (target) insertInOrder(target, id, v);
+}
+
+/** Swap the phase at index i with the one delta places away (-1 up, 1 down). */
+export function movePhase(state: State, i: number, delta: number) {
+  const j = i + delta;
+  if (j < 0 || j >= state.phases.length) return;
+  [state.phases[i], state.phases[j]] = [state.phases[j], state.phases[i]];
+}
+
+/**
+ * Move a dragged process from one phase (from, or '' for none) to another
+ * (to, or '' to leave it unassigned), before the process before, or at the end.
+ */
+export function moveProcess(state: State, id: string, from: string, to: string, before?: string) {
+  const source = state.phases.find((p) => p.id === from);
+  if (source) source.processes.splice(source.processes.indexOf(id), 1);
+  const target = state.phases.find((p) => p.id === to);
+  if (!target) return;
+  target.processes = target.processes.filter((x) => x !== id);
+  const at = before ? target.processes.indexOf(before) : -1;
+  target.processes.splice(at < 0 ? target.processes.length : at, 0, id);
+}
+
+/** The model in another PRM version: the processes in both versions stay selected; the activities may differ, so none is excluded. */
+export function inVersion(state: State, v: Version): State {
+  const ids = new Set(v.processes.map((p) => p.id));
+  return { ...state, version: v.id, selected: new Set([...state.selected].filter((id) => ids.has(id))), excluded: new Set() };
+}
+
+/**
+ * Start again from every process ('all'), none ('none') or a lifecycle
+ * template ('lc:<id>'), which also sets the phases, the name and the
+ * description. Returns the template, if it was one.
+ */
+export function startFrom(state: State, choice: string, data: Data): Lifecycle | undefined {
+  const lc = choice.startsWith('lc:') ? data.lifecycles.find((l) => l.id === choice.slice(3)) : undefined;
+  if (choice === 'all') state.selected = new Set(versionOf(data, state.version).processes.map((p) => p.id));
+  else if (choice === 'none') state.selected = new Set();
+  else if (lc) {
+    state.selected = new Set(lc.processes);
+    state.phases = phasesOf(lc);
+    state.description = lc.description;
+    state.project = lc.name;
+  }
+  state.excluded = new Set();
+  syncPhases(state, versionOf(data, state.version));
+  return lc;
+}
+
 export function newPhaseId(state: State) {
   let n = state.phases.length + 1;
   while (state.phases.some((p) => p.id === `phase-${n}`)) n++;

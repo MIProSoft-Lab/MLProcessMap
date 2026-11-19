@@ -3,8 +3,24 @@ import { parse } from 'yaml';
 import { lifecycleSchema } from '../content/schemas';
 import { format } from '../text';
 import { csv, json, lifecyclePhases, markdown, yaml } from './export';
-import { fromObject, parseCsv, readModel } from './import';
-import { fromHash, insertInOrder, missingInputs, phase, syncPhases, toHash, type Data, type State, type Version } from './model';
+import { fromObject, parseCsv, readModel, toState } from './import';
+import {
+  assignToPhase,
+  fromHash,
+  insertInOrder,
+  inVersion,
+  missingInputs,
+  movePhase,
+  moveProcess,
+  phase,
+  startFrom,
+  syncPhases,
+  toHash,
+  type Data,
+  type State,
+  type Version,
+} from './model';
+import { missingList, phaseCard, phaseLabel, phaseSelect, printView, processRow, startOptions } from './render';
 
 const strings: Record<string, string> = {
   'tailor.untitled': 'Untitled model',
@@ -133,6 +149,126 @@ describe('the phases', () => {
       ['phase-2', 'Phase 2', 'build'],
       ['build-2', 'Build', undefined],
     ]);
+  });
+});
+
+/** The processes of each phase. */
+const ids = (state: State) => state.phases.map((p) => p.processes);
+
+describe('editing the phases', () => {
+  it('assign a process to one phase only, in the order of the PRM, or to none', () => {
+    const state = model();
+    state.selected.add('P02');
+    assignToPhase(state, 'P02', 'phase-2', v2);
+    expect(ids(state)).toEqual([['P01'], ['P02', 'P03']]);
+    assignToPhase(state, 'P03', 'phase-1', v2);
+    expect(ids(state)).toEqual([['P01', 'P03'], ['P02']]);
+    assignToPhase(state, 'P02', '', v2);
+    expect(ids(state)).toEqual([['P01', 'P03'], []]);
+  });
+
+  it('move a phase up or down, but not past the ends', () => {
+    const state = model();
+    movePhase(state, 1, -1);
+    expect(state.phases.map((p) => p.id)).toEqual(['phase-2', 'phase-1']);
+    movePhase(state, 0, -1);
+    movePhase(state, 1, 1);
+    expect(state.phases.map((p) => p.id)).toEqual(['phase-2', 'phase-1']);
+  });
+
+  it('move a dragged process before another, to the end, or out of the phases', () => {
+    const state = model();
+    state.phases[1].processes = ['P02', 'P03'];
+    moveProcess(state, 'P01', 'phase-1', 'phase-2', 'P03');
+    expect(ids(state)).toEqual([[], ['P02', 'P01', 'P03']]);
+    moveProcess(state, 'P02', 'phase-2', 'phase-2');
+    expect(ids(state)).toEqual([[], ['P01', 'P03', 'P02']]);
+    moveProcess(state, 'P03', 'phase-2', '');
+    expect(ids(state)).toEqual([[], ['P01', 'P02']]);
+    moveProcess(state, 'P03', '', 'phase-1');
+    expect(ids(state)).toEqual([['P03'], ['P01', 'P02']]);
+  });
+});
+
+describe('replacing the model', () => {
+  it('keeps the processes another version has, and no excluded activity', () => {
+    const state = inVersion(model(), v1);
+    expect([state.version, [...state.selected], [...state.excluded]]).toEqual(['v1', ['P01'], []]);
+  });
+
+  it('starts from every process, none, or a template with its phases', () => {
+    const state = model();
+    expect(startFrom(state, 'all', data)).toBeUndefined();
+    expect([...state.selected, ...state.excluded]).toEqual(['P01', 'P02', 'P03']);
+    startFrom(state, 'none', data);
+    expect([state.selected.size, ids(state)]).toEqual([0, [[], []]]);
+    expect(startFrom(state, 'lc:basic', data)?.name).toBe('Basic');
+    expect([state.project, state.description, [...state.selected]]).toEqual(['Basic', 'A basic lifecycle.', ['P01', 'P03']]);
+    expect(state.phases.map((p) => [p.id, p.processes, p.returnsTo])).toEqual([
+      ['one', ['P01'], ''],
+      ['two', ['P03'], 'one'],
+    ]);
+  });
+
+  it('opens an imported model in its version, leaving out unknown processes', () => {
+    const imported = { ...fromObject(JSON.parse(json({ state: model(), version: v2, s, link: '' })), 'Untitled model') };
+    imported.selected.push('P99');
+    const { state, unknown } = toState(imported, v1);
+    expect([state.version, [...state.selected], unknown, state.tab]).toEqual(['v1', ['P01'], ['P03', 'P99'], 'phases']);
+  });
+});
+
+describe('the builder templates', () => {
+  const view = () => ({ state: model(), version: v2, s });
+
+  it('number the phases and name the unnamed ones', () => {
+    const { state } = view();
+    expect(state.phases.map((p, i) => phaseLabel(p, i, s))).toEqual(['01 Build', '02 Phase 2']);
+  });
+
+  it('escape what the user typed', () => {
+    const v = view();
+    v.state.rationale.P02 = '<b>"x"</b>';
+    v.state.phases[0].name = '<i>';
+    const html = processRow(v, v2.processes[1]) + phaseCard(v, v.state.phases[0], 0, { free: [], touch: false });
+    expect(html).not.toMatch(/<b>|<i>/);
+    expect(html).toContain('&lt;b&gt;&quot;x&quot;&lt;/b&gt;');
+  });
+
+  it('offer the phase menu only for selected processes, once there are phases', () => {
+    const v = view();
+    expect(phaseSelect(v, 'P02')).toBe('');
+    expect(phaseSelect(v, 'P01')).toContain('<option value="phase-1" selected>01 Build</option>');
+    v.state.phases = [];
+    expect(phaseSelect(v, 'P01')).toBe('');
+  });
+
+  it('point an empty phase at the menu on a touch screen', () => {
+    const v = view();
+    const empty = phase({ id: 'phase-3' });
+    v.state.phases.push(empty);
+    const free = [v2.processes[1]];
+    expect(phaseCard(v, empty, 2, { free, touch: true })).toContain('tailor.phase-drop-touch');
+    expect(phaseCard(v, empty, 2, { free, touch: false })).toContain('tailor.phase-drop<');
+  });
+
+  it('list the producers of missing inputs, or say there are none', () => {
+    const v = view();
+    expect(missingList(v, missingInputs(v.state, v2))).toContain('data-add="P02"');
+    expect(missingList(v, new Map())).toContain('tailor.allCovered');
+  });
+
+  it('offer the templates of the version only', () => {
+    expect(startOptions(data, model(), s)).toContain('data-start="lc:basic"');
+    expect(startOptions(data, { ...model(), version: 'v1' }, s)).not.toContain('lc:basic');
+  });
+
+  it('print the included activities by phase', () => {
+    const html = printView(view());
+    expect(html).toContain('<h1>Fraud detection</h1>');
+    expect(html).toContain('<h2>02 Phase 2</h2>');
+    expect(html).toContain('☐ A1. First of P01');
+    expect(html).not.toContain('Second of P01');
   });
 });
 
