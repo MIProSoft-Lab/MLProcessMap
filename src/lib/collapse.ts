@@ -96,13 +96,16 @@ export function willBeOpen(details: HTMLDetailsElement) {
   return details.open && !(body && running.has(body));
 }
 
+/** Animate a <details> with a collapse-body when its summary is used. */
+export function animateDetail(details: HTMLDetailsElement) {
+  if (!details.querySelector(':scope > .collapse-body')) return;
+  details.querySelector(':scope > summary')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    setDetailsOpen(details, !willBeOpen(details));
+  });
+}
+
 /** Animate every <details> with a collapse-body inside root when its summary is used. */
 export function animateDetails(root: ParentNode = document) {
-  root.querySelectorAll<HTMLDetailsElement>('details').forEach((details) => {
-    if (!details.querySelector(':scope > .collapse-body')) return;
-    details.querySelector(':scope > summary')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      setDetailsOpen(details, !willBeOpen(details));
-    });
-  });
+  root.querySelectorAll<HTMLDetailsElement>('details').forEach(animateDetail);
 }
