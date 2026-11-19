@@ -1,0 +1,101 @@
+---
+// A "What … mean" disclosure: a short summary line that opens a list of terms
+// and their meanings. Used for the origin colours on the process map and the
+// types of work product. A term shows a colour swatch (`swatch`, the class of
+// its colour) or, with `badges`, is shown as a badge.
+interface Item {
+  term: string;
+  description: string;
+  swatch?: string;
+}
+
+interface Props {
+  summary: string;
+  items: Item[];
+  badges?: boolean;
+}
+
+const { summary, items, badges = false } = Astro.props;
+---
+
+<details class="legend-help small">
+  <summary class="muted">{summary}</summary>
+  <dl>
+    {
+      items.map((item) => (
+        <div>
+          <dt>
+            {item.swatch && <span class={`swatch ${item.swatch}`} />}
+            {badges ? <span class="badge">{item.term}</span> : item.term}
+          </dt>
+          <dd class="muted">{item.description}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</details>
+
+<style>
+  .legend-help {
+    margin: -6px 0 16px;
+  }
+
+  .legend-help summary {
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .legend-help dl {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding-top: 10px;
+    max-width: 720px;
+  }
+
+  .legend-help dt {
+    font-weight: 600;
+  }
+
+  .legend-help dd {
+    margin: 0 0 0 24px;
+  }
+
+  /* A badge is wider than a swatch, so its meaning starts under it instead. */
+  .legend-help dt:has(.badge) + dd {
+    margin: 4px 0 0;
+  }
+
+  .legend-help .swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+    vertical-align: -2px;
+    border: 1px solid var(--ink);
+  }
+
+  /* Opening slides the list down and fades it in, closing the reverse, unless
+     the reader asked for less motion. Browsers without ::details-content or
+     interpolate-size open it at once, as before. */
+  @media (prefers-reduced-motion: no-preference) {
+    .legend-help {
+      interpolate-size: allow-keywords;
+    }
+
+    .legend-help::details-content {
+      block-size: 0;
+      opacity: 0;
+      overflow: clip;
+      transition:
+        block-size 220ms ease,
+        opacity 220ms ease,
+        content-visibility 220ms allow-discrete;
+    }
+
+    .legend-help[open]::details-content {
+      block-size: auto;
+      opacity: 1;
+    }
+  }
+</style>

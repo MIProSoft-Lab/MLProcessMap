@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
+import LegendHelp from '../../../components/LegendHelp.astro';
 import { getVersion, getProcess, pick, versions } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
 import { plain } from '../../../lib/text';
@@ -59,22 +60,10 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
       }
     </div>
   </div>
-  <details class="legend-help small">
-    <summary class="muted">{t('map.legendHelp')}</summary>
-    <dl>
-      {
-        origins.map((o) => (
-          <div>
-            <dt>
-              <span class={`swatch origin-${o}`} />
-              {t(`origin.${o}`)}
-            </dt>
-            <dd class="muted">{t(`origin.${o}-long`)}</dd>
-          </div>
-        ))
-      }
-    </dl>
-  </details>
+  <LegendHelp
+    summary={t('map.legendHelp')}
+    items={origins.map((o) => ({ term: t(`origin.${o}`), description: t(`origin.${o}-long`), swatch: `origin-${o}` }))}
+  />
 
   {
     groups.map((g) => (
@@ -310,39 +299,6 @@ const searchData = Object.fromEntries(groups.flatMap((g) => g.columns.flat()).ma
     background: var(--warn-bg);
     color: inherit;
     box-shadow: 0 0 0 1px var(--warn-border);
-  }
-
-  .legend-help {
-    margin: -6px 0 16px;
-  }
-
-  .legend-help summary {
-    cursor: pointer;
-    width: fit-content;
-  }
-
-  .legend-help dl {
-    display: grid;
-    gap: 8px;
-    margin: 10px 0 0;
-    max-width: 720px;
-  }
-
-  .legend-help dt {
-    font-weight: 600;
-  }
-
-  .legend-help dd {
-    margin: 0 0 0 24px;
-  }
-
-  .legend-help .swatch {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-right: 10px;
-    vertical-align: -2px;
-    border: 1px solid var(--ink);
   }
 
   @media (max-width: 600px) {

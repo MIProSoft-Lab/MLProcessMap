@@ -101,6 +101,10 @@ wp:
   type-information-item: Element d'informació
   type-artifact: Artefacte
   type-record: Registre
+  typesHelp: Què signifiquen els tipus
+  def-information-item: Un document o un altre conjunt d'informació que les persones redacten i consulten, com ara una especificació, un pla, un informe o un procediment.
+  def-artifact: Un producte tangible del treball a partir del qual es construeix el sistema, que en forma part o que aquest produeix, com ara un conjunt de dades, un model entrenat, codi o un paquet de desplegament.
+  def-record: Evidència d'una activitat duta a terme i dels seus resultats, que es conserva per a la traçabilitat i l'auditoria. Normalment cap altre procés no l'empra com a entrada.
   producers: Produït per
   consumers: Emprat per
   filter: Filtra per producte de treball o procés

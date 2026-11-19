@@ -104,6 +104,10 @@ wp:
   type-information-item: Information item
   type-artifact: Artifact
   type-record: Record
+  typesHelp: What the types mean
+  def-information-item: A document or other body of information that people write and consult, such as a specification, a plan, a report or a procedure.
+  def-artifact: A tangible product of the work that the system is built from, is made of or produces, such as a dataset, a trained model, code or a deployment package.
+  def-record: Evidence of an activity that was carried out and of its results, kept for traceability and audit. Other processes do not usually use it as an input.
   producers: Produced by
   consumers: Used by
   filter: Filter by work product or process

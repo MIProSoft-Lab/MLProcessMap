@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import ProcessModal from '../../../components/ProcessModal.astro';
+import LegendHelp from '../../../components/LegendHelp.astro';
 import { getProcess, getWorkProducts, versions } from '../../../lib/content';
 import { versionPaths } from '../../../lib/paths';
 import { searchKey } from '../../../lib/text';
@@ -41,6 +42,11 @@ const types = ['information-item', 'artifact', 'record'] as const;
       }
     </div>
   </div>
+  <LegendHelp
+    summary={t('wp.typesHelp')}
+    items={types.map((ty) => ({ term: t(`wp.type-${ty}`), description: t(`wp.def-${ty}`) }))}
+    badges
+  />
 
   <div class="table-wrap">
     <table class="wp-table">
@@ -64,7 +70,9 @@ const types = ['information-item', 'artifact', 'record'] as const;
                 <strong>{w.name}</strong>
               </td>
               <td>
-                <span class="badge">{t(`wp.type-${w.type}`)}</span>
+                <span class="badge" title={t(`wp.def-${w.type}`)}>
+                  {t(`wp.type-${w.type}`)}
+                </span>
               </td>
               <td data-label={t('wp.producers')}>
                 {w.producers.length ? (
