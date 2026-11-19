@@ -165,7 +165,6 @@ tailor:
   next-phases: "Next: arrange into phases"
   share: Share
   shareNote: "The link holds the whole model, so anyone who opens it sees it as it is now."
-  yamlDisabled: "Add a phase to export the lifecycle model as YAML."
   selected: "{n} of {total} processes, {a} activities in the model"
   missingInputs: Inputs without a producer in the model
   missingInputsNote: These inputs of the processes in the model are produced by processes you have left out. Make sure your project gets them from somewhere else.
@@ -175,6 +174,9 @@ tailor:
   csv: CSV
   json: JSON
   print: Print
+  exportDocuments: Documents
+  exportData: Data files
+  exportDataNote: These files can be opened again with Import, below.
   copyLink: Copy link
   copied: Link copied
   selectAll: Select all
@@ -215,7 +217,7 @@ tailor:
   preview: Preview
   preview-empty: Add a phase to see the diagram of the lifecycle.
   phases-summary: "{n} phases, {u} processes without a phase"
-  yaml: Lifecycle model (YAML)
+  yaml: YAML
   yamlNote: The YAML file uses the format of the lifecycle templates, so an admin can publish your model on this site.
   untitled: Untitled lifecycle model
   import: Import

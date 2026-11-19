@@ -180,14 +180,20 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
           <button type="button" id="copy" class="primary button">{t('tailor.copyLink')}</button>
         </div>
         <h2>{t('tailor.export')}</h2>
-        <div class="exports">
+        <!-- Documents are for reading; data files can be imported again below. -->
+        <h3 class="export-group" id="export-documents">{t('tailor.exportDocuments')}</h3>
+        <div class="exports" role="group" aria-labelledby="export-documents">
           <button type="button" data-export="md">{t('tailor.markdown')}</button>
-          <button type="button" data-export="csv">{t('tailor.csv')}</button>
-          <button type="button" data-export="json">{t('tailor.json')}</button>
-          <button type="button" data-export="yaml" id="export-yaml" aria-describedby="yaml-note">{t('tailor.yaml')}</button>
           <button type="button" id="print">{t('tailor.print')}</button>
         </div>
-        <p id="yaml-note" class="small muted" data-ready={t('tailor.yamlNote')} data-disabled={t('tailor.yamlDisabled')}></p>
+        <h3 class="export-group" id="export-data">{t('tailor.exportData')}</h3>
+        <p class="small muted">{t('tailor.exportDataNote')}</p>
+        <div class="exports" role="group" aria-labelledby="export-data">
+          <button type="button" data-export="json">{t('tailor.json')}</button>
+          <button type="button" data-export="yaml" id="export-yaml" aria-describedby="yaml-note">{t('tailor.yaml')}</button>
+          <button type="button" data-export="csv">{t('tailor.csv')}</button>
+        </div>
+        <p id="yaml-note" class="small muted">{t('tailor.yamlNote')}</p>
         <h2>{t('tailor.import')}</h2>
         <p class="small muted">{t('tailor.import-note')}</p>
         <div class="exports">
@@ -508,8 +514,6 @@ const strings = Object.fromEntries(keys.map((k) => [k, t(k)]));
     phaseSummary.hidden = !state.phases.length;
     phaseSummary.textContent = s('tailor.phases-summary', { n: state.phases.length, u: unassigned().length });
     $<HTMLButtonElement>('#export-yaml').disabled = !state.phases.length;
-    const yamlNote = $('#yaml-note');
-    yamlNote.textContent = state.phases.length ? yamlNote.dataset.ready! : yamlNote.dataset.disabled!;
     for (const p of v.processes) {
       const el = list.querySelector(`[data-count="${p.id}"]`);
       if (el) el.textContent = `${activeActivities(p).length}/${p.activities.length}`;

@@ -83,6 +83,17 @@
   padding: 4px 10px;
 }
 
+/* The two kinds of export, under the Export heading. */
+.tailor-page .export-group {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 12px 0 6px;
+}
+
+.tailor-page .export-group + .small {
+  margin-top: 0;
+}
+
 .tailor-page .print-only {
   display: none;
 }

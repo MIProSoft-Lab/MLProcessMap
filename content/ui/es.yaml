@@ -162,7 +162,6 @@ tailor:
   next-phases: "Siguiente: organizar en fases"
   share: Compartir
   shareNote: "El enlace contiene todo el modelo, así que quien lo abra lo verá tal como está ahora."
-  yamlDisabled: "Añade una fase para exportar el modelo de ciclo de vida en YAML."
   selected: "{n} de {total} procesos, {a} actividades en el modelo"
   missingInputs: Entradas sin productor en el modelo
   missingInputsNote: Estas entradas de los procesos del modelo las producen procesos que has dejado fuera. Asegúrate de que tu proyecto las obtiene de otro lugar.
@@ -172,6 +171,9 @@ tailor:
   csv: CSV
   json: JSON
   print: Imprimir
+  exportDocuments: Documentos
+  exportData: Archivos de datos
+  exportDataNote: Estos archivos se pueden volver a abrir con Importar, más abajo.
   copyLink: Copiar enlace
   copied: Enlace copiado
   selectAll: Seleccionar todo
@@ -212,7 +214,7 @@ tailor:
   preview: Vista previa
   preview-empty: Añade una fase para ver el diagrama del ciclo de vida.
   phases-summary: "{n} fases, {u} procesos sin fase"
-  yaml: Modelo de ciclo de vida (YAML)
+  yaml: YAML
   yamlNote: El archivo YAML usa el formato de las plantillas de ciclo de vida, para que un administrador pueda publicar tu modelo en este sitio.
   untitled: Modelo de ciclo de vida sin título
   import: Importar
