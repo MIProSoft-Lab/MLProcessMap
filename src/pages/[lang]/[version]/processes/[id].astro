@@ -73,6 +73,7 @@ const title = (key: string) => sections.find(([k]) => k === key)![1];
   </div>
 
   <TitleBlock locale={locale} process={p} version={getVersion(version)} index={i} total={ids.length} />
+  <Pager locale={locale} version={version} prev={ids[i - 1]} next={ids[i + 1]} />
 
   <div class="layout">
     <aside class="toc no-print" aria-label={t('process.contents')}>
@@ -122,8 +123,6 @@ const title = (key: string) => sections.find(([k]) => k === key)![1];
           </ProcessSection>
         )
       }
-
-      <Pager locale={locale} version={version} prev={ids[i - 1]} next={ids[i + 1]} />
     </article>
   </div>
 </Layout>
