@@ -184,10 +184,14 @@ export const GET: APIRoute = () => {
       repo,
       branch: import.meta.env.PUBLIC_REPO_BRANCH ?? 'main',
       ...(import.meta.env.PUBLIC_CMS_AUTH_URL ? { base_url: import.meta.env.PUBLIC_CMS_AUTH_URL } : {}),
+      // Conventional Commits, so that `npm run release` lists the edits under
+      // "Content" in the changelog.
       commit_messages: {
-        create: 'Create {{collection}} “{{slug}}”',
-        update: 'Update {{collection}} “{{slug}}”',
-        delete: 'Delete {{collection}} “{{slug}}”',
+        create: 'content({{collection}}): create “{{slug}}”',
+        update: 'content({{collection}}): update “{{slug}}”',
+        delete: 'content({{collection}}): delete “{{slug}}”',
+        uploadMedia: 'content: upload “{{path}}”',
+        deleteMedia: 'content: delete “{{path}}”',
       },
     },
     // Each entry is saved on its own branch, cms/<collection>/<slug>

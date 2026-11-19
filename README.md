@@ -109,8 +109,20 @@ This copies the process files, drops the list of changes (it belongs to the vers
 
 1. Push the repository to GitHub with `main` as the default branch.
 2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
-3. In **Settings → Environments → github-pages → Deployment branches and tags**, allow `main` and `thesis`.
-4. Every push to `main` or `thesis` builds and deploys the site; pull requests are built to check them.
+3. In **Settings → Environments → github-pages → Deployment branches and tags**, allow `main` and the tag pattern `v*`.
+4. The site is deployed when a version tag is pushed, and pull requests are built to check them. Pushes to `main` or `thesis` are not deployed until the next release. To deploy the head of `main` without a release, run the workflow from the **Actions** tab.
+
+### Releases
+
+```sh
+npm run release -- --dry-run   # show the next version and its notes
+npm run release                # version worked out from the commits
+npm run release -- minor       # or major, patch, or an exact version such as 1.4.0
+```
+
+This checks that `main` is clean and up to date, then runs the formatting, content and type checks, the tests and the build. It sets the new version in `package.json`, `package-lock.json` and `CITATION.cff` (with `date-released`), and adds the notes to `CHANGELOG.md`. It then opens `CHANGELOG.md` in Git's editor so you can fix the notes; to use VS Code, run `git config --global core.editor "code --wait"`. The saved text is what goes into the commit, the tag and the GitHub release. If you delete the version heading or answer no, the release is cancelled and the files are put back. `--no-edit` skips this step. Then it commits, tags `vX.Y.Z` and, after asking, pushes. The tag deploys both editions, and once the deploy succeeds the workflow publishes a GitHub release with the same notes. The deploy stops if the tag does not match `package.json` or is not on `main`.
+
+The notes come from the commit messages since the last tag, which follow [Conventional Commits](https://www.conventionalcommits.org): `feat: …` is listed under Features and makes a minor release, `fix: …` is a patch, `content: …` (as the admin panel writes them) is listed under Content, and `feat!: …` or a `BREAKING CHANGE:` line in the body makes a major release. Merge commits are left out.
 
 ## Live and thesis editions
 
@@ -121,7 +133,7 @@ The site is published in two editions from this repository:
 | Live: the tool as it keeps evolving                  | `main`   | `/`        | `/admin/`        |
 | Thesis: the version described in the doctoral thesis | `thesis` | `/thesis/` | `/thesis/admin/` |
 
-The thesis edition receives corrections and translations but no new features. It shows a banner that links to the live edition, and search engines do not index it; the live edition links to it from the footer. GitHub Pages publishes one site per repository, so the deploy workflow builds both branches on every push to either of them; keep `.github/workflows/deploy.yml` the same on both. The edition of a build is set by `PUBLIC_EDITION` (`live` or `thesis`, see `src/lib/edition.ts`); a local build is the live edition.
+The thesis edition receives corrections and translations but no new features. It shows a banner that links to the live edition, and search engines do not index it; the live edition links to it from the footer. GitHub Pages publishes one site per repository, so each deploy builds both branches; keep `.github/workflows/deploy.yml` the same on both. The edition of a build is set by `PUBLIC_EDITION` (`live` or `thesis`, see `src/lib/edition.ts`); a local build is the live edition.
 
 **Fixes and translations go to `thesis` first**, through `/thesis/admin/` or a commit on the branch, and are then carried to the live edition by merging:
 
@@ -134,11 +146,11 @@ Git only stops for a conflict where `main` has changed the same lines since, whi
 
 ## Admin access
 
-The admin panel at `/admin` is [Sveltia CMS](https://github.com/sveltia/sveltia-cms). Edits are saved as commits to the repository, which redeploys the site, so the history of every change to the PRM is in git.
+The admin panel at `/admin` is [Sveltia CMS](https://github.com/sveltia/sveltia-cms), with its editorial workflow. Saving an entry does not change `main` (or `thesis`, in the thesis edition). It commits to a branch `cms/<collection>/<slug>` and opens a pull request, which is checked and can be reviewed. **Publish** in the panel's Workflow board merges it. The change reaches the site with the next release, and the history of every change to the PRM is in git.
 
 Only people with write access to the repository can save changes. Add admins as collaborators in **Settings → Collaborators**.
 
 Admins can sign in in two ways:
 
-- **Access token** (no setup): create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens/new) for this repository with _Contents: Read and write_, and paste it in **Sign In Using Access Token**.
+- **Access token** (no setup): create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens/new) for this repository with _Contents: Read and write_ and _Pull requests: Read and write_, and paste it in **Sign In Using Access Token**.
 - **Sign in with GitHub**: deploy [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) to Cloudflare Workers (free) and set its URL as the repository variable `CMS_AUTH_URL` in **Settings → Secrets and variables → Actions → Variables**.

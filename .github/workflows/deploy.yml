@@ -8,7 +8,9 @@ name: Build and deploy
 # tagged commit and the thesis edition from the head of the thesis branch.
 # Pushes to main or thesis, including edits from the admin panel, are not
 # published until the next tag. Run the workflow by hand to deploy the head of
-# main. Keep this file the same on both branches.
+# main. Make the tag with `npm run release`, which also writes the changelog;
+# once the site is deployed, the release job publishes a GitHub release with
+# the notes of that version. Keep this file the same on both branches.
 
 on:
   push:
@@ -20,10 +22,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
   # A pull request is built on its own, to check it. Pushes to a branch are no
@@ -54,6 +52,21 @@ jobs:
         with:
           ref: ${{ github.ref_type == 'tag' && github.ref || 'main' }}
           path: live
+          # The whole history, to check below that the tag is on main.
+          fetch-depth: 0
+      - name: Check the tag
+        if: github.ref_type == 'tag'
+        working-directory: live
+        run: |
+          version="$(npm pkg get version | tr -d '"')"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::The tag $GITHUB_REF_NAME does not match the version $version in package.json. Make releases with npm run release."
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::The tag $GITHUB_REF_NAME is not on main."
+            exit 1
+          fi
       - id: thesis
         name: Look for the thesis branch
         run: |
@@ -123,9 +136,40 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    # One deploy at a time, in order. Only this job is in the group, so a pull
+    # request check never waits for a deploy or replaces one in the queue.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # After a tag is deployed, its notes from CHANGELOG.md become a GitHub release.
+  release:
+    if: github.ref_type == 'tag'
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: CHANGELOG.md
+          sparse-checkout-cone-mode: false
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          # The lines under this version's heading, up to the next version.
+          awk -v v="$version" '/^## /{ if (p) exit; if (index($0, "[" v "]") || $2 == v) { p = 1; next } } p' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then echo "No notes for $version in CHANGELOG.md." > notes.md; fi
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release edit "$GITHUB_REF_NAME" --notes-file notes.md
+          else
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
+          fi
