@@ -174,6 +174,12 @@ print:
   leftOut: "Processos exclosos"
   repeats: Aquesta fase es pot repetir
   returnsTo: "Torna a {phase}"
+  browserTitle: Millor des de Chrome
+  browserText: "Aquesta pàgina s'imprimeix millor des de Chrome, o un altre navegador basat en ell com Edge. Altres navegadors, com Firefox i Safari, ometen la capçalera, el peu i els números de pàgina, i poden distribuir les pàgines d'una altra manera."
+  browserKeep: "Totes les teves eleccions es desen a l'adreça d'aquesta pàgina: copia-la i obre-la a Chrome per continuar on ho havies deixat, sense perdre res."
+  browserCopy: Copia l'adreça
+  browserCopied: Adreça copiada
+  browserClose: Continua aquí
 compare:
   title: Compara versions
   intro: Canvis en el text de cada procés entre dues versions del PRM.

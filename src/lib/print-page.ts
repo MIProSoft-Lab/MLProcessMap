@@ -19,7 +19,7 @@ import {
 import { applyModel, modelKeys, readPrintModel } from './print-model';
 
 /** The strings this script uses, with those of print-model.ts; the page hands them to it. */
-export const printKeys = ['print.selected', 'print.printed', ...modelKeys] as const;
+export const printKeys = ['print.selected', 'print.printed', 'print.browserCopied', ...modelKeys] as const;
 
 /**
  * The settings last used, remembered in the browser (not which processes): an
@@ -42,6 +42,48 @@ const remembered = {
     } catch {}
   },
 };
+
+/**
+ * Whether the browser is Chrome or another built on Chromium (Edge, Opera,
+ * Brave), the only ones that print the margin boxes of pageRules (the header,
+ * the footer and the page numbers). Only Chromium has userAgentData; the user
+ * agent string covers older versions.
+ */
+export function isChromium(nav: Navigator = navigator) {
+  const brands = (nav as Navigator & { userAgentData?: { brands: { brand: string }[] } }).userAgentData?.brands;
+  if (brands) return brands.some((b) => b.brand === 'Chromium');
+  return /\b(Chrome|Chromium)\//.test(nav.userAgent) && !/\bFirefox\//.test(nav.userAgent);
+}
+
+/**
+ * In another browser, say so once: what it leaves out, and that the address
+ * keeps every choice, so the page can be opened in Chrome without losing them.
+ * Once closed, it is not shown again in that browser.
+ */
+const WARNED = 'prm-tool:print:browser-warned';
+function warnAboutBrowser(s: ReturnType<typeof translator>) {
+  const dialog = document.getElementById('print-browser') as HTMLDialogElement | null;
+  if (!dialog || isChromium()) return;
+  try {
+    if (localStorage.getItem(WARNED)) return;
+  } catch {}
+  const status = document.getElementById('print-browser-copied')!;
+  document.getElementById('print-browser-copy')!.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      status.textContent = s('print.browserCopied');
+    } catch {
+      // No clipboard: the address bar is still there to copy from.
+      status.textContent = location.href;
+    }
+  });
+  dialog.addEventListener('close', () => {
+    try {
+      localStorage.setItem(WARNED, '1');
+    } catch {}
+  });
+  dialog.showModal();
+}
 
 const PAGE: Record<PrintOptions['paper'], string> = { a4: 'A4', letter: 'letter' };
 const names = Object.keys(settings) as Setting[];
@@ -254,4 +296,5 @@ export function initPrintPage() {
 
   showOptions();
   showDocument();
+  warnAboutBrowser(s);
 }

@@ -738,3 +738,18 @@
     margin-top: 0;
   }
 }
+
+/* The warning in a browser that does not print the page well (print.astro):
+   the message that the address was copied takes the room between the buttons. */
+#print-browser p:not(.vc-actions) {
+  margin: 0 0 8px;
+}
+
+#print-browser .vc-actions {
+  flex-wrap: wrap;
+}
+
+#print-browser-copied {
+  flex: 1;
+  overflow-wrap: anywhere;
+}

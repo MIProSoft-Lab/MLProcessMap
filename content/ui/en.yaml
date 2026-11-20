@@ -177,6 +177,12 @@ print:
   leftOut: "Processes left out"
   repeats: This phase can be repeated
   returnsTo: "Returns to {phase}"
+  browserTitle: Best printed from Chrome
+  browserText: "This page prints best from Chrome, or another browser based on it such as Edge. Other browsers, such as Firefox and Safari, leave out the header, the footer and the page numbers, and may lay out the pages differently."
+  browserKeep: "Your choices are all kept in the address of this page: copy it and open it in Chrome to carry on where you left off, without losing anything."
+  browserCopy: Copy the address
+  browserCopied: Address copied
+  browserClose: Continue here
 compare:
   title: Compare versions
   intro: Changes in the text of each process between two versions of the PRM.

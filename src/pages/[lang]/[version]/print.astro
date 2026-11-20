@@ -339,6 +339,20 @@ const title = `${pick(site.title, locale)} · ${version}`;
   </div>
   <!-- The paper size, set by src/lib/print-page.ts: @page cannot be switched with a class. -->
   <style is:inline id="print-page-size"></style>
+
+  <!-- Shown by src/lib/print-page.ts in a browser that does not print the page well. -->
+  <dialog id="print-browser" class="version-change no-print" aria-labelledby="pb-title">
+    <form method="dialog">
+      <h2 id="pb-title">{t('print.browserTitle')}</h2>
+      <p>{t('print.browserText')}</p>
+      <p>{t('print.browserKeep')}</p>
+      <p class="vc-actions">
+        <button type="button" class="button" id="print-browser-copy">{t('print.browserCopy')}</button>
+        <span class="small muted" id="print-browser-copied" role="status"></span>
+        <button value="close" class="primary button" autofocus>{t('print.browserClose')}</button>
+      </p>
+    </form>
+  </dialog>
 </Layout>
 
 <script>
