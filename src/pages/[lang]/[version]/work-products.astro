@@ -180,8 +180,11 @@ const types = ['information-item', 'artifact', 'record'] as const;
       display: none;
     }
 
+    /* Who produces it and who uses it side by side, under the name and type. */
     .wp-table tr:not([hidden]) {
-      display: block;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 16px;
       padding: 10px 12px 12px;
       border-bottom: 1px solid var(--ink);
     }
@@ -202,6 +205,10 @@ const types = ['information-item', 'artifact', 'record'] as const;
 
     .wp-table td + td {
       margin-top: 6px;
+    }
+
+    .wp-table td:not([data-label]) {
+      grid-column: 1 / -1;
     }
 
     .wp-table td[data-label]::before {
