@@ -61,9 +61,64 @@ export function flowWires(flow: HTMLElement | null) {
   return draw;
 }
 
+/**
+ * The contents of the page (.toc): the section in view is marked as the page
+ * scrolls (aria-current="location"). On a narrow screen, where the contents are
+ * a bar that scrolls sideways, the bar keeps that section in view and fades out
+ * on the side that has more (data-fade: s, e or se, for start and end).
+ */
+export function contentsBar(list: HTMLElement | null) {
+  if (!list) return;
+  const links = [...list.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+  const sections = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+
+  const fade = () => {
+    const max = list.scrollWidth - list.clientWidth;
+    const at = list.scrollLeft;
+    const sides = max > 1 ? `${at > 1 ? 's' : ''}${at < max - 1 ? 'e' : ''}` : '';
+    if (sides) list.dataset.fade = sides;
+    else delete list.dataset.fade;
+  };
+
+  let current: HTMLAnchorElement | undefined;
+  const spy = () => {
+    // The last section whose top has passed under the bar.
+    let i = 0;
+    sections.forEach((section, k) => {
+      if (section && section.getBoundingClientRect().top <= 96) i = k;
+    });
+    // At the end of the page the last sections, if short, never reach the bar: the last one is in view.
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) i = sections.length - 1;
+    if (links[i] === current) return;
+    current?.removeAttribute('aria-current');
+    current = links[i];
+    current.setAttribute('aria-current', 'location');
+    // Bring it into the bar, without scrolling the page.
+    const left = current.offsetLeft - list.offsetLeft;
+    if (left < list.scrollLeft || left + current.offsetWidth > list.scrollLeft + list.clientWidth) {
+      list.scrollTo({ left: Math.max(0, left - 16), behavior: 'smooth' });
+    }
+  };
+
+  let frame = 0;
+  const update = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      spy();
+      fade();
+    });
+  };
+  list.addEventListener('scroll', update, { passive: true });
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  spy();
+  fade();
+}
+
 /** Everything the process page does in the browser. */
 export function initProcessPage() {
   const drawWires = flowWires(document.querySelector<HTMLElement>('.flow'));
+  contentsBar(document.querySelector<HTMLElement>('.toc ol'));
 
   // Outcomes, inputs, outputs and activities each open and close on their own.
   // A column of the diagram has no wires while it is closed or moving.

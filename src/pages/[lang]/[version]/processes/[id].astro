@@ -60,9 +60,12 @@ const title = (key: string) => sections.find(([k]) => k === key)![1];
   translated={translated}
   pageClass="process-page"
 >
-  <Breadcrumbs locale={locale} items={[{ text: `ML-PRM / ${version}`, href: href(locale, version) }, { text: p.id }]} />
-
+  {
+    /* The breadcrumbs and the buttons share the first line, so the name has the
+      whole of the next, however long it is (process.css). */
+  }
   <div class="title-row">
+    <Breadcrumbs locale={locale} items={[{ text: `ML-PRM / ${version}`, href: href(locale, version) }, { text: p.id }]} />
     <h1>{p.name}</h1>
     <span class="title-actions no-print">
       {

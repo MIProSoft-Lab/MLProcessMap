@@ -23,7 +23,8 @@ const two = (n: number) => String(n).padStart(2, '0');
     <dt class="label">{t('process.sheet-process')}</dt>
     <dd class="mono">{p.id}</dd>
   </div>
-  <div>
+  {/* Left out on a phone, where the header and the breadcrumbs say it (process.css). */}
+  <div class="sheet-version">
     <dt class="label">{t('nav.version')}</dt>
     <dd><span class="mono">{v.id}</span> · {pick(v.title, locale)}</dd>
   </div>

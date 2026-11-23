@@ -10,13 +10,23 @@
   margin: 0 0 8px;
 }
 
+/* On a phone, the title block is one row: the process, its origin and its
+   place among the processes. The version is in the header and the breadcrumbs. */
 @media (max-width: 560px) {
   .process-page .sheet {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
   }
 
-  .process-page .sheet > div:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
+  .process-page .sheet .sheet-version {
+    display: none;
+  }
+
+  .process-page .sheet > div {
+    padding: 6px 10px;
+  }
+
+  .process-page .sheet .badge {
+    white-space: normal;
   }
 }
 
@@ -43,6 +53,32 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 32px;
+}
+
+/* The contents (the narrow-screen bar below changes them). */
+.process-page .toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid var(--ink);
+  font-size: 0.88rem;
+}
+
+.process-page .toc a {
+  display: flex;
+  gap: 8px;
+  padding: 4px 12px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.process-page .toc a .mono {
+  font-size: 0.75rem;
+  padding-top: 2px;
+}
+
+.process-page .toc a:hover {
+  color: var(--text);
 }
 
 @media (min-width: 1000px) {
@@ -86,35 +122,29 @@
     white-space: nowrap;
   }
 
+  /* The section in view (process-page.ts). */
+  .process-page .toc a[aria-current='location'] {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* It fades out on the side that has more, as the sections scroll sideways. */
+  .process-page .toc ol[data-fade='e'] {
+    mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+  }
+
+  .process-page .toc ol[data-fade='s'] {
+    mask-image: linear-gradient(to left, #000 calc(100% - 40px), transparent);
+  }
+
+  .process-page .toc ol[data-fade='se'] {
+    mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+  }
+
   /* Leave room for the bar above what a link scrolls to. */
   html:has(.process-page) {
     scroll-padding-top: 30px;
   }
-}
-
-.process-page .toc ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-left: 1px solid var(--ink);
-  font-size: 0.88rem;
-}
-
-.process-page .toc a {
-  display: flex;
-  gap: 8px;
-  padding: 4px 12px;
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.process-page .toc a .mono {
-  font-size: 0.75rem;
-  padding-top: 2px;
-}
-
-.process-page .toc a:hover {
-  color: var(--text);
 }
 
 .process-page section {
@@ -590,23 +620,45 @@
   border-left: 1px solid var(--border);
 }
 
+/* On a phone, previous and next stay side by side, by their IDs; the names
+   are still read out by screen readers. */
 @media (max-width: 560px) {
-  .process-page .pager {
-    grid-template-columns: 1fr;
+  .process-page .pager a {
+    padding: 6px 10px;
   }
 
-  .process-page .pager .next {
-    border-left: 0;
-    border-top: 1px solid var(--border);
+  .process-page .pager .pager-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 
+/* The breadcrumbs with the buttons on their right, then the name on a line of
+   its own, so that a long name neither moves the buttons nor loses width. */
 .process-page .title-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 20px;
-  align-items: baseline;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'crumbs actions'
+    'title title';
+  align-items: center;
+  column-gap: 20px;
+}
+
+.process-page .title-row .breadcrumbs {
+  grid-area: crumbs;
+}
+
+.process-page .title-row h1 {
+  grid-area: title;
+}
+
+.process-page .title-actions {
+  grid-area: actions;
 }
 
 .process-page .title-actions {
@@ -617,6 +669,28 @@
 
 .process-page .title-row .button {
   flex: none;
+}
+
+/* On a phone, the buttons go under the name, side by side and of one width. */
+@media (max-width: 560px) {
+  .process-page .title-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'crumbs'
+      'title'
+      'actions';
+  }
+
+  .process-page .title-actions {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    margin: 0 0 12px;
+  }
+
+  .process-page .title-actions .button {
+    justify-content: center;
+  }
 }
 
 /* On a touch screen, room to tap: links and toggles at least about 32px tall

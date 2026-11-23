@@ -23,7 +23,7 @@ const name = (pid: string) => getProcess(version, pid, locale).data.name;
       <a href={href(locale, version, 'processes', prev)}>
         <span class="label">← {t('process.previous')}</span>
         <span>
-          <span class="mono muted">{prev}</span> {name(prev)}
+          <span class="mono muted">{prev}</span> <span class="pager-name">{name(prev)}</span>
         </span>
       </a>
     ) : (
@@ -35,7 +35,7 @@ const name = (pid: string) => getProcess(version, pid, locale).data.name;
       <a class="next" href={href(locale, version, 'processes', next)}>
         <span class="label">{t('process.next')} →</span>
         <span>
-          <span class="mono muted">{next}</span> {name(next)}
+          <span class="mono muted">{next}</span> <span class="pager-name">{name(next)}</span>
         </span>
       </a>
     ) : (
