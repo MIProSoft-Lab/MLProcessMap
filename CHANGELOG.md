@@ -2,6 +2,12 @@
 
 The changes in each release of the live edition. Written by `npm run release` from the commit messages, which follow [Conventional Commits](https://www.conventionalcommits.org).
 
+## [1.1.1](https://github.com/MIProSoft-Lab/MLProcessMap/compare/v1.1.0...v1.1.1) (2026-11-23)
+
+### Features
+
+- Warning on the print page on non-chromium browsers ([72fea10](https://github.com/MIProSoft-Lab/MLProcessMap/commit/72fea1081f1994f8f8e933c88c3bfe98e9c2c894))
+
 ## [1.1.0](https://github.com/MIProSoft-Lab/MLProcessMap/compare/v1.0.1...v1.1.0) (2026-11-19)
 
 ### Features
