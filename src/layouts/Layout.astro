@@ -59,6 +59,8 @@ const nav = [
   ['tailor', href(locale, 'tailor')],
   ['references', href(locale, 'references')],
 ] as const;
+// The section of the page, which the menu on a narrow screen is named after.
+const currentSection = nav.find(([key]) => key === section)?.[0];
 const repo = import.meta.env.PUBLIC_REPO ? `https://github.com/${import.meta.env.PUBLIC_REPO}` : undefined;
 const otherEdition = otherEditionUrl && `${otherEditionUrl}${locale}/`;
 // Comments go to the issues of the repository, or by email without one.
@@ -201,7 +203,28 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
       </div>
       <nav class="main-nav" aria-label={t('nav.main')}>
         <div class="container">
-          <ul>
+          {
+            /* On a narrow screen, where the sections do not fit side by side: a menu
+              named after the current section (global.css shows one or the other). */
+          }
+          <details class="menu section-menu">
+            <summary>
+              <span class="section-menu-icon" aria-hidden="true">☰</span>
+              {currentSection ? t(`nav.${currentSection}`) : t('nav.menu')}
+            </summary>
+            <ul>
+              {
+                nav.map(([key, url]) => (
+                  <li>
+                    <a href={url} aria-current={section === key ? 'page' : undefined}>
+                      {t(`nav.${key}`)}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </details>
+          <ul class="section-tabs">
             {
               nav.map(([key, url]) => (
                 <li>
@@ -340,7 +363,7 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
       // On a narrow screen the main menu scrolls sideways: bring the current
       // section into view and fade the side that has more items.
       (() => {
-        const list = document.querySelector('.main-nav ul');
+        const list = document.querySelector('.main-nav .section-tabs');
         const current = list.querySelector('[aria-current="page"]');
         if (current) {
           const item = current.getBoundingClientRect();

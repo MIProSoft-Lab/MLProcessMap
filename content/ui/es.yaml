@@ -18,6 +18,7 @@ nav:
   versionCancel: "Cancelar"
   skip: Ir al contenido
   main: Principal
+  menu: Menú
   breadcrumb: Ruta de navegación
   theme-dark: Cambiar al tema oscuro
   theme-light: Cambiar al tema claro

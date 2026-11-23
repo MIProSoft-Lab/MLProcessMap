@@ -21,6 +21,7 @@ nav:
   versionCancel: "Cancel"
   skip: Skip to content
   main: Main
+  menu: Menu
   breadcrumb: Breadcrumb
   theme-dark: Switch to dark theme
   theme-light: Switch to light theme

@@ -556,7 +556,7 @@ code,
   border-top: 1px solid var(--border);
 }
 
-.main-nav ul {
+.main-nav .section-tabs {
   display: flex;
   list-style: none;
   margin: 0;
@@ -566,22 +566,22 @@ code,
 }
 
 /* On a narrow screen the menu scrolls sideways: it fades out on the side that has more. */
-.main-nav ul[data-fade='e'] {
+.main-nav .section-tabs[data-fade='e'] {
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
   mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
 }
 
-.main-nav ul[data-fade='s'] {
+.main-nav .section-tabs[data-fade='s'] {
   -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent);
   mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent);
 }
 
-.main-nav ul[data-fade='se'] {
+.main-nav .section-tabs[data-fade='se'] {
   -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
   mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
 }
 
-.main-nav a {
+.main-nav .section-tabs a {
   display: block;
   padding: 11px 14px 9px;
   color: var(--muted);
@@ -591,18 +591,69 @@ code,
   font-size: 0.92rem;
 }
 
-.main-nav li:first-child a {
+.main-nav .section-tabs li:first-child a {
   padding-left: 0;
 }
 
-.main-nav a:hover {
+.main-nav .section-tabs a:hover {
   color: var(--text);
 }
 
-.main-nav a[aria-current='page'] {
+.main-nav .section-tabs a[aria-current='page'] {
   color: var(--text);
   border-bottom-color: var(--ink);
   font-weight: 600;
+}
+
+/* On a narrow screen the sections do not fit side by side: a menu named
+   after the current section lists them all (Layout.astro). */
+.section-menu {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .main-nav .section-tabs {
+    display: none;
+  }
+
+  .main-nav .section-menu {
+    display: block;
+    margin: 8px 0;
+    font-family: var(--font);
+    font-size: 0.95rem;
+  }
+
+  .section-menu summary {
+    height: 42px;
+    padding: 0 12px;
+    gap: 10px;
+    font-weight: 600;
+  }
+
+  /* The arrow of .menu, at the far end. */
+  .section-menu summary::after {
+    margin-left: auto;
+  }
+
+  .section-menu-icon {
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .section-menu ul {
+    left: 0;
+    right: 0;
+  }
+
+  .section-menu li a {
+    padding: 11px 14px;
+    font-size: 0.95rem;
+  }
+
+  .section-menu li a[aria-current='page'] {
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--ink);
+  }
 }
 
 main {
