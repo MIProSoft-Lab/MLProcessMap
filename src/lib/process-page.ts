@@ -145,7 +145,7 @@ export function initProcessPage() {
   // Every activity, and the button that opens or closes them all.
   animateDetails(document.querySelector('.activities')!);
   const button = document.querySelector<HTMLButtonElement>('.toggle-all');
-  const all = [...document.querySelectorAll<HTMLDetailsElement>('.activities details')];
+  const all = [...document.querySelectorAll<HTMLDetailsElement>('.activities li > details')];
   const sync = () => {
     const anyOpen = all.some(willBeOpen);
     button!.textContent = anyOpen ? button!.dataset.collapse! : button!.dataset.expand!;

@@ -484,7 +484,8 @@
   background: var(--surface-2);
 }
 
-.process-page .activities summary {
+/* The summary of an activity, not of the sections inside it (Sources.astro). */
+.process-page .activities li > details > summary {
   cursor: pointer;
   font-weight: 600;
   display: flex;
@@ -493,11 +494,11 @@
   list-style: none;
 }
 
-.process-page .activities summary::-webkit-details-marker {
+.process-page .activities li > details > summary::-webkit-details-marker {
   display: none;
 }
 
-.process-page .activities summary:hover .atitle {
+.process-page .activities li > details > summary:hover .atitle {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -530,6 +531,30 @@
 @media (max-width: 560px) {
   .process-page .abody {
     padding-left: 14px;
+  }
+}
+
+/* The primary studies of an activity, closed until asked for. */
+.process-page .studies {
+  margin: 10px 0 0;
+}
+
+.process-page .studies summary {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.process-page .studies-count {
+  margin-left: 6px;
+}
+
+.process-page .studies .chips {
+  padding-top: 6px;
+}
+
+@media (pointer: coarse) {
+  .process-page .studies summary {
+    padding-block: 5px;
   }
 }
 

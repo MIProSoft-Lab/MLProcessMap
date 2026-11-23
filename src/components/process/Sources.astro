@@ -1,6 +1,8 @@
 ---
 // Where an activity comes from: the primary studies of the review (P1, P2…)
 // and the specialized literature, each a chip linking to the references page.
+// The primary studies are in a section that starts closed, with how many there
+// are in its summary, like "Cited by" on the references page (Cited.astro).
 import type { Activity } from '../../lib/content';
 import { referenceByKey, shortCite, studyById, studyCite } from '../../lib/refs';
 import { href, useTranslations, type Locale } from '../../i18n/ui';
@@ -16,37 +18,39 @@ const references = href(locale, 'references');
 ---
 
 {
-  (a.primaryStudies?.length || a.literature?.length) && (
-    <dl class="sources small">
-      {a.primaryStudies?.length ? (
-        <>
-          <dt class="label">{t('process.primaryStudies')}</dt>
-          <dd class="chips">
-            {a.primaryStudies.map((s) => {
-              const study = studyById.get(s);
-              const cite = studyCite(s);
-              return (
-                <a class="chip" href={`${references}#${s}`} title={study?.title}>
-                  <span class="study-id">{s}</span>
-                  {cite}
-                </a>
-              );
-            })}
-          </dd>
-        </>
-      ) : null}
-      {a.literature?.length ? (
-        <>
-          <dt class="label">{t('process.literature')}</dt>
-          <dd class="chips">
-            {a.literature.map((k) => (
-              <a class="chip" href={`${references}#${k}`} title={referenceByKey.get(k)?.title}>
-                {shortCite(referenceByKey.get(k), k)}
+  a.primaryStudies?.length ? (
+    <details class="studies small">
+      <summary>
+        <span class="label">{t('process.primaryStudies')}</span> <span class="muted studies-count">({a.primaryStudies.length})</span>
+      </summary>
+      <div class="collapse-body">
+        <div class="chips">
+          {a.primaryStudies.map((s) => {
+            const study = studyById.get(s);
+            const cite = studyCite(s);
+            return (
+              <a class="chip" href={`${references}#${s}`} title={study?.title}>
+                <span class="study-id">{s}</span>
+                {cite}
               </a>
-            ))}
-          </dd>
-        </>
-      ) : null}
+            );
+          })}
+        </div>
+      </div>
+    </details>
+  ) : null
+}
+{
+  a.literature?.length ? (
+    <dl class="sources small">
+      <dt class="label">{t('process.literature')}</dt>
+      <dd class="chips">
+        {a.literature.map((k) => (
+          <a class="chip" href={`${references}#${k}`} title={referenceByKey.get(k)?.title}>
+            {shortCite(referenceByKey.get(k), k)}
+          </a>
+        ))}
+      </dd>
     </dl>
-  )
+  ) : null
 }
