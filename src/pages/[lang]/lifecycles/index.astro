@@ -62,4 +62,11 @@ const lifecycles = lifecycleIds().map((id) => getLifecycle(id, locale));
     margin: 0;
     margin-right: auto;
   }
+
+  /* On a touch screen, room to tap the name of each lifecycle. */
+  @media (pointer: coarse) {
+    .head h2 a {
+      padding-block: 6px;
+    }
+  }
 </style>

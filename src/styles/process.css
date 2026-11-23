@@ -618,3 +618,20 @@
 .process-page .title-row .button {
   flex: none;
 }
+
+/* On a touch screen, room to tap: links and toggles at least about 32px tall
+   (WCAG 2.5.8 asks for 24px). A mouse keeps the compact sizes. */
+@media (pointer: coarse) {
+  .process-page .serves a {
+    width: 28px;
+    height: 28px;
+  }
+
+  .process-page .collapse-toggle.with-text {
+    padding-block: 7px;
+  }
+
+  .process-page .served .chip {
+    padding-block: 5px;
+  }
+}

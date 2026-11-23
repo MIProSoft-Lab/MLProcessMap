@@ -34,4 +34,16 @@ const { href, label } = Astro.props;
   .person-page:hover .disc {
     fill: var(--accent);
   }
+  /* On a touch screen, a tap a little around the icon still reaches it. */
+  @media (pointer: coarse) {
+    .person-page {
+      position: relative;
+    }
+
+    .person-page::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+    }
+  }
 </style>

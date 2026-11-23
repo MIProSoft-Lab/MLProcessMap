@@ -264,6 +264,20 @@
   font-size: 0.8rem;
 }
 
+/* A process with its phase menu is too wide for a narrow screen: the menu and
+   the info button then go on a line of their own, under the name. */
+.tailor-page .processes .proc-head {
+  flex-wrap: wrap;
+}
+
+.tailor-page .processes .proc-label {
+  flex: 1 1 200px;
+}
+
+.tailor-page .processes .proc-tools {
+  margin-left: auto;
+}
+
 .tailor-page .lc-description {
   display: grid;
   gap: 4px;
@@ -656,4 +670,26 @@
 .tailor-page .side .count {
   font-weight: 400;
   color: var(--muted);
+}
+
+/* On a touch screen, room to tap: links and toggles at least about 32px tall
+   (WCAG 2.5.8 asks for 24px). A mouse keeps the compact sizes. */
+@media (pointer: coarse) {
+  .tailor-page .processes summary,
+  .tailor-page .phase-list details summary {
+    padding-block: 5px;
+  }
+}
+
+/* A phase card on a narrow screen: its number and name on one line, and its
+   buttons (up, down, remove) on the next, so the name keeps its width. */
+@media (max-width: 480px) {
+  .tailor-page .phase-list .pc-head {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .tailor-page .phase-list .pc-tools {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
 }

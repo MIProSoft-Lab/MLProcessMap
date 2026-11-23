@@ -83,4 +83,11 @@ const { summary, items, badges = false } = Astro.props;
     vertical-align: -2px;
     border: 1px solid var(--ink);
   }
+  /* On a touch screen, room to tap: links and toggles at least about 32px tall
+     (WCAG 2.5.8 asks for 24px). A mouse keeps the compact sizes. */
+  @media (pointer: coarse) {
+    .legend-help summary {
+      padding-block: 5px;
+    }
+  }
 </style>

@@ -29,4 +29,16 @@ const { id, label } = Astro.props;
     font-weight: 700;
     fill: #fff;
   }
+  /* On a touch screen, a tap a little around the icon still reaches it. */
+  @media (pointer: coarse) {
+    .orcid {
+      position: relative;
+    }
+
+    .orcid::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+    }
+  }
 </style>

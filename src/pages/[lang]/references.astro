@@ -124,6 +124,7 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
 
 <script>
   import { bindSearch, highlightTarget, queryWords, showCount } from '../../lib/search';
+  import { setDetailsOpen } from '../../lib/collapse';
 
   highlightTarget();
 
@@ -172,6 +173,18 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
         'hit',
         cited.some((w) => c === w || c.startsWith(`${w}.`)),
       );
+    });
+    // Open the "Cited by" sections with a citation marked, so that it shows,
+    // and close again those the search opened once it no longer marks one.
+    document.querySelectorAll<HTMLDetailsElement>('details.cited').forEach((d) => {
+      const hit = !!d.querySelector('.hit');
+      if (hit && !d.open) {
+        setDetailsOpen(d, true, { animate: false });
+        d.dataset.openedBySearch = '';
+      } else if (!hit && d.dataset.openedBySearch !== undefined) {
+        setDetailsOpen(d, false, { animate: false });
+        delete d.dataset.openedBySearch;
+      }
     });
     showCount(count, words, shown, references.length);
     empty.hidden = groups.some((g) => !g.section.hidden);
@@ -276,5 +289,12 @@ const literature = references.filter((r) => !studies.some((s) => s.reference ===
     font-family: var(--mono);
     font-size: 0.85rem;
     color: var(--muted);
+  }
+  /* On a touch screen, room to tap: links and toggles at least about 32px tall
+     (WCAG 2.5.8 asks for 24px). A mouse keeps the compact sizes. */
+  @media (pointer: coarse) {
+    .jump a {
+      padding-block: 6px;
+    }
   }
 </style>

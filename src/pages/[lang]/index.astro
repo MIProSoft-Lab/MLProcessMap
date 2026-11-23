@@ -547,4 +547,10 @@ const thesisEdition = edition === 'live' && otherEditionUrl ? `${otherEditionUrl
       grid-column: 2;
     }
   }
+  /* On a touch screen, room to tap the links of the revisions table. */
+  @media (pointer: coarse) {
+    .revisions a {
+      padding-block: 6px;
+    }
+  }
 </style>

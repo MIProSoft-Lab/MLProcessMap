@@ -1,4 +1,8 @@
 ---
+// Where a reference or study is cited: the activities of the PRM that cite it,
+// in a section that starts closed, with how many there are in its summary. It
+// opens and closes like the parts of a process page (src/lib/collapse.ts); a
+// search for a process or activity opens those that cite it (references.astro).
 import { useTranslations, href, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -12,33 +16,65 @@ const t = useTranslations(locale);
 
 {
   items.length > 0 && (
-    <div class="cited small">
-      <span class="muted">{t('refs.citedBy')}:</span>
-      {items.map((c) => (
-        <a
-          class="chip"
-          data-cite={`${c.process}.${c.activity}`.toLowerCase()}
-          href={`${href(locale, c.version, 'processes', c.process)}#activity-${c.activity}`}
-        >
-          {c.process}·{c.activity}
-          {c.version && <span class="num">{c.version}</span>}
-        </a>
-      ))}
-    </div>
+    <details class="cited small">
+      <summary class="muted">
+        {t('refs.citedBy')} ({items.length})
+      </summary>
+      <div class="collapse-body">
+        <div class="cited-chips">
+          {items.map((c) => (
+            <a
+              class="chip"
+              data-cite={`${c.process}.${c.activity}`.toLowerCase()}
+              href={`${href(locale, c.version, 'processes', c.process)}#activity-${c.activity}`}
+            >
+              {c.process}·{c.activity}
+              {c.version && <span class="num">{c.version}</span>}
+            </a>
+          ))}
+        </div>
+      </div>
+    </details>
   )
 }
 
+<script>
+  import { animateDetail } from '../lib/collapse';
+
+  document.querySelectorAll<HTMLDetailsElement>('details.cited').forEach(animateDetail);
+</script>
+
 <style>
   .cited {
+    margin-top: 4px;
+  }
+
+  .cited summary {
+    width: fit-content;
+    cursor: pointer;
+  }
+
+  .cited-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
     align-items: center;
-    margin-top: 4px;
+    padding-top: 4px;
   }
 
   .chip {
     font-size: 0.75rem;
     padding: 0 6px;
+  }
+
+  /* On a touch screen, room to tap. */
+  @media (pointer: coarse) {
+    .cited summary {
+      padding-block: 5px;
+    }
+
+    .chip {
+      padding-block: 5px;
+    }
   }
 </style>

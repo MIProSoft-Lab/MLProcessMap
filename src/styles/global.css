@@ -916,6 +916,31 @@ del {
   }
 }
 
+/* On a touch screen, room to tap: links and toggles at least about 32px tall
+   (WCAG 2.5.8 asks for 24px). A mouse keeps the compact sizes. */
+@media (pointer: coarse) {
+  /* Inline: the padding widens where a tap lands without moving the text. */
+  .breadcrumbs a {
+    padding-block: 8px;
+  }
+
+  .chip {
+    padding-block: 5px;
+  }
+
+  /* A badge that is a link reaches further only invisibly, so that it keeps
+     the height of the badges beside it. */
+  a.badge {
+    position: relative;
+  }
+
+  a.badge::after {
+    content: '';
+    position: absolute;
+    inset: -5px 0;
+  }
+}
+
 @media print {
   .site-header,
   .site-footer,
