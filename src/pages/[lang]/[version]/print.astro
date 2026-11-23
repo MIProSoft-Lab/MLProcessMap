@@ -137,87 +137,91 @@ const title = `${pick(site.title, locale)} · ${version}`;
       <p>
         <button type="button" class="primary button" id="print-now">{t('print.print')}</button>
       </p>
-      <p class="print-hint small muted">{t('print.headersHint')}</p>
+      <!-- Always open on a wide screen; on a narrow one it starts closed, so the preview is in view (print-page.ts). -->
+      <details class="print-settings" open>
+        <summary>{t('print.options')}</summary>
+        <p class="print-hint small muted">{t('print.headersHint')}</p>
 
-      <fieldset>
-        <legend>{t('print.document')}</legend>
-        {
-          documentOptions.map(([name, label]) => (
-            <label class:list={{ sub: parentOf(name) }}>
-              <input type="checkbox" data-setting={name} data-parent={parentOf(name)} /> {label}
-            </label>
-          ))
-        }
-      </fieldset>
-
-      <fieldset class="print-processes">
-        <legend>{t('print.processes')}</legend>
-        <p class="small">
-          <span id="print-count" class="muted" data-text={t('print.selected')}></span>
-          <button type="button" class="link" data-all>{t('print.all')}</button>
-          <button type="button" class="link" data-none>{t('print.none')}</button>
-        </p>
-        <div class="print-process-list">
+        <fieldset>
+          <legend>{t('print.document')}</legend>
           {
-            processes.map(({ data: p }) => (
-              <label>
-                <input type="checkbox" data-process-option={p.id} checked />
-                <span class="mono">{p.id}</span> {p.name}
+            documentOptions.map(([name, label]) => (
+              <label class:list={{ sub: parentOf(name) }}>
+                <input type="checkbox" data-setting={name} data-parent={parentOf(name)} /> {label}
               </label>
             ))
           }
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset>
-        <legend>{t('print.parts')}</legend>
-        {
-          processOptions.map(([name, label]) => (
-            <label class:list={{ sub: parentOf(name) }}>
-              <input type="checkbox" data-setting={name} data-parent={parentOf(name)} /> {label}
-            </label>
-          ))
-        }
-      </fieldset>
+        <fieldset class="print-processes">
+          <legend>{t('print.processes')}</legend>
+          <p class="small">
+            <span id="print-count" class="muted" data-text={t('print.selected')}></span>
+            <button type="button" class="link" data-all>{t('print.all')}</button>
+            <button type="button" class="link" data-none>{t('print.none')}</button>
+          </p>
+          <div class="print-process-list">
+            {
+              processes.map(({ data: p }) => (
+                <label>
+                  <input type="checkbox" data-process-option={p.id} checked />
+                  <span class="mono">{p.id}</span> {p.name}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>{t('print.appearance')}</legend>
-        {
-          pageOptions.map(([name, label]) => (
-            <>
-              <label>
-                <input type="checkbox" data-setting={name} /> {label}
+        <fieldset>
+          <legend>{t('print.parts')}</legend>
+          {
+            processOptions.map(([name, label]) => (
+              <label class:list={{ sub: parentOf(name) }}>
+                <input type="checkbox" data-setting={name} data-parent={parentOf(name)} /> {label}
               </label>
-              {(name === 'header' || name === 'footer') && (
-                <input
-                  type="text"
-                  class="margin-text"
-                  name={`${name}Text`}
-                  value={name === 'header' ? defaultHeader : defaultFooter}
-                  data-default={name === 'header' ? defaultHeader : defaultFooter}
-                  aria-label={t(name === 'header' ? 'print.headerText' : 'print.footerText')}
-                />
-              )}
-            </>
-          ))
-        }
-        <label class="select">
-          {t('print.size')}
-          <select name="size">
-            {sizes.map((s) => <option value={s}>{sizeLabels[s]}</option>)}
-          </select>
-        </label>
-        <label class="select">
-          {t('print.paper')}
-          <select name="paper">
-            {papers.map((p) => <option value={p}>{paperLabels[p]}</option>)}
-          </select>
-        </label>
-      </fieldset>
+            ))
+          }
+        </fieldset>
 
-      <p>
-        <button type="button" class="link small" id="print-reset">{t('print.reset')}</button>
-      </p>
+        <fieldset>
+          <legend>{t('print.appearance')}</legend>
+          {
+            pageOptions.map(([name, label]) => (
+              <>
+                <label>
+                  <input type="checkbox" data-setting={name} /> {label}
+                </label>
+                {(name === 'header' || name === 'footer') && (
+                  <input
+                    type="text"
+                    class="margin-text"
+                    name={`${name}Text`}
+                    value={name === 'header' ? defaultHeader : defaultFooter}
+                    data-default={name === 'header' ? defaultHeader : defaultFooter}
+                    aria-label={t(name === 'header' ? 'print.headerText' : 'print.footerText')}
+                  />
+                )}
+              </>
+            ))
+          }
+          <label class="select">
+            {t('print.size')}
+            <select name="size">
+              {sizes.map((s) => <option value={s}>{sizeLabels[s]}</option>)}
+            </select>
+          </label>
+          <label class="select">
+            {t('print.paper')}
+            <select name="paper">
+              {papers.map((p) => <option value={p}>{paperLabels[p]}</option>)}
+            </select>
+          </label>
+        </fieldset>
+
+        <p>
+          <button type="button" class="link small" id="print-reset">{t('print.reset')}</button>
+        </p>
+      </details>
     </form>
 
     <div

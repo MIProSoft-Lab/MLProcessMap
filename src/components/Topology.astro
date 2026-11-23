@@ -226,4 +226,12 @@ const groups = getVersion(version).topology.map((g) => ({
     font-size: 0.78rem;
     min-height: 0;
   }
+
+  /* The printable PRM previewed on a small screen: one column, as there is no
+     room for the paper's. Only on screen; the printed pages keep their columns. */
+  @media screen and (max-width: 600px) {
+    .compact .columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 </style>

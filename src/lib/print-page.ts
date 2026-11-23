@@ -183,6 +183,13 @@ export function initPrintPage() {
   const form = document.getElementById('print-options') as HTMLFormElement;
   const s = translator(JSON.parse(doc.dataset.strings!));
   const look = pageLook(doc);
+
+  // The options are always open beside the preview on a wide screen; on a
+  // narrow one, where they come before it, they start closed.
+  const settingsBox = form.querySelector<HTMLDetailsElement>('.print-settings')!;
+  const narrow = matchMedia('(max-width: 900px)');
+  settingsBox.open = !narrow.matches;
+  narrow.addEventListener('change', () => (settingsBox.open = !narrow.matches || settingsBox.open));
   const processBoxes = [...form.querySelectorAll<HTMLInputElement>('[data-process-option]')];
   const all = processBoxes.map((x) => x.dataset.processOption!);
   const settingBoxes = [...form.querySelectorAll<HTMLInputElement>('[data-setting]')];

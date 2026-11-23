@@ -19,12 +19,34 @@
 /* --- The options ---------------------------------------------------------- */
 
 .print-page .print-options {
-  position: sticky;
-  top: 12px;
-  max-height: calc(100vh - 24px);
-  overflow: auto;
   padding: 14px 16px;
   font-size: 0.9rem;
+}
+
+/* Beside the preview, the options stay in view as it scrolls, and their
+   Options toggle is hidden: they are always open (print-page.ts). */
+@media (min-width: 901px) {
+  .print-page .print-options {
+    position: sticky;
+    top: 12px;
+    max-height: calc(100vh - 24px);
+    overflow: auto;
+  }
+
+  .print-page .print-settings > summary {
+    display: none;
+  }
+}
+
+/* Above the preview, on a narrow screen, they fold under the print button. */
+.print-page .print-settings > summary {
+  margin-top: 12px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .print-page .print-options fieldset {
@@ -668,6 +690,27 @@
   align-items: center;
   font-size: 0.9em;
   line-height: 1.4;
+}
+
+/* --- On a small screen ------------------------------------------------------- */
+
+/* The preview of paper is narrower than paper: smaller margins, and one column
+   for the map, the contents and the inputs and outputs. Only on screen: the
+   printed pages keep their own layout and margins. */
+@media screen and (max-width: 600px) {
+  .print-page .print-doc {
+    padding: 18px 14px;
+  }
+
+  .print-doc .pd-toc ol,
+  .print-doc .pp-interface {
+    columns: auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .print-doc .pd-cover h1 {
+    font-size: 1.8em;
+  }
 }
 
 /* --- On paper -------------------------------------------------------------- */
