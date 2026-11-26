@@ -105,6 +105,7 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
       } catch {}
     </script>
+    <script is:inline data-goatcounter="https://mlprocessmap.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <slot name="head" />
   </head>
   <body>
@@ -303,6 +304,8 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
           }
           {' · '}
           <a href={`${base}/admin/`} data-astro-prefetch="false">{t('nav.admin')}</a>
+          {' · '}
+          <a href="https://www.goatcounter.com/">{t('footer.analytics')}</a>
         </p>
       </div>
     </footer>

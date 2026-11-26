@@ -338,6 +338,7 @@ footer:
   license: Content under CC BY 4.0 · Code under MIT
   feedback: Send feedback
   version: "v{v}"
+  analytics: "Anonymous visit counts by GoatCounter, without cookies"
 notFound:
   title: Page not found
   text: "The address may be mistyped, or the page may have been moved or removed."

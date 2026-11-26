@@ -335,6 +335,7 @@ footer:
   license: Contenido bajo CC BY 4.0 · Código bajo MIT
   feedback: Enviar comentarios
   version: "v{v}"
+  analytics: "Recuento anónimo de visitas con GoatCounter, sin cookies"
 notFound:
   title: Página no encontrada
   text: "Puede que la dirección esté mal escrita o que la página se haya movido o eliminado."
