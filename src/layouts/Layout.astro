@@ -83,6 +83,7 @@ const feedback = repo ? `${repo}/issues/new` : site.email ? `mailto:${site.email
     {locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={ogLocale(l)} />)}
     {indexable && Astro.site && <meta property="og:url" content={canonical} />}
     <meta name="twitter:card" content="summary" />
+    <meta name="google-site-verification" content="DFrHLKr47viKl9Y4WnMUrtCA83rQucePNwBC7O2soEA" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     {/* Searches lead to the live edition; the thesis edition is reached from the thesis. */}
     {(edition === 'thesis' || !indexable) && <meta name="robots" content="noindex" />}
