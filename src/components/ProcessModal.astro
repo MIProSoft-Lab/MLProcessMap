@@ -171,8 +171,9 @@ const strings = JSON.stringify(stringsFor(t, modalKeys));
     margin: 18px 0 6px;
   }
 
-  .pm-origin {
-    margin: 12px 0 0;
+  /* The first heading sits closer to the top of the body. */
+  .pm-body :global(h3:first-child) {
+    margin-top: 12px;
   }
 
   .pm-letter {

@@ -16,9 +16,6 @@ const keys: UiKey[] = [
   'tip.counts',
   'tip.from',
   'tip.to',
-  'origin.standards-and-literature',
-  'origin.standards-only',
-  'origin.decomposed',
 ];
 const strings = JSON.stringify(stringsFor(t, keys));
 ---
@@ -92,7 +89,6 @@ const strings = JSON.stringify(stringsFor(t, keys));
     const to = [...new Set(d.outputs.flatMap((o) => o.consumers))].sort();
     card.querySelector('.ph-name')!.textContent = d.name;
     body.innerHTML = `
-      <p><span class="badge origin-${d.origin}">${esc(s(`origin.${d.origin}`))}</span> <span class="num">${esc(version)}</span></p>
       <p class="ph-purpose">${d.purpose}</p>
       <p class="ph-counts small muted">${esc(s('tip.counts', { o: d.outcomes.length, a: d.activities.length, i: d.inputs.length, u: d.outputs.length }))}</p>
       ${list(s('tip.from'), from)}
@@ -165,6 +161,16 @@ const strings = JSON.stringify(stringsFor(t, keys));
     gap: 8px;
     align-items: baseline;
     margin-bottom: 6px;
+  }
+
+  /* The ID in a filled box, as in the process modal. */
+  .ph-id {
+    flex: none;
+    padding: 1px 6px;
+    background: var(--ink-fill);
+    color: var(--surface);
+    font-family: var(--mono);
+    font-size: 0.78rem;
   }
 
   .ph-body :global(p) {

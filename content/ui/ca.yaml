@@ -227,7 +227,7 @@ lc:
   zoomHint: Ctrl + roda o pessiga per fer zoom, arrossega per moure't
 tailor:
   title: Crea un model de cicle de vida per al teu projecte
-  intro: "Crea un model de cicle de vida a mida a partir dels processos del PRM: tria els processos i les activitats que necessita el teu projecte, organitza'ls en fases, marca les que es repeteixen i els bucles que tornen a fases anteriors. Pots compartir el model copiant la URL o exportant-lo."
+  intro: "Crea un model de cicle de vida a mida a partir dels processos del PRM: tria els processos i les activitats que necessita el teu projecte, organitza'ls en fases, marca les que es repeteixen i els bucles que tornen a fases anteriors."
   project: Nom del model de cicle de vida
   version: Versió del PRM
   start: Comença des de
@@ -243,12 +243,11 @@ tailor:
   allCovered: Totes les entrades dels processos del model les produeix un altre procés del model o venen de fora del PRM.
   export: Exporta
   markdown: Llista en Markdown
-  csv: CSV
   json: JSON
   print: Imprimeix
   exportDocuments: Documents
   exportData: Fitxers de dades
-  exportDataNote: Aquests fitxers es poden tornar a obrir amb Importa, més avall.
+  exportDataNote: Aquests fitxers es poden importar més endavant.
   copyLink: Copia l'enllaç
   copied: Enllaç copiat
   selectAll: Selecciona-ho tot
@@ -290,16 +289,14 @@ tailor:
   preview-empty: Afegeix una fase per veure el diagrama del cicle de vida.
   phases-summary: "{n} fases, {u} processos sense fase"
   yaml: YAML
-  yamlNote: El fitxer YAML empra el format de les plantilles de cicle de vida, perquè un administrador pugui publicar el teu model en aquest lloc.
   untitled: Model de cicle de vida sense títol
   import: Importa
-  import-note: "Obre un model de cicle de vida exportat des d'aquesta pàgina com a JSON, YAML o CSV. Substitueix el model que estàs editant, i ho pots desfer just després."
+  import-note: Obre un model de cicle de vida desat com a JSON o YAML.
   import-open: Obre un fitxer
   restore-text: "Aquest navegador ha desat el darrer model que vas editar aquí:"
   restore-yes: Continua-hi
   restore-no: Descarta'l
   import-done: "S'ha obert {file}."
-  import-csv: Un fitxer CSV només desa els processos, les activitats i els noms de les fases, així que revisa la versió del PRM, l'ordre de les fases i els bucles.
   import-skipped: "El PRM {v} no té {ids}, així que s'han deixat fora."
   import-version: "El fitxer és de la versió {v} del PRM, que aquest lloc no té."
   import-error: Aquest fitxer no és un model de cicle de vida exportat des d'aquesta pàgina.

@@ -17,9 +17,6 @@ export const modalKeys = [
   'process.usedBy',
   'process.external',
   'process.notUsed',
-  'origin.standards-and-literature',
-  'origin.standards-only',
-  'origin.decomposed',
 ];
 
 export interface Details {
@@ -93,7 +90,6 @@ export function createProcessModal(options: ModalOptions = {}) {
       return `<li>${head}<p>${a.description}</p></li>`;
     };
     body.innerHTML = `
-      <p class="pm-origin"><span class="badge origin-${d.origin}">${s(`origin.${d.origin}`)}</span></p>
       <h3 class="label">${s('process.purpose')}</h3>
       <p>${d.purpose}</p>
       <h3 class="label">${s('process.outcomes')}</h3>

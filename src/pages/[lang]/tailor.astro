@@ -36,7 +36,6 @@ const keys: UiKey[] = [
   'tailor.undo-phase',
   'tailor.undo-version',
   'tailor.import-done',
-  'tailor.import-csv',
   'tailor.import-skipped',
   'tailor.import-version',
   'tailor.import-error',
@@ -139,15 +138,13 @@ const strings = stringsFor(t, keys);
         <p class="small muted">{t('tailor.exportDataNote')}</p>
         <div class="exports" role="group" aria-labelledby="export-data">
           <button type="button" data-export="json">{t('tailor.json')}</button>
-          <button type="button" data-export="yaml" id="export-yaml" aria-describedby="yaml-note">{t('tailor.yaml')}</button>
-          <button type="button" data-export="csv">{t('tailor.csv')}</button>
+          <button type="button" data-export="yaml" id="export-yaml">{t('tailor.yaml')}</button>
         </div>
-        <p id="yaml-note" class="small muted">{t('tailor.yamlNote')}</p>
         <h2>{t('tailor.import')}</h2>
         <p class="small muted">{t('tailor.import-note')}</p>
         <div class="exports">
           <button type="button" id="import">{t('tailor.import-open')}</button>
-          <input type="file" id="import-file" accept=".json,.yaml,.yml,.csv,application/json,application/yaml,text/csv" hidden />
+          <input type="file" id="import-file" accept=".json,.yaml,.yml,application/json,application/yaml" hidden />
         </div>
         <p id="import-status" class="small" role="status" hidden></p>
       </div>
@@ -570,7 +567,6 @@ const strings = stringsFor(t, keys);
     b.addEventListener('click', () => {
       const kind = b.dataset.export!;
       if (kind === 'md') download(`${fileBase()}.md`, 'text/markdown', exporter.markdown(context()));
-      if (kind === 'csv') download(`${fileBase()}.csv`, 'text/csv', exporter.csv(context()));
       if (kind === 'json') download(`${fileBase()}.json`, 'application/json', exporter.json(context()));
       if (kind === 'yaml') download(`${model.slug(state.project) || 'lifecycle-model'}.yaml`, 'application/yaml', exporter.yaml(state, s));
     }),
@@ -603,11 +599,7 @@ const strings = stringsFor(t, keys);
     if (!file) return;
     const messages: string[] = [];
     try {
-      const m = await readModel(await file.text(), file.name, {
-        versions: data.versions,
-        fallback: current(),
-        untitled: s('tailor.untitled'),
-      });
+      const m = await readModel(await file.text(), s('tailor.untitled'));
       const v = data.versions.find((x) => x.id === m.version);
       if (!v) throw new ImportError(s('tailor.import-version', { v: m.version || '?' }));
       const { state: next, unknown } = toState(m, v);
@@ -615,7 +607,6 @@ const strings = stringsFor(t, keys);
       load(next);
       offerUndo(before, s('tailor.undo-replaced', { name: file.name }));
       messages.push(s('tailor.import-done', { file: file.name }));
-      if (m.csv) messages.push(s('tailor.import-csv'));
       if (unknown.length) messages.push(s('tailor.import-skipped', { v: v.id, ids: unknown.join(', ') }));
     } catch (e) {
       messages.push(e instanceof ImportError ? e.message : s('tailor.import-error'));

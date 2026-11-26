@@ -19,8 +19,7 @@ const types = ['information-item', 'artifact', 'record'] as const;
 ---
 
 <Layout locale={locale} title={t('wp.title')} description={t('wp.intro')} section="workProducts" version={version} versionLinks={links}>
-  <h1>{t('wp.title')} <span class="muted">· {version}</span></h1>
-  <p class="muted prose">{t('wp.intro')}</p>
+  <h1>{t('wp.title')}</h1>
 
   <SearchToolbar class="no-print" placeholder={t('wp.filter')}>
     <div class="pills" role="group" aria-label={t('wp.type')}>

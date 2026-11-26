@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { lifecycleSchema } from '../content/schemas';
 import { format } from '../text';
-import { csv, json, lifecyclePhases, markdown, yaml } from './export';
-import { fromObject, parseCsv, readModel, toState } from './import';
+import { json, lifecyclePhases, markdown, yaml } from './export';
+import { fromObject, readModel, toState } from './import';
 import {
   assignToPhase,
   fromHash,
@@ -283,14 +283,6 @@ describe('exports', () => {
     expect(md).toContain('- P02 Process P02: Reused, "as is"');
   });
 
-  it('start the CSV with a byte order mark, for Excel', () => {
-    expect(csv(ctx()).startsWith('\uFEFFprocess_id,')).toBe(true);
-  });
-
-  it('quote CSV fields', () => {
-    expect(csv(ctx()).split('\n')[3]).toBe('P02,"Process P02","",A1,"First of P02",no,"Reused, ""as is"""');
-  });
-
   it('write lifecycle YAML with quotes only where needed', () => {
     const out = yaml({ ...model(), project: 'yes' }, s);
     expect(out).toContain('id: yes\nname: "yes"\n');
@@ -313,7 +305,7 @@ describe('exports', () => {
 });
 
 describe('importing an export', () => {
-  const options = { versions: data.versions, fallback: v1, untitled: s('tailor.untitled') };
+  const untitled = s('tailor.untitled');
   const essentials = (m: {
     version: string;
     selected: string[];
@@ -330,7 +322,7 @@ describe('importing an export', () => {
   const expected = { version: 'v2', selected: ['P01', 'P03'], excluded: ['P01.A2'], rationale: { P02: 'Reused, "as is"' } };
 
   it('reads the JSON export', async () => {
-    const m = await readModel(json({ state: model(), version: v2, s, link: '' }), 'model.json', options);
+    const m = await readModel(json({ state: model(), version: v2, s, link: '' }), untitled);
     expect(essentials(m)).toEqual({
       ...expected,
       phases: [
@@ -343,7 +335,7 @@ describe('importing an export', () => {
   });
 
   it('reads the YAML lifecycle file', async () => {
-    const m = await readModel(yaml(model(), s), 'model.yaml', options);
+    const m = await readModel(yaml(model(), s), untitled);
     expect(essentials(m)).toEqual({
       ...expected,
       excluded: [],
@@ -356,42 +348,13 @@ describe('importing an export', () => {
     expect(m.phases[0].iterative).toBe(true);
   });
 
-  it('reads the CSV export, with the version from the file name', async () => {
-    const text = csv({ state: model(), version: v2, s });
-    const m = await readModel(text, 'fraud-detection-v2.csv', options);
-    expect(essentials(m)).toEqual({
-      ...expected,
-      phases: [
-        ['Build', ['P01']],
-        ['Phase 2', ['P03']],
-      ],
-    });
-    expect(m.csv).toBe(true);
-    expect((await readModel(text, 'renamed.csv', options)).version).toBe('v1');
-  });
-
   it('reads back an untitled model without a name', () => {
     expect(fromObject({ name: 'Untitled model', phases: [] }, 'Untitled model').project).toBe('');
   });
 
   it('rejects other files', async () => {
-    await expect(readModel('{"a": 1}', 'x.json', options)).rejects.toThrow();
-    await expect(readModel('process_id,name\nP01,x', 'x.csv', options)).rejects.toThrow();
+    await expect(readModel('{"a": 1}', untitled)).rejects.toThrow();
+    await expect(readModel('process_id,name\nP01,x', untitled)).rejects.toThrow();
   });
 });
 
-describe('the CSV reader', () => {
-  it('handles quotes, line breaks and CRLF', () => {
-    expect(parseCsv('a,"b, c","say ""hi"""\r\n1,"two\nlines",3\r\n')).toEqual([
-      ['a', 'b, c', 'say "hi"'],
-      ['1', 'two\nlines', '3'],
-    ]);
-  });
-
-  it('reads files saved with semicolons', () => {
-    expect(parseCsv('a;b\n1;"x;y"')).toEqual([
-      ['a', 'b'],
-      ['1', 'x;y'],
-    ]);
-  });
-});

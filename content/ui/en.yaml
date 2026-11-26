@@ -230,7 +230,7 @@ lc:
   zoomHint: Ctrl + scroll or pinch to zoom, drag to move
 tailor:
   title: Build a lifecycle model for your project
-  intro: "Create a custom lifecycle model from the processes of the PRM: choose the processes and activities your project needs, arrange them into phases, and mark the phases that repeat and the loops back to earlier phases. The model is saved in the link, so you can share it."
+  intro: "Create a custom lifecycle model from the processes of the PRM: choose the processes and activities your project needs, arrange them into phases, and mark the phases that repeat and the loops back to earlier phases."
   project: Name of the lifecycle model
   version: PRM version
   start: Start from
@@ -246,12 +246,11 @@ tailor:
   allCovered: Every input of the processes in the model is produced by another process of the model or comes from outside the PRM.
   export: Export
   markdown: Markdown checklist
-  csv: CSV
   json: JSON
   print: Print
   exportDocuments: Documents
   exportData: Data files
-  exportDataNote: These files can be opened again with Import, below.
+  exportDataNote: These files can be imported later.
   copyLink: Copy link
   copied: Link copied
   selectAll: Select all
@@ -293,16 +292,14 @@ tailor:
   preview-empty: Add a phase to see the diagram of the lifecycle.
   phases-summary: "{n} phases, {u} processes without a phase"
   yaml: YAML
-  yamlNote: The YAML file uses the format of the lifecycle templates, so an admin can publish your model on this site.
   untitled: Untitled lifecycle model
   import: Import
-  import-note: "Open a lifecycle model exported from this page as JSON, YAML or CSV. It replaces the model you are editing, and you can undo that right after."
+  import-note: Open a lifecycle model saved as JSON or YAML.
   import-open: Open a file
   restore-text: "This browser has kept the last model you edited here:"
   restore-yes: Continue with it
   restore-no: Discard it
   import-done: "Opened {file}."
-  import-csv: A CSV file keeps only the processes, activities and phase names, so check the PRM version, the order of the phases and the loops.
   import-skipped: "PRM {v} has no {ids}, so they were left out."
   import-version: "The file is for PRM version {v}, which this site does not have."
   import-error: This file is not a lifecycle model exported from this page.

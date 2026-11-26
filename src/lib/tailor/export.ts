@@ -1,6 +1,6 @@
-// Exports of the tailored model: a Markdown checklist, a CSV of the activities,
-// the JSON of the whole model, and a lifecycle file in the format of
-// content/lifecycles/<lang>/<id>.yaml. import.ts reads the JSON, CSV and YAML back.
+// Exports of the tailored model: a Markdown checklist, the JSON of the whole
+// model, and a lifecycle file in the format of
+// content/lifecycles/<lang>/<id>.yaml. import.ts reads the JSON and YAML back.
 import type { Translate } from '../lifecycle-diagram';
 import { phaseOf, slug, type Phase, type State, type Version } from './model';
 
@@ -78,29 +78,6 @@ export function markdown(ctx: ExportContext) {
     for (const x of excluded) out += `- ${x.p.id} ${x.p.name}${x.rationale ? `: ${x.rationale}` : ''}\n`;
   }
   return out;
-}
-
-export function csv(ctx: Omit<ExportContext, 'link'>) {
-  const { state, s } = ctx;
-  const q = (x: string) => `"${x.replace(/"/g, '""')}"`;
-  const lines = [['process_id', 'process', 'phase', 'activity_id', 'activity', 'included', 'rationale'].join(',')];
-  for (const x of rows(ctx)) {
-    const ph = phaseOf(state, x.p.id);
-    for (const a of x.activities) {
-      lines.push(
-        [
-          x.p.id,
-          q(x.p.name),
-          q(ph ? phaseName(state, ph, s) : ''),
-          a.id,
-          q(a.title),
-          a.included ? 'yes' : 'no',
-          q(x.included ? '' : x.rationale),
-        ].join(','),
-      );
-    }
-  }
-  return '\uFEFF' + lines.join('\n');
 }
 
 export function json(ctx: ExportContext) {

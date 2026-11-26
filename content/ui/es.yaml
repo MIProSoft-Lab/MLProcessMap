@@ -227,7 +227,7 @@ lc:
   zoomHint: Ctrl + rueda o pellizca para hacer zoom, arrastra para moverte
 tailor:
   title: Crea un modelo de ciclo de vida para tu proyecto
-  intro: "Crea un modelo de ciclo de vida a medida a partir de los procesos del PRM: elige los procesos y actividades que necesita tu proyecto, organízalos en fases, marca cuales se repiten y los bucles que vuelven a fases anteriores. Puedes compartir el modelo copiando la URL o exportándolo."
+  intro: "Crea un modelo de ciclo de vida a medida a partir de los procesos del PRM: elige los procesos y actividades que necesita tu proyecto, organízalos en fases, marca cuales se repiten y los bucles que vuelven a fases anteriores."
   project: Nombre del modelo de ciclo de vida
   version: Versión del PRM
   start: Empezar desde
@@ -243,12 +243,11 @@ tailor:
   allCovered: Todas las entradas de los procesos del modelo las produce otro proceso del modelo o vienen de fuera del PRM.
   export: Exportar
   markdown: Lista en Markdown
-  csv: CSV
   json: JSON
   print: Imprimir
   exportDocuments: Documentos
   exportData: Archivos de datos
-  exportDataNote: Estos archivos se pueden volver a abrir con Importar, más abajo.
+  exportDataNote: Estos archivos se pueden importar más adelante.
   copyLink: Copiar enlace
   copied: Enlace copiado
   selectAll: Seleccionar todo
@@ -290,16 +289,14 @@ tailor:
   preview-empty: Añade una fase para ver el diagrama del ciclo de vida.
   phases-summary: "{n} fases, {u} procesos sin fase"
   yaml: YAML
-  yamlNote: El archivo YAML usa el formato de las plantillas de ciclo de vida, para que un administrador pueda publicar tu modelo en este sitio.
   untitled: Modelo de ciclo de vida sin título
   import: Importar
-  import-note: "Abre un modelo de ciclo de vida exportado desde esta página como JSON, YAML o CSV. Sustituye el modelo que estás editando, y puedes deshacerlo justo después."
+  import-note: Abre un modelo de ciclo de vida guardado como JSON o YAML.
   import-open: Abrir un archivo
   restore-text: "Este navegador ha guardado el último modelo que editaste aquí:"
   restore-yes: Continuar con él
   restore-no: Descartarlo
   import-done: "Se ha abierto {file}."
-  import-csv: Un archivo CSV solo guarda los procesos, las actividades y los nombres de las fases, así que revisa la versión del PRM, el orden de las fases y los bucles.
   import-skipped: "El PRM {v} no tiene {ids}, así que se han dejado fuera."
   import-version: "El archivo es de la versión {v} del PRM, que este sitio no tiene."
   import-error: Este archivo no es un modelo de ciclo de vida exportado desde esta página.
