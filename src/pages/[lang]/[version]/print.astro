@@ -128,8 +128,7 @@ const title = `${pick(site.title, locale)} · ${version}`;
 >
   <div class="no-print">
     <Breadcrumbs locale={locale} items={[{ text: `ML-PRM / ${version}`, href: href(locale, version) }, { text: t('print.title') }]} />
-    <h1>{t('print.title')} <span class="muted">· {pick(v.title, locale)}</span></h1>
-    <p class="muted prose">{t('print.intro')}</p>
+    <h1>{t('print.title')}</h1>
   </div>
 
   <div class="print-layout">
@@ -140,7 +139,6 @@ const title = `${pick(site.title, locale)} · ${version}`;
       <!-- Always open on a wide screen; on a narrow one it starts closed, so the preview is in view (print-page.ts). -->
       <details class="print-settings" open>
         <summary>{t('print.options')}</summary>
-        <p class="print-hint small muted">{t('print.headersHint')}</p>
 
         <fieldset>
           <legend>{t('print.document')}</legend>

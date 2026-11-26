@@ -105,11 +105,6 @@
   font-size: 0.85rem;
 }
 
-.print-page .print-options .print-hint {
-  margin-top: 8px;
-  line-height: 1.4;
-}
-
 .print-page .print-options #print-now {
   width: 100%;
   justify-content: center;

@@ -124,7 +124,6 @@ print:
   title: Printable version
   intro: "Choose what to include and how it looks. Then print the page, or choose Save as PDF in the print dialog."
   print: Print or save as PDF
-  headersHint: "If the address and the date appear at the top or the bottom of the pages, untick Headers and footers in the print dialog."
   options: Options
   reset: Reset options
   cover: Cover page

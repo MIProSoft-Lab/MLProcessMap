@@ -121,7 +121,6 @@ print:
   title: Versió imprimible
   intro: "Tria què vols incloure i com es veu. Després imprimeix la pàgina o tria Desa com a PDF al diàleg d'impressió."
   print: Imprimeix o desa com a PDF
-  headersHint: "Si l'adreça i la data surten a dalt o a baix de les pàgines, desmarca Capçaleres i peus de pàgina al diàleg d'impressió."
   options: Opcions
   reset: Restableix les opcions
   cover: Portada
