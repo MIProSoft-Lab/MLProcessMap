@@ -11,12 +11,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const keys: UiKey[] = [
-  'modal.loading',
-  'tip.counts',
-  'tip.from',
-  'tip.to',
-];
+const keys: UiKey[] = ['modal.loading', 'tip.counts', 'tip.from', 'tip.to'];
 const strings = JSON.stringify(stringsFor(t, keys));
 ---
 

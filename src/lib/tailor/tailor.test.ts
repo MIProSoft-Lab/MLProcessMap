@@ -357,4 +357,3 @@ describe('importing an export', () => {
     await expect(readModel('process_id,name\nP01,x', untitled)).rejects.toThrow();
   });
 });
-
