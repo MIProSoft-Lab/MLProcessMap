@@ -202,7 +202,6 @@ lc:
   title: Modelos de ciclo de vida
   intro: El PRM define los procesos de un proyecto de ML y deja su orden y repetición a un modelo de ciclo de vida. Estas plantillas organizan los procesos de una versión del PRM en fases.
   basedOn: Basado en el PRM {version}
-  phase: Fase
   phases: Fases
   iterative: Se repite
   returnsTo: Vuelve a {phase}
@@ -244,7 +243,6 @@ tailor:
   export: Exportar
   markdown: Lista en Markdown
   json: JSON
-  print: Imprimir
   exportDocuments: Documentos
   exportData: Archivos de datos
   exportDataNote: Estos archivos se pueden importar más adelante.

@@ -205,7 +205,6 @@ lc:
   title: Lifecycle models
   intro: The PRM defines the processes of an ML project and leaves their order and repetition to a lifecycle model. These templates arrange the processes of a PRM version into phases.
   basedOn: Based on PRM {version}
-  phase: Phase
   phases: Phases
   iterative: Repeated
   returnsTo: Returns to {phase}
@@ -247,7 +246,6 @@ tailor:
   export: Export
   markdown: Markdown checklist
   json: JSON
-  print: Print
   exportDocuments: Documents
   exportData: Data files
   exportDataNote: These files can be imported later.
