@@ -685,8 +685,19 @@ main {
 .title-block {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  position: relative;
   border: 1px solid var(--ink);
   background: var(--surface);
+}
+
+/* The frame again, above the cells: each cell's right and bottom border runs
+   1px past it (the negative margins below) and would cover it in light grey. */
+.title-block::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--ink);
+  pointer-events: none;
 }
 
 .title-block > div {
