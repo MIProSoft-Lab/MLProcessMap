@@ -4,8 +4,7 @@ status: draft
 prmVersion: v2
 description: >-
   An example arrangement of the processes of the PRM in the order of the topology, with the data
-  preparation and modeling phases repeated until the model meets its success criteria. It shows how a
-  lifecycle template is defined; it is not one of the lifecycle models of the literature review.
+  preparation and modeling phases repeated until the model meets its success criteria.
 phases:
   - id: problem
     name: Problem and requirements

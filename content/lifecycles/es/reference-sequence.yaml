@@ -5,7 +5,6 @@ prmVersion: v2
 description: >-
   Una disposición de ejemplo de los procesos del PRM, con las fases de
   preparación de los datos y de modelado repetidas hasta que el modelo cumple sus criterios de éxito.
-  Muestra cómo se define una plantilla de ciclo de vida.
 phases:
   - id: problem
     name: Problema y requisitos
