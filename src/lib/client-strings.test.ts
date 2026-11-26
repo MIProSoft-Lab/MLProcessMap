@@ -17,10 +17,10 @@ function used(code: string) {
   return [...new Set(keys)];
 }
 
-/** An Astro file's list of keys, with the lists it spreads in, and its script. */
+/** An Astro file's list of keys, on one line or several, with the lists it spreads in, and its script. */
 function page(path: string, lists: Record<string, string[]> = {}) {
   const text = read(path);
-  const list = text.match(/const keys: UiKey\[\] = \[([\s\S]*?)\n\];/)![1];
+  const list = text.match(/const keys: UiKey\[\] = \[([\s\S]*?)\];/)![1];
   const keys = [...list.matchAll(/'([^']+)'/g)].map((m) => m[1]);
   for (const [, name] of list.matchAll(/\.\.\.(\w+)/g)) keys.push(...lists[name]);
   return { keys, script: text.slice(text.indexOf('<script>')) };
