@@ -2,6 +2,25 @@
 
 The changes in each release of the live edition. Written by `npm run release` from the commit messages, which follow [Conventional Commits](https://www.conventionalcommits.org).
 
+## [1.1.3](https://github.com/MIProSoft-Lab/MLProcessMap/compare/v1.1.2...v1.1.3) (2026-11-26)
+
+### Features
+
+- Added google site verification ([5bbf64d](https://github.com/MIProSoft-Lab/MLProcessMap/commit/5bbf64d7786193ea30db111d24a3024cebab3037))
+
+### Fixes
+
+- Border of process page header block ([b5fd92e](https://github.com/MIProSoft-Lab/MLProcessMap/commit/b5fd92e12e0242033e8e45bcea155d7a034145c1))
+- Removed unused strings ([6de961b](https://github.com/MIProSoft-Lab/MLProcessMap/commit/6de961bc9f678c70b7b28ab1bbf93f51cf948936))
+
+### Maintenance
+
+- Cleanup of redundant text and functions ([c862526](https://github.com/MIProSoft-Lab/MLProcessMap/commit/c862526471d43eae64d1639f83b422a62e2d26ad))([0bc834e](https://github.com/MIProSoft-Lab/MLProcessMap/commit/0bc834e9a8c02a21c071379e2b8316706370fc1f))
+
+### Other changes
+
+- Merge branch 'main' ([f8ad06c](https://github.com/MIProSoft-Lab/MLProcessMap/commit/f8ad06c80b7f7ac621f8019c1c831c2cbd5eee58))
+
 ## [1.1.2](https://github.com/MIProSoft-Lab/MLProcessMap/compare/v1.1.1...v1.1.2) (2026-11-26)
 
 ### Features
