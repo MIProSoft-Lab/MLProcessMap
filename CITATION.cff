@@ -5,8 +5,8 @@ title: MLProcessMap
 abstract: >-
   A website to explore the Process Reference Model (PRM) for the Machine Learning lifecycle
   from the doctoral thesis, and to build custom lifecycle models from it.
-version: 1.1.1
-date-released: 2026-11-23
+version: 1.1.2
+date-released: 2026-11-26
 authors:
   - family-names: Crespí Tobeña
     given-names: Antonio

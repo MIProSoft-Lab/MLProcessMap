@@ -2,6 +2,18 @@
 
 The changes in each release of the live edition. Written by `npm run release` from the commit messages, which follow [Conventional Commits](https://www.conventionalcommits.org).
 
+## [1.1.2](https://github.com/MIProSoft-Lab/MLProcessMap/compare/v1.1.1...v1.1.2) (2026-11-26)
+
+### Features
+
+- Added GoatCounter to count visitors ([9c14eb9](https://github.com/MIProSoft-Lab/MLProcessMap/commit/9c14eb980af6cedf977177f1dde023877717409a))
+- Moved activity references to a collapsible menu ([1928857](https://github.com/MIProSoft-Lab/MLProcessMap/commit/19288579ae718e877506347cc7839a4602058ea7))
+
+### Fixes
+
+- Top box layout improvements ([f60c282](https://github.com/MIProSoft-Lab/MLProcessMap/commit/f60c282c9f8085de3bc834b9c719fab1dbc8ddd1))
+- Layout improvements for mobile ([d09c196](https://github.com/MIProSoft-Lab/MLProcessMap/commit/d09c1963fb3bb4dab43b0ced1831686ccefd4989)) ([0251b96](https://github.com/MIProSoft-Lab/MLProcessMap/commit/0251b960c1138ab02dc3510f78b0e6cb71e606a4)) ([7cb7c4d](https://github.com/MIProSoft-Lab/MLProcessMap/commit/7cb7c4d0d72ec20abec6786c2b5f94e817a29acf)) ([803a52d](https://github.com/MIProSoft-Lab/MLProcessMap/commit/803a52df6adb7ac1f6398322e3e1c2246fb28a57))
+
 ## [1.1.1](https://github.com/MIProSoft-Lab/MLProcessMap/compare/v1.1.0...v1.1.1) (2026-11-23)
 
 ### Features
